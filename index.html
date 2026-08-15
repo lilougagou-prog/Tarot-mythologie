@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#6f3f3d">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <title>Le Temple des Arcanes</title>
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <button class="icon-btn" id="backBtn" aria-label="Retour" hidden>‹</button>
+      <div>
+        <div class="eyebrow">TAROT DE MARSEILLE · MYTHOLOGIE GRECQUE</div>
+        <h1 id="pageTitle">Le Temple des Arcanes</h1>
+      </div>
+      <button class="icon-btn" id="homeBtn" aria-label="Accueil">⌂</button>
+    </header>
+
+    <main id="screen"></main>
+
+    <nav class="bottom-nav">
+      <button data-route="home" class="active"><span>⌂</span>Accueil</button>
+      <button data-route="tirage"><span>✦</span>Tirage</button>
+      <button data-route="apprendre"><span>◈</span>Apprendre</button>
+      <button data-route="symboles"><span>✧</span>Symboles</button>
+      <button data-route="journal"><span>☽</span>Journal</button>
+    </nav>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
