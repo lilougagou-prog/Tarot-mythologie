@@ -70,134 +70,350 @@ const NUMBER_KEYS = {
 10:["cycle accompli","cercle fermé · récolte · graine","aboutissement · transmission · nouveau cycle"]
 };
 
-let journal = JSON.parse(localStorage.getItem("arcanes-journal")||"[]");
+let journal = JSON.parse(localStorage.getItem("arcanes-journal") || "[]");
 let route = "home";
 
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[char]));
+}
+
+function pipHTML(suit, number){
+  const icon = SUITS[suit]?.[1] || "•";
+  return `<div class="pips pips-${number}">${
+    Array.from({length:number}, () => `<span class="pip">${icon}</span>`).join("")
+  }</div>`;
+}
+
 function cardHTML(c, cls="major", subtitle=""){
+  const isNumber = c[4] === "number";
+  const visual = isNumber
+    ? pipHTML(c[6], c[7])
+    : `<div class="glyph">${c[2] || "✦"}</div>`;
+
   return `<div class="tarot-card ${cls}" data-card="${encodeURIComponent(JSON.stringify(c))}">
     <div class="frame">
-      <div class="card-no">${c[0]}</div>
-      <div class="glyph">${c[2]||"✦"}</div>
-      <div class="mini-symbols">${(c[5]||"").split(" · ").slice(0,3).map(x=>x[0]).join(" · ")}</div>
-      <div class="card-name">${c[1]}</div>
-      <div class="card-sub">${subtitle||c[3]||""}</div>
+      <div class="card-no">${escapeHTML(c[0])}</div>
+      ${visual}
+      <div class="card-name">${escapeHTML(c[1])}</div>
+      <div class="card-sub">${escapeHTML(subtitle || c[3] || "")}</div>
     </div>
   </div>`;
 }
 
 function allCards(){
-  const arr = MAJORS.map(x=>({...x,kind:"major"}));
-  for(const [s,rows] of Object.entries(COURTS)) rows.forEach(x=>arr.push([x[0],x[1],x[2],x[3],"court","",s]));
-  for(const [s,meta] of Object.entries(SUITS)){
-    for(let n=1;n<=10;n++){
-      const k=NUMBER_KEYS[n];
-      arr.push([`${n===1?"As":n} de ${s}`,`${k[0]}`,meta[1],`${k[2]} · ${meta[2]}`,"number",`${k[1]} · ${meta[3]}`,s]);
+  const cards = MAJORS.map(x => [...x]);
+
+  for(const [suit, rows] of Object.entries(COURTS)){
+    rows.forEach(x => cards.push([x[0], x[1], x[2], x[3], "court", "", suit]));
+  }
+
+  for(const [suit, meta] of Object.entries(SUITS)){
+    for(let n = 1; n <= 10; n++){
+      const key = NUMBER_KEYS[n];
+      cards.push([
+        `${n === 1 ? "As" : n} de ${suit}`,
+        key[0],
+        meta[1],
+        `${key[2]} · ${meta[2]}`,
+        "number",
+        `${key[1]} · ${meta[3]}`,
+        suit,
+        n
+      ]);
     }
   }
-  return arr;
+
+  return cards;
 }
+
 const CARDS = allCards();
 
-function setRoute(r){route=r; render(); window.scrollTo(0,0);}
+function setRoute(newRoute){
+  route = newRoute;
+  render();
+  window.scrollTo(0,0);
+}
+
 function render(){
-  const screen=document.getElementById("screen");
-  const title=document.getElementById("pageTitle");
-  document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.toggle("active",b.dataset.route===route));
-  document.getElementById("backBtn").hidden=route==="home";
-  title.textContent={home:"Le Temple des Arcanes",tirage:"Tirage",apprendre:"Apprendre",symboles:"Bibliothèque symbolique",journal:"Journal"}[route]||"Le Temple des Arcanes";
-  if(route==="home") screen.innerHTML=home();
-  if(route==="tirage") screen.innerHTML=tirage();
-  if(route==="apprendre") screen.innerHTML=apprendre();
-  if(route==="symboles") screen.innerHTML=symboles();
-  if(route==="journal") screen.innerHTML=journalView();
+  const screen = document.getElementById("screen");
+  const title = document.getElementById("pageTitle");
+
+  if(!screen || !title) return;
+
+  document.querySelectorAll(".bottom-nav button").forEach(button => {
+    button.classList.toggle("active", button.dataset.route === route);
+  });
+
+  const back = document.getElementById("backBtn");
+  if(back) back.hidden = route === "home";
+
+  title.textContent = {
+    home:"Le Temple des Arcanes",
+    tirage:"Tirage",
+    apprendre:"Apprendre",
+    symboles:"Bibliothèque symbolique",
+    journal:"Journal"
+  }[route] || "Le Temple des Arcanes";
+
+  if(route === "home") screen.innerHTML = home();
+  if(route === "tirage") screen.innerHTML = tirage();
+  if(route === "apprendre") screen.innerHTML = apprendre();
+  if(route === "symboles") screen.innerHTML = symboles();
+  if(route === "journal") screen.innerHTML = journalView();
+
   bind();
 }
 
 function home(){
- return `<section class="hero">
-   <span class="pill">V1 · 78 cartes · Tarot de Marseille réinterprété</span>
-   <h2>Un tarot qui s'apprend en le regardant.</h2>
-   <p>Une première version privée de ton Temple : tirage, apprentissage, bibliothèque symbolique et journal. Les personnages mythologiques et la structure des cartes suivent les choix définis ensemble.</p>
- </section>
- <div class="grid">
-   <div class="tile" data-go="tirage"><strong>✦ Tirer les cartes</strong><span>Un tirage simple pour commencer.</span></div>
-   <div class="tile" data-go="apprendre"><strong>◈ Apprendre</strong><span>Explore les 78 cartes et leurs personnages.</span></div>
-   <div class="tile" data-go="symboles"><strong>✧ Symboles</strong><span>Comprendre la grammaire des nombres et des enseignes.</span></div>
-   <div class="tile" data-go="journal"><strong>☽ Journal</strong><span>Conserver tes tirages et tes interprétations.</span></div>
- </div>
- <div class="section-title"><h3>Les 22 majeurs</h3><span class="pill">mythologie grecque</span></div>
- <div class="card-grid">${MAJORS.slice(0,8).map(c=>cardHTML(c)).join("")}</div>`;
+  return `<section class="hero">
+    <span class="pill">V1 · 78 cartes · Tarot de Marseille réinterprété</span>
+    <h2>Un tarot qui s'apprend en le regardant.</h2>
+    <p>Les personnages mythologiques, la structure des cartes et la grammaire symbolique suivent les choix validés ensemble.</p>
+  </section>
+
+  <div class="grid">
+    <div class="tile" data-go="tirage">
+      <strong>✦ Tirer les cartes</strong>
+      <span>Un tirage de trois cartes avec question et notes.</span>
+    </div>
+    <div class="tile" data-go="apprendre">
+      <strong>◈ Apprendre</strong>
+      <span>Explorer les 78 cartes et leurs personnages.</span>
+    </div>
+    <div class="tile" data-go="symboles">
+      <strong>✧ Symboles</strong>
+      <span>Comprendre la grammaire des nombres et des enseignes.</span>
+    </div>
+    <div class="tile" data-go="journal">
+      <strong>☽ Journal</strong>
+      <span>Conserver tes tirages et tes interprétations.</span>
+    </div>
+  </div>
+
+  <div class="section-title">
+    <h3>Les 22 majeurs</h3>
+    <span class="pill">mythologie grecque</span>
+  </div>
+
+  <div class="card-grid">
+    ${MAJORS.slice(0,8).map(card => cardHTML(card)).join("")}
+  </div>`;
 }
 
 function tirage(){
- return `<div class="draw-zone">
-   <h2>Un tirage</h2>
-   <p class="note">Les cartes sont mélangées aléatoirement. Pour l'instant, cette V1 propose un tirage de trois cartes.</p>
-   <button class="primary" id="drawBtn">Tirer 3 cartes</button>
-   <div id="drawn"></div>
- </div>`;
+  return `<div class="draw-zone">
+    <h2>Un tirage</h2>
+    <p class="note">Pose ta question avant de tirer. Les 78 cartes sont mélangées aléatoirement.</p>
+
+    <textarea id="drawQuestion" placeholder="Ta question…"></textarea>
+
+    <button class="primary" id="drawBtn">Tirer 3 cartes</button>
+
+    <div id="drawn"></div>
+  </div>`;
 }
 
 function drawCards(){
- const pool=CARDS.filter(c=>c[4]!=="number"); // V1: majeurs + cours, numérales bientôt enrichies graphiquement
- const shuffled=[...pool].sort(()=>Math.random()-.5).slice(0,3);
- const drawn=document.getElementById("drawn");
- drawn.innerHTML=`<div class="card-grid">${shuffled.map(c=>cardHTML(c,c[4]==="major"?"major":SUITS[c[6]]?.[0]||"major")).join("")}</div>
- <div style="margin-top:18px"><button class="secondary" id="saveDraw">Enregistrer ce tirage</button></div>`;
- document.getElementById("saveDraw").onclick=()=>{
-   const question=prompt("Question du tirage (facultatif) :")||"";
-   journal.unshift({date:new Date().toLocaleString("fr-FR"),question,cards:shuffled.map(c=>c[0]),notes:""});
-   localStorage.setItem("arcanes-journal",JSON.stringify(journal));
-   alert("Tirage enregistré dans le journal.");
- };
+  const question = document.getElementById("drawQuestion")?.value.trim() || "";
+  const shuffled = [...CARDS].sort(() => Math.random() - 0.5).slice(0,3);
+  const drawn = document.getElementById("drawn");
+
+  if(!drawn) return;
+
+  drawn.innerHTML = `
+    <div class="card-grid">
+      ${shuffled.map(card => cardHTML(
+        card,
+        card[4] === "major" ? "major" : (SUITS[card[6]]?.[0] || "major")
+      )).join("")}
+    </div>
+
+    <div style="margin-top:18px">
+      <textarea id="drawNotes" placeholder="Tes premières impressions, symboles, interprétation…"></textarea>
+      <button class="secondary" id="saveDraw">Enregistrer dans le journal</button>
+    </div>`;
+
+  document.getElementById("saveDraw").onclick = () => {
+    journal.unshift({
+      date: new Date().toLocaleString("fr-FR"),
+      question,
+      cards: shuffled.map(card => card[0]),
+      notes: document.getElementById("drawNotes")?.value || ""
+    });
+
+    localStorage.setItem("arcanes-journal", JSON.stringify(journal));
+    alert("Tirage enregistré dans le journal.");
+  };
+
+  document.querySelectorAll("[data-card]").forEach(el => {
+    el.onclick = () => showDetail(JSON.parse(decodeURIComponent(el.dataset.card)));
+  });
 }
 
 function apprendre(){
- return `<section class="hero"><span class="pill">Parcours libre</span><h2>Apprendre les 78 cartes</h2><p>Commence par les majeurs, puis les familles et les figures de cour. Les cartes numérales utilisent une grammaire commune : nombre + élément + symboles.</p></section>
- <div class="section-title"><h3>Arcanes majeurs</h3></div>
- <div class="card-grid">${MAJORS.map(c=>cardHTML(c)).join("")}</div>
- <div class="section-title"><h3>Figures de cour</h3></div>
- ${Object.entries(COURTS).map(([s,rows])=>`<h3>${s}</h3><div class="card-grid">${rows.map(x=>cardHTML([x[0],x[1],x[2],x[3],"court","",s],SUITS[s][0])).join("")}</div>`).join("")}`;
+  return `<section class="hero">
+    <span class="pill">Parcours libre</span>
+    <h2>Apprendre les 78 cartes</h2>
+    <p>Les numérales utilisent une grammaire commune : nombre + enseigne + symboles. Elles ne portent aucun personnage.</p>
+  </section>
+
+  <div class="section-title"><h3>Arcanes majeurs</h3></div>
+  <div class="card-grid">
+    ${MAJORS.map(card => cardHTML(card)).join("")}
+  </div>
+
+  <div class="section-title"><h3>Figures de cour</h3></div>
+  ${Object.entries(COURTS).map(([suit, rows]) => `
+    <h3>${suit}</h3>
+    <div class="card-grid">
+      ${rows.map(row => cardHTML(
+        [row[0],row[1],row[2],row[3],"court","",suit],
+        SUITS[suit][0]
+      )).join("")}
+    </div>
+  `).join("")}
+
+  <div class="section-title"><h3>Cartes numérales</h3></div>
+  ${Object.keys(SUITS).map(suit => `
+    <h3>${suit}</h3>
+    <div class="card-grid">
+      ${CARDS
+        .filter(card => card[4] === "number" && card[6] === suit)
+        .map(card => cardHTML(card, SUITS[suit][0]))
+        .join("")}
+    </div>
+  `).join("")}`;
 }
 
 function symboles(){
- return `<section class="hero"><span class="pill">Grammaire visuelle</span><h2>Bibliothèque symbolique</h2><p>Le nombre donne la direction générale ; l'enseigne donne le domaine ; les symboles donnent les indices permettant d'interpréter la carte.</p></section>
- <div class="symbol-list">${Object.entries(NUMBER_KEYS).map(([n,k])=>`<div class="symbol"><b>${n==="1"?"As":n} — ${k[0]}</b><br><span>${k[1]}</span><br><small>${k[2]}</small></div>`).join("")}</div>
- <div class="section-title"><h3>Les quatre enseignes</h3></div>
- <div class="symbol-list">${Object.entries(SUITS).map(([s,m])=>`<div class="symbol"><b>${s}</b><br>${m[2]}<br><small>Symboles : ${m[3]}</small></div>`).join("")}</div>`;
+  return `<section class="hero">
+    <span class="pill">Grammaire visuelle</span>
+    <h2>Bibliothèque symbolique</h2>
+    <p>Le nombre donne la direction générale ; l’enseigne donne le domaine ; les symboles donnent les indices.</p>
+  </section>
+
+  <div class="symbol-list">
+    ${Object.entries(NUMBER_KEYS).map(([number,key]) => `
+      <div class="symbol">
+        <b>${number === "1" ? "As" : number} — ${key[0]}</b><br>
+        <span>${key[1]}</span><br>
+        <small>${key[2]}</small>
+      </div>
+    `).join("")}
+  </div>
+
+  <div class="section-title"><h3>Les quatre enseignes</h3></div>
+
+  <div class="symbol-list">
+    ${Object.entries(SUITS).map(([suit,meta]) => `
+      <div class="symbol">
+        <b>${suit}</b><br>
+        ${meta[2]}<br>
+        <small>Symboles : ${meta[3]}</small>
+      </div>
+    `).join("")}
+  </div>`;
 }
 
 function journalView(){
- if(!journal.length) return `<div class="empty"><h2>Ton journal est vide.</h2><p>Enregistre un tirage pour commencer à construire ton historique personnel.</p></div>`;
- return `<section class="hero"><span class="pill">${journal.length} tirage(s)</span><h2>Journal</h2></section>
- ${journal.map((j,i)=>`<article class="tile" style="margin-bottom:12px"><strong>${j.date}</strong><span>${j.question||"Sans question"}</span><p>${j.cards.join(" · ")}</p></article>`).join("")}`;
+  if(!journal.length){
+    return `<div class="empty">
+      <h2>Ton journal est vide.</h2>
+      <p>Enregistre un tirage pour commencer à construire ton historique personnel.</p>
+    </div>`;
+  }
+
+  return `<section class="hero">
+    <span class="pill">${journal.length} tirage(s)</span>
+    <h2>Journal</h2>
+    <p>Ton historique conserve tes questions, tes cartes et tes interprétations.</p>
+  </section>
+
+  ${journal.map((entry, index) => `
+    <article class="tile" style="margin-bottom:12px">
+      <strong>${escapeHTML(entry.date)}</strong>
+      <span>${escapeHTML(entry.question || "Sans question")}</span>
+      <p>${entry.cards.map(escapeHTML).join(" · ")}</p>
+      ${entry.notes ? `<small>${escapeHTML(entry.notes)}</small>` : ""}
+      <button class="secondary delete-entry" data-index="${index}" style="margin-top:12px">Supprimer</button>
+    </article>
+  `).join("")}`;
 }
 
 function bind(){
- document.querySelectorAll("[data-route]").forEach(b=>b.onclick=()=>setRoute(b.dataset.route));
- document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>setRoute(b.dataset.go));
- document.getElementById("homeBtn").onclick=()=>setRoute("home");
- document.getElementById("backBtn").onclick=()=>setRoute("home");
- const draw=document.getElementById("drawBtn"); if(draw) draw.onclick=drawCards;
- document.querySelectorAll("[data-card]").forEach(el=>el.onclick=()=>{
-   const c=JSON.parse(decodeURIComponent(el.dataset.card));
-   showDetail(c);
- });
+  document.querySelectorAll("[data-route]").forEach(button => {
+    button.onclick = () => setRoute(button.dataset.route);
+  });
+
+  document.querySelectorAll("[data-go]").forEach(element => {
+    element.onclick = () => setRoute(element.dataset.go);
+  });
+
+  const homeButton = document.getElementById("homeBtn");
+  if(homeButton) homeButton.onclick = () => setRoute("home");
+
+  const backButton = document.getElementById("backBtn");
+  if(backButton) backButton.onclick = () => setRoute("home");
+
+  const drawButton = document.getElementById("drawBtn");
+  if(drawButton) drawButton.onclick = drawCards;
+
+  document.querySelectorAll("[data-card]").forEach(element => {
+    element.onclick = () => {
+      showDetail(JSON.parse(decodeURIComponent(element.dataset.card)));
+    };
+  });
+
+  document.querySelectorAll(".delete-entry").forEach(button => {
+    button.onclick = () => {
+      const index = Number(button.dataset.index);
+      if(!Number.isInteger(index)) return;
+
+      journal.splice(index, 1);
+      localStorage.setItem("arcanes-journal", JSON.stringify(journal));
+      render();
+    };
+  });
 }
-function showDetail(c){
- const suit=c[6], cls=c[4]==="major"?"major":(SUITS[suit]?.[0]||"major");
- document.getElementById("screen").innerHTML=`<div class="detail">
-   ${cardHTML(c,cls)}
-   <h2>${c[0]}</h2>
-   <h3>${c[1]}</h3>
-   <p>${c[3]||""}</p>
-   <div class="symbol-list">
-     <div class="symbol"><b>Symboles</b><br>${c[5]||"À compléter"}</div>
-     ${c[4]==="number"?`<div class="symbol"><b>Direction du nombre</b><br>${NUMBER_KEYS[Object.keys(NUMBER_KEYS).find(n=>`${n===1?"As":n} de ${suit}`===c[0])]?.[2]||""}</div>`:""}
-   </div>
-   <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
- </div>`;
- document.getElementById("detailBack").onclick=()=>render();
+
+function showDetail(card){
+  const suit = card[6];
+  const cls = card[4] === "major"
+    ? "major"
+    : (SUITS[suit]?.[0] || "major");
+
+  document.getElementById("screen").innerHTML = `
+    <div class="detail">
+      ${cardHTML(card, cls)}
+
+      <h2>${escapeHTML(card[0])}</h2>
+      <h3>${escapeHTML(card[1])}</h3>
+      <p>${escapeHTML(card[3] || "")}</p>
+
+      <div class="symbol-list">
+        <div class="symbol">
+          <b>Symboles</b><br>
+          ${escapeHTML(card[5] || "À compléter")}
+        </div>
+
+        ${card[4] === "number" ? `
+          <div class="symbol">
+            <b>Direction du nombre</b><br>
+            ${escapeHTML(NUMBER_KEYS[card[7]]?.[2] || "")}
+          </div>
+        ` : ""}
+      </div>
+
+      <button class="secondary" id="detailBack" style="margin-top:20px">
+        ← Retour
+      </button>
+    </div>`;
+
+  document.getElementById("detailBack").onclick = () => render();
 }
-if("serviceWorker" in navigator) navigator.serviceWorker.register("./service-worker.js").catch(()=>{});
-render();
+
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+}
