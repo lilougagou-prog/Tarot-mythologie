@@ -20,21 +20,28 @@ La fonction `generateAIReading(question, cards)` dans `app.js` envoie `{question
 
 Si l'appel échoue ou dépasse 15 secondes, l'app bascule automatiquement sur un texte généré localement (`synthesisParagraphs` / `interpretationFor`) — l'utilisateur n'est jamais bloqué.
 
+### Protéger l'usage IA (recommandé tant que l'appli est personnelle)
+Coût réel : ~1 centime par tirage (facturation à l'usage sur console.anthropic.com, indépendante d'un éventuel abonnement Claude.ai — les deux sont des produits distincts). Pour éviter que quelqu'un d'autre qui tomberait sur l'URL de l'appli déclenche des appels avec ta clé :
+- Définir une variable d'environnement **`APP_ACCESS_CODE`** (n'importe quelle chaîne secrète). Tant qu'elle est définie, le backend refuse toute requête qui ne fournit pas ce même code — l'appli le demande une fois côté client et le mémorise.
+- Recommandé en complément, quel que soit l'usage : fixer un **plafond de dépense mensuel strict** sur console.anthropic.com (Settings → Limits) pour ne jamais pouvoir dépasser un montant que tu choisis.
+- Pour ouvrir l'appli à d'autres plus tard : supprimer `APP_ACCESS_CODE` sur Vercel — aucun changement de code nécessaire. Penser alors à revoir le plafond de dépense en conséquence.
+
 ## Déployer sur Vercel
 
 Vercel héberge en un seul projet le site statique (racine du repo) et la fonction backend (`api/reading.js`) — c'est l'option la plus simple pour ce projet.
 
-1. Créer une clé API sur [console.anthropic.com](https://console.anthropic.com) (nécessite un moyen de paiement configuré).
+1. Créer une clé API sur [console.anthropic.com](https://console.anthropic.com) (nécessite un moyen de paiement configuré) et, si souhaité, y fixer un plafond de dépense mensuel (Settings → Limits).
 2. Sur [vercel.com](https://vercel.com), **New Project** → importer ce dépôt GitHub.
 3. Aucune configuration de build n'est nécessaire (site statique + dossier `api/` détectés automatiquement).
 4. Dans **Settings → Environment Variables**, ajouter :
    - `ANTHROPIC_API_KEY` = la clé créée à l'étape 1 (cocher Production, Preview et Development).
+   - `APP_ACCESS_CODE` = un code secret de ton choix (voir ci-dessus ; optionnel mais recommandé tant que l'appli est personnelle).
 5. Déployer. Vercel donne une URL du type `https://ton-projet.vercel.app/`.
 
 Pour tester en local avec la CLI Vercel :
 ```bash
 npm install
-cp .env.example .env   # puis renseigner ANTHROPIC_API_KEY
+cp .env.example .env   # puis renseigner ANTHROPIC_API_KEY (et APP_ACCESS_CODE si souhaité)
 npx vercel dev
 ```
 

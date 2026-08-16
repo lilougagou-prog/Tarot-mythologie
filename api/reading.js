@@ -5,6 +5,14 @@
 //
 // La clé API Anthropic vit uniquement ici, côté serveur, dans la variable
 // d'environnement ANTHROPIC_API_KEY (jamais exposée au navigateur).
+//
+// Protection optionnelle "usage personnel" : si la variable d'environnement
+// APP_ACCESS_CODE est définie, chaque requête doit fournir le même code dans
+// l'en-tête X-App-Access-Code (le client le demande une fois et le garde en
+// localStorage — voir requestAccessCode() dans app.js). Tant qu'elle est
+// définie, seule une personne connaissant ce code peut déclencher un appel
+// payant. Pour ouvrir l'appli à d'autres plus tard, il suffit de supprimer
+// APP_ACCESS_CODE dans les réglages Vercel — aucun changement de code requis.
 
 const Anthropic = require("@anthropic-ai/sdk");
 
@@ -31,6 +39,15 @@ module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     res.status(405).json({ error: "Méthode non autorisée." });
     return;
+  }
+
+  const requiredCode = process.env.APP_ACCESS_CODE;
+  if (requiredCode) {
+    const providedCode = req.headers["x-app-access-code"];
+    if (providedCode !== requiredCode) {
+      res.status(401).json({ error: "Code d'accès manquant ou incorrect." });
+      return;
+    }
   }
 
   const { question, cards } = req.body || {};

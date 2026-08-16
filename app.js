@@ -507,13 +507,32 @@ function synthesisParagraphs(question, cards, domain){
 // Appelle notre backend (/api/reading, voir api/reading.js) qui garde la clé API Anthropic
 // côté serveur et construit le prompt exact (repris ici pour mémoire, désormais côté backend).
 // C'est le seul endroit du fichier concerné par ce changement.
+
+// Tant que la variable d'environnement APP_ACCESS_CODE est définie côté backend, chaque appel
+// doit fournir ce code (usage personnel : évite que quelqu'un d'autre déclenche des appels
+// payants avec ta clé s'il tombe sur l'URL de l'appli). Demandé une seule fois, puis mémorisé.
+// Le jour où l'appli est ouverte à d'autres, supprimer APP_ACCESS_CODE sur Vercel suffit — ce
+// code continuera d'envoyer un en-tête vide, ignoré par le backend.
+function getAccessCode(){
+  let code = localStorage.getItem("delphesAccessCode");
+  if(code === null){
+    code = window.prompt("Code d'accès à l'appli (laisser vide si aucun) :") || "";
+    localStorage.setItem("delphesAccessCode", code);
+  }
+  return code;
+}
+
 async function generateAIReading(question, cards){
   const timeout = new Promise((_,reject)=>setTimeout(()=>reject(new Error("timeout")), 15000));
   const call = fetch("/api/reading", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "X-App-Access-Code": getAccessCode() },
     body: JSON.stringify({ question, cards })
   }).then(async r=>{
+    if(r.status === 401){
+      // Code manquant/incorrect : on l'efface pour qu'il soit redemandé au prochain tirage.
+      localStorage.removeItem("delphesAccessCode");
+    }
     if(!r.ok) throw new Error("réponse backend invalide");
     return r.json();
   });
