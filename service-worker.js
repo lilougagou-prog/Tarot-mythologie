@@ -1,4 +1,4 @@
-const CACHE="arcanes-v2";
+const CACHE="arcanes-v3";
 const ASSETS=["./","./index.html","./styles.css","./app.js","./manifest.json","./icon.svg"];
 
 self.addEventListener("install",e=>e.waitUntil(
@@ -9,8 +9,7 @@ self.addEventListener("install",e=>e.waitUntil(
 
 self.addEventListener("activate",e=>e.waitUntil(
   caches.keys()
-    .then(keys=>Promise.all( keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))
-    )
+    .then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))
     .then(()=>self.clients.claim())
 ));
 
