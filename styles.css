@@ -1,61 +1,152 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap');
 
 :root{
-  --terracotta:#8a4d46; --deep:#291c1d; --cream:#f7efe3; --gold:#c9a35a;
-  --olive:#59634a; --water:#627b80; --line:rgba(41,28,29,.14);
-  --shadow:0 18px 50px rgba(41,28,29,.16);
+  --terracotta:#8a4d46; --deep:#2a1c1d; --cream:#f8f1e4; --gold:#c9a35a;
+  --gold-bright:#dbb96f; --line:rgba(42,28,29,.16);
+  --shadow:0 18px 50px rgba(41,28,29,.18);
 }
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(circle at 50% -10%,#fff9ef 0,#f7efe3 42%,#ead9c5 100%);color:var(--deep);font-family:Inter,system-ui,sans-serif}
-button{font:inherit}
-#app{min-height:100vh;padding-bottom:82px}
-.topbar{position:sticky;top:0;z-index:10;display:grid;grid-template-columns:42px 1fr 42px;align-items:center;padding:16px 16px 12px;background:rgba(247,239,227,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-.eyebrow{font-size:9px;letter-spacing:.14em;opacity:.58}
-h1,h2,h3{font-family:"Cormorant Garamond",serif;margin:.1em 0}
-h1{font-size:28px;line-height:1}
-h2{font-size:30px}
-h3{font-size:22px}
-.icon-btn{border:0;background:transparent;color:var(--deep);font-size:30px;line-height:1;cursor:pointer}
-main{max-width:900px;margin:auto;padding:24px 18px}
-.hero{padding:26px 8px 20px}
-.hero p{max-width:640px;line-height:1.65;opacity:.78}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(circle at 50% -10%,#fffaf0 0,#f8f1e4 40%,#e9d7bd 100%);color:var(--deep);font-family:"EB Garamond",Georgia,serif;font-size:17px}
+button,input,textarea{font-family:"EB Garamond",Georgia,serif}
+button{color:inherit}
+#app{min-height:100vh;padding-bottom:86px}
+
+/* ===== Barre du haut, centrée, style divinatoire ===== */
+.topbar{position:sticky;top:0;z-index:10;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;padding:14px 14px 10px;background:rgba(248,241,228,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.topbar > div{text-align:center;grid-column:2}
+.eyebrow{font-family:"Cinzel",serif;font-size:9px;letter-spacing:.22em;opacity:.55;text-transform:uppercase}
+h1,h2,h3{font-family:"Cinzel",serif;margin:.15em 0;font-weight:600;letter-spacing:.02em}
+h1{font-size:19px;line-height:1.3}
+h2{font-size:26px;text-align:center}
+h3{font-size:18px;letter-spacing:.04em}
+.icon-btn{border:0;background:transparent;color:var(--deep);font-size:24px;line-height:1;cursor:pointer}
+main{max-width:900px;margin:auto;padding:22px 18px}
+
+/* ===== Hero / accueil ===== */
+.hero{padding:20px 8px 14px;text-align:center}
+.hero-emblem{font-size:30px;color:var(--gold);margin-bottom:6px}
+.hero-emblem.small{font-size:22px;margin-bottom:10px}
+.hero p{max-width:560px;margin:10px auto 0;line-height:1.7;opacity:.78;font-size:16px}
+.section-title{display:flex;justify-content:space-between;align-items:end;gap:10px;margin:28px 0 12px}
+.section-title.centered{justify-content:center;text-align:center}
+.pill{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:11px;opacity:.75;font-family:"Cinzel",serif;letter-spacing:.05em}
+.suit-h4{font-family:"Cinzel",serif;font-size:15px;letter-spacing:.05em;margin:18px 0 8px;opacity:.8}
+
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
-.tile{border:1px solid var(--line);background:rgba(255,255,255,.45);border-radius:20px;padding:18px;min-height:130px;box-shadow:0 6px 20px rgba(41,28,29,.05);cursor:pointer}
-.tile strong{display:block;font-family:"Cormorant Garamond",serif;font-size:23px}
-.tile span{font-size:12px;opacity:.65}
-.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:16px}
-.tarot-card{aspect-ratio:2/3.45;border-radius:18px;padding:10px;position:relative;overflow:hidden;border:2px solid rgba(201,163,90,.65);box-shadow:var(--shadow);cursor:pointer;background:linear-gradient(145deg,#fff9ee,#ead9c5)}
+.tile{border:1px solid var(--line);background:rgba(255,255,255,.5);border-radius:20px;padding:18px;min-height:120px;box-shadow:0 6px 20px rgba(41,28,29,.06);cursor:pointer}
+.tile strong{display:block;font-family:"Cinzel",serif;font-size:16px;letter-spacing:.02em}
+.tile span{font-size:13px;opacity:.65}
+
+/* ===== Cartes ===== */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
+.tarot-card{aspect-ratio:2/3.45;border-radius:18px;padding:10px;position:relative;overflow:hidden;border:2px solid rgba(201,163,90,.65);box-shadow:var(--shadow);cursor:pointer;background:linear-gradient(145deg,#fffaf0,#e9d7bd)}
 .tarot-card .frame{height:100%;border:1px solid rgba(201,163,90,.7);border-radius:13px;padding:10px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center}
-.card-no{font-size:10px;letter-spacing:.12em;opacity:.6}
-.glyph{font-size:54px;line-height:1.1;filter:drop-shadow(0 4px 4px rgba(0,0,0,.08))}
-.card-name{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:700}
+.card-no{font-family:"Cinzel",serif;font-size:9px;letter-spacing:.1em;opacity:.6}
+.glyph{font-size:50px;line-height:1.1;filter:drop-shadow(0 4px 4px rgba(0,0,0,.08))}
+.card-name{font-family:"Cinzel",serif;font-size:16px;font-weight:600;letter-spacing:.01em}
 .card-sub{font-size:10px;opacity:.65;line-height:1.35}
-.mini-symbols{font-size:18px;letter-spacing:4px}
-.major{background:linear-gradient(160deg,#fff8e9,#ead7bd)}
+.major{background:linear-gradient(160deg,#fffaf0,#ecdcc2)}
 .wands{background:linear-gradient(160deg,#fff4dd,#e9c9a5)}
 .cups{background:linear-gradient(160deg,#fff5f1,#d9e6e4)}
 .swords{background:linear-gradient(160deg,#f5f3ef,#c9d2d3)}
 .coins{background:linear-gradient(160deg,#fff8dc,#d8d5ae)}
-.section-title{display:flex;justify-content:space-between;align-items:end;margin:26px 0 12px}
-.pill{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:7px 11px;font-size:11px;opacity:.75}
-.detail{max-width:620px;margin:auto}
-.detail .tarot-card{max-width:290px;margin:10px auto 24px}
-.detail p{line-height:1.7}
-.symbol-list{display:grid;gap:10px;margin-top:18px}
-.symbol{padding:14px 16px;border-left:3px solid var(--gold);background:rgba(255,255,255,.45);border-radius:0 12px 12px 0}
-.symbol b{font-family:"Cormorant Garamond",serif;font-size:20px}
-.draw-zone{text-align:center;padding:24px 0}
-.drawn{display:flex;justify-content:center;margin:20px 0}
-.drawn .tarot-card{width:190px}
-.primary{border:0;background:var(--terracotta);color:#fff8ef;padding:14px 20px;border-radius:999px;cursor:pointer;font-weight:600;box-shadow:0 10px 25px rgba(138,77,70,.25)}
-.secondary{border:1px solid var(--line);background:transparent;padding:12px 18px;border-radius:999px;cursor:pointer}
-.row{display:flex;gap:10px;flex-wrap:wrap}
-.note{font-size:12px;opacity:.65;line-height:1.5}
-textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;padding:13px;background:rgba(255,255,255,.55);font:inherit;color:inherit}
-textarea{min-height:130px;resize:vertical}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);padding:9px 6px calc(9px + env(safe-area-inset-bottom));background:rgba(247,239,227,.95);backdrop-filter:blur(14px);border-top:1px solid var(--line)}
-.bottom-nav button{border:0;background:none;color:var(--deep);font-size:10px;opacity:.5;cursor:pointer}
-.bottom-nav button.active{opacity:1;font-weight:600}
-.bottom-nav span{display:block;font-size:20px;margin-bottom:2px}
+.card-img{width:100%;border-radius:10px;object-fit:cover;aspect-ratio:2/3;box-shadow:0 4px 10px rgba(41,28,29,.15)}
+.tarot-card.has-img{padding:6px}
+.tarot-card.has-img .frame{padding:6px;justify-content:flex-start;gap:6px}
+.tarot-card.has-img .card-name{font-size:15px;margin-top:2px}
+
+.pips{width:100%;display:grid;justify-items:center;align-items:center;gap:3px;flex:1;padding:8px 2px}
+.pips-1{grid-template-columns:1fr}
+.pips-2{grid-template-columns:1fr;grid-template-rows:repeat(2,1fr)}
+.pips-3{grid-template-columns:1fr;grid-template-rows:repeat(3,1fr)}
+.pips-4{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(2,1fr)}
+.pips-5{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(3,1fr)}
+.pips-6{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(3,1fr)}
+.pips-7,.pips-8,.pips-9,.pips-10{grid-template-columns:repeat(2,1fr)}
+.pips-7{grid-template-rows:repeat(4,1fr)}
+.pips-8{grid-template-rows:repeat(4,1fr)}
+.pips-9,.pips-10{grid-template-rows:repeat(5,1fr)}
+.pip{font-size:20px;line-height:1}
+
+/* ===== Dos de carte (pioche) ===== */
+.deck-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.tarot-card-back{aspect-ratio:2/3.2;border-radius:14px;cursor:pointer;border:2px solid var(--gold);box-shadow:0 8px 20px rgba(41,28,29,.15);background:
+  radial-gradient(circle at 50% 50%, #6d3934 0%, #4a2622 70%),
+  repeating-linear-gradient(45deg, rgba(201,163,90,.08) 0 6px, transparent 6px 12px);
+  transition:transform .15s ease}
+.tarot-card-back:hover{transform:translateY(-3px)}
+.tarot-card-back.revealed{visibility:hidden}
+.back-frame{height:100%;display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,163,90,.5);border-radius:10px;margin:5px}
+.back-glyph{font-size:22px;color:var(--gold-bright)}
+.picks-counter{font-family:"Cinzel",serif;letter-spacing:.08em;font-size:12px;opacity:.65;text-align:center;margin-top:4px}
+
+.detail{max-width:600px;margin:auto}
+.detail .tarot-card{max-width:270px;margin:10px auto 20px}
+.detail p{line-height:1.75}
+.lore-text{font-size:16px}
+.symbol-list{display:grid;gap:10px;margin-top:10px}
+.symbol{padding:14px 16px;border-left:3px solid var(--gold);background:rgba(255,255,255,.5);border-radius:0 12px 12px 0}
+.symbol b{font-family:"Cinzel",serif;font-size:15px;letter-spacing:.01em}
+
+.draw-zone{text-align:center;padding:20px 0}
+.draw-zone.compact{padding:8px 0 0}
+.draw-question{width:100%;min-height:100px;border:1px solid var(--line);border-radius:14px;padding:14px;background:rgba(255,255,255,.55);resize:vertical;margin:14px 0}
+textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;padding:13px;background:rgba(255,255,255,.55)}
+.primary{border:0;background:var(--terracotta);color:#fff8ef;padding:14px 26px;border-radius:999px;cursor:pointer;font-family:"Cinzel",serif;font-size:13px;letter-spacing:.06em;box-shadow:0 10px 25px rgba(138,77,70,.25)}
+.primary:disabled{opacity:.4;cursor:not-allowed}
+.secondary{border:1px solid var(--line);background:transparent;padding:12px 18px;border-radius:999px;cursor:pointer;font-family:"Cinzel",serif;font-size:12px;letter-spacing:.04em}
+.ghost{border:0;background:none;color:var(--deep);opacity:.55;padding:12px 14px;cursor:pointer;font-size:13px;text-decoration:underline;display:block;margin:0 auto}
+.note{font-size:13px;opacity:.65;line-height:1.6}
+
+.question-recall{text-align:center;font-style:italic;opacity:.7;margin:16px 0 0;font-size:16px}
+.card-name-recall{font-family:"Cinzel",serif;font-size:13px;letter-spacing:.04em;text-align:center;opacity:.75;margin:2px 0 8px}
+
+/* ===== Animation de chargement "magique" (étoiles dorées) ===== */
+.ai-loading-magic{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 0}
+.ai-loading-magic.small{padding:8px 0}
+.stars-container{position:relative;width:140px;height:64px}
+.stars-container.sm{width:74px;height:34px}
+.star{position:absolute;color:var(--gold-bright);text-shadow:0 0 8px rgba(219,185,111,.85),0 0 2px rgba(255,255,255,.6);animation-name:twinkle;animation-timing-function:ease-in-out;animation-iteration-count:infinite}
+.stars-container:not(.sm) .star{font-size:15px}
+.stars-container.sm .star{font-size:10px}
+@keyframes twinkle{
+  0%,100%{opacity:.12;transform:scale(.55) rotate(0deg)}
+  50%{opacity:1;transform:scale(1.25) rotate(20deg)}
+}
+.ai-loading-text{font-family:"Cinzel",serif;font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.6;font-style:normal;animation:pulse-text 1.8s ease-in-out infinite}
+@keyframes pulse-text{0%,100%{opacity:.4}50%{opacity:.85}}
+.reading-grid{display:grid;gap:14px;margin-top:20px}
+.reading-block{border:1px solid var(--line);background:rgba(255,255,255,.45);border-radius:16px;padding:18px;text-align:center}
+.reading-roman{font-family:"Cinzel",serif;font-size:12px;letter-spacing:.2em;opacity:.5;margin-bottom:6px}
+.reading-block .tarot-card{max-width:150px;margin:0 auto 10px}
+.reading-block p{text-align:left;font-size:16px}
+.why{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px;text-align:left}
+.why summary{cursor:pointer;font-family:"Cinzel",serif;font-size:11px;letter-spacing:.05em;opacity:.7}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{border:1px solid var(--gold);background:rgba(201,163,90,.12);border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--deep)}
+.chip:hover{background:rgba(201,163,90,.28)}
+.chip:disabled{opacity:.4;cursor:default}
+.answer{margin-top:20px;padding:22px;border-radius:20px;background:rgba(255,255,255,.55);border:1px solid var(--line)}
+.answer p{line-height:1.75;font-size:16px}
+.draw-notes{margin:14px 0}
+
+.day-card{max-width:220px;margin:14px auto 8px}
+.tap-hint{text-align:center;font-size:12px;opacity:.5;font-style:italic;margin-top:-6px}
+.progress{height:7px;background:rgba(41,28,29,.1);border-radius:99px;overflow:hidden;margin:12px auto;max-width:300px}
+.progress>span{display:block;height:100%;background:var(--terracotta)}
+
+.symbol.clickable{cursor:pointer;transition:transform .12s ease}
+.symbol.clickable:hover{transform:translateX(2px);background:rgba(255,255,255,.75)}
+.symbol-hero{font-size:56px;text-align:center;margin-bottom:6px}
+.symbol-cat-big{text-align:center;font-family:"Cinzel",serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.6;margin-top:-8px}
+
 .empty{padding:35px 5px;text-align:center;opacity:.65}
-@media(min-width:700px){main{padding:35px 28px}.hero{padding-top:45px}.bottom-nav{max-width:900px;margin:auto;border-radius:20px 20px 0 0}}
+.search{margin:14px auto 0;max-width:400px}
+
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);padding:9px 6px calc(9px + env(safe-area-inset-bottom));background:rgba(248,241,228,.96);backdrop-filter:blur(14px);border-top:1px solid var(--line)}
+.bottom-nav button{border:0;background:none;color:var(--deep);font-family:"Cinzel",serif;font-size:9px;letter-spacing:.03em;opacity:.5;cursor:pointer}
+.bottom-nav button.active{opacity:1;font-weight:600}
+.bottom-nav span{display:block;font-size:19px;margin-bottom:2px}
+
+@media(min-width:700px){main{padding:35px 28px}.bottom-nav{max-width:900px;margin:auto;border-radius:20px 20px 0 0}}
