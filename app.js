@@ -904,8 +904,6 @@ function apprendre(){
   </section>
   <div class="section-title"><h3>Arcanes majeurs</h3></div>
   <div class="card-grid">${MAJORS.map(c=>cardHTML(c)).join("")}</div>
-  <div class="section-title"><h3>Les quatre enseignes</h3></div>
-  <div class="symbol-list">${Object.entries(SUITS).map(([s,m])=>`<div class="symbol"><b>${s}</b><br>${escapeHTML(m[2])}</div>`).join("")}</div>
   ${Object.entries(COURTS).map(([suit,rows])=>`<div class="section-title"><h3>${suit}</h3></div><div class="card-grid">${rows.map(x=>cardHTML([x[0],x[1],x[2],x[3],"court","",suit],SUITS[suit][0])).join("")}</div>`).join("")}
   <div class="section-title"><h3>Cartes numérales</h3></div>
   ${Object.keys(SUITS).map(suit=>`<h4 class="suit-h4">${suit}</h4><div class="card-grid">${CARDS.filter(c=>c[4]==="number"&&c[6]===suit).map(c=>cardHTML(c,SUITS[suit][0])).join("")}</div>`).join("")}`;
@@ -927,7 +925,7 @@ function symboles(){
     <div class="symbol-list">${items.map(([id,s])=>symbolCard(id,s)).join("")}</div>
   `).join("")}
   <div class="section-title"><h3>Les nombres</h3></div>
-  <div class="symbol-list">${Object.entries(NUMBER_KEYS).map(([n,k])=>`<div class="symbol"><b>${n==="1"?"As":n} — ${escapeHTML(k[0])}</b><br>${escapeHTML(k[1])}</div>`).join("")}</div>`;
+  <div class="symbol-list">${Object.entries(NUMBER_KEYS).map(([n,k])=>`<div class="symbol clickable" data-number="${n}"><b>${n==="1"?"As":n} — ${escapeHTML(k[0])}</b><br>${escapeHTML(k[1])}</div>`).join("")}</div>`;
 }
 
 function symbolCard(id, s){
@@ -952,6 +950,27 @@ function showSymbolDetail(id){
       <div class="symbol-list">${linkedDeities.map(d=>`<div class="symbol"><b>${escapeHTML(d[0].toUpperCase()+d.slice(1))}</b><br><small>${escapeHTML(DEITY_NOTES[d])}</small></div>`).join("")}</div>` : ""}
     ${related.length ? `<div class="section-title"><h3>Cartes concernées</h3></div>
       <div class="card-grid">${related.map(c=>cardHTML(c, c[4]==="major"?"major":(SUITS[c[6]]?.[0]||"major"))).join("")}</div>` : ""}
+    <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
+  </div>`;
+  window.scrollTo(0,0);
+  document.getElementById("detailBack").onclick = ()=>{
+    render();
+    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+  };
+  bindCards(); bindChips();
+}
+
+function showNumberDetail(n){
+  const k = NUMBER_KEYS[n]; if(!k) return;
+  preDetailScroll = window.scrollY;
+  const related = CARDS.filter(c => c[4]==="number" && c[7]===Number(n));
+  document.getElementById("screen").innerHTML = `<div class="detail">
+    <div class="symbol-hero">${n==="1"?"As":n}</div>
+    <h2>${n==="1"?"As":n} — ${escapeHTML(k[0])}</h2>
+    <p class="symbol-cat-big">Grammaire des nombres</p>
+    <p>${escapeHTML(k[1])} — ${escapeHTML(k[2])}</p>
+    <div class="section-title"><h3>Cartes concernées</h3></div>
+    <div class="card-grid">${related.map(c=>cardHTML(c, SUITS[c[6]]?.[0]||"major")).join("")}</div>
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
   window.scrollTo(0,0);
@@ -1017,7 +1036,7 @@ function bindChips(){
     el.onclick = ()=> showSymbolDetail(el.dataset.symbol);
   });
   document.querySelectorAll(".symbol.clickable").forEach(el=>{
-    el.onclick = ()=> showSymbolDetail(el.dataset.symbol);
+    el.onclick = ()=> el.dataset.number ? showNumberDetail(el.dataset.number) : showSymbolDetail(el.dataset.symbol);
   });
 }
 
