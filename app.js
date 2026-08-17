@@ -933,15 +933,85 @@ function apprendre(){
   return `<section class="hero">
     <span class="pill">Parcours pédagogique</span>
     <h2>Apprendre le Tarot de Delphes</h2>
-    <p>Touche une carte pour découvrir sa lecture complète : signification traditionnelle et éclairage mythologique.</p>
+    <p>Explore le jeu par catégorie, ou découvre les figures mythologiques qui l'inspirent.</p>
     <div class="progress"><span style="width:${progress}%"></span></div>
     <small>Progression personnelle : ${progress}%</small>
   </section>
-  <div class="section-title"><h3>Arcanes majeurs</h3></div>
-  <div class="card-grid">${MAJORS.map(c=>cardHTML(c)).join("")}</div>
-  ${Object.entries(COURTS).map(([suit,rows])=>`<div class="section-title"><h3>${suit}</h3></div><div class="card-grid">${rows.map(x=>cardHTML([x[0],x[1],x[2],x[3],"court","",suit],SUITS[suit][0])).join("")}</div>`).join("")}
-  <div class="section-title"><h3>Cartes numérales</h3></div>
-  ${Object.keys(SUITS).map(suit=>`<h4 class="suit-h4">${suit}</h4><div class="card-grid">${CARDS.filter(c=>c[4]==="number"&&c[6]===suit).map(c=>cardHTML(c,SUITS[suit][0])).join("")}</div>`).join("")}`;
+  <div class="grid" style="margin-top:20px">
+    <div class="tile" data-learn="majeurs"><strong>✦ Arcanes majeurs</strong><span>Les 22 grandes figures du jeu.</span></div>
+    <div class="tile" data-learn="cour"><strong>♛ Figures de cour</strong><span>16 figures, réparties en 4 enseignes.</span></div>
+    <div class="tile" data-learn="numerales"><strong>✧ Cartes numérales</strong><span>40 cartes, de l'As au Dix.</span></div>
+    <div class="tile" data-learn="figures"><strong>🏛 Figures mythologiques</strong><span>Les ${Object.keys(DEITY_NOTES).length} divinités et héros du jeu.</span></div>
+  </div>`;
+}
+
+/* ----- Sous-navigation de l'onglet Apprendre (écrans "detail" ré-utilisant le motif showXDetail) ----- */
+
+function showLearnMajors(){
+  preDetailScroll = window.scrollY;
+  document.getElementById("screen").innerHTML = `<div class="detail">
+    <div class="section-title"><h3>Arcanes majeurs</h3></div>
+    <div class="card-grid">${MAJORS.map(c=>cardHTML(c)).join("")}</div>
+    <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
+  </div>`;
+  window.scrollTo(0,0);
+  document.getElementById("detailBack").onclick = ()=>{
+    render();
+    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+  };
+  cardDetailReturnTo = showLearnMajors;
+  bindCards();
+}
+
+function showLearnCategory(kind){
+  preDetailScroll = window.scrollY;
+  const title = kind==="cour" ? "Figures de cour" : "Cartes numérales";
+  document.getElementById("screen").innerHTML = `<div class="detail">
+    <div class="section-title"><h3>${title}</h3></div>
+    <div class="grid">${Object.entries(SUITS).map(([suit,m])=>`<div class="tile" data-learn-kind="${kind}" data-learn-suit="${escapeHTML(suit)}"><strong>${m[1]} ${escapeHTML(suit)}</strong><span>${escapeHTML(m[2])}</span></div>`).join("")}</div>
+    <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
+  </div>`;
+  window.scrollTo(0,0);
+  document.getElementById("detailBack").onclick = ()=>{
+    render();
+    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+  };
+  document.querySelectorAll("[data-learn-suit]").forEach(el=>{
+    el.onclick = ()=> showLearnSuit(el.dataset.learnKind, el.dataset.learnSuit);
+  });
+}
+
+function showLearnSuit(kind, suit){
+  preDetailScroll = window.scrollY;
+  const cards = kind==="cour"
+    ? (COURTS[suit]||[]).map(x=>[x[0],x[1],x[2],x[3],"court","",suit])
+    : CARDS.filter(c=>c[4]==="number" && c[6]===suit);
+  document.getElementById("screen").innerHTML = `<div class="detail">
+    <div class="section-title"><h3>${escapeHTML(suit)}</h3></div>
+    <div class="card-grid">${cards.map(c=>cardHTML(c,SUITS[suit]?.[0]||"major")).join("")}</div>
+    <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
+  </div>`;
+  window.scrollTo(0,0);
+  document.getElementById("detailBack").onclick = ()=> showLearnCategory(kind);
+  cardDetailReturnTo = () => showLearnSuit(kind, suit);
+  bindCards();
+}
+
+function showLearnFigures(){
+  preDetailScroll = window.scrollY;
+  const entries = Object.entries(DEITY_NOTES).sort((a,b)=>a[0].localeCompare(b[0],"fr"));
+  document.getElementById("screen").innerHTML = `<div class="detail">
+    <div class="section-title"><h3>Figures mythologiques</h3></div>
+    <p class="note">${entries.length} figures citées dans le jeu — certaines ont leur propre carte, d'autres n'apparaissent que dans une lecture.</p>
+    <div class="symbol-list">${entries.map(([id,note])=>`<div class="symbol clickable" data-deity="${escapeHTML(id)}"><b>${escapeHTML(id.charAt(0).toUpperCase()+id.slice(1))}</b><br><small>${escapeHTML(note)}</small></div>`).join("")}</div>
+    <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
+  </div>`;
+  window.scrollTo(0,0);
+  document.getElementById("detailBack").onclick = ()=>{
+    render();
+    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+  };
+  bindChips();
 }
 
 function symboles(){
@@ -970,6 +1040,11 @@ function symbolCard(id, s){
 }
 
 let preDetailScroll = 0;
+// Où revenir depuis le détail d'une carte : par défaut la vue courante (render()),
+// mais surchargé par les écrans "detail" intermédiaires (symbole, nombre, divinité,
+// sous-listes d'Apprendre) pour qu'un retour depuis une fiche carte ramène bien à la
+// sous-liste d'où l'on vient, pas directement au menu principal.
+let cardDetailReturnTo = () => render();
 
 function showSymbolDetail(id){
   const s = SYMBOL_LIBRARY[id]; if(!s) return;
@@ -992,6 +1067,7 @@ function showSymbolDetail(id){
     render();
     requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
   };
+  cardDetailReturnTo = () => showSymbolDetail(id);
   bindCards(); bindChips();
 }
 
@@ -1013,6 +1089,7 @@ function showNumberDetail(n){
     render();
     requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
   };
+  cardDetailReturnTo = () => showNumberDetail(n);
   bindCards(); bindChips();
 }
 
@@ -1035,6 +1112,7 @@ function showDeityDetail(id){
     render();
     requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
   };
+  cardDetailReturnTo = () => showDeityDetail(id);
   bindCards(); bindChips();
 }
 
@@ -1073,7 +1151,7 @@ function showDetail(c){
   </div>`;
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
-    render();
+    cardDetailReturnTo();
     requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
   };
   bindChips();
@@ -1119,8 +1197,18 @@ function bindDeck(){
 }
 
 function bind(){
+  cardDetailReturnTo = () => render();
   document.querySelectorAll("[data-route]").forEach(b=>b.onclick=()=>setRoute(b.dataset.route));
   document.querySelectorAll("[data-go]").forEach(el=>el.onclick=()=>setRoute(el.dataset.go));
+  document.querySelectorAll("[data-learn]").forEach(el=>{
+    el.onclick = ()=>{
+      const key = el.dataset.learn;
+      if(key==="majeurs") showLearnMajors();
+      else if(key==="cour") showLearnCategory("cour");
+      else if(key==="numerales") showLearnCategory("numerales");
+      else if(key==="figures") showLearnFigures();
+    };
+  });
   document.getElementById("homeBtn").onclick=()=>setRoute("home");
   document.getElementById("backBtn").onclick=()=>setRoute("home");
 
