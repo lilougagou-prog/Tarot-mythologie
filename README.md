@@ -58,6 +58,7 @@ npx vercel dev
 - Bibliothèque de ~70 symboles, classés par catégorie, tous cliquables et reliés aux cartes/divinités ; position de scroll préservée à la navigation
 - Détail de carte enrichi : lecture Tarot de Marseille + éclairage mythologique pour les 22 arcanes majeurs
 - Sauvegarde locale (localStorage) : journal des tirages + état du tirage en cours (persiste même après fermeture du navigateur)
+- Animations légères dans toute l'app : illustrations avec léger zoom/pan continu + halo scintillant, transition douce entre écrans, micro-interactions au toucher, retournement des cartes du tirage, barre de progression et lecture qui s'animent (respecte la préférence système « réduire les animations »)
 
 ## Pistes de suite possibles (non bloquantes)
 - Ajouter les illustrations des 16 arcanes majeurs restants + 56 cartes mineures (même gabarit que `assets/`, 500px de large, JPEG qualité ~78)
