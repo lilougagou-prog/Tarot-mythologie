@@ -84,7 +84,7 @@ main{max-width:900px;margin:auto;padding:22px 18px}
 .illus{position:relative;overflow:hidden;border-radius:14px;margin-bottom:10px}
 .illus .tile-img{margin-bottom:0}
 .illus .spark{position:absolute;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle,rgba(255,250,230,.95) 0%,rgba(219,185,111,.55) 45%,rgba(219,185,111,0) 75%);animation-name:twinkle;animation-duration:3s;animation-timing-function:ease-in-out;animation-iteration-count:infinite;pointer-events:none}
-.tile-img{animation:ken-burns 6s ease-in-out infinite alternate}
+.tile-img,.card-img{animation:ken-burns 6s ease-in-out infinite alternate}
 @keyframes ken-burns{
   0%{transform:scale(1) translate(0,0)}
   100%{transform:scale(1.22) translate(-3.5%,-2.5%)}
