@@ -20,7 +20,8 @@ h1,h2,h3{font-family:"Cinzel",serif;margin:.15em 0;font-weight:600;letter-spacin
 h1{font-size:19px;line-height:1.3}
 h2{font-size:26px;text-align:center}
 h3{font-size:18px;letter-spacing:.04em}
-.icon-btn{border:0;background:transparent;color:var(--deep);font-size:24px;line-height:1;cursor:pointer}
+.icon-btn{border:0;background:transparent;color:var(--deep);font-size:24px;line-height:1;cursor:pointer;transition:transform .12s ease}
+.icon-btn:active{transform:scale(.85)}
 main{max-width:900px;margin:auto;padding:22px 18px}
 
 /* ===== Hero / accueil ===== */
@@ -34,14 +35,28 @@ main{max-width:900px;margin:auto;padding:22px 18px}
 .suit-h4{font-family:"Cinzel",serif;font-size:15px;letter-spacing:.05em;margin:18px 0 8px;opacity:.8}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
-.tile{border:1px solid var(--line);background:rgba(255,255,255,.5);border-radius:20px;padding:18px;min-height:120px;box-shadow:0 6px 20px rgba(41,28,29,.06);cursor:pointer}
+.tile{border:1px solid var(--line);background:rgba(255,255,255,.5);border-radius:20px;padding:18px;min-height:120px;box-shadow:0 6px 20px rgba(41,28,29,.06);cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
+.tile:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(41,28,29,.1)}
+.tile:active{transform:translateY(-1px) scale(.97)}
 .tile strong{display:block;font-family:"Cinzel",serif;font-size:16px;letter-spacing:.02em}
 .tile span{font-size:13px;opacity:.65}
 .tile-img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:14px;margin-bottom:10px;display:block;border:1px solid rgba(201,163,90,.5)}
 
+/* ===== Illustrations vivantes : zoom/pan très lent + halo scintillant posé dessus ===== */
+.illus{position:relative;overflow:hidden;border-radius:14px;margin-bottom:10px}
+.illus .tile-img{margin-bottom:0}
+.illus .spark{position:absolute;color:var(--gold-bright);text-shadow:0 0 6px rgba(219,185,111,.9),0 0 2px rgba(255,255,255,.7);font-size:12px;animation-name:twinkle;animation-duration:3s;animation-timing-function:ease-in-out;animation-iteration-count:infinite;pointer-events:none}
+.tile-img,.card-img{animation:ken-burns 26s ease-in-out infinite alternate}
+@keyframes ken-burns{
+  0%{transform:scale(1) translate(0,0)}
+  100%{transform:scale(1.07) translate(-1.5%,-1%)}
+}
+
 /* ===== Cartes ===== */
 .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
-.tarot-card{aspect-ratio:2/3.45;border-radius:18px;padding:10px;position:relative;overflow:hidden;border:2px solid rgba(201,163,90,.65);box-shadow:var(--shadow);cursor:pointer;background:linear-gradient(145deg,#fffaf0,#e9d7bd)}
+.tarot-card{aspect-ratio:2/3.45;border-radius:18px;padding:10px;position:relative;overflow:hidden;border:2px solid rgba(201,163,90,.65);box-shadow:var(--shadow);cursor:pointer;background:linear-gradient(145deg,#fffaf0,#e9d7bd);transition:transform .15s ease,box-shadow .15s ease}
+.tarot-card:hover{transform:translateY(-2px)}
+.tarot-card:active{transform:scale(.98)}
 .tarot-card .frame{height:100%;border:1px solid rgba(201,163,90,.7);border-radius:13px;padding:10px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center}
 .card-no{font-family:"Cinzel",serif;font-size:9px;letter-spacing:.1em;opacity:.6}
 .glyph{font-size:50px;line-height:1.1;filter:drop-shadow(0 4px 4px rgba(0,0,0,.08))}
@@ -75,9 +90,9 @@ main{max-width:900px;margin:auto;padding:22px 18px}
 .tarot-card-back{aspect-ratio:2/3.2;border-radius:14px;cursor:pointer;border:2px solid var(--gold);box-shadow:0 8px 20px rgba(41,28,29,.15);background:
   radial-gradient(circle at 50% 50%, #6d3934 0%, #4a2622 70%),
   repeating-linear-gradient(45deg, rgba(201,163,90,.08) 0 6px, transparent 6px 12px);
-  transition:transform .15s ease}
+  transition:transform .38s cubic-bezier(.34,1.56,.64,1),opacity .3s ease .05s,box-shadow .15s ease}
 .tarot-card-back:hover{transform:translateY(-3px)}
-.tarot-card-back.revealed{visibility:hidden}
+.tarot-card-back.revealed{transform:rotateY(90deg) scale(.85);opacity:0;pointer-events:none}
 .back-frame{height:100%;display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,163,90,.5);border-radius:10px;margin:5px}
 .back-glyph{font-size:22px;color:var(--gold-bright)}
 .picks-counter{font-family:"Cinzel",serif;letter-spacing:.08em;font-size:12px;opacity:.65;text-align:center;margin-top:4px}
@@ -94,10 +109,13 @@ main{max-width:900px;margin:auto;padding:22px 18px}
 .draw-zone.compact{padding:8px 0 0}
 .draw-question{width:100%;min-height:100px;border:1px solid var(--line);border-radius:14px;padding:14px;background:rgba(255,255,255,.55);resize:vertical;margin:14px 0}
 textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;padding:13px;background:rgba(255,255,255,.55)}
-.primary{border:0;background:var(--terracotta);color:#fff8ef;padding:14px 26px;border-radius:999px;cursor:pointer;font-family:"Cinzel",serif;font-size:13px;letter-spacing:.06em;box-shadow:0 10px 25px rgba(138,77,70,.25)}
+.primary{border:0;background:var(--terracotta);color:#fff8ef;padding:14px 26px;border-radius:999px;cursor:pointer;font-family:"Cinzel",serif;font-size:13px;letter-spacing:.06em;box-shadow:0 10px 25px rgba(138,77,70,.25);transition:transform .12s ease}
 .primary:disabled{opacity:.4;cursor:not-allowed}
-.secondary{border:1px solid var(--line);background:transparent;padding:12px 18px;border-radius:999px;cursor:pointer;font-family:"Cinzel",serif;font-size:12px;letter-spacing:.04em}
-.ghost{border:0;background:none;color:var(--deep);opacity:.55;padding:12px 14px;cursor:pointer;font-size:13px;text-decoration:underline;display:block;margin:0 auto}
+.primary:active:not(:disabled){transform:scale(.96)}
+.secondary{border:1px solid var(--line);background:transparent;padding:12px 18px;border-radius:999px;cursor:pointer;font-family:"Cinzel",serif;font-size:12px;letter-spacing:.04em;transition:transform .12s ease}
+.secondary:active{transform:scale(.96)}
+.ghost{border:0;background:none;color:var(--deep);opacity:.55;padding:12px 14px;cursor:pointer;font-size:13px;text-decoration:underline;display:block;margin:0 auto;transition:transform .12s ease}
+.ghost:active{transform:scale(.96)}
 .note{font-size:13px;opacity:.65;line-height:1.6}
 
 .question-recall{text-align:center;font-style:italic;opacity:.7;margin:16px 0 0;font-size:16px}
@@ -118,15 +136,20 @@ textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;paddin
 .ai-loading-text{font-family:"Cinzel",serif;font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.6;font-style:normal;animation:pulse-text 1.8s ease-in-out infinite}
 @keyframes pulse-text{0%,100%{opacity:.4}50%{opacity:.85}}
 .reading-grid{display:grid;gap:14px;margin-top:20px}
-.reading-block{border:1px solid var(--line);background:rgba(255,255,255,.45);border-radius:16px;padding:18px;text-align:center}
+.reading-block{border:1px solid var(--line);background:rgba(255,255,255,.45);border-radius:16px;padding:18px;text-align:center;animation:block-in .45s ease both}
+.reading-block:nth-child(1){animation-delay:.05s}
+.reading-block:nth-child(2){animation-delay:.16s}
+.reading-block:nth-child(3){animation-delay:.27s}
+@keyframes block-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .reading-roman{font-family:"Cinzel",serif;font-size:12px;letter-spacing:.2em;opacity:.5;margin-bottom:6px}
 .reading-block .tarot-card{max-width:150px;margin:0 auto 10px}
 .reading-block p{text-align:left;font-size:16px}
 .why{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px;text-align:left}
 .why summary{cursor:pointer;font-family:"Cinzel",serif;font-size:11px;letter-spacing:.05em;opacity:.7}
 .chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.chip{border:1px solid var(--gold);background:rgba(201,163,90,.12);border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--deep)}
+.chip{border:1px solid var(--gold);background:rgba(201,163,90,.12);border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--deep);transition:transform .12s ease,background .12s ease}
 .chip:hover{background:rgba(201,163,90,.28)}
+.chip:active:not(:disabled){transform:scale(.94)}
 .chip:disabled{opacity:.4;cursor:default}
 .answer{margin-top:20px;padding:22px;border-radius:20px;background:rgba(255,255,255,.55);border:1px solid var(--line)}
 .answer p{line-height:1.75;font-size:16px}
@@ -135,7 +158,8 @@ textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;paddin
 .day-card{max-width:220px;margin:14px auto 8px}
 .tap-hint{text-align:center;font-size:12px;opacity:.5;font-style:italic;margin-top:-6px}
 .progress{height:7px;background:rgba(41,28,29,.1);border-radius:99px;overflow:hidden;margin:12px auto;max-width:300px}
-.progress>span{display:block;height:100%;background:var(--terracotta)}
+.progress>span{display:block;height:100%;background:var(--terracotta);animation:fill-bar 1s ease-out}
+@keyframes fill-bar{from{width:0}}
 
 .symbol.clickable{cursor:pointer;transition:transform .12s ease}
 .symbol.clickable:hover{transform:translateX(2px);background:rgba(255,255,255,.75)}
@@ -148,8 +172,21 @@ textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;paddin
 .search{margin:14px auto 0;max-width:400px}
 
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);padding:9px 6px calc(9px + env(safe-area-inset-bottom));background:rgba(248,241,228,.96);backdrop-filter:blur(14px);border-top:1px solid var(--line)}
-.bottom-nav button{border:0;background:none;color:var(--deep);font-family:"Cinzel",serif;font-size:9px;letter-spacing:.03em;opacity:.5;cursor:pointer}
+.bottom-nav button{border:0;background:none;color:var(--deep);font-family:"Cinzel",serif;font-size:9px;letter-spacing:.03em;opacity:.5;cursor:pointer;transition:transform .12s ease}
+.bottom-nav button:active{transform:scale(.88)}
 .bottom-nav button.active{opacity:1;font-weight:600}
 .bottom-nav span{display:block;font-size:19px;margin-bottom:2px}
 
 @media(min-width:700px){main{padding:35px 28px}.bottom-nav{max-width:900px;margin:auto;border-radius:20px 20px 0 0}}
+
+/* ===== Transition douce à chaque changement d'écran (onglet ou écran de détail) ===== */
+@keyframes screen-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.screen-anim{animation:screen-in .32s ease both}
+
+/* Respecte la préférence système "réduire les animations" */
+@media (prefers-reduced-motion: reduce){
+  .tile-img,.card-img,.illus .spark,.screen-anim,.reading-block,.progress>span,
+  .tile,.primary,.secondary,.chip,.icon-btn,.ghost,.bottom-nav button,.tarot-card,.tarot-card-back{
+    animation:none !important;transition:none !important
+  }
+}
