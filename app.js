@@ -652,11 +652,13 @@ function cardVisual(c){
 
 function cardHTML(c, cls="major"){
   const hasImg = !!CARD_IMAGES[c[0]];
+  // Les illustrations sont déjà des cartes complètes (nom + déité intégrés au dessin) :
+  // pas besoin de ré-afficher un libellé HTML par-dessus pour ces cartes-là.
   return `<div class="tarot-card ${cls} ${hasImg?"has-img":""}" data-card="${encodeURIComponent(JSON.stringify(c))}">
     <div class="frame">
       ${hasImg ? "" : `<div class="card-no">${escapeHTML(c[0])}</div>`}
       ${cardVisual(c)}
-      <div class="card-name">${escapeHTML(c[1])}</div>
+      ${hasImg ? "" : `<div class="card-name">${escapeHTML(c[1])}</div>`}
       ${hasImg ? "" : `<div class="card-sub">${escapeHTML(c[3]||"")}</div>`}
     </div>
   </div>`;
