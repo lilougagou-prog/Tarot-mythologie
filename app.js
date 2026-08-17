@@ -848,9 +848,24 @@ function render(){
   bind();
 }
 
+// Petite poussière de lumière qui flotte lentement dans le hero de l'accueil
+// (positions/durées fixes mais variées, purement décoratif).
+function homeGlowHTML(){
+  const motes = [
+    {left:"6%", size:6, dur:8, delay:0},
+    {left:"20%", size:4, dur:11, delay:2.2},
+    {left:"37%", size:7, dur:9.5, delay:.8},
+    {left:"55%", size:5, dur:10.5, delay:3.4},
+    {left:"71%", size:8, dur:8.8, delay:1.6},
+    {left:"88%", size:5, dur:12, delay:.3},
+  ];
+  return `<div class="home-glow">${motes.map(m=>`<span class="mote" style="left:${m.left};width:${m.size}px;height:${m.size}px;animation-duration:${m.dur}s;animation-delay:${m.delay}s"></span>`).join("")}</div>`;
+}
+
 function home(){
   const day = MAJORS[new Date().getDate() % MAJORS.length];
   return `<section class="hero">
+    ${homeGlowHTML()}
     <div class="hero-emblem">✦</div>
     <h2>Tarot de Delphes</h2>
     <p>Un tarot mythologique grec qui s'apprend en le regardant : tirage, symboles reliés entre eux, et un parcours d'apprentissage progressif.</p>
