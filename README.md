@@ -6,7 +6,7 @@ Application web (PWA) de tarot mythologique grec — tirage interactif, lecture 
 - `index.html` — structure de la page
 - `styles.css` — tous les styles (police Cinzel/EB Garamond, thème "divinatoire", animation de chargement en étoiles)
 - `app.js` — toute la logique (données des cartes, symboles, tirage, navigation, appel au backend IA)
-- `assets/` — 6 illustrations de cartes (Le Mat, Bateleur, Papesse, Impératrice, Empereur, Amoureux) ; les 16 autres arcanes majeurs + 56 cartes mineures utilisent un glyphe emoji en attendant leurs illustrations
+- `assets/` — 6 illustrations de cartes (Le Mat, Bateleur, Papesse, Impératrice, Empereur, Amoureux) ; les 16 autres arcanes majeurs + 56 cartes mineures utilisent un glyphe emoji en attendant leurs illustrations. 4 illustrations supplémentaires (`learn-*.jpg`) pour les cases de l'onglet Apprendre.
 - `manifest.json` + `icon.svg` — nécessaires pour l'installation en PWA
 - `service-worker.js` — cache offline
 - `api/reading.js` — backend serverless (Vercel) qui appelle l'API Anthropic côté serveur

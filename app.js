@@ -938,10 +938,10 @@ function apprendre(){
     <small>Progression personnelle : ${progress}%</small>
   </section>
   <div class="grid" style="margin-top:20px">
-    <div class="tile" data-learn="majeurs"><strong>✦ Arcanes majeurs</strong><span>Les 22 grandes figures du jeu.</span></div>
-    <div class="tile" data-learn="cour"><strong>♛ Figures de cour</strong><span>16 figures, réparties en 4 enseignes.</span></div>
-    <div class="tile" data-learn="numerales"><strong>✧ Cartes numérales</strong><span>40 cartes, de l'As au Dix.</span></div>
-    <div class="tile" data-learn="figures"><strong>🏛 Figures mythologiques</strong><span>Les ${Object.keys(DEITY_NOTES).length} divinités et héros du jeu.</span></div>
+    <div class="tile" data-learn="majeurs"><img class="tile-img" src="assets/learn-majeurs.jpg" alt=""><strong>Arcanes majeurs</strong><span>Les 22 grandes figures du jeu.</span></div>
+    <div class="tile" data-learn="cour"><img class="tile-img" src="assets/learn-cour.jpg" alt=""><strong>Figures de cour</strong><span>16 figures, réparties en 4 enseignes.</span></div>
+    <div class="tile" data-learn="numerales"><img class="tile-img" src="assets/learn-numerales.jpg" alt=""><strong>Cartes numérales</strong><span>40 cartes, de l'As au Dix.</span></div>
+    <div class="tile" data-learn="figures"><img class="tile-img" src="assets/learn-figures.jpg" alt=""><strong>Figures mythologiques</strong><span>Les ${Object.keys(DEITY_NOTES).length} divinités et héros du jeu.</span></div>
   </div>`;
 }
 
