@@ -973,7 +973,7 @@ function illusHTML(src, seed){
 function apprendre(){
   const progress = Math.min(100, Math.round((Math.min(78,journal.length*3)/78)*100));
   return `<section class="hero">
-    <span class="pill">Parcours pédagogique</span>
+    <div class="hero-emblem">✦</div>
     <h2>Apprendre le Tarot de Delphes</h2>
     <p>Explore le jeu par catégorie, ou découvre les figures mythologiques qui l'inspirent.</p>
     <div class="progress"><span style="width:${progress}%"></span></div>
@@ -1075,7 +1075,6 @@ function symboles(){
 
   return `<section class="hero">
     <div class="hero-emblem">✦</div>
-    <span class="pill">Bibliothèque vivante</span>
     <h2>Bibliothèque symbolique</h2>
     <p>Chaque symbole est relié aux cartes et aux figures mythologiques qui l'utilisent.</p>
     <div class="search"><input id="symbolSearch" placeholder="Rechercher un symbole…"></div>
