@@ -114,6 +114,234 @@ const CARD_LORE = {
 "XXI — Le Monde": {
   marseille:"Une figure danse au centre d'une couronne végétale entourée des quatre créatures : accomplissement, totalité, la boucle enfin bouclée.",
   myth:"Gaïa, déesse primordiale de la Terre et mère de toutes choses, est l'aboutissement qui contient et intègre tout ce qui a précédé plutôt que de l'exclure. Le Monde n'efface rien du chemin parcouru — il le rassemble."
+},
+
+/* ----- Figures de cour (16) ----- */
+"Valet de Bâtons": {
+  marseille:"Le Valet de Bâtons se tient prêt, bâton en main, avant même que le mouvement ne commence : c'est l'arcane de l'élan qui s'annonce, encore neuf, pas encore éprouvé par l'action.",
+  myth:"Éos, déesse de l'aurore aux doigts de rose, ouvre chaque jour les portes du ciel pour que le soleil s'y engage. Elle ne conduit pas le char : elle rend simplement le passage possible — l'énergie de ce Valet est la même, une promesse plus qu'un accomplissement."
+},
+"Cavalier de Bâtons": {
+  marseille:"Le Cavalier de Bâtons galope, bâton levé, sans se retourner : action rapide, engagement total, énergie qui préfère avancer que réfléchir davantage.",
+  myth:"Niké, déesse ailée de la victoire, se tient aux côtés des vainqueurs sans jamais combattre elle-même — elle est le mouvement qui précède et accompagne le triomphe. Ce Cavalier avance avec cette même certitude conquérante, parfois trop vite pour mesurer les obstacles."
+},
+"Reine de Bâtons": {
+  marseille:"La Reine de Bâtons tient son bâton fermement, assise mais jamais passive : confiance stable, feu intérieur qui n'a plus besoin de se démontrer.",
+  myth:"Hestia, déesse du foyer, refusa les prétendants de l'Olympe pour garder la flamme sacrée toujours allumée au centre de chaque maison. Sa présence discrète mais irremplaçable est la vraie force de cette Reine : un feu qui n'éblouit pas mais qui ne s'éteint jamais."
+},
+"Roi de Bâtons": {
+  marseille:"Le Roi de Bâtons dirige avec l'autorité de celui qui a lui-même façonné son pouvoir : maîtrise acquise par le travail, création menée jusqu'au bout.",
+  myth:"Héphaïstos, dieu forgeron rejeté pour sa claudication, se rendit indispensable par son génie créateur — armes des dieux, palais, automates. Sa légende rappelle que l'autorité la plus solide n'est pas celle qu'on reçoit, mais celle qu'on forge patiemment de ses mains."
+},
+"Valet de Coupes": {
+  marseille:"Le Valet de Coupes contemple sa coupe avec étonnement : sensibilité qui s'éveille, premier émoi, désir encore trop neuf pour se nommer clairement.",
+  myth:"Himéros, dieu ailé compagnon d'Éros, incarne le désir soudain, celui qui saisit avant toute réflexion. Ce Valet ressent avant de comprendre — une attirance sincère, encore fragile."
+},
+"Cavalier de Coupes": {
+  marseille:"Le Cavalier de Coupes avance lentement, coupe tendue devant lui : offre sincère, quête menée par le cœur plus que par la stratégie.",
+  myth:"Énée, fils d'Aphrodite, quitta Troie en flammes en portant son père sur son dos, fidèle à ce qu'il aimait jusque dans la ruine. Ce Cavalier porte la même loyauté tranquille : il engage son cœur pour un temps long, pas pour un instant."
+},
+"Reine de Coupes": {
+  marseille:"La Reine de Coupes regarde sa coupe fermée, comme un secret qu'elle seule connaît : intuition affective, réceptivité, beauté qui n'a pas besoin de se justifier.",
+  myth:"Aphrodite, née de l'écume marine, incarne un amour qui échappe à toute logique et pourtant gouverne les dieux comme les hommes. Cette Reine ressent avec cette même acuité : rien ne lui échappe de ce qui touche au cœur."
+},
+"Roi de Coupes": {
+  marseille:"Le Roi de Coupes reste stable sur une mer agitée, coupe en main : maîtrise émotionnelle, sagesse acquise à force d'avoir traversé bien des marées.",
+  myth:"Nérée, vieillard bienveillant de la mer et père des cinquante Néréides, connaît toutes les vérités mais ne les impose jamais — il les révèle à qui sait le retenir. Ce Roi gouverne ses eaux intérieures avec cette même patience, sans jamais se laisser submerger."
+},
+"Valet d'Épées": {
+  marseille:"Le Valet d'Épées observe, épée prête, l'esprit en alerte : curiosité vive, idées qui filent plus vite qu'elles ne se posent.",
+  myth:"Zéphyr, le plus doux des vents, peut aussi bien caresser les fleurs que déraciner un arbre selon son humeur. Ce Valet a cette même vivacité changeante — un esprit brillant, encore à apprivoiser."
+},
+"Cavalier d'Épées": {
+  marseille:"Le Cavalier d'Épées charge sans ralentir, épée haute : action décidée, parfois précipitée, qui préfère l'affrontement direct à l'attente.",
+  myth:"Bellérophon, monté sur Pégase, terrassa la Chimère avec autant de courage que d'impétuosité — avant qu'un excès d'ambition ne précipite sa chute. Ce Cavalier porte la même bravoure fougueuse, à condition de ne pas viser plus haut que ce que la situation permet."
+},
+"Reine d'Épées": {
+  marseille:"La Reine d'Épées tient son épée droite, le regard clair : discernement, indépendance d'esprit, décision prise sans se laisser attendrir inutilement.",
+  myth:"Athéna, née tout armée de la tête de Zeus, conseille les héros sans jamais se laisser guider par la seule émotion — sa chouette voit dans l'obscurité ce que d'autres manquent. Cette Reine juge avec cette même lucidité, précieuse et parfois redoutée."
+},
+"Roi d'Épées": {
+  marseille:"Le Roi d'Épées gouverne depuis son trône, épée verticale : autorité intellectuelle, décisions mesurées, contrôle exercé sur des forces qui pourraient autrement tout emporter.",
+  myth:"Éole, gardien des vents, les enferme dans une outre pour n'en libérer que ce qui est nécessaire — un pouvoir sur des forces invisibles mais redoutables. Ce Roi maîtrise ses pensées avec la même rigueur, sans jamais les laisser se déchaîner sans raison."
+},
+"Valet de Deniers": {
+  marseille:"Le Valet de Deniers observe une pièce avec attention, comme une graine qu'on examine avant de la semer : projet naissant, application studieuse, patience du débutant.",
+  myth:"Chloris, déesse des fleurs, transforme d'un souffle chaque endroit qu'elle traverse en jardin. Ce Valet porte cette même promesse silencieuse — rien n'est encore visible, mais tout est déjà en germination."
+},
+"Cavalier de Deniers": {
+  marseille:"Le Cavalier de Deniers avance sans se presser, dans un champ plutôt que sur un chemin de bataille : travail méthodique, constance préférée à la précipitation.",
+  myth:"Triptolème reçut de Déméter un char ailé et des grains de blé pour enseigner l'agriculture au monde entier, patiemment, terre après terre. Ce Cavalier porte cette même vocation : transmettre un savoir utile, sans hâte inutile."
+},
+"Reine de Deniers": {
+  marseille:"La Reine de Deniers tient son denier avec douceur, entourée d'abondance discrète : fertilité, capacité à faire grandir ce qui lui est confié, générosité concrète.",
+  myth:"Perséphone traverse chaque année le monde souterrain puis en revient, faisant fleurir la terre à son retour. Cette Reine incarne cette même alternance féconde : elle sait que la croissance a besoin de ses saisons de repli."
+},
+"Roi de Deniers": {
+  marseille:"Le Roi de Deniers siège entouré de richesse tangible : réussite matérielle installée, sens pratique, autorité fondée sur des résultats concrets et durables.",
+  myth:"Ploutos, dieu de la richesse, fut rendu aveugle par Zeus afin qu'il distribue l'abondance sans favoritisme, à qui la mérite comme à qui ne la mérite pas. Ce Roi gère ce qu'il possède avec ce même sérieux — une prospérité qui doit encore être mise au service de quelque chose."
+},
+
+/* ----- Cartes numérales (40) — l'éclairage mythologique varie librement au fil des nombres ----- */
+"As de Bâtons": {
+  marseille:"L'As de Bâtons est une main qui surgit des nuages, tenant un bâton en bourgeon : énergie brute encore intacte, désir d'agir qui ne demande qu'à s'exprimer.",
+  myth:"C'est l'étincelle que Prométhée déroba aux dieux pour l'offrir aux hommes — un feu premier, avant toute maîtrise, porteur d'un potentiel immense et encore dangereux. Cet As est ce don initial, à apprivoiser plutôt qu'à redouter."
+},
+"2 de Bâtons": {
+  marseille:"Un personnage tient le globe d'une main et un bâton de l'autre, regardant au loin depuis ses remparts : premier choix de direction, projet qui hésite encore entre deux voies.",
+  myth:"Héraclès, à la croisée des chemins, dut choisir entre la voie facile du plaisir et celle, plus rude, de la vertu — un choix qui façonna toute sa légende. Cette carte pose la même question : quelle direction donner à une énergie qui ne demande qu'à partir ?"
+},
+"3 de Bâtons": {
+  marseille:"Trois bâtons plantés en terre, un personnage regarde des navires s'éloigner vers l'horizon : entreprise lancée, expansion, résultats encore à venir mais déjà en mouvement.",
+  myth:"Jason, une fois l'Argo achevé, dut attendre que le vent se lève pour partir vers la Toison d'or — l'élan était prêt, restait à le laisser porter ses fruits au loin. Cette carte est cette attente active, tournée vers ce qui vient."
+},
+"4 de Bâtons": {
+  marseille:"Quatre bâtons soutiennent une guirlande de fleurs, deux figures célèbrent devant : stabilité heureuse, fondations posées, moment de répit mérité après l'effort.",
+  myth:"Les fêtes en l'honneur d'Hestia et du foyer marquaient traditionnellement l'achèvement d'une maison — un seuil franchi, une base désormais sûre pour continuer à bâtir. Cette carte célèbre ce même palier stable."
+},
+"5 de Bâtons": {
+  marseille:"Cinq personnages croisent leurs bâtons dans un désordre apparent : rivalité, tension d'énergies qui s'opposent sans qu'aucune ne prenne clairement le dessus.",
+  myth:"Les jeux du stade antique opposaient les athlètes dans une compétition rude mais codifiée — la friction n'y était pas destructrice, elle faisait partie du jeu. Cette carte invite à voir le conflit comme un frottement nécessaire, pas une catastrophe."
+},
+"6 de Bâtons": {
+  marseille:"Un cavalier couronné de laurier avance entouré de bâtons, acclamé par d'autres : victoire reconnue publiquement, effort enfin récompensé et validé par les autres.",
+  myth:"Le laurier couronnait les vainqueurs des jeux Pythiques, à Delphes même, en hommage à Apollon qui l'avait consacré après sa propre victoire sur le serpent Python. Cette carte est cette reconnaissance méritée, célébrée devant témoins."
+},
+"7 de Bâtons": {
+  marseille:"Un personnage en position haute défend sa place avec un bâton contre six autres levés vers lui : résistance, position à défendre, courage face à une pression multiple.",
+  myth:"Achille, seul face à la coalition adverse sous les murs de Troie, continua de tenir sa position malgré le nombre. Cette carte est cette même ténacité — tenir bon, même sans certitude de l'issue."
+},
+"8 de Bâtons": {
+  marseille:"Huit bâtons filent dans les airs, en plein vol, vers un but encore invisible : accélération soudaine, événements qui se précipitent après une période d'attente.",
+  myth:"Les flèches d'Apollon, dieu archer autant que solaire, atteignaient toujours leur cible avec une vitesse redoutable. Cette carte annonce ce même mouvement rapide, presque impossible à ralentir une fois lancé."
+},
+"9 de Bâtons": {
+  marseille:"Un personnage blessé mais debout tient son dernier bâton, huit autres dressés derrière lui en rempart : résilience, vigilance maintenue malgré la fatigue accumulée.",
+  myth:"Héraclès, au seuil de son douzième et dernier travail, portait déjà les marques des onze précédents sans jamais renoncer. Cette carte est cette endurance presque épuisée mais qui refuse encore de céder."
+},
+"10 de Bâtons": {
+  marseille:"Un personnage courbé porte dix bâtons vers une maison au loin : charge lourde, responsabilités accumulées, but presque atteint mais au prix d'un fardeau conséquent.",
+  myth:"Atlas porte le poids du ciel sur ses épaules, une charge sans fin qu'aucun repos ne vient jamais alléger totalement. Cette carte questionne cette même charge : est-elle encore nécessaire à porter seul jusqu'au bout ?"
+},
+"As de Coupes": {
+  marseille:"Une main sort des nuages, offrant une coupe débordante d'où jaillissent cinq jets d'eau : émotion neuve et généreuse, cœur ouvert avant toute retenue.",
+  myth:"La source de Castalie, au pied du mont Parnasse à Delphes, offrait à qui s'y abreuvait une inspiration purifiée, presque sacrée. Cet As est cette même eau vive, promesse d'un sentiment encore intact."
+},
+"2 de Coupes": {
+  marseille:"Deux figures échangent leurs coupes face à face, un caducée ailé entre elles : union, réciprocité, lien affectif qui se noue à parts égales.",
+  myth:"Éros et Psyché, après bien des épreuves, finirent unis dans une réciprocité que ni les dieux ni les obstacles n'avaient réussi à empêcher. Cette carte célèbre cet échange équilibré, où chacun donne autant qu'il reçoit."
+},
+"3 de Coupes": {
+  marseille:"Trois figures lèvent leur coupe ensemble, en cercle, entourées de fruits : joie partagée, célébration collective, abondance émotionnelle vécue à plusieurs.",
+  myth:"Les Charites, déesses de la grâce et de la joie, dansaient toujours ensemble, jamais seules — leur bonheur n'existait que partagé. Cette carte est cette même allégresse qui a besoin d'être vécue à plusieurs pour prendre tout son sens."
+},
+"4 de Coupes": {
+  marseille:"Un personnage assis sous un arbre regarde trois coupes sans réaction, une quatrième lui est tendue depuis un nuage : lassitude, indifférence face à une opportunité pourtant offerte.",
+  myth:"Narcisse, absorbé par son propre reflet, ne vit jamais l'amour d'Écho pourtant sincèrement tendu vers lui. Cette carte avertit de ce même risque : trop tourné vers l'intérieur, on peut laisser passer ce qui mériterait un regard."
+},
+"5 de Coupes": {
+  marseille:"Un personnage en deuil contemple trois coupes renversées, sans voir les deux qui restent debout derrière lui : regret, attention entièrement fixée sur la perte plutôt que sur ce qui subsiste.",
+  myth:"Déméter, pleurant Perséphone disparue, refusa longtemps de voir qu'elle pourrait un jour la retrouver. Cette carte rappelle cette même leçon : le chagrin est légitime, mais il ne doit pas aveugler sur ce qui reste encore possible."
+},
+"6 de Coupes": {
+  marseille:"Deux enfants échangent des coupes fleuries dans un jardin paisible : nostalgie douce, souvenir d'enfance, tendresse simple retrouvée sans calcul.",
+  myth:"Perséphone, enfant, cueillait des fleurs dans les prairies avant que le monde souterrain ne l'appelle — un souvenir d'innocence auquel elle resta toujours attachée. Cette carte ravive ce même attachement à une douceur passée."
+},
+"7 de Coupes": {
+  marseille:"Sept coupes flottent dans les nuages, chacune contenant une image différente — trésor, serpent, couronne : choix multiples, illusions à démêler avant de décider vraiment.",
+  myth:"Circé offrait à ses visiteurs des breuvages aux apparences trompeuses, séduisants mais rarement ce qu'ils semblaient être. Cette carte invite à la même vigilance : toutes les promesses ne se valent pas, il faut regarder au-delà du reflet."
+},
+"8 de Coupes": {
+  marseille:"Un personnage s'éloigne de nuit, laissant huit coupes soigneusement empilées derrière lui : départ volontaire, quête de sens qui prime sur ce qui a déjà été construit.",
+  myth:"Perséphone elle-même quitte chaque année le monde d'en haut pour redescendre — un départ qui n'est ni fuite ni échec, mais nécessité intérieure. Cette carte est ce même choix de partir vers autre chose, même en laissant de l'acquis derrière soi."
+},
+"9 de Coupes": {
+  marseille:"Un personnage satisfait est assis, bras croisés, devant neuf coupes alignées en arc : contentement, désirs comblés, bien-être qui n'a plus besoin de rien démontrer.",
+  myth:"Dans les Champs Élysées, les âmes bienheureuses jouissaient d'un repos paisible, sans manque ni attente. Cette carte est ce même sentiment d'accomplissement affectif, tranquille et suffisant."
+},
+"10 de Coupes": {
+  marseille:"Une famille réunie lève les bras vers un arc-en-ciel de dix coupes au-dessus d'elle : bonheur familial accompli, harmonie durable, joie qui se transmet au-delà de soi.",
+  myth:"Iris, messagère arc-en-ciel entre les mondes, relie le ciel et la terre d'une lumière qui ne se referme jamais tout à fait sur elle-même. Cette carte est ce bonheur qui rayonne et se partage, plutôt que de rester enfermé."
+},
+"As de Épées": {
+  marseille:"Une main tient une épée droite couronnée de laurier et de palme : idée claire, vérité qui perce, décision prise avec une netteté qui ne laisse pas de place au doute.",
+  myth:"La Pythie, à Delphes, prononçait ses oracles dans une clarté parfois brutale — une vérité qu'on ne pouvait ni négocier ni adoucir. Cet As porte cette même force tranchante : une pensée juste, mais qui exige d'être entendue telle quelle."
+},
+"2 de Épées": {
+  marseille:"Une figure aux yeux bandés tient deux épées croisées sur sa poitrine, dos à la mer : indécision assumée, équilibre précaire entre deux choix qu'on refuse encore de trancher.",
+  myth:"Thémis elle-même, avant de juger, se bandait parfois les yeux pour ne pas laisser l'apparence influencer la balance. Cette carte est ce moment suspendu où l'on refuse de choisir, le temps de voir plus clair."
+},
+"3 de Épées": {
+  marseille:"Trois épées transpercent un cœur rouge sous un ciel d'orage : douleur nette, vérité blessante mais nécessaire, rupture qui ne peut plus être évitée.",
+  myth:"Les flèches d'Éros ne visaient pas toujours l'amour partagé : certaines, dorées, faisaient naître un amour non réciproque, source d'une souffrance bien réelle. Cette carte est cette blessure précise, qu'il faut traverser plutôt que nier."
+},
+"4 de Épées": {
+  marseille:"Une figure allongée repose sur un tombeau, trois épées suspendues au mur et une sous elle : retrait nécessaire, repos de l'esprit après une période de tension.",
+  myth:"Endymion, plongé par Séléné dans un sommeil éternel pour rester jeune à jamais, avait cessé toute agitation. Cette carte invite à cette même pause volontaire : l'esprit a parfois besoin de silence pour se réparer."
+},
+"5 de Épées": {
+  marseille:"Un personnage ramasse trois épées avec un sourire ambigu tandis que deux figures s'éloignent, tête baissée : victoire à coût élevé, conflit gagné mais qui laisse un goût amer.",
+  myth:"Bellérophon, après sa victoire sur la Chimère, laissa son orgueil grandissant l'éloigner peu à peu de ceux qui l'admiraient. Cette carte questionne le prix réel de certaines victoires — celles qui isolent plus qu'elles ne rassemblent."
+},
+"6 de Épées": {
+  marseille:"Un passeur conduit une barque chargée d'épées vers une rive plus calme, deux silhouettes assises à l'arrière : transition, éloignement volontaire d'une zone de trouble vers plus de sérénité.",
+  myth:"Charon menait les âmes à travers le Styx, non vers une fin, mais vers un autre état — un passage nécessaire, jamais un naufrage. Cette carte est ce même mouvement : quitter une eau agitée pour une autre, plus tranquille."
+},
+"7 de Épées": {
+  marseille:"Un personnage s'éloigne d'un camp en emportant cinq épées, en laissant deux derrière lui, avec un air furtif : stratégie, action menée en partie seule, discrétion parfois nécessaire.",
+  myth:"Ulysse conçut le stratagème du cheval de Troie non par la force, mais par une ruse qu'il garda pour lui jusqu'au bout. Cette carte est cette même intelligence tactique — efficace, mais qui flirte parfois avec la limite de l'honnêteté."
+},
+"8 de Épées": {
+  marseille:"Une figure entravée et les yeux bandés se tient debout, entourée de huit épées plantées en cercle : sentiment d'enfermement, obstacles qui semblent infranchissables — mais le chemin entre les épées reste ouvert.",
+  myth:"Andromède, enchaînée au rocher offerte au monstre marin, semblait sans issue jusqu'à ce que Persée vienne rompre ce qui la retenait. Cette carte rappelle que l'entrave est souvent plus mentale que réellement définitive."
+},
+"9 de Épées": {
+  marseille:"Un personnage se réveille en sursaut, le visage dans les mains, neuf épées suspendues au-dessus de lui : angoisse nocturne, pensées ressassées qui empêchent le repos.",
+  myth:"Les Érinyes poursuivaient les coupables jusque dans leurs rêves, sans relâche, réveillant sans cesse une culpabilité qu'aucune fuite ne pouvait apaiser. Cette carte est cette même nuit agitée — mais le jour, souvent, dissipe ce que la nuit avait grossi."
+},
+"10 de Épées": {
+  marseille:"Un personnage gît au sol, transpercé de dix épées, sous un ciel qui commence pourtant à s'éclaircir à l'horizon : fin brutale d'un cycle, mais aussi le signe qu'il ne peut plus rien empirer après cela.",
+  myth:"Actéon, changé en cerf et déchiré par ses propres chiens pour avoir vu Artémis au bain, connut une fin sans appel — mais son histoire, elle, devint un avertissement qui survécut à sa chute. Cette carte est ce point le plus bas d'où, justement, il ne reste qu'à se relever."
+},
+"As de Deniers": {
+  marseille:"Une main tient un unique denier doré au-dessus d'un jardin fleuri : opportunité concrète, début tangible, promesse de croissance matérielle bien enracinée.",
+  myth:"Gaïa, mère de toute chose, fait surgir de la terre elle-même tout ce qui nourrit et fait vivre. Cet As est ce même don originel — une graine bien réelle, qui ne demande qu'à être plantée avec soin."
+},
+"2 de Deniers": {
+  marseille:"Un personnage jongle avec deux deniers reliés par un ruban en forme d'infini, un navire tanguant en arrière-plan : adaptation, équilibre à maintenir entre plusieurs priorités concrètes.",
+  myth:"Protée, dieu marin insaisissable, changeait sans cesse de forme pour s'ajuster à chaque situation plutôt que d'y résister. Cette carte demande cette même souplesse : jongler sans perdre l'équilibre."
+},
+"3 de Deniers": {
+  marseille:"Un artisan sculpte une pierre dans une abbaye, deux figures consultent ses plans à ses côtés : travail collectif, compétence reconnue, projet qui prend forme grâce à la collaboration.",
+  myth:"Héphaïstos ne construisait jamais seul les grandes œuvres de l'Olympe : les Cyclopes et d'autres artisans divins unissaient leur savoir-faire au sien. Cette carte célèbre ce même travail à plusieurs mains, plus solide que tout effort isolé."
+},
+"4 de Deniers": {
+  marseille:"Un personnage serre fermement un denier contre sa poitrine, deux sous ses pieds, un sur sa tête : contrôle, besoin de sécurité qui peut virer à la rigidité si l'on s'y accroche trop fort.",
+  myth:"Ploutos, rendu aveugle, distribue la richesse sans toujours voir à qui elle profite vraiment — un excès de retenue peut, comme un excès de largesse, priver l'abondance de son sens. Cette carte questionne ce qu'on retient peut-être trop fort pour rien."
+},
+"5 de Deniers": {
+  marseille:"Deux personnages démunis passent devant un vitrail éclairé sans y entrer, dans le froid : période difficile, sentiment d'exclusion — alors qu'un refuge est pourtant tout proche.",
+  myth:"Déméter, en deuil, laissa la terre entière stérile et froide, aveugle un temps aux dieux qui pourtant cherchaient à l'aider. Cette carte rappelle que même dans l'épreuve, un secours reste parfois à portée, si l'on accepte de le voir."
+},
+"6 de Deniers": {
+  marseille:"Un marchand pèse et distribue des pièces à deux mendiants agenouillés : générosité, échange, redistribution équilibrée entre celui qui a et celui qui a besoin.",
+  myth:"Triptolème, formé par Déméter, ne garda pas pour lui seul le secret de l'agriculture : il le porta de terre en terre pour que chacun en profite. Cette carte est ce même geste de partage, juste et mesuré."
+},
+"7 de Deniers": {
+  marseille:"Un cultivateur s'appuie sur sa houe, contemplant sept deniers accrochés à un buisson : évaluation, pause dans l'effort pour juger si la récolte à venir vaut la peine investie.",
+  myth:"Triptolème encore, entre deux semailles, devait attendre que la terre fasse son œuvre sans pouvoir en précipiter le cours. Cette carte est ce temps d'observation patiente, avant de savoir si l'effort portera ses fruits."
+},
+"8 de Deniers": {
+  marseille:"Un artisan burine ses deniers un à un, appliqué, dans un atelier ordonné : travail méthodique, perfectionnement d'un savoir-faire par la répétition patiente.",
+  myth:"Héphaïstos, encore, ne façonnait ses œuvres les plus admirables — le bouclier d'Achille, les filets invisibles — qu'après d'innombrables heures à la forge. Cette carte est cette même maîtrise qui ne s'acquiert que par la pratique répétée."
+},
+"9 de Deniers": {
+  marseille:"Une figure élégante se tient seule dans un jardin abondant, un faucon sur le poing : indépendance, aisance acquise par soi-même, plaisir tranquille d'une réussite qui n'a plus rien à prouver.",
+  myth:"Cybèle, déesse de la terre nourricière, régnait sur une abondance sauvage qu'elle seule savait apprivoiser, libre et souveraine. Cette carte est cette même autonomie sereine, faite d'un travail déjà accompli."
+},
+"10 de Deniers": {
+  marseille:"Une famille sur trois générations se tient réunie dans une cour prospère, entourée de dix deniers : héritage, réussite durable qui dépasse la seule réussite individuelle pour se transmettre.",
+  myth:"Gaïa, mère originelle, engendra les générations divines qui façonnèrent le monde bien après elle — une fondation si solide qu'elle continue de porter tout ce qui est venu ensuite. Cette carte est cet aboutissement qui se transmet, plutôt que de s'arrêter à soi."
 }
 };
 
