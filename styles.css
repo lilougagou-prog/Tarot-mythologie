@@ -84,7 +84,7 @@ main{max-width:900px;margin:auto;padding:22px 18px}
 .illus{position:relative;overflow:hidden;border-radius:14px;margin-bottom:10px}
 .illus .tile-img{margin-bottom:0}
 .illus .spark{position:absolute;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle,rgba(255,250,230,.95) 0%,rgba(219,185,111,.55) 45%,rgba(219,185,111,0) 75%);animation-name:twinkle;animation-duration:3s;animation-timing-function:ease-in-out;animation-iteration-count:infinite;pointer-events:none}
-.tile-img,.card-img{animation:ken-burns 6s ease-in-out infinite alternate}
+.tile-img{animation:ken-burns 6s ease-in-out infinite alternate}
 @keyframes ken-burns{
   0%{transform:scale(1) translate(0,0)}
   100%{transform:scale(1.22) translate(-3.5%,-2.5%)}
@@ -105,10 +105,9 @@ main{max-width:900px;margin:auto;padding:22px 18px}
 .cups{background:linear-gradient(160deg,#fff5f1,#d9e6e4)}
 .swords{background:linear-gradient(160deg,#f5f3ef,#c9d2d3)}
 .coins{background:linear-gradient(160deg,#fff8dc,#d8d5ae)}
-.card-img{width:100%;border-radius:10px;object-fit:cover;aspect-ratio:2/3;box-shadow:0 4px 10px rgba(41,28,29,.15)}
+.card-img{width:100%;border-radius:10px;object-fit:cover;object-position:center;aspect-ratio:2/3;box-shadow:0 4px 10px rgba(41,28,29,.15);display:block}
 .tarot-card.has-img{padding:6px}
-.tarot-card.has-img .frame{padding:6px;justify-content:flex-start;gap:6px}
-.tarot-card.has-img .card-name{font-size:15px;margin-top:2px}
+.tarot-card.has-img .frame{padding:6px;justify-content:center;align-items:center}
 
 .pips{width:100%;display:grid;justify-items:center;align-items:center;gap:3px;flex:1;padding:8px 2px}
 .pips-1{grid-template-columns:1fr}
