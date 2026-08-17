@@ -1063,22 +1063,24 @@ function showLearnFigures(){
 }
 
 function symboles(){
-  const grouped = {};
-  Object.entries(SYMBOL_LIBRARY).forEach(([id,s])=>{
-    (grouped[s.category] ||= []).push([id,s]);
-  });
+  // Un seul répertoire, trié par ordre alphabétique — plus de catégories : symboles et
+  // nombres mélangés, triés sur leur libellé affiché (locale française, accents compris).
+  const items = [
+    ...Object.entries(SYMBOL_LIBRARY).map(([id,s])=>({ sort:s.label, html:symbolCard(id,s) })),
+    ...Object.entries(NUMBER_KEYS).map(([n,k])=>({
+      sort:k[0],
+      html:`<div class="symbol clickable" data-number="${n}" data-search="${escapeHTML((k[0]+" "+k[1]+" "+k[2]).toLowerCase())}"><b>${n==="1"?"As":n} — ${escapeHTML(k[0])}</b><br>${escapeHTML(k[1])}</div>`
+    }))
+  ].sort((a,b)=>a.sort.localeCompare(b.sort,"fr"));
+
   return `<section class="hero">
+    <div class="hero-emblem">✦</div>
     <span class="pill">Bibliothèque vivante</span>
     <h2>Bibliothèque symbolique</h2>
     <p>Chaque symbole est relié aux cartes et aux figures mythologiques qui l'utilisent.</p>
     <div class="search"><input id="symbolSearch" placeholder="Rechercher un symbole…"></div>
   </section>
-  ${Object.entries(grouped).map(([cat, items])=>`
-    <div class="section-title"><h3>${escapeHTML(cat)}</h3></div>
-    <div class="symbol-list">${items.map(([id,s])=>symbolCard(id,s)).join("")}</div>
-  `).join("")}
-  <div class="section-title"><h3>Les nombres</h3></div>
-  <div class="symbol-list">${Object.entries(NUMBER_KEYS).map(([n,k])=>`<div class="symbol clickable" data-number="${n}"><b>${n==="1"?"As":n} — ${escapeHTML(k[0])}</b><br>${escapeHTML(k[1])}</div>`).join("")}</div>`;
+  <div class="symbol-list" style="margin-top:20px">${items.map(i=>i.html).join("")}</div>`;
 }
 
 function symbolCard(id, s){
