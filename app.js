@@ -963,12 +963,14 @@ function showLearnMajors(){
   bindCards();
 }
 
+const SUIT_IMAGES = {"Bâtons":"assets/suit-batons.jpg","Coupes":"assets/suit-coupes.jpg","Deniers":"assets/suit-deniers.jpg","Épées":"assets/suit-epees.jpg"};
+
 function showLearnCategory(kind){
   preDetailScroll = window.scrollY;
   const title = kind==="cour" ? "Figures de cour" : "Cartes numérales";
   document.getElementById("screen").innerHTML = `<div class="detail">
     <div class="section-title"><h3>${title}</h3></div>
-    <div class="grid">${Object.entries(SUITS).map(([suit,m])=>`<div class="tile" data-learn-kind="${kind}" data-learn-suit="${escapeHTML(suit)}"><strong>${m[1]} ${escapeHTML(suit)}</strong><span>${escapeHTML(m[2])}</span></div>`).join("")}</div>
+    <div class="grid">${Object.entries(SUITS).map(([suit,m])=>`<div class="tile" data-learn-kind="${kind}" data-learn-suit="${escapeHTML(suit)}"><img class="tile-img" src="${SUIT_IMAGES[suit]}" alt=""><strong>${escapeHTML(suit)}</strong><span>${escapeHTML(m[2])}</span></div>`).join("")}</div>
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
   window.scrollTo(0,0);
