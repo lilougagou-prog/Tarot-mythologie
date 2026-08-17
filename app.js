@@ -903,18 +903,25 @@ function tirage(){
   return renderDrawResult();
 }
 
-// Génère un semis d'étoiles dorées scintillantes pour l'animation de chargement.
+// Génère l'animation de chargement "halo & pluie d'étoiles" : un halo doré qui respire
+// en fond, un flash lumineux périodique, et une pluie d'étoiles qui montent en continu
+// (au lieu de scintiller sur place) — beaucoup plus dense et théâtral que la version précédente.
 function starLoaderHTML(size){
-  const count = size === "sm" ? 5 : 8;
+  const sm = size === "sm";
+  const count = sm ? 11 : 22;
+  const rise = sm ? -60 : -105;
+  const glyphs = ["✦","✧","✶"];
   let stars = "";
   for(let i=0;i<count;i++){
-    const left = (5 + Math.random()*90).toFixed(1);
-    const top = (5 + Math.random()*80).toFixed(1);
-    const delay = (Math.random()*1.6).toFixed(2);
-    const dur = (1.1 + Math.random()*0.9).toFixed(2);
-    stars += `<span class="star" style="left:${left}%;top:${top}%;animation-delay:${delay}s;animation-duration:${dur}s">✦</span>`;
+    const left = (Math.random()*94).toFixed(1);
+    const delay = (Math.random()*4.6).toFixed(2);
+    const dur = (2.2 + Math.random()*2).toFixed(2);
+    const g = glyphs[i % glyphs.length];
+    stars += `<span class="star" style="left:${left}%;--rise:${rise}px;animation-delay:${delay}s;animation-duration:${dur}s">${g}</span>`;
   }
-  return `<div class="stars-container ${size==="sm"?"sm":""}">${stars}</div>`;
+  const haloDelay = (Math.random()*2.4).toFixed(2);
+  const flashDelay = (Math.random()*3.4).toFixed(2);
+  return `<div class="stars-container ${sm?"sm":""}" style="--halo-delay:${haloDelay}s;--flash-delay:${flashDelay}s">${stars}</div>`;
 }
 
 function renderDrawResult(){
