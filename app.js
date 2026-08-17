@@ -135,7 +135,7 @@ const CARD_LORE = {
 },
 "Valet de Coupes": {
   marseille:"Le Valet de Coupes contemple sa coupe avec étonnement : sensibilité qui s'éveille, premier émoi, désir encore trop neuf pour se nommer clairement.",
-  myth:"Himéros, dieu ailé compagnon d'Éros, incarne le désir soudain, celui qui saisit avant toute réflexion. Ce Valet ressent avant de comprendre — une attirance sincère, encore fragile."
+  myth:"Himeros, dieu ailé compagnon d'Éros, incarne le désir soudain, celui qui saisit avant toute réflexion. Ce Valet ressent avant de comprendre — une attirance sincère, encore fragile."
 },
 "Cavalier de Coupes": {
   marseille:"Le Cavalier de Coupes avance lentement, coupe tendue devant lui : offre sincère, quête menée par le cœur plus que par la stratégie.",
@@ -552,6 +552,41 @@ const DEITY_NOTES = {
   "aphrodite":"Déesse de l'amour et de la beauté.",
   "nérée":"Vieillard de la mer, dieu marin sage et bienveillant.",
   "bellérophon":"Héros dompteur de Pégase, vainqueur de la Chimère.",
+
+  /* ----- Figures de cour supplémentaires ----- */
+  "éos":"Déesse de l'aurore aux doigts de rose, elle ouvre chaque matin les portes du ciel au passage du soleil.",
+  "niké":"Déesse ailée de la victoire, elle accompagne les vainqueurs sans jamais combattre elle-même.",
+  "hestia":"Déesse du foyer, gardienne de la flamme sacrée au centre de chaque maison.",
+  "héphaïstos":"Dieu forgeron, créateur ingénieux des armes et merveilles de l'Olympe malgré son rejet initial.",
+  "himeros":"Dieu ailé du désir soudain, compagnon d'Éros.",
+  "énée":"Héros troyen, fils d'Aphrodite, fidèle jusque dans la ruine de sa cité.",
+  "zéphyr":"Dieu du vent d'ouest, le plus doux mais aussi le plus changeant des vents.",
+  "éole":"Gardien des vents, il les enferme et n'en libère que ce qui est nécessaire.",
+  "chloris":"Déesse des fleurs, elle transforme en jardin chaque lieu qu'elle traverse.",
+  "triptolème":"Héros formé par Déméter, messager de l'agriculture porté de terre en terre.",
+  "ploutos":"Dieu de la richesse, rendu aveugle par Zeus pour la distribuer sans favoritisme.",
+
+  /* ----- Autres figures mentionnées dans les lectures des cartes numérales ----- */
+  "jason":"Chef des Argonautes, parti à la conquête de la Toison d'or à bord de l'Argo.",
+  "achille":"Le plus grand guerrier de la guerre de Troie, connu pour sa bravoure et sa colère.",
+  "atlas":"Titan condamné à porter le poids du ciel sur ses épaules pour l'éternité.",
+  "psyché":"Mortelle aimée d'Éros, unie à lui après avoir traversé de nombreuses épreuves.",
+  "charites":"Trois déesses de la grâce et de la joie, toujours représentées ensemble, jamais seules.",
+  "narcisse":"Jeune homme épris de son propre reflet, incapable de voir l'amour qu'on lui offrait.",
+  "écho":"Nymphe condamnée à ne répéter que les derniers mots des autres, éprise en vain de Narcisse.",
+  "circé":"Magicienne capable de transformer les hommes en animaux à l'aide de breuvages trompeurs.",
+  "pythie":"Prêtresse d'Apollon à Delphes, elle rendait des oracles dans une clarté parfois brutale.",
+  "endymion":"Berger plongé par Séléné dans un sommeil éternel pour rester à jamais jeune.",
+  "charon":"Passeur des Enfers, il conduit les âmes à travers le Styx vers l'autre monde.",
+  "ulysse":"Héros rusé de l'Odyssée, inventeur du stratagème du cheval de Troie.",
+  "andromède":"Princesse enchaînée à un rocher en offrande à un monstre marin, sauvée par Persée.",
+  "persée":"Héros vainqueur de la Gorgone Méduse, sauveur d'Andromède.",
+  "érinyes":"Divinités vengeresses qui poursuivent les coupables sans relâche, jusque dans leurs rêves.",
+  "actéon":"Chasseur changé en cerf par Artémis pour l'avoir surprise au bain, puis déchiré par ses propres chiens.",
+  "artémis":"Déesse de la chasse et de la nature sauvage, farouchement protectrice de son intimité.",
+  "protée":"Dieu marin insaisissable, capable de changer sans cesse de forme.",
+  "cyclopes":"Artisans géants à l'œil unique, forgerons associés à Héphaïstos dans les grandes œuvres divines.",
+  "cybèle":"Déesse de la terre nourricière, souveraine d'une abondance sauvage.",
 };
 
 /* ===================== ÉTAT ===================== */
@@ -947,7 +982,7 @@ function showSymbolDetail(id){
     <p class="symbol-cat-big">${escapeHTML(s.category)}</p>
     <p>${escapeHTML(s.desc)}</p>
     ${linkedDeities.length ? `<div class="section-title"><h3>Figures liées</h3></div>
-      <div class="symbol-list">${linkedDeities.map(d=>`<div class="symbol"><b>${escapeHTML(d[0].toUpperCase()+d.slice(1))}</b><br><small>${escapeHTML(DEITY_NOTES[d])}</small></div>`).join("")}</div>` : ""}
+      <div class="symbol-list">${linkedDeities.map(d=>`<div class="symbol clickable" data-deity="${escapeHTML(d)}"><b>${escapeHTML(d[0].toUpperCase()+d.slice(1))}</b><br><small>${escapeHTML(DEITY_NOTES[d])}</small></div>`).join("")}</div>` : ""}
     ${related.length ? `<div class="section-title"><h3>Cartes concernées</h3></div>
       <div class="card-grid">${related.map(c=>cardHTML(c, c[4]==="major"?"major":(SUITS[c[6]]?.[0]||"major"))).join("")}</div>` : ""}
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
@@ -981,6 +1016,28 @@ function showNumberDetail(n){
   bindCards(); bindChips();
 }
 
+function showDeityDetail(id){
+  const note = DEITY_NOTES[id]; if(!note) return;
+  preDetailScroll = window.scrollY;
+  const name = id.charAt(0).toUpperCase()+id.slice(1);
+  const related = CARDS.filter(c => (c[4]==="major"||c[4]==="court") && (c[1]||"").toLowerCase()===id);
+  document.getElementById("screen").innerHTML = `<div class="detail">
+    <div class="symbol-hero">✦</div>
+    <h2>${escapeHTML(name)}</h2>
+    <p class="symbol-cat-big">Figure mythologique</p>
+    <p>${escapeHTML(note)}</p>
+    ${related.length ? `<div class="section-title"><h3>Carte${related.length>1?"s":""} associée${related.length>1?"s":""}</h3></div>
+      <div class="card-grid">${related.map(c=>cardHTML(c, c[4]==="major"?"major":(SUITS[c[6]]?.[0]||"major"))).join("")}</div>` : ""}
+    <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
+  </div>`;
+  window.scrollTo(0,0);
+  document.getElementById("detailBack").onclick = ()=>{
+    render();
+    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+  };
+  bindCards(); bindChips();
+}
+
 function journalView(){
   if(!journal.length) return `<div class="empty"><h2>Ton journal est vide.</h2><p>Le journal reste privé et local sur cet appareil.</p></div>`;
   return `<section class="hero"><span class="pill">${journal.length} tirage(s)</span><h2>Journal</h2></section>
@@ -1000,7 +1057,7 @@ function showDetail(c){
   document.getElementById("screen").innerHTML = `<div class="detail">
     ${cardHTML(c,cls)}
     <h2>${escapeHTML(c[0])}</h2>
-    <h3>${escapeHTML(c[1])}</h3>
+    ${DEITY_NOTES[(c[1]||"").toLowerCase()] ? `<h3 class="clickable-deity" data-deity="${escapeHTML(c[1].toLowerCase())}">${escapeHTML(c[1])}</h3>` : `<h3>${escapeHTML(c[1])}</h3>`}
     <p>${escapeHTML(c[3]||"")}</p>
     ${lore ? `
       <div class="section-title"><h3>Lecture traditionnelle</h3></div>
@@ -1035,8 +1092,17 @@ function bindChips(){
     if(!el.dataset.symbol) return;
     el.onclick = ()=> showSymbolDetail(el.dataset.symbol);
   });
-  document.querySelectorAll(".symbol.clickable").forEach(el=>{
-    el.onclick = ()=> el.dataset.number ? showNumberDetail(el.dataset.number) : showSymbolDetail(el.dataset.symbol);
+  document.querySelectorAll(".symbol.clickable[data-number]").forEach(el=>{
+    el.onclick = ()=> showNumberDetail(el.dataset.number);
+  });
+  document.querySelectorAll(".symbol.clickable[data-deity]").forEach(el=>{
+    el.onclick = ()=> showDeityDetail(el.dataset.deity);
+  });
+  document.querySelectorAll(".symbol.clickable[data-symbol]").forEach(el=>{
+    el.onclick = ()=> showSymbolDetail(el.dataset.symbol);
+  });
+  document.querySelectorAll(".clickable-deity[data-deity]").forEach(el=>{
+    el.onclick = ()=> showDeityDetail(el.dataset.deity);
   });
 }
 
