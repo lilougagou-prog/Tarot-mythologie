@@ -940,16 +940,16 @@ function renderDrawResult(){
     </section>`;
 }
 
-// Habille une illustration statique d'un léger halo scintillant (2 petites étoiles,
-// délais dérivés du nom pour varier d'une image à l'autre) — le zoom/pan lent lui-même
+// Habille une illustration statique de 2 petits points de lumière scintillants (pur CSS,
+// délais dérivés du nom pour varier d'une image à l'autre) — le zoom/pan lui-même
 // vient de l'animation CSS posée sur .tile-img / .card-img.
 function illusHTML(src, seed){
   const h = String(seed).split("").reduce((a,c)=>a+c.charCodeAt(0),0);
   const d1 = (0.2 + (h % 10) / 6).toFixed(2);
   const d2 = (1.2 + (h % 7) / 5).toFixed(2);
   return `<div class="illus"><img class="tile-img" src="${src}" alt="">
-    <span class="spark" style="top:8%;left:10%;animation-delay:${d1}s">✦</span>
-    <span class="spark" style="top:15%;left:82%;animation-delay:${d2}s">✦</span>
+    <span class="spark" style="top:8%;left:10%;animation-delay:${d1}s"></span>
+    <span class="spark" style="top:15%;left:82%;animation-delay:${d2}s"></span>
   </div>`;
 }
 

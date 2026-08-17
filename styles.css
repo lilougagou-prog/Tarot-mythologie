@@ -42,14 +42,14 @@ main{max-width:900px;margin:auto;padding:22px 18px}
 .tile span{font-size:13px;opacity:.65}
 .tile-img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:14px;margin-bottom:10px;display:block;border:1px solid rgba(201,163,90,.5)}
 
-/* ===== Illustrations vivantes : zoom/pan très lent + halo scintillant posé dessus ===== */
+/* ===== Illustrations vivantes : zoom/pan + halo scintillant posé dessus ===== */
 .illus{position:relative;overflow:hidden;border-radius:14px;margin-bottom:10px}
 .illus .tile-img{margin-bottom:0}
-.illus .spark{position:absolute;color:var(--gold-bright);text-shadow:0 0 6px rgba(219,185,111,.9),0 0 2px rgba(255,255,255,.7);font-size:12px;animation-name:twinkle;animation-duration:3s;animation-timing-function:ease-in-out;animation-iteration-count:infinite;pointer-events:none}
-.tile-img,.card-img{animation:ken-burns 26s ease-in-out infinite alternate}
+.illus .spark{position:absolute;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle,rgba(255,250,230,.95) 0%,rgba(219,185,111,.55) 45%,rgba(219,185,111,0) 75%);animation-name:twinkle;animation-duration:3s;animation-timing-function:ease-in-out;animation-iteration-count:infinite;pointer-events:none}
+.tile-img,.card-img{animation:ken-burns 9s ease-in-out infinite alternate}
 @keyframes ken-burns{
   0%{transform:scale(1) translate(0,0)}
-  100%{transform:scale(1.07) translate(-1.5%,-1%)}
+  100%{transform:scale(1.13) translate(-2%,-1.5%)}
 }
 
 /* ===== Cartes ===== */
