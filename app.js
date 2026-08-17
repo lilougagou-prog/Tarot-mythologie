@@ -353,7 +353,12 @@ Object.assign(CARD_IMAGES, {
   "II — La Papesse": "assets/card-2-papesse.jpg",
   "III — L'Impératrice": "assets/card-3-imperatrice.jpg",
   "IV — L'Empereur": "assets/card-4-empereur.jpg",
+  "V — Le Pape": "assets/card-5-pape.jpg",
   "VI — L'Amoureux": "assets/card-6-amoureux.jpg",
+  "VII — Le Chariot": "assets/card-7-chariot.jpg",
+  "VIII — La Justice": "assets/card-8-justice.jpg",
+  "IX — L'Hermite": "assets/card-9-hermite.jpg",
+  "XI — La Force": "assets/card-11-force.jpg",
 });
 
 const COURTS = {
