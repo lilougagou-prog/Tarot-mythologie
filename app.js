@@ -358,7 +358,10 @@ Object.assign(CARD_IMAGES, {
   "VII — Le Chariot": "assets/card-7-chariot.jpg",
   "VIII — La Justice": "assets/card-8-justice.jpg",
   "IX — L'Hermite": "assets/card-9-hermite.jpg",
+  "X — La Roue de Fortune": "assets/card-10-rouedefortune.jpg",
   "XI — La Force": "assets/card-11-force.jpg",
+  "XII — Le Pendu": "assets/card-12-pendu.jpg",
+  "XIII — L'Arcane sans nom": "assets/card-13-arcanesansnom.jpg",
 });
 
 const COURTS = {
