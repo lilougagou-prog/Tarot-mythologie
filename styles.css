@@ -138,6 +138,8 @@ textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;paddin
 
 .symbol.clickable{cursor:pointer;transition:transform .12s ease}
 .symbol.clickable:hover{transform:translateX(2px);background:rgba(255,255,255,.75)}
+.clickable-deity{cursor:pointer;display:inline-block;border-bottom:1px dashed var(--gold);transition:opacity .12s ease}
+.clickable-deity:hover{opacity:.7}
 .symbol-hero{font-size:56px;text-align:center;margin-bottom:6px}
 .symbol-cat-big{text-align:center;font-family:"Cinzel",serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.6;margin-top:-8px}
 
