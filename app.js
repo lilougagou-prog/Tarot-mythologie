@@ -820,6 +820,17 @@ function startAIReading(){
 
 function setRoute(newRoute){ route = newRoute; render(); window.scrollTo(0,0); }
 
+// Rejoue la transition douce (fondu + léger glissement) sur #screen à chaque changement
+// de contenu — on retire puis reforce la classe (avec un reflow entre les deux) car
+// l'élément #screen n'est jamais recréé, seul son innerHTML change.
+function triggerScreenAnim(){
+  const screen = document.getElementById("screen");
+  if(!screen) return;
+  screen.classList.remove("screen-anim");
+  void screen.offsetWidth;
+  screen.classList.add("screen-anim");
+}
+
 function render(){
   const screen = document.getElementById("screen");
   const title = document.getElementById("pageTitle");
@@ -833,6 +844,7 @@ function render(){
   if(route==="apprendre") screen.innerHTML = apprendre();
   if(route==="symboles") screen.innerHTML = symboles();
   if(route==="journal") screen.innerHTML = journalView();
+  triggerScreenAnim();
   bind();
 }
 
@@ -928,6 +940,19 @@ function renderDrawResult(){
     </section>`;
 }
 
+// Habille une illustration statique d'un léger halo scintillant (2 petites étoiles,
+// délais dérivés du nom pour varier d'une image à l'autre) — le zoom/pan lent lui-même
+// vient de l'animation CSS posée sur .tile-img / .card-img.
+function illusHTML(src, seed){
+  const h = String(seed).split("").reduce((a,c)=>a+c.charCodeAt(0),0);
+  const d1 = (0.2 + (h % 10) / 6).toFixed(2);
+  const d2 = (1.2 + (h % 7) / 5).toFixed(2);
+  return `<div class="illus"><img class="tile-img" src="${src}" alt="">
+    <span class="spark" style="top:8%;left:10%;animation-delay:${d1}s">✦</span>
+    <span class="spark" style="top:15%;left:82%;animation-delay:${d2}s">✦</span>
+  </div>`;
+}
+
 function apprendre(){
   const progress = Math.min(100, Math.round((Math.min(78,journal.length*3)/78)*100));
   return `<section class="hero">
@@ -938,10 +963,10 @@ function apprendre(){
     <small>Progression personnelle : ${progress}%</small>
   </section>
   <div class="grid" style="margin-top:20px">
-    <div class="tile" data-learn="majeurs"><img class="tile-img" src="assets/learn-majeurs.jpg" alt=""><strong>Arcanes majeurs</strong><span>Les 22 grandes figures du jeu.</span></div>
-    <div class="tile" data-learn="cour"><img class="tile-img" src="assets/learn-cour.jpg" alt=""><strong>Figures de cour</strong><span>16 figures, réparties en 4 enseignes.</span></div>
-    <div class="tile" data-learn="numerales"><img class="tile-img" src="assets/learn-numerales.jpg" alt=""><strong>Cartes numérales</strong><span>40 cartes, de l'As au Dix.</span></div>
-    <div class="tile" data-learn="figures"><img class="tile-img" src="assets/learn-figures.jpg" alt=""><strong>Figures mythologiques</strong><span>Les ${Object.keys(DEITY_NOTES).length} divinités et héros du jeu.</span></div>
+    <div class="tile" data-learn="majeurs">${illusHTML("assets/learn-majeurs.jpg","majeurs")}<strong>Arcanes majeurs</strong><span>Les 22 grandes figures du jeu.</span></div>
+    <div class="tile" data-learn="cour">${illusHTML("assets/learn-cour.jpg","cour")}<strong>Figures de cour</strong><span>16 figures, réparties en 4 enseignes.</span></div>
+    <div class="tile" data-learn="numerales">${illusHTML("assets/learn-numerales.jpg","numerales")}<strong>Cartes numérales</strong><span>40 cartes, de l'As au Dix.</span></div>
+    <div class="tile" data-learn="figures">${illusHTML("assets/learn-figures.jpg","figures")}<strong>Figures mythologiques</strong><span>Les ${Object.keys(DEITY_NOTES).length} divinités et héros du jeu.</span></div>
   </div>`;
 }
 
@@ -954,6 +979,7 @@ function showLearnMajors(){
     <div class="card-grid">${MAJORS.map(c=>cardHTML(c)).join("")}</div>
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
+  triggerScreenAnim();
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
     render();
@@ -970,9 +996,10 @@ function showLearnCategory(kind){
   const title = kind==="cour" ? "Figures de cour" : "Cartes numérales";
   document.getElementById("screen").innerHTML = `<div class="detail">
     <div class="section-title"><h3>${title}</h3></div>
-    <div class="grid">${Object.entries(SUITS).map(([suit,m])=>`<div class="tile" data-learn-kind="${kind}" data-learn-suit="${escapeHTML(suit)}"><img class="tile-img" src="${SUIT_IMAGES[suit]}" alt=""><strong>${escapeHTML(suit)}</strong><span>${escapeHTML(m[2])}</span></div>`).join("")}</div>
+    <div class="grid">${Object.entries(SUITS).map(([suit,m])=>`<div class="tile" data-learn-kind="${kind}" data-learn-suit="${escapeHTML(suit)}">${illusHTML(SUIT_IMAGES[suit],suit)}<strong>${escapeHTML(suit)}</strong><span>${escapeHTML(m[2])}</span></div>`).join("")}</div>
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
+  triggerScreenAnim();
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
     render();
@@ -993,6 +1020,7 @@ function showLearnSuit(kind, suit){
     <div class="card-grid">${cards.map(c=>cardHTML(c,SUITS[suit]?.[0]||"major")).join("")}</div>
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
+  triggerScreenAnim();
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=> showLearnCategory(kind);
   cardDetailReturnTo = () => showLearnSuit(kind, suit);
@@ -1008,6 +1036,7 @@ function showLearnFigures(){
     <div class="symbol-list">${entries.map(([id,note])=>`<div class="symbol clickable" data-deity="${escapeHTML(id)}"><b>${escapeHTML(id.charAt(0).toUpperCase()+id.slice(1))}</b><br><small>${escapeHTML(note)}</small></div>`).join("")}</div>
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
+  triggerScreenAnim();
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
     render();
@@ -1064,6 +1093,7 @@ function showSymbolDetail(id){
       <div class="card-grid">${related.map(c=>cardHTML(c, c[4]==="major"?"major":(SUITS[c[6]]?.[0]||"major"))).join("")}</div>` : ""}
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
+  triggerScreenAnim();
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
     render();
@@ -1086,6 +1116,7 @@ function showNumberDetail(n){
     <div class="card-grid">${related.map(c=>cardHTML(c, SUITS[c[6]]?.[0]||"major")).join("")}</div>
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
+  triggerScreenAnim();
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
     render();
@@ -1109,6 +1140,7 @@ function showDeityDetail(id){
       <div class="card-grid">${related.map(c=>cardHTML(c, c[4]==="major"?"major":(SUITS[c[6]]?.[0]||"major"))).join("")}</div>` : ""}
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
+  triggerScreenAnim();
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
     render();
@@ -1151,6 +1183,7 @@ function showDetail(c){
     ${suit?`<div class="symbol-list" style="margin-top:14px"><div class="symbol"><b>Enseigne</b><br>${escapeHTML(suit)} · ${escapeHTML(SUITS[suit]?.[2]||"")}</div></div>`:""}
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
+  triggerScreenAnim();
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
     cardDetailReturnTo();
@@ -1191,9 +1224,14 @@ function bindDeck(){
     el.onclick = ()=>{
       const idx = Number(el.dataset.pick);
       if(tirageState.picks.includes(idx) || tirageState.picks.length>=3) return;
-      tirageState.picks.push(idx);
-      saveTirageState();
-      render();
+      // Petit temps de bascule (la carte "se retourne" visuellement, voir .tarot-card-back.revealed
+      // dans styles.css) avant de mettre à jour l'état et de re-rendre l'écran.
+      el.classList.add("revealed");
+      setTimeout(()=>{
+        tirageState.picks.push(idx);
+        saveTirageState();
+        render();
+      }, 380);
     };
   });
 }
@@ -1265,4 +1303,7 @@ function bind(){
 }
 
 if("serviceWorker" in navigator) navigator.serviceWorker.register("./service-worker.js").catch(()=>{});
+// Safari iOS n'active les styles :active que sur les éléments ayant un vrai listener tactile :
+// cet écouteur (vide, passif) suffit à activer les micro-interactions au toucher partout dans l'app.
+document.addEventListener("touchstart", function(){}, { passive:true });
 render();
