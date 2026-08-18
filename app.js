@@ -1102,7 +1102,7 @@ function apprendre(){
     <h2>Apprendre le Tarot de Delphes</h2>
     <p>Explore le jeu par catégorie, ou découvre les figures mythologiques qui l'inspirent.</p>
     <div class="progress"><span style="width:${p.percent}%"></span></div>
-    <small>Progression personnelle : ${p.percent}% — cartes ${p.cardsSeen}/${p.totalCards} · figures ${p.figuresSeen}/${p.totalFigures} · symboles ${p.symbolsSeen}/${p.totalSymbols}</small>
+    <small>Progression personnelle : ${p.percent}%</small>
   </section>
   <div class="grid" style="margin-top:20px">
     <div class="tile" data-learn="majeurs">${illusHTML("assets/learn-majeurs.jpg","majeurs")}<strong>Arcanes majeurs</strong><span>Les 22 grandes figures du jeu.</span></div>
