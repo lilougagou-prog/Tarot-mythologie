@@ -5,6 +5,8 @@
   "description": "Tarot de Delphes — PWA de tarot mythologique grec, avec lecture générée par IA (backend serverless).",
   "license": "UNLICENSED",
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.117.1"
+    "@anthropic-ai/sdk": "^0.117.1",
+    "astronomy-engine": "^2.1.19",
+    "luxon": "^3.7.2"
   }
 }
