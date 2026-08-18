@@ -957,6 +957,7 @@ function home(){
 function tirage(){
   if(!tirageState.spread){
     return `<section class="draw-zone">
+      ${oracleGlowHTML()}
       <div class="hero-emblem small">✦</div>
       <p class="note">Pose ta question, puis choisis toi-même trois cartes dans le jeu, face cachée.</p>
       <textarea id="drawQuestion" class="draw-question" placeholder="Écris ta question ici…">${escapeHTML(tirageState.question)}</textarea>
@@ -974,25 +975,37 @@ function tirage(){
   return renderDrawResult();
 }
 
-// Génère l'animation de chargement "halo & pluie d'étoiles" : un halo doré qui respire
-// en fond, un flash lumineux périodique, et une pluie d'étoiles qui montent en continu
-// (au lieu de scintiller sur place) — beaucoup plus dense et théâtral que la version précédente.
+// Génère un semis d'étoiles dorées scintillantes pour l'animation de chargement.
 function starLoaderHTML(size){
-  const sm = size === "sm";
-  const count = sm ? 11 : 22;
-  const rise = sm ? -60 : -105;
+  const count = size === "sm" ? 5 : 8;
+  let stars = "";
+  for(let i=0;i<count;i++){
+    const left = (5 + Math.random()*90).toFixed(1);
+    const top = (5 + Math.random()*80).toFixed(1);
+    const delay = (Math.random()*1.6).toFixed(2);
+    const dur = (1.1 + Math.random()*0.9).toFixed(2);
+    stars += `<span class="star" style="left:${left}%;top:${top}%;animation-delay:${delay}s;animation-duration:${dur}s">✦</span>`;
+  }
+  return `<div class="stars-container ${size==="sm"?"sm":""}">${stars}</div>`;
+}
+
+// Génère le halo & pluie d'étoiles utilisés pour animer l'encart "pose ta question" du
+// tirage (déplacé ici depuis l'animation de chargement, cf. commentaire dans styles.css).
+function oracleGlowHTML(){
+  const count = 16;
   const glyphs = ["✦","✧","✶"];
   let stars = "";
   for(let i=0;i<count;i++){
     const left = (Math.random()*94).toFixed(1);
     const delay = (Math.random()*4.6).toFixed(2);
-    const dur = (2.2 + Math.random()*2).toFixed(2);
+    const dur = (2.4 + Math.random()*2.2).toFixed(2);
+    const rise = (-(140 + Math.random()*100)).toFixed(0);
     const g = glyphs[i % glyphs.length];
-    stars += `<span class="star" style="left:${left}%;--rise:${rise}px;animation-delay:${delay}s;animation-duration:${dur}s">${g}</span>`;
+    stars += `<span class="spark-star" style="left:${left}%;--rise:${rise}px;animation-delay:${delay}s;animation-duration:${dur}s">${g}</span>`;
   }
   const haloDelay = (Math.random()*2.4).toFixed(2);
   const flashDelay = (Math.random()*3.4).toFixed(2);
-  return `<div class="stars-container ${sm?"sm":""}" style="--halo-delay:${haloDelay}s;--flash-delay:${flashDelay}s">${stars}</div>`;
+  return `<div class="oracle-glow" style="--halo-delay:${haloDelay}s;--flash-delay:${flashDelay}s">${stars}</div>`;
 }
 
 function renderDrawResult(){

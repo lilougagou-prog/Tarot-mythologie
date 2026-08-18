@@ -6,7 +6,7 @@
   --shadow:0 18px 50px rgba(41,28,29,.18);
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;touch-action:manipulation} /* pas de zoom au double-tap : évite un zoom accidentel resté "coincé" en tapant vite sur la pioche */
 body{margin:0;background:radial-gradient(circle at 50% -10%,#fffaf0 0,#f8f1e4 40%,#e9d7bd 100%);color:var(--deep);font-family:"EB Garamond",Georgia,serif;font-size:17px;position:relative}
 button,input,textarea{font-family:"EB Garamond",Georgia,serif}
 button{color:inherit}
@@ -158,21 +158,34 @@ textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;paddin
 .question-recall{text-align:center;font-style:italic;opacity:.7;margin:16px 0 0;font-size:16px}
 .card-name-recall{font-family:"Cinzel",serif;font-size:13px;letter-spacing:.04em;text-align:center;opacity:.75;margin:2px 0 8px}
 
-/* ===== Animation de chargement "magique" : halo qui respire + pluie d'étoiles ===== */
+/* ===== Animation de chargement "magique" (étoiles dorées scintillantes) ===== */
 .ai-loading-magic{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 0}
 .ai-loading-magic.small{padding:8px 0}
-.stars-container{position:relative;width:140px;height:90px;overflow:hidden}
-.stars-container.sm{width:74px;height:52px}
-.stars-container::before{
+.stars-container{position:relative;width:140px;height:64px}
+.stars-container.sm{width:74px;height:34px}
+.star{position:absolute;color:var(--gold-bright);text-shadow:0 0 8px rgba(219,185,111,.85),0 0 2px rgba(255,255,255,.6);animation-name:twinkle;animation-timing-function:ease-in-out;animation-iteration-count:infinite}
+.stars-container:not(.sm) .star{font-size:15px}
+.stars-container.sm .star{font-size:10px}
+@keyframes twinkle{
+  0%,100%{opacity:.12;transform:scale(.55) rotate(0deg)}
+  50%{opacity:1;transform:scale(1.25) rotate(20deg)}
+}
+.ai-loading-text{font-family:"Cinzel",serif;font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.6;font-style:normal;animation:pulse-text 1.8s ease-in-out infinite}
+@keyframes pulse-text{0%,100%{opacity:.4}50%{opacity:.85}}
+
+/* ===== Halo & pluie d'étoiles : maintenant réservés à l'encart "pose ta question" du
+   tirage, pour l'animer un peu (l'écran était jugé trop vide) — cf. oracleGlowHTML(). ===== */
+.draw-zone{position:relative}
+.oracle-glow{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.oracle-glow::before{
   content:"";
   position:absolute;
   inset:-30%;
   background:radial-gradient(circle,rgba(219,185,111,.5) 0%,rgba(219,185,111,0) 62%);
   animation:halo-breathe 3.2s ease-in-out infinite;
   animation-delay:var(--halo-delay,0s);
-  pointer-events:none;
 }
-.stars-container::after{
+.oracle-glow::after{
   content:"";
   position:absolute;
   inset:0;
@@ -180,8 +193,8 @@ textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;paddin
   opacity:0;
   animation:halo-flash 4.8s ease-in-out infinite;
   animation-delay:var(--flash-delay,0s);
-  pointer-events:none;
 }
+.oracle-glow .spark-star{position:absolute;bottom:-10%;color:var(--gold-bright);text-shadow:0 0 8px rgba(219,185,111,.85),0 0 2px rgba(255,255,255,.6);font-size:15px;animation-name:rise;animation-timing-function:ease-in;animation-iteration-count:infinite}
 @keyframes halo-breathe{
   0%,100%{opacity:.5;transform:scale(.9)}
   50%{opacity:1;transform:scale(1.18)}
@@ -192,21 +205,12 @@ textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;paddin
   96%{opacity:0}
   100%{opacity:0}
 }
-.star{position:absolute;bottom:-10%;color:var(--gold-bright);text-shadow:0 0 8px rgba(219,185,111,.85),0 0 2px rgba(255,255,255,.6);animation-name:rise;animation-timing-function:ease-in;animation-iteration-count:infinite}
-.stars-container:not(.sm) .star{font-size:15px}
-.stars-container.sm .star{font-size:10px}
-@keyframes twinkle{
-  0%,100%{opacity:.12;transform:scale(.55) rotate(0deg)}
-  50%{opacity:1;transform:scale(1.25) rotate(20deg)}
-}
 @keyframes rise{
   0%{transform:translateY(0) scale(.5);opacity:0}
   12%{opacity:1}
   80%{opacity:.7}
-  100%{transform:translateY(var(--rise,-100px)) scale(1.15);opacity:0}
+  100%{transform:translateY(var(--rise,-180px)) scale(1.15);opacity:0}
 }
-.ai-loading-text{font-family:"Cinzel",serif;font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.6;font-style:normal;animation:pulse-text 1.8s ease-in-out infinite}
-@keyframes pulse-text{0%,100%{opacity:.4}50%{opacity:.85}}
 .reading-grid{display:grid;gap:14px;margin-top:20px}
 .reading-block{border:1px solid var(--line);background:rgba(255,255,255,.45);border-radius:16px;padding:18px;text-align:center;animation:block-in .45s ease both}
 .reading-block:nth-child(1){animation-delay:.05s}
@@ -259,8 +263,9 @@ textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;paddin
 @media (prefers-reduced-motion: reduce){
   .tile-img,.card-img,.illus .spark,.screen-anim,.reading-block,.progress>span,
   .tile,.primary,.secondary,.chip,.icon-btn,.ghost,.bottom-nav button,.tarot-card,.tarot-card-back,
-  body::before,.hero-emblem,.home-glow .mote,.star,.stars-container::before,.stars-container::after{
+  body::before,.hero-emblem,.home-glow .mote,.star,
+  .oracle-glow::before,.oracle-glow::after,.oracle-glow .spark-star{
     animation:none !important;transition:none !important
   }
-  body::before,.home-glow,.stars-container::before,.stars-container::after{display:none}
+  body::before,.home-glow,.oracle-glow::before,.oracle-glow::after{display:none}
 }
