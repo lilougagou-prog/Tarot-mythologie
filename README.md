@@ -100,6 +100,7 @@ npx vercel dev
 - Bibliothèque de 86 symboles et nombres, triés par ordre alphabétique, tous cliquables et reliés aux cartes/divinités ; position de scroll préservée à la navigation
 - Détail de carte enrichi : lecture Tarot de Marseille + éclairage mythologique pour les 22 arcanes majeurs
 - Profil : Profil astral (thème natal complet + numérologie du prénom) et Journal des tirages passés, tous les deux en localStorage
+- Progression personnelle (onglet Apprendre) : score composite (`learningProgress()`) sur ce qui a été réellement **consulté en détail**, pas seulement tiré — 60% cartes (78), 20% figures mythologiques (58), 20% symboles et nombres (86), chaque fiche comptée une seule fois même revisitée (`markSeen()`/`seenCount()`, `localStorage`)
 - Animations légères dans toute l'app : illustrations avec léger zoom/pan continu + halo scintillant, transition douce entre écrans, micro-interactions au toucher, retournement des cartes du tirage, barre de progression et lecture qui s'animent (respecte la préférence système « réduire les animations »)
 
 ## Pistes de suite possibles (non bloquantes)

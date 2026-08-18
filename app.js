@@ -825,6 +825,24 @@ function getProfile(){
 }
 function saveProfileData(data){ localStorage.setItem("delphesProfile", JSON.stringify(data)); }
 
+/* ===================== PROGRESSION PERSONNELLE (Apprendre) ===================== */
+// Suivi de ce qui a réellement été consulté en détail — pas seulement tiré — dans trois
+// catégories : cartes, figures mythologiques, symboles (nombres inclus). Chaque id n'est
+// compté qu'une fois (Set), quel que soit le nombre de fois où on revisite la fiche.
+function markSeen(bucket, id){
+  const key = "delphesSeen_" + bucket;
+  let list;
+  try{ list = JSON.parse(localStorage.getItem(key) || "[]"); }catch{ list = []; }
+  if(!list.includes(id)){
+    list.push(id);
+    localStorage.setItem(key, JSON.stringify(list));
+  }
+}
+function seenCount(bucket){
+  try{ return (JSON.parse(localStorage.getItem("delphesSeen_"+bucket) || "[]")).length; }
+  catch{ return 0; }
+}
+
 // Résumé minimal du profil enregistré, prêt à envoyer à /api/reading — null si aucun
 // profil n'est enregistré (dans ce cas la lecture se comporte exactement comme avant).
 function profileForReading(){
@@ -1061,14 +1079,30 @@ function illusHTML(src, seed){
   </div>`;
 }
 
+// Progression personnelle : score composite pondéré sur ce qui a réellement été
+// consulté en détail (cartes 60%, figures mythologiques 20%, symboles/nombres 20%) —
+// pas juste le nombre de tirages sauvegardés, qui ne reflétait pas un vrai apprentissage.
+function learningProgress(){
+  const totalCards = CARDS.length;
+  const totalFigures = Object.keys(DEITY_NOTES).length;
+  const totalSymbols = Object.keys(SYMBOL_LIBRARY).length + Object.keys(NUMBER_KEYS).length;
+  const cardsSeen = Math.min(totalCards, seenCount("cards"));
+  const figuresSeen = Math.min(totalFigures, seenCount("figures"));
+  const symbolsSeen = Math.min(totalSymbols, seenCount("symbols"));
+  const percent = Math.min(100, Math.round(
+    60 * (cardsSeen/totalCards) + 20 * (figuresSeen/totalFigures) + 20 * (symbolsSeen/totalSymbols)
+  ));
+  return { percent, totalCards, totalFigures, totalSymbols, cardsSeen, figuresSeen, symbolsSeen };
+}
+
 function apprendre(){
-  const progress = Math.min(100, Math.round((Math.min(78,journal.length*3)/78)*100));
+  const p = learningProgress();
   return `<section class="hero">
     <div class="hero-emblem">✦</div>
     <h2>Apprendre le Tarot de Delphes</h2>
     <p>Explore le jeu par catégorie, ou découvre les figures mythologiques qui l'inspirent.</p>
-    <div class="progress"><span style="width:${progress}%"></span></div>
-    <small>Progression personnelle : ${progress}%</small>
+    <div class="progress"><span style="width:${p.percent}%"></span></div>
+    <small>Progression personnelle : ${p.percent}% — cartes ${p.cardsSeen}/${p.totalCards} · figures ${p.figuresSeen}/${p.totalFigures} · symboles ${p.symbolsSeen}/${p.totalSymbols}</small>
   </section>
   <div class="grid" style="margin-top:20px">
     <div class="tile" data-learn="majeurs">${illusHTML("assets/learn-majeurs.jpg","majeurs")}<strong>Arcanes majeurs</strong><span>Les 22 grandes figures du jeu.</span></div>
@@ -1188,6 +1222,7 @@ let cardDetailReturnTo = () => render();
 
 function showSymbolDetail(id){
   const s = SYMBOL_LIBRARY[id]; if(!s) return;
+  markSeen("symbols", id);
   preDetailScroll = window.scrollY;
   const related = cardsForSymbol(id);
   const linkedDeities = s.links.filter(l => DEITY_NOTES[l]);
@@ -1214,6 +1249,7 @@ function showSymbolDetail(id){
 
 function showNumberDetail(n){
   const k = NUMBER_KEYS[n]; if(!k) return;
+  markSeen("symbols", "n"+n); // préfixé pour ne jamais entrer en collision avec un id de symbole
   preDetailScroll = window.scrollY;
   const related = CARDS.filter(c => c[4]==="number" && c[7]===Number(n));
   document.getElementById("screen").innerHTML = `<div class="detail">
@@ -1237,6 +1273,7 @@ function showNumberDetail(n){
 
 function showDeityDetail(id){
   const note = DEITY_NOTES[id]; if(!note) return;
+  markSeen("figures", id);
   preDetailScroll = window.scrollY;
   const name = id.charAt(0).toUpperCase()+id.slice(1);
   const related = CARDS.filter(c => (c[4]==="major"||c[4]==="court") && (c[1]||"").toLowerCase()===id);
@@ -1468,6 +1505,7 @@ function showJournal(){
 function showDetail(c){
   const suit = c[6], cls = c[4]==="major" ? "major" : (SUITS[suit]?.[0] || "major");
   const lore = CARD_LORE[c[0]];
+  markSeen("cards", c[0]);
   preDetailScroll = window.scrollY;
   document.getElementById("screen").innerHTML = `<div class="detail">
     ${cardHTML(c,cls)}
