@@ -1,6 +1,11 @@
 // Backend serverless (Vercel) — génère une lecture de tarot via l'API Anthropic.
 //
-// Reçoit en POST : { question: string, cards: [carte1, carte2, carte3] }
+// Reçoit en POST : { question: string, cards: [carte1, carte2, carte3], profile? }
+//   - profile (optionnel, envoyé par le client quand un Profil astral est enregistré) :
+//     { firstName, nameNumber, nameNumberMeaning, sunSign, moonSign, ascendantSign }
+//     ascendantSign peut être absent/null (heure de naissance inconnue). N'importe quel
+//     champ manquant ou profile absent au complet ne change rien au comportement — la
+//     lecture reste identique à avant que cette fonctionnalité existe.
 // Renvoie : { card1, card2, card3, synthesis }
 //
 // La clé API Anthropic vit uniquement ici, côté serveur, dans la variable
@@ -50,7 +55,7 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  const { question, cards } = req.body || {};
+  const { question, cards, profile } = req.body || {};
 
   if (
     typeof question !== "string" ||
@@ -78,12 +83,37 @@ module.exports = async function handler(req, res) {
     })
     .join("\n");
 
+  // Bloc de contexte personnel optionnel (prénom + numérologie + profil astral), tiré du
+  // Profil enregistré côté client s'il existe. Ne comporte que les champs réellement
+  // présents ; absent au complet si `profile` n'est pas fourni ou vide.
+  let personalBlock = "";
+  if (profile && typeof profile === "object") {
+    const lines = [];
+    if (typeof profile.firstName === "string" && profile.firstName.trim()) {
+      const meaning = typeof profile.nameNumberMeaning === "string" ? profile.nameNumberMeaning : null;
+      const num = Number.isFinite(profile.nameNumber) ? profile.nameNumber : null;
+      lines.push(
+        `Prénom : ${profile.firstName.trim()}` +
+          (num ? ` (nombre numérologique ${num}${meaning ? ` — ${meaning}` : ""})` : "")
+      );
+    }
+    const astralParts = [];
+    if (typeof profile.sunSign === "string" && profile.sunSign) astralParts.push(`Soleil en ${profile.sunSign}`);
+    if (typeof profile.moonSign === "string" && profile.moonSign) astralParts.push(`Lune en ${profile.moonSign}`);
+    if (typeof profile.ascendantSign === "string" && profile.ascendantSign) astralParts.push(`Ascendant ${profile.ascendantSign}`);
+    if (astralParts.length) lines.push(`Thème astral : ${astralParts.join(", ")}.`);
+
+    if (lines.length) {
+      personalBlock = `\nContexte sur la personne qui consulte (${lines.join(" — ")}) : tu peux t'en servir avec subtilité pour nuancer ta lecture si c'est pertinent — jamais de façon appuyée ni comme un horoscope générique, et jamais au détriment des cartes tirées, qui restent le cœur de la lecture.\n`;
+    }
+  }
+
   // Prompt exact repris de generateAIReading() dans app.js.
   const prompt = `Tu es un tarologue professionnel, chaleureux, direct et humain. Une personne pose cette question : "${question}"
 
 Elle a tiré ces trois cartes, dans cet ordre :
 ${cardBlock}
-
+${personalBlock}
 Rédige une lecture de tarot en français, comme le ferait un professionnel expérimenté en face à face. Règles strictes :
 - Appelle toujours chaque carte par son nom exact donné ci-dessus (par exemple "le 10 d'Épées", "Le Chariot") — jamais par un simple mot-clé comme "Harmonie".
 - Réponds vraiment et précisément à la question posée, pas de façon générique.

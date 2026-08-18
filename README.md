@@ -28,13 +28,14 @@ Coût réel : ~1 centime par tirage (facturation à l'usage sur console.anthropi
 - Pour ouvrir l'appli à d'autres plus tard : supprimer `APP_ACCESS_CODE` sur Vercel — aucun changement de code nécessaire. Penser alors à revoir le plafond de dépense en conséquence.
 
 ## Profil astral — comment ça marche
-`POST /api/astral` (`api/astral.js`) calcule un thème astral complet à partir d'une date, heure et lieu de naissance. Reçoit `{ date: "AAAA-MM-JJ", time: "HH:MM", place: string }` (heure **locale** au lieu de naissance) et renvoie :
+`POST /api/astral` (`api/astral.js`) calcule un thème astral complet à partir d'une date, heure et lieu de naissance. Reçoit `{ date: "AAAA-MM-JJ", time: "HH:MM" | null, place: string }` (heure **locale** au lieu de naissance ; `time: null` pour une heure de naissance inconnue — voir plus bas) et renvoie :
 ```json
 {
   "resolvedPlace": "Lyon, Rhône-Alpes, France",
   "latitude": 45.75, "longitude": 4.85,
   "timezone": "Europe/Paris",
   "utcInstant": "1990-07-15T12:00:00.000Z",
+  "timeUnknown": false,
   "sunSign": "Cancer", "moonSign": "Bélier",
   "ascendant": { "longitude": 201.02, "sign": "Balance", "degreeInSign": 21.02 },
   "midheaven": { "longitude": 115.94, "sign": "Cancer", "degreeInSign": 25.94 },
@@ -56,7 +57,16 @@ Pipeline en 5 étapes, chacune sur un service/bibliothèque activement maintenu 
 4. **Maisons (Placidus) + Ascendant/MC** — calculés à la main par-dessus l'obliquité de l'écliptique et le temps sidéral local que fournit déjà astronomy-engine (pas de dépendance supplémentaire). Algorithme porté d'une implémentation vérifiée contre `swe_houses` (Swiss Ephemeris) à ~1.5' près par la communauté d'astronomy-engine ([discussion #391](https://github.com/cosinekitty/astronomy/discussions/391)). Le système Placidus devient peu fiable au-delà d'environ 66,5° de latitude (cercles polaires) : `houseWarning` le signale dans la réponse plutôt que de renvoyer un résultat silencieusement dégradé.
 5. **Aspects** — conjonction, sextile, carré, trigone, opposition entre chaque paire de corps, avec un orbe de 6 à 8° selon le type.
 
+**Heure de naissance inconnue** : envoyer `time: null` fait calculer le thème à midi local (convention standard) ; `timeUnknown: true` et `ascendant`/`midheaven`/`houseCusps`/`houseWarning`/`bodies.*.house` valent `null` dans la réponse (une heure précise est indispensable pour ces calculs-là), mais signes et aspects restent fiables et sont toujours renvoyés.
+
 **Vie privée** : la date/heure/lieu de naissance ne sont utilisées que le temps du calcul (fonction serverless sans état, rien n'est journalisé ni persisté côté serveur) — c'est au client de les garder en `localStorage` s'il veut les réutiliser. Même protection optionnelle `APP_ACCESS_CODE` que `/api/reading` (en-tête `X-App-Access-Code`).
+
+### Client : onglet Profil
+Barre du bas → **Profil** → deux cases, **Profil astral** et **Journal** (l'ancien onglet Journal a fusionné ici). Première visite de « Profil astral » : formulaire (prénom, date/heure/lieu de naissance, case « heure inconnue ») → appel à `/api/astral` → tout le résultat mis en cache dans `localStorage` (`delphesProfile`, jamais renvoyé au serveur ensuite) ; les visites suivantes affichent directement le résultat, avec un bouton « Modifier mes informations » qui rouvre le formulaire prérempli.
+
+Le prénom reçoit en plus une **numérologie** (`nameNumerology()` dans `app.js`, méthode pythagoricienne classique réduite à 1-9, volontairement sans nombre maître 11/22/33) dont la signification réutilise directement `NUMBER_KEYS`, la même grammaire symbolique que les cartes numérales.
+
+Quand un profil est enregistré, `generateAIReading()` envoie automatiquement un résumé (`profileForReading()` : prénom, nombre numérologique, signes solaire/lunaire/ascendant) à `/api/reading`, qui l'intègre avec subtilité à la lecture si c'est pertinent — sans jamais devenir un horoscope générique ni éclipser les cartes tirées. Sans profil enregistré, la lecture se comporte exactement comme avant.
 
 ## Déployer sur Vercel
 
@@ -85,17 +95,17 @@ npx vercel dev
 3. L'application apparaît avec son icône et s'ouvre comme une app, y compris hors ligne (sauf la lecture IA, qui a besoin du réseau — avec repli automatique sinon).
 
 ## État actuel du reste de l'app
-- Navigation 5 onglets (Accueil / Tirage / Apprendre / Symboles / Journal)
-- Tirage : pioche de 15 cartes face cachée, l'utilisateur en choisit 3 ; lecture personnalisée générée par IA avec animation de chargement (étoiles dorées scintillantes)
-- Bibliothèque de ~70 symboles, classés par catégorie, tous cliquables et reliés aux cartes/divinités ; position de scroll préservée à la navigation
+- Navigation 5 onglets (Accueil / Tirage / Apprendre / Symboles / Profil)
+- Tirage : pioche de 15 cartes face cachée, l'utilisateur en choisit 3 ; lecture personnalisée générée par IA avec animation de chargement (étoiles dorées scintillantes), enrichie par le Profil astral quand il existe
+- Bibliothèque de 86 symboles et nombres, triés par ordre alphabétique, tous cliquables et reliés aux cartes/divinités ; position de scroll préservée à la navigation
 - Détail de carte enrichi : lecture Tarot de Marseille + éclairage mythologique pour les 22 arcanes majeurs
-- Sauvegarde locale (localStorage) : journal des tirages + état du tirage en cours (persiste même après fermeture du navigateur)
+- Profil : Profil astral (thème natal complet + numérologie du prénom) et Journal des tirages passés, tous les deux en localStorage
 - Animations légères dans toute l'app : illustrations avec léger zoom/pan continu + halo scintillant, transition douce entre écrans, micro-interactions au toucher, retournement des cartes du tirage, barre de progression et lecture qui s'animent (respecte la préférence système « réduire les animations »)
 
 ## Pistes de suite possibles (non bloquantes)
 - Ajouter les illustrations des 6 arcanes majeurs restants + 56 cartes mineures (même gabarit que `assets/`, 500px de large, JPEG qualité ~78)
 - Lecture enrichie similaire (Marseille + mythologie) pour les cartes mineures — actuellement seuls les 22 majeurs ont la double lecture
-- Profil astral : le backend (`api/astral.js`) est complet (géocodage, positions planétaires, maisons Placidus, aspects) — reste à faire l'écran « Profil astral » côté client et le lien avec les arcanes majeurs via les correspondances zodiaque/planètes ↔ divinités déjà présentes dans `MAJORS`
+- Relier le Profil astral aux arcanes majeurs via les correspondances zodiaque/planètes ↔ divinités déjà présentes dans `MAJORS` (ex. mettre en avant les cartes liées au signe solaire/lunaire du profil)
 - Système de compte / sync cloud si l'app doit devenir multi-appareil (actuellement tout est en localStorage, donc local à l'appareil)
 - Emballage en app native (Capacitor) pour publication App Store / Google Play
 - Suivi des coûts d'API si l'usage grandit (chaque tirage = un appel Claude ; prévoir un cache ou une limite si le trafic augmente)
