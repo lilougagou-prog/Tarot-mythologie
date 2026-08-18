@@ -415,6 +415,24 @@ const NUMBER_KEYS = {
 
 const DRAW_POSITIONS = ["I","II","III"]; // discrets, sans intitulé imposé
 
+// Numérologie du prénom (méthode pythagoricienne classique : A=1, B=2… I=9, J=1…).
+// Volontairement réduite à 1-9 (jamais de nombre maître 11/22/33) pour retomber
+// directement sur la même grammaire symbolique que les cartes numérales (NUMBER_KEYS).
+function nameNumerology(name){
+  const normalized = (name||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toUpperCase();
+  const letters = normalized.replace(/[^A-Z]/g,"");
+  if(!letters) return null;
+  let sum = 0;
+  for(const ch of letters){
+    const idx = ch.charCodeAt(0) - 65; // 0-25
+    sum += (idx % 9) + 1;
+  }
+  while(sum > 9){
+    sum = String(sum).split("").reduce((a,d)=>a+Number(d),0);
+  }
+  return sum;
+}
+
 /* ===================== BIBLIOTHÈQUE SYMBOLIQUE ÉTOFFÉE ===================== */
 // id -> {icon, label, category, desc, links: [ids de divinités]}
 
@@ -797,12 +815,55 @@ function getAccessCode(){
   return code;
 }
 
+// Profil astral (prénom + thème natal), enregistré localement une fois calculé — voir
+// showProfilAstral(). Jamais envoyé nulle part sauf, avec l'accord implicite de son
+// existence, en résumé minimal à /api/reading pour nuancer une lecture (voir
+// profileForReading ci-dessous et le bloc "Contexte sur la personne" dans api/reading.js).
+function getProfile(){
+  try{ return JSON.parse(localStorage.getItem("delphesProfile") || "null"); }
+  catch{ return null; }
+}
+function saveProfileData(data){ localStorage.setItem("delphesProfile", JSON.stringify(data)); }
+
+// Résumé minimal du profil enregistré, prêt à envoyer à /api/reading — null si aucun
+// profil n'est enregistré (dans ce cas la lecture se comporte exactement comme avant).
+function profileForReading(){
+  const p = getProfile();
+  if(!p) return null;
+  const numMeaning = NUMBER_KEYS[p.nameNumber];
+  return {
+    firstName: p.firstName,
+    nameNumber: p.nameNumber,
+    nameNumberMeaning: numMeaning ? numMeaning[0] : null,
+    sunSign: p.astral?.sunSign || null,
+    moonSign: p.astral?.moonSign || null,
+    ascendantSign: p.astral?.ascendant?.sign || null,
+  };
+}
+
+async function fetchAstralProfile({ date, time, place }){
+  const r = await fetch("/api/astral", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-App-Access-Code": getAccessCode() },
+    body: JSON.stringify({ date, time, place })
+  });
+  const data = await r.json().catch(()=>({}));
+  if(r.status === 401){
+    localStorage.removeItem("delphesAccessCode");
+  }
+  if(!r.ok){
+    throw new Error(data.error || "Impossible de calculer le profil pour le moment.");
+  }
+  return data;
+}
+
 async function generateAIReading(question, cards){
   const timeout = new Promise((_,reject)=>setTimeout(()=>reject(new Error("timeout")), 15000));
+  const profile = profileForReading();
   const call = fetch("/api/reading", {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-App-Access-Code": getAccessCode() },
-    body: JSON.stringify({ question, cards })
+    body: JSON.stringify({ question, cards, ...(profile ? { profile } : {}) })
   }).then(async r=>{
     if(r.status === 401){
       // Code manquant/incorrect : on l'efface pour qu'il soit redemandé au prochain tirage.
@@ -850,12 +911,12 @@ function render(){
   document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.toggle("active", b.dataset.route===route));
   const back = document.getElementById("backBtn");
   if(back) back.hidden = route === "home";
-  title.textContent = {home:"Tarot de Delphes", tirage:"Tirage", apprendre:"Apprendre", symboles:"Symboles", journal:"Journal"}[route] || "Tarot de Delphes";
+  title.textContent = {home:"Tarot de Delphes", tirage:"Tirage", apprendre:"Apprendre", symboles:"Symboles", profil:"Profil"}[route] || "Tarot de Delphes";
   if(route==="home") screen.innerHTML = home();
   if(route==="tirage") screen.innerHTML = tirage();
   if(route==="apprendre") screen.innerHTML = apprendre();
   if(route==="symboles") screen.innerHTML = symboles();
-  if(route==="journal") screen.innerHTML = journalView();
+  if(route==="profil") screen.innerHTML = profil();
   triggerScreenAnim();
   bind();
 }
@@ -889,7 +950,7 @@ function home(){
     <div class="tile" data-go="tirage"><strong>✦ Tirer les cartes</strong><span>Choisis toi-même trois cartes dans le jeu.</span></div>
     <div class="tile" data-go="apprendre"><strong>◈ Apprendre</strong><span>Un parcours progressif sur les 78 cartes.</span></div>
     <div class="tile" data-go="symboles"><strong>✧ Symboles</strong><span>Chaque symbole est relié aux autres.</span></div>
-    <div class="tile" data-go="journal"><strong>☽ Journal</strong><span>Retrouve tes tirages passés.</span></div>
+    <div class="tile" data-go="profil"><strong>☉ Profil</strong><span>Ton profil astral et tes tirages passés.</span></div>
   </div>`;
 }
 
@@ -1185,6 +1246,180 @@ function showDeityDetail(id){
   bindCards(); bindChips();
 }
 
+/* ===================== ONGLET PROFIL (profil astral + journal) ===================== */
+
+function profil(){
+  return `<section class="hero">
+    <div class="hero-emblem">☉</div>
+    <h2>Profil</h2>
+    <p>Ton profil astral et l'historique de tes tirages — tout reste privé, sur cet appareil.</p>
+  </section>
+  <div class="grid" style="margin-top:20px">
+    <div class="tile" data-profil-go="astral"><strong>☉ Profil astral</strong><span>Ton thème natal complet, calculé à partir de ta date, heure et lieu de naissance.</span></div>
+    <div class="tile" data-profil-go="journal"><strong>☽ Journal</strong><span>${journal.length} tirage${journal.length>1?"s":""} enregistré${journal.length>1?"s":""}.</span></div>
+  </div>`;
+}
+
+const PLANET_LABELS = {
+  sun:"☉ Soleil", moon:"☽ Lune", mercury:"Mercure", venus:"Vénus", mars:"Mars",
+  jupiter:"Jupiter", saturn:"Saturne", uranus:"Uranus", neptune:"Neptune", pluto:"Pluton",
+};
+const PLANET_ORDER = ["sun","moon","mercury","venus","mars","jupiter","saturn","uranus","neptune","pluto"];
+
+// Écran Profil astral : affiche le résultat s'il existe déjà, sinon le formulaire de
+// première saisie. Comme les autres écrans "detail", le retour ramène au menu Profil.
+function showProfilAstral(){
+  preDetailScroll = window.scrollY;
+  const saved = getProfile();
+  cardDetailReturnTo = showProfilAstral;
+  if(!saved){ showProfilEditForm(); return; }
+
+  document.getElementById("screen").innerHTML = renderProfilResults(saved);
+  triggerScreenAnim();
+  window.scrollTo(0,0);
+  document.getElementById("detailBack").onclick = ()=>{
+    render();
+    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+  };
+  document.getElementById("profilEdit").onclick = ()=> showProfilEditForm();
+}
+
+// Formulaire de saisie/modification. `saved` (s'il existe) préremplit les champs ; le
+// bouton d'annulation ramène au résultat si un profil existait déjà, sinon au menu Profil.
+function showProfilEditForm(){
+  preDetailScroll = window.scrollY;
+  const saved = getProfile();
+  document.getElementById("screen").innerHTML = renderProfilForm(saved);
+  triggerScreenAnim();
+  window.scrollTo(0,0);
+  bindProfilForm(saved);
+}
+
+function renderProfilForm(prefill){
+  const p = prefill || {};
+  return `<div class="detail">
+    <div class="section-title"><h3>${p.firstName ? "Modifier mon profil astral" : "Profil astral"}</h3></div>
+    <p class="note">Renseigne ton prénom, ta date, heure et lieu de naissance pour calculer ton thème complet. Ces informations restent uniquement sur cet appareil — le serveur ne fait que le calcul, sans rien conserver.</p>
+    <div class="draw-notes">
+      <p class="suit-h4" style="margin:0 0 6px">Prénom</p>
+      <input id="profilFirstName" placeholder="Ton prénom" value="${escapeHTML(p.firstName||"")}">
+    </div>
+    <div class="draw-notes">
+      <p class="suit-h4" style="margin:0 0 6px">Date de naissance</p>
+      <input id="profilDate" type="date" value="${escapeHTML(p.birthDate||"")}">
+    </div>
+    <div class="draw-notes">
+      <p class="suit-h4" style="margin:0 0 6px">Heure de naissance</p>
+      <input id="profilTime" type="time" value="${escapeHTML(p.birthTime||"")}" ${p.timeUnknown?"disabled":""}>
+      <label style="display:flex;align-items:center;gap:8px;font-size:14px;margin-top:8px;opacity:.8">
+        <input id="profilTimeUnknown" type="checkbox" style="width:auto" ${p.timeUnknown?"checked":""}>
+        Je ne connais pas mon heure de naissance exacte
+      </label>
+    </div>
+    <div class="draw-notes">
+      <p class="suit-h4" style="margin:0 0 6px">Lieu de naissance</p>
+      <input id="profilPlace" placeholder="ex. Lyon, France" value="${escapeHTML(p.birthPlace||"")}">
+    </div>
+    <p class="note" id="profilFormError" style="display:none;color:var(--terracotta)"></p>
+    <div id="profilFormLoading" style="display:none"></div>
+    <button class="primary" id="profilSubmit">Calculer mon profil</button>
+    <button class="ghost" id="profilFormCancel">${p.firstName ? "Annuler" : "← Retour"}</button>
+  </div>`;
+}
+
+function bindProfilForm(saved){
+  const timeInput = document.getElementById("profilTime");
+  const unknownCheckbox = document.getElementById("profilTimeUnknown");
+  unknownCheckbox.addEventListener("change", ()=>{
+    timeInput.disabled = unknownCheckbox.checked;
+    if(unknownCheckbox.checked) timeInput.value = "";
+  });
+
+  document.getElementById("profilFormCancel").onclick = ()=>{
+    if(saved) showProfilAstral(); else render();
+  };
+
+  document.getElementById("profilSubmit").onclick = async ()=>{
+    const firstName = document.getElementById("profilFirstName").value.trim();
+    const birthDate = document.getElementById("profilDate").value;
+    const timeUnknown = unknownCheckbox.checked;
+    const birthTime = timeUnknown ? "" : document.getElementById("profilTime").value;
+    const birthPlace = document.getElementById("profilPlace").value.trim();
+    const errorEl = document.getElementById("profilFormError");
+    errorEl.style.display = "none";
+
+    if(!firstName || !birthDate || !birthPlace || (!timeUnknown && !birthTime)){
+      errorEl.textContent = "Merci de remplir tous les champs (ou de cocher « heure inconnue »).";
+      errorEl.style.display = "block";
+      return;
+    }
+
+    const submitBtn = document.getElementById("profilSubmit");
+    submitBtn.disabled = true;
+    const loadingEl = document.getElementById("profilFormLoading");
+    loadingEl.innerHTML = `<div class="ai-loading-magic small">${starLoaderHTML("sm")}</div>`;
+    loadingEl.style.display = "block";
+
+    try{
+      const astral = await fetchAstralProfile({ date: birthDate, time: timeUnknown ? null : birthTime, place: birthPlace });
+      const nameNumber = nameNumerology(firstName);
+      saveProfileData({ firstName, nameNumber, birthDate, birthTime: timeUnknown ? null : birthTime, timeUnknown, birthPlace, astral });
+      showProfilAstral();
+    } catch(err){
+      errorEl.textContent = err.message || "Impossible de calculer le profil pour le moment.";
+      errorEl.style.display = "block";
+      submitBtn.disabled = false;
+      loadingEl.style.display = "none";
+    }
+  };
+}
+
+function renderProfilResults(saved){
+  const a = saved.astral;
+  const numMeaning = NUMBER_KEYS[saved.nameNumber];
+  const dateLabel = (saved.birthDate||"").split("-").reverse().join("/");
+
+  return `<div class="detail">
+    <div class="section-title"><h3>Profil astral</h3></div>
+    <p class="question-recall">« ${escapeHTML(saved.firstName)} »</p>
+
+    ${numMeaning ? `<div class="symbol-list" style="margin-top:14px">
+      <div class="symbol"><b>Nombre du prénom : ${saved.nameNumber} — ${escapeHTML(numMeaning[0])}</b><br>${escapeHTML(numMeaning[2])}</div>
+    </div>` : ""}
+
+    <div class="section-title centered" style="margin-top:24px"><h3>Thème natal</h3></div>
+    <p class="note" style="text-align:center">${escapeHTML(saved.birthPlace)} · ${escapeHTML(dateLabel)}${saved.timeUnknown ? " · heure inconnue" : (saved.birthTime ? " · " + escapeHTML(saved.birthTime) : "")}</p>
+
+    <div class="symbol-list" style="margin-top:14px">
+      <div class="symbol"><b>☉ Soleil en ${escapeHTML(a.sunSign)}</b></div>
+      <div class="symbol"><b>☽ Lune en ${escapeHTML(a.moonSign)}</b></div>
+      ${a.ascendant
+        ? `<div class="symbol"><b>Ascendant ${escapeHTML(a.ascendant.sign)}</b></div>`
+        : `<div class="symbol"><b>Ascendant</b><br><small>Heure de naissance inconnue — l'ascendant et les maisons ne peuvent pas être calculés avec certitude.</small></div>`}
+    </div>
+
+    ${a.houseWarning ? `<p class="note" style="margin-top:10px">${escapeHTML(a.houseWarning)}</p>` : ""}
+
+    <div class="section-title"><h3>Planètes</h3></div>
+    <div class="symbol-list">
+      ${PLANET_ORDER.map(k=>{
+        const b = a.bodies[k];
+        if(!b) return "";
+        return `<div class="symbol"><b>${PLANET_LABELS[k]} en ${escapeHTML(b.sign)}</b> — ${b.degreeInSign}°${b.house?` · maison ${b.house}`:""}${b.retrograde?" · rétrograde":""}</div>`;
+      }).join("")}
+    </div>
+
+    ${a.aspects && a.aspects.length ? `
+    <div class="section-title"><h3>Aspects</h3></div>
+    <div class="symbol-list">
+      ${a.aspects.map(asp=>`<div class="symbol"><b>${PLANET_LABELS[asp.bodies[0]]} ${asp.type} ${PLANET_LABELS[asp.bodies[1]]}</b><br><small>orbe ${asp.orb}°</small></div>`).join("")}
+    </div>` : ""}
+
+    <button class="secondary" id="profilEdit" style="margin-top:20px">Modifier mes informations</button>
+    <button class="ghost" id="detailBack">← Retour</button>
+  </div>`;
+}
+
 function journalView(){
   if(!journal.length) return `<div class="empty"><h2>Ton journal est vide.</h2><p>Le journal reste privé et local sur cet appareil.</p></div>`;
   return `<section class="hero"><span class="pill">${journal.length} tirage(s)</span><h2>Journal</h2></section>
@@ -1195,6 +1430,26 @@ function journalView(){
     ${j.notes?`<p><b>Notes :</b> ${escapeHTML(j.notes)}</p>`:""}
     <button class="ghost delete-entry" data-index="${i}">Supprimer</button>
   </article>`).join("")}`;
+}
+
+// Écran "detail" (accessible depuis la tuile Journal de l'onglet Profil) — même motif
+// que les autres sous-écrans (showLearnMajors, etc.), le bouton Retour ramène au menu
+// Profil puisque `route` reste "profil" pendant toute la navigation.
+function showJournal(){
+  preDetailScroll = window.scrollY;
+  document.getElementById("screen").innerHTML = `<div class="detail">${journalView()}
+    <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
+  </div>`;
+  triggerScreenAnim();
+  window.scrollTo(0,0);
+  document.getElementById("detailBack").onclick = ()=>{
+    render();
+    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+  };
+  cardDetailReturnTo = showJournal;
+  document.querySelectorAll(".delete-entry").forEach(b=>{
+    b.onclick = ()=>{ const i=Number(b.dataset.index); journal.splice(i,1); localStorage.setItem("arcanes-journal", JSON.stringify(journal)); showJournal(); };
+  });
 }
 
 function showDetail(c){
@@ -1284,6 +1539,13 @@ function bind(){
       else if(key==="figures") showLearnFigures();
     };
   });
+  document.querySelectorAll("[data-profil-go]").forEach(el=>{
+    el.onclick = ()=>{
+      const key = el.dataset.profilGo;
+      if(key==="astral") showProfilAstral();
+      else if(key==="journal") showJournal();
+    };
+  });
   document.getElementById("homeBtn").onclick=()=>setRoute("home");
   document.getElementById("backBtn").onclick=()=>setRoute("home");
 
@@ -1319,10 +1581,8 @@ function bind(){
   };
   const clearDraw = document.getElementById("clearDraw");
   if(clearDraw) clearDraw.onclick = ()=>{ tirageState = {question:"",spread:null,picks:[],notes:"",saved:false,aiReading:null,aiStatus:"idle"}; saveTirageState(); render(); };
-
-  document.querySelectorAll(".delete-entry").forEach(b=>{
-    b.onclick = ()=>{ const i=Number(b.dataset.index); journal.splice(i,1); localStorage.setItem("arcanes-journal", JSON.stringify(journal)); render(); };
-  });
+  // .delete-entry est maintenant lié directement dans showJournal() (le Journal n'est
+  // plus une route de premier niveau, voir l'onglet Profil).
 
   const search = document.getElementById("symbolSearch");
   if(search) search.addEventListener("input", ()=>{

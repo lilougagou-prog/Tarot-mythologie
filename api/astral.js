@@ -1,11 +1,17 @@
 // Backend serverless (Vercel) — calcule un profil astral (thème natal) à partir d'une
 // date, heure et lieu de naissance.
 //
-// Reçoit en POST : { date: "YYYY-MM-DD", time: "HH:MM", place: string }
+// Reçoit en POST : { date: "YYYY-MM-DD", time: "HH:MM" | null, place: string }
 //   - date/time : date et heure LOCALES de naissance (heure au lieu de naissance, pas UTC)
+//     time est optionnel ("heure de naissance inconnue") : dans ce cas le calcul se fait
+//     à midi local (convention standard en astrologie pour une heure inconnue), et
+//     ascendant/maisons — qui exigent une heure précise — sont renvoyés à null plutôt
+//     que faux ; les signes et aspects, eux, restent fiables et sont toujours renvoyés.
 //   - place     : lieu en texte libre, ex. "Lyon, France"
 //
-// Renvoie : { resolvedPlace, latitude, longitude, timezone, utcInstant, sunSign, moonSign, bodies }
+// Renvoie : { resolvedPlace, latitude, longitude, timezone, utcInstant, timeUnknown,
+//             sunSign, moonSign, ascendant, midheaven, houseSystem, houseCusps,
+//             houseWarning, bodies, aspects }
 //
 // Étapes :
 //   1. Géocodage du lieu (Open-Meteo Geocoding API — gratuite, sans clé, renvoie aussi
@@ -233,14 +239,15 @@ module.exports = async function handler(req, res) {
   }
 
   const { date, time, place } = req.body || {};
+  const timeUnknown = time === null || time === undefined || time === "";
 
   if (
     typeof date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
-    typeof time !== "string" || !/^\d{2}:\d{2}$/.test(time) ||
+    (!timeUnknown && (typeof time !== "string" || !/^\d{2}:\d{2}$/.test(time))) ||
     typeof place !== "string" || !place.trim() || place.length > 200
   ) {
     res.status(400).json({
-      error: "Requête invalide : { date: \"AAAA-MM-JJ\", time: \"HH:MM\", place: string } attendu.",
+      error: "Requête invalide : { date: \"AAAA-MM-JJ\", time: \"HH:MM\" ou null, place: string } attendu.",
     });
     return;
   }
@@ -260,7 +267,7 @@ module.exports = async function handler(req, res) {
   }
 
   const [year, month, day] = date.split("-").map(Number);
-  const [hour, minute] = time.split(":").map(Number);
+  const [hour, minute] = timeUnknown ? [12, 0] : time.split(":").map(Number);
 
   const local = DateTime.fromObject(
     { year, month, day, hour, minute },
@@ -278,22 +285,27 @@ module.exports = async function handler(req, res) {
   // "trou" d'un passage à l'heure d'été, ex. 2h30 un jour où les horloges sautent de
   // 2h à 3h) : elle choisit un instant UTC plausible sans le signaler. On le détecte
   // nous-mêmes en revenant de cet instant UTC vers l'heure locale et en vérifiant
-  // qu'on retombe bien sur l'heure demandée.
-  const roundTrip = local.toUTC().setZone(geo.timezone);
-  if (roundTrip.hour !== hour || roundTrip.minute !== minute || roundTrip.day !== day) {
-    res.status(400).json({
-      error: "Cette heure de naissance n'a pas existé à cet endroit ce jour-là (probablement un changement d'heure) — vérifie l'heure saisie.",
-    });
-    return;
+  // qu'on retombe bien sur l'heure demandée. (Skippé en heure inconnue : midi est choisi
+  // par nous, pas saisi par l'utilisateur — rien à valider dans ce cas.)
+  if (!timeUnknown) {
+    const roundTrip = local.toUTC().setZone(geo.timezone);
+    if (roundTrip.hour !== hour || roundTrip.minute !== minute || roundTrip.day !== day) {
+      res.status(400).json({
+        error: "Cette heure de naissance n'a pas existé à cet endroit ce jour-là (probablement un changement d'heure) — vérifie l'heure saisie.",
+      });
+      return;
+    }
   }
 
   const utcDate = local.toUTC().toJSDate();
 
   let bodies;
-  let houseInfo;
+  let houseInfo = null;
   let aspects;
   try {
-    houseInfo = computeHouses(geo.latitude, geo.longitude, utcDate);
+    if (!timeUnknown) {
+      houseInfo = computeHouses(geo.latitude, geo.longitude, utcDate);
+    }
 
     const rawLongitudes = {};
     bodies = {};
@@ -305,7 +317,7 @@ module.exports = async function handler(req, res) {
         longitude: Math.round(lon * 10000) / 10000,
         sign,
         degreeInSign,
-        house: houseIndexOfLongitude(lon, houseInfo.houses),
+        house: houseInfo ? houseIndexOfLongitude(lon, houseInfo.houses) : null,
         retrograde: isRetrograde(body, utcDate),
       };
     }
@@ -316,8 +328,8 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const ascendantZodiac = zodiacFromLongitude(houseInfo.ascendant);
-  const midheavenZodiac = zodiacFromLongitude(houseInfo.midheaven);
+  const ascendantZodiac = houseInfo ? zodiacFromLongitude(houseInfo.ascendant) : null;
+  const midheavenZodiac = houseInfo ? zodiacFromLongitude(houseInfo.midheaven) : null;
 
   res.status(200).json({
     resolvedPlace: geo.resolvedPlace,
@@ -325,25 +337,32 @@ module.exports = async function handler(req, res) {
     longitude: geo.longitude,
     timezone: geo.timezone,
     utcInstant: utcDate.toISOString(),
+    timeUnknown,
     sunSign: bodies.sun.sign,
     moonSign: bodies.moon.sign,
-    ascendant: {
-      longitude: Math.round(houseInfo.ascendant * 10000) / 10000,
-      sign: ascendantZodiac.sign,
-      degreeInSign: ascendantZodiac.degreeInSign,
-    },
-    midheaven: {
-      longitude: Math.round(houseInfo.midheaven * 10000) / 10000,
-      sign: midheavenZodiac.sign,
-      degreeInSign: midheavenZodiac.degreeInSign,
-    },
-    houseSystem: "placidus",
-    houseCusps: houseInfo.houses.map((lon, i) => ({
-      house: i + 1,
-      longitude: Math.round(lon * 10000) / 10000,
-    })),
+    ascendant: houseInfo
+      ? {
+          longitude: Math.round(houseInfo.ascendant * 10000) / 10000,
+          sign: ascendantZodiac.sign,
+          degreeInSign: ascendantZodiac.degreeInSign,
+        }
+      : null,
+    midheaven: houseInfo
+      ? {
+          longitude: Math.round(houseInfo.midheaven * 10000) / 10000,
+          sign: midheavenZodiac.sign,
+          degreeInSign: midheavenZodiac.degreeInSign,
+        }
+      : null,
+    houseSystem: houseInfo ? "placidus" : null,
+    houseCusps: houseInfo
+      ? houseInfo.houses.map((lon, i) => ({
+          house: i + 1,
+          longitude: Math.round(lon * 10000) / 10000,
+        }))
+      : null,
     houseWarning:
-      Math.abs(geo.latitude) >= HOUSE_LATITUDE_WARNING_THRESHOLD
+      houseInfo && Math.abs(geo.latitude) >= HOUSE_LATITUDE_WARNING_THRESHOLD
         ? "Le système Placidus est peu fiable à cette latitude (proche ou au-delà des cercles polaires) — les maisons peuvent être imprécises ou dégénérées."
         : null,
     bodies,
