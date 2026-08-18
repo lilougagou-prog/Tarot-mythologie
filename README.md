@@ -36,19 +36,25 @@ Coût réel : ~1 centime par tirage (facturation à l'usage sur console.anthropi
   "timezone": "Europe/Paris",
   "utcInstant": "1990-07-15T12:00:00.000Z",
   "sunSign": "Cancer", "moonSign": "Bélier",
+  "ascendant": { "longitude": 201.02, "sign": "Balance", "degreeInSign": 21.02 },
+  "midheaven": { "longitude": 115.94, "sign": "Cancer", "degreeInSign": 25.94 },
+  "houseSystem": "placidus",
+  "houseCusps": [{ "house": 1, "longitude": 201.02 }, "... x12"],
+  "houseWarning": null,
   "bodies": {
-    "sun": { "longitude": 112.75, "sign": "Cancer", "degreeInSign": 22.75, "retrograde": false },
+    "sun": { "longitude": 112.75, "sign": "Cancer", "degreeInSign": 22.75, "house": 9, "retrograde": false },
     "moon": { "...": "..." },
     "mercury": {}, "venus": {}, "mars": {}, "jupiter": {}, "saturn": {}, "uranus": {}, "neptune": {}, "pluto": {}
-  }
+  },
+  "aspects": [{ "bodies": ["sun", "jupiter"], "type": "conjonction", "angle": 0, "orb": 0.2 }, "..."]
 }
 ```
-Pipeline en 3 étapes, chacune sur un service/bibliothèque activement maintenu :
+Pipeline en 5 étapes, chacune sur un service/bibliothèque activement maintenu (ou sur des formules maison, pour les étapes 4-5) :
 1. **Géocodage** — [Open-Meteo Geocoding API](https://open-meteo.com/en/docs/geocoding-api) (gratuite, sans clé) : convertit le lieu en latitude/longitude, et renvoie directement le **fuseau IANA** du lieu (ex. `"Europe/Paris"`) via GeoNames.
 2. **Heure UTC exacte** — [Luxon](https://moment.github.io/luxon/) convertit l'heure locale dans ce fuseau, en tenant compte des règles historiques de changement d'heure (base IANA intégrée à Node). Un contrôle maison détecte les heures locales qui n'ont jamais existé (le "trou" d'un passage à l'heure d'été) et renvoie une erreur claire plutôt que de laisser Luxon deviner silencieusement.
 3. **Positions planétaires** — [astronomy-engine](https://github.com/cosinekitty/astronomy) calcule la longitude écliptique géocentrique "de la date" de chaque corps (Soleil à Pluton), d'où sont dérivés signe zodiacal, degré dans le signe et rétrogradation.
-
-**Pas encore implémenté** (maisons astrologiques Placidus + ascendant + aspects entre planètes) — prévu par-dessus les mêmes calculs d'astronomy-engine (temps sidéral local, obliquité de l'écliptique), sans dépendance supplémentaire.
+4. **Maisons (Placidus) + Ascendant/MC** — calculés à la main par-dessus l'obliquité de l'écliptique et le temps sidéral local que fournit déjà astronomy-engine (pas de dépendance supplémentaire). Algorithme porté d'une implémentation vérifiée contre `swe_houses` (Swiss Ephemeris) à ~1.5' près par la communauté d'astronomy-engine ([discussion #391](https://github.com/cosinekitty/astronomy/discussions/391)). Le système Placidus devient peu fiable au-delà d'environ 66,5° de latitude (cercles polaires) : `houseWarning` le signale dans la réponse plutôt que de renvoyer un résultat silencieusement dégradé.
+5. **Aspects** — conjonction, sextile, carré, trigone, opposition entre chaque paire de corps, avec un orbe de 6 à 8° selon le type.
 
 **Vie privée** : la date/heure/lieu de naissance ne sont utilisées que le temps du calcul (fonction serverless sans état, rien n'est journalisé ni persisté côté serveur) — c'est au client de les garder en `localStorage` s'il veut les réutiliser. Même protection optionnelle `APP_ACCESS_CODE` que `/api/reading` (en-tête `X-App-Access-Code`).
 
@@ -89,7 +95,7 @@ npx vercel dev
 ## Pistes de suite possibles (non bloquantes)
 - Ajouter les illustrations des 6 arcanes majeurs restants + 56 cartes mineures (même gabarit que `assets/`, 500px de large, JPEG qualité ~78)
 - Lecture enrichie similaire (Marseille + mythologie) pour les cartes mineures — actuellement seuls les 22 majeurs ont la double lecture
-- Profil astral : maisons Placidus + ascendant + aspects (`api/astral.js`), puis l'écran « Profil astral » côté client et le lien avec les arcanes majeurs via les correspondances zodiaque/planètes ↔ divinités déjà présentes dans `MAJORS`
+- Profil astral : le backend (`api/astral.js`) est complet (géocodage, positions planétaires, maisons Placidus, aspects) — reste à faire l'écran « Profil astral » côté client et le lien avec les arcanes majeurs via les correspondances zodiaque/planètes ↔ divinités déjà présentes dans `MAJORS`
 - Système de compte / sync cloud si l'app doit devenir multi-appareil (actuellement tout est en localStorage, donc local à l'appareil)
 - Emballage en app native (Capacitor) pour publication App Store / Google Play
 - Suivi des coûts d'API si l'usage grandit (chaque tirage = un appel Claude ; prévoir un cache ou une limite si le trafic augmente)
