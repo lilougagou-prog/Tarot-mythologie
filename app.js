@@ -362,6 +362,8 @@ Object.assign(CARD_IMAGES, {
   "XI — La Force": "assets/card-11-force.jpg",
   "XII — Le Pendu": "assets/card-12-pendu.jpg",
   "XIII — L'Arcane sans nom": "assets/card-13-arcanesansnom.jpg",
+  "XIV — Tempérance": "assets/card-14-temperance.jpg",
+  "XV — Le Diable": "assets/card-15-diable.jpg",
 });
 
 const COURTS = {
