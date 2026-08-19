@@ -470,12 +470,30 @@ const SPREADS = {
   },
   annee: {
     key:"annee", name:"Année à venir", glyph:"❋",
-    description:"Un aperçu mois par mois de l'année qui vient.",
-    count:12, poolSize:24,
+    description:"Un aperçu mois par mois, de maintenant jusqu'à la fin de l'année.",
+    count:12, poolSize:24, // valeurs par défaut ; count/positions réellement utilisés sont
+    // recalculés dynamiquement dans spreadConf() (voir remainingMonthsPositions ci-dessous).
     positions:["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"],
   },
 };
-function spreadConf(){ return SPREADS[tirageState.spreadType] || SPREADS.general; }
+const MONTH_NAMES = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+// Le tirage "Année à venir" ne pioche que pour les mois restants de l'année en cours
+// (mois courant inclus) plutôt que toujours 12 cartes — inutile de tirer une carte pour
+// un mois déjà passé.
+function remainingMonthsPositions(now){
+  return MONTH_NAMES.slice((now||new Date()).getMonth());
+}
+// Question posée par défaut pour "Année à venir" : ce tirage n'a pas de question propre
+// (voir tile-click dans bind()), on saute directement à la pioche.
+const YEAR_DEFAULT_QUESTION = "Comment vont se dérouler les mois à venir, jusqu'à la fin de l'année ?";
+function spreadConf(){
+  const base = SPREADS[tirageState.spreadType] || SPREADS.general;
+  if(base.key === "annee"){
+    const positions = remainingMonthsPositions();
+    return { ...base, count: positions.length, positions };
+  }
+  return base;
+}
 
 // Réduction numérologique classique : additionne les chiffres jusqu'à retomber sur un
 // seul chiffre (1-9). Volontairement sans nombre maître (11/22/33) pour retomber
@@ -1092,7 +1110,9 @@ function findAspect(lon1, lon2){
 }
 
 const TRANSIT_LABELS = { sun:"Le Soleil", moon:"La Lune", mercury:"Mercure", venus:"Vénus", mars:"Mars" };
-const TRANSIT_ASPECT_PHRASES = {
+// Vocabulaire d'aspect générique (pas seulement pour les transits) : réutilisé plus bas
+// pour les aspects natals du Profil astral (natalAspectSentence()).
+const ASPECT_ACTION_PHRASES = {
   conjonction:"vient renforcer", trigone:"soutient en douceur", sextile:"ouvre une occasion du côté de",
   carré:"met sous tension", opposition:"invite à trouver un équilibre avec",
 };
@@ -1124,15 +1144,15 @@ function horoscopeDuJour(transits, profile){
   hits.sort((a,b)=>a.aspect.orb - b.aspect.orb); // l'aspect le plus exact d'abord
 
   const sunSign = transits.sun?.sign, moonSign = transits.moon?.sign;
-  const sunArcana = sunSign && ZODIAC_MAJOR_LINKS[sunSign] && MAJORS.find(c=>c[0]===ZODIAC_MAJOR_LINKS[sunSign]);
-  const moonArcana = moonSign && ZODIAC_MAJOR_LINKS[moonSign] && MAJORS.find(c=>c[0]===ZODIAC_MAJOR_LINKS[moonSign]);
+  const sunArcana = signArcana(sunSign);
+  const moonArcana = signArcana(moonSign);
 
   const lines = [];
   if(sunSign) lines.push(`Le Soleil traverse ${sunSign}${sunArcana ? `, une énergie proche de ${cardFullName(sunArcana)}` : ""}.`);
   if(moonSign) lines.push(`La Lune est en ${moonSign}${moonArcana ? ` — ambiance du jour du côté de ${(moonArcana[3]||"").split("·")[0].trim().toLowerCase()}` : ""}.`);
   if(hits.length){
     const h = hits[0];
-    lines.push(`${TRANSIT_LABELS[h.transitBody]} ${TRANSIT_ASPECT_PHRASES[h.aspect.type]} ${h.natal.label}.`);
+    lines.push(`${TRANSIT_LABELS[h.transitBody]} ${ASPECT_ACTION_PHRASES[h.aspect.type]} ${h.natal.label}.`);
   }
   return lines.length ? lines.join(" ") : null;
 }
@@ -1288,10 +1308,13 @@ function tirage(){
       <p class="note">Choisis le tirage qui correspond à ta question.</p>
     </section>
     <div class="grid" style="margin-top:10px">
-      ${Object.values(SPREADS).map(s=>`<div class="tile" data-spread="${s.key}">
+      ${Object.values(SPREADS).map(s=>{
+        const displayCount = s.key === "annee" ? remainingMonthsPositions().length : s.count;
+        return `<div class="tile" data-spread="${s.key}">
         <strong>${s.glyph} ${escapeHTML(s.name)}</strong>
-        <span>${escapeHTML(s.description)} (${s.count} carte${s.count>1?"s":""})</span>
-      </div>`).join("")}
+        <span>${escapeHTML(s.description)} (${displayCount} carte${displayCount>1?"s":""})</span>
+      </div>`;
+      }).join("")}
     </div>`;
   }
   const conf = spreadConf();
@@ -1368,7 +1391,7 @@ function currentReadingTexts(){
 }
 
 function renderDrawResult(){
-  const { question, spread, picks, notes, saved, aiStatus } = tirageState;
+  const { question, spread, picks, notes, saved, aiStatus, spreadType } = tirageState;
   const chosen = picks.map(i=>spread[i]);
   const domain = detectDomain(question);
   const conf = spreadConf();
@@ -1381,7 +1404,9 @@ function renderDrawResult(){
        ${reading.source==="local" && aiStatus==="error" ? `<p class="note">(Lecture générée hors-ligne — le service de lecture personnalisée n'a pas répondu.)</p>` : ""}`;
 
   return `
-    <p class="question-recall">« ${escapeHTML(question)} »</p>
+    ${spreadType === "annee"
+      ? `<p class="question-recall">✦ Année à venir</p>`
+      : `<p class="question-recall">« ${escapeHTML(question)} »</p>`}
     <div class="reading-grid">
       ${chosen.map((c,i)=>`<article class="reading-block">
         <div class="reading-roman">${escapeHTML(conf.positions[i]||"")}</div>
@@ -1683,6 +1708,75 @@ const PLANET_LABELS = {
 };
 const PLANET_ORDER = ["sun","moon","mercury","venus","mars","jupiter","saturn","uranus","neptune","pluto"];
 
+// Domaine de vie associé à chaque planète — vocabulaire court, réutilisé pour expliquer sa
+// position par signe et ses aspects dans le Profil astral (natalPlanetSentence/
+// natalAspectSentence ci-dessous), ainsi que pour l'horoscope du jour (horoscopeDuJour).
+const PLANET_THEMES = {
+  sun:"ton identité, ce que tu affirmes", moon:"ton monde intérieur, tes émotions",
+  mercury:"ta façon de penser et de communiquer", venus:"ce que tu aimes, tes valeurs, tes relations",
+  mars:"ton énergie, ta façon d'agir et de désirer", jupiter:"ce qui te fait grandir, ta confiance, ta chance",
+  saturn:"ce qui te structure, tes limites, ton sens du devoir", uranus:"ta part de rupture, ton besoin de liberté",
+  neptune:"ton intuition, tes rêves, ton imaginaire", pluto:"ta capacité de transformation profonde",
+};
+const ASCENDANT_THEME = "la façon dont tu te présentes aux autres";
+
+// Signe zodiacal -> mot-clé qualitatif court, en réutilisant la table de correspondance
+// avec les arcanes majeurs (ZODIAC_MAJOR_LINKS) déjà utilisée pour "Apprendre" et
+// l'horoscope du jour — reste cohérent avec le reste de l'appli plutôt que d'inventer un
+// nouveau vocabulaire de "traits de signe".
+function signArcana(sign){
+  const cardName = sign && ZODIAC_MAJOR_LINKS[sign];
+  return cardName ? MAJORS.find(c=>c[0]===cardName) : null;
+}
+function signQuality(sign){
+  const card = signArcana(sign);
+  return card ? (card[3]||"").split("·")[0].trim().toLowerCase() : null;
+}
+
+// Une phrase expliquant ce que représente une planète (ou l'Ascendant) placée dans son
+// signe — utilisée pour chaque ligne de la section "Planètes" du Profil astral.
+function natalPlanetSentence(key, body){
+  const theme = PLANET_THEMES[key];
+  if(!theme || !body || !body.sign) return null;
+  const quality = signQuality(body.sign);
+  const capitalized = theme.charAt(0).toUpperCase() + theme.slice(1);
+  const retro = body.retrograde ? " Rétrograde à ta naissance, cette énergie se vit souvent plus intérieurement qu'elle ne se montre." : "";
+  return `${capitalized}, en ${body.sign}${quality ? `, se teinte de ${quality}` : ""}.${retro}`;
+}
+function natalAscendantSentence(ascendant){
+  if(!ascendant || !ascendant.sign) return null;
+  const quality = signQuality(ascendant.sign);
+  return `${ASCENDANT_THEME.charAt(0).toUpperCase()+ASCENDANT_THEME.slice(1)}, en ${ascendant.sign}${quality ? `, se teinte de ${quality}` : ""}.`;
+}
+// Une phrase expliquant un aspect natal entre deux planètes — même vocabulaire d'aspect
+// (ASPECT_ACTION_PHRASES) que l'horoscope du jour, pour rester cohérent dans toute l'appli.
+function natalAspectSentence(asp){
+  const label1 = PLANET_LABELS[asp.bodies[0]], label2 = PLANET_LABELS[asp.bodies[1]];
+  const theme2 = PLANET_THEMES[asp.bodies[1]];
+  const phrase = ASPECT_ACTION_PHRASES[asp.type];
+  if(!label1 || !label2 || !phrase || !theme2) return null;
+  return `${label1} ${phrase} ${theme2} (${label2}).`;
+}
+
+// Paragraphe récapitulatif du thème natal (Soleil/Lune/Ascendant + densité des aspects) —
+// affiché en tête du Profil astral, avant le détail planète par planète.
+function natalSummaryParagraph(saved){
+  const a = saved.astral;
+  if(!a || !a.sunSign || !a.moonSign) return null;
+  const sunQ = signQuality(a.sunSign), moonQ = signQuality(a.moonSign);
+  const ascQ = a.ascendant ? signQuality(a.ascendant.sign) : null;
+  const who = saved.firstName ? `${saved.firstName}, ton` : "Ton";
+  let text = `${who} thème natal place le Soleil en ${a.sunSign}${sunQ ? ` (${sunQ})` : ""} au cœur de ton identité, et la Lune en ${a.moonSign}${moonQ ? ` (${moonQ})` : ""} dans ton monde intérieur`;
+  text += a.ascendant
+    ? `, avec un Ascendant en ${a.ascendant.sign}${ascQ ? ` (${ascQ})` : ""} qui colore la façon dont tu te présentes aux autres.`
+    : ` — l'heure de naissance inconnue ne permet pas de calculer ton Ascendant.`;
+  const n = (a.aspects || []).length;
+  if(n >= 3) text += ` Plusieurs de tes planètes dialoguent fortement entre elles (${n} aspects majeurs) : un thème dense, où les différentes facettes de ta personnalité s'influencent beaucoup les unes les autres.`;
+  else if(n >= 1) text += ` Quelques aspects marquants relient tes planètes entre elles (voir le détail plus bas).`;
+  else text += ` Peu d'aspects serrés entre tes planètes : les différentes facettes de ta personnalité fonctionnent plutôt chacune de leur côté.`;
+  return text;
+}
+
 // Écran Profil astral : affiche le résultat s'il existe déjà, sinon le formulaire de
 // première saisie. Comme les autres écrans "detail", le retour ramène au menu Profil.
 function showProfilAstral(){
@@ -1799,10 +1893,13 @@ function renderProfilResults(saved){
   const pm = personalMonthNumber(saved.birthDate);
   const pyMeaning = NUMBER_KEYS[py];
   const pmMeaning = NUMBER_KEYS[pm];
+  const summary = natalSummaryParagraph(saved);
 
   return `<div class="detail">
     <div class="section-title"><h3>Profil astral</h3></div>
     <p class="question-recall">« ${escapeHTML(saved.firstName)} »</p>
+
+    ${summary ? `<p class="lore-text" style="margin-top:10px">${escapeHTML(summary)}</p>` : ""}
 
     ${numMeaning ? `<div class="symbol-list" style="margin-top:14px">
       <div class="symbol"><b>Nombre du prénom : ${saved.nameNumber} — ${escapeHTML(numMeaning[0])}</b><br>${escapeHTML(numMeaning[2])}</div>
@@ -1820,10 +1917,10 @@ function renderProfilResults(saved){
     <p class="note" style="text-align:center">${escapeHTML(saved.birthPlace)} · ${escapeHTML(dateLabel)}${saved.timeUnknown ? " · heure inconnue" : (saved.birthTime ? " · " + escapeHTML(saved.birthTime) : "")}</p>
 
     <div class="symbol-list" style="margin-top:14px">
-      <div class="symbol"><b>☉ Soleil en ${escapeHTML(a.sunSign)}</b></div>
-      <div class="symbol"><b>☽ Lune en ${escapeHTML(a.moonSign)}</b></div>
+      <div class="symbol"><b>☉ Soleil en ${escapeHTML(a.sunSign)}</b><br>${escapeHTML(natalPlanetSentence("sun", a.bodies.sun) || "")}</div>
+      <div class="symbol"><b>☽ Lune en ${escapeHTML(a.moonSign)}</b><br>${escapeHTML(natalPlanetSentence("moon", a.bodies.moon) || "")}</div>
       ${a.ascendant
-        ? `<div class="symbol"><b>Ascendant ${escapeHTML(a.ascendant.sign)}</b></div>`
+        ? `<div class="symbol"><b>Ascendant ${escapeHTML(a.ascendant.sign)}</b><br>${escapeHTML(natalAscendantSentence(a.ascendant) || "")}</div>`
         : `<div class="symbol"><b>Ascendant</b><br><small>Heure de naissance inconnue — l'ascendant et les maisons ne peuvent pas être calculés avec certitude.</small></div>`}
     </div>
 
@@ -1834,14 +1931,14 @@ function renderProfilResults(saved){
       ${PLANET_ORDER.map(k=>{
         const b = a.bodies[k];
         if(!b) return "";
-        return `<div class="symbol"><b>${PLANET_LABELS[k]} en ${escapeHTML(b.sign)}</b> — ${b.degreeInSign}°${b.house?` · maison ${b.house}`:""}${b.retrograde?" · rétrograde":""}</div>`;
+        return `<div class="symbol"><b>${PLANET_LABELS[k]} en ${escapeHTML(b.sign)}</b> — ${b.degreeInSign}°${b.house?` · maison ${b.house}`:""}${b.retrograde?" · rétrograde":""}<br>${escapeHTML(natalPlanetSentence(k, b) || "")}</div>`;
       }).join("")}
     </div>
 
     ${a.aspects && a.aspects.length ? `
     <div class="section-title"><h3>Aspects</h3></div>
     <div class="symbol-list">
-      ${a.aspects.map(asp=>`<div class="symbol"><b>${PLANET_LABELS[asp.bodies[0]]} ${asp.type} ${PLANET_LABELS[asp.bodies[1]]}</b><br><small>orbe ${asp.orb}°</small></div>`).join("")}
+      ${a.aspects.map(asp=>`<div class="symbol"><b>${PLANET_LABELS[asp.bodies[0]]} ${asp.type} ${PLANET_LABELS[asp.bodies[1]]}</b><br>${escapeHTML(natalAspectSentence(asp) || "")}<br><small>orbe ${asp.orb}°</small></div>`).join("")}
     </div>` : ""}
 
     <button class="secondary" id="profilEdit" style="margin-top:20px">Modifier mes informations</button>
@@ -2008,7 +2105,17 @@ function bind(){
   if(dayCard) dayCard.onclick = ()=> showDetail(JSON.parse(decodeURIComponent(dayCard.dataset.card)));
 
   document.querySelectorAll("[data-spread]").forEach(el=>{
-    el.onclick = ()=>{ tirageState.spreadType = el.dataset.spread; saveTirageState(); render(); };
+    el.onclick = ()=>{
+      const key = el.dataset.spread;
+      if(key === "annee"){
+        // Pas de question à écrire pour ce tirage : on saute directement à la pioche,
+        // avec une question par défaut (utilisée pour la lecture, jamais affichée à saisir).
+        tirageState = { question: YEAR_DEFAULT_QUESTION, spreadType: key, spread: shuffledDeck().slice(0, SPREADS.annee.poolSize), picks: [], notes:"", saved:false, savedIndex:null, aiReading:null, aiStatus:"idle" };
+      } else {
+        tirageState.spreadType = key;
+      }
+      saveTirageState(); render();
+    };
   });
   const changeSpread = document.getElementById("changeSpread");
   if(changeSpread) changeSpread.onclick = ()=>{ tirageState.spreadType = null; saveTirageState(); render(); };
