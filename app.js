@@ -384,6 +384,11 @@ Object.assign(CARD_IMAGES, {
   "XIII — L'Arcane sans nom": "assets/card-13-arcanesansnom.jpg",
   "XIV — Tempérance": "assets/card-14-temperance.jpg",
   "XV — Le Diable": "assets/card-15-diable.jpg",
+  "XVI — La Maison-Dieu": "assets/card-16-maisondieu.jpg",
+  "XVII — L'Étoile": "assets/card-17-etoile.jpg",
+  "XVIII — La Lune": "assets/card-18-lune.jpg",
+  "XIX — Le Soleil": "assets/card-19-soleil.jpg",
+  "XXI — Le Monde": "assets/card-21-monde.jpg",
 });
 
 const COURTS = {
