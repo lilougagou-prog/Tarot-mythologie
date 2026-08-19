@@ -98,9 +98,11 @@ module.exports = async function handler(req, res) {
   // Profil enregistré côté client s'il existe. Ne comporte que les champs réellement
   // présents ; absent au complet si `profile` n'est pas fourni ou vide.
   let personalBlock = "";
+  let firstNameForAddress = null;
   if (profile && typeof profile === "object") {
     const lines = [];
     if (typeof profile.firstName === "string" && profile.firstName.trim()) {
+      firstNameForAddress = profile.firstName.trim();
       const meaning = typeof profile.nameNumberMeaning === "string" ? profile.nameNumberMeaning : null;
       const num = Number.isFinite(profile.nameNumber) ? profile.nameNumber : null;
       lines.push(
@@ -120,7 +122,7 @@ module.exports = async function handler(req, res) {
     }
 
     if (lines.length) {
-      personalBlock = `\nContexte sur la personne qui consulte (${lines.join(" — ")}) : tu peux t'en servir avec subtilité pour nuancer ta lecture si c'est pertinent — jamais de façon appuyée ni comme un horoscope générique, et jamais au détriment des cartes tirées, qui restent le cœur de la lecture.\n`;
+      personalBlock = `\nContexte sur la personne qui consulte (${lines.join(" — ")}) : tu peux t'en servir avec subtilité pour nuancer ta lecture si c'est pertinent — jamais de façon appuyée ni comme un horoscope générique, et jamais au détriment des cartes tirées, qui restent le cœur de la lecture.${firstNameForAddress ? ` Tu peux t'adresser à cette personne par son prénom (${firstNameForAddress}) une fois dans la lecture, à l'endroit qui te semble le plus naturel — jamais de façon systématique ni comme une formule répétée à chaque paragraphe.` : ""}\n`;
     }
   }
 
