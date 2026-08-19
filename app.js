@@ -477,9 +477,20 @@ const SPREADS = {
 };
 function spreadConf(){ return SPREADS[tirageState.spreadType] || SPREADS.general; }
 
+// Réduction numérologique classique : additionne les chiffres jusqu'à retomber sur un
+// seul chiffre (1-9). Volontairement sans nombre maître (11/22/33) pour retomber
+// systématiquement sur la même grammaire symbolique que les cartes numérales
+// (NUMBER_KEYS) — réutilisée par nameNumerology() et par la numérologie du temps
+// (personalYearNumber/personalMonthNumber) ci-dessous.
+function reduceToDigit(n){
+  n = Math.abs(Math.trunc(n));
+  while(n > 9){
+    n = String(n).split("").reduce((a,d)=>a+Number(d),0);
+  }
+  return n;
+}
+
 // Numérologie du prénom (méthode pythagoricienne classique : A=1, B=2… I=9, J=1…).
-// Volontairement réduite à 1-9 (jamais de nombre maître 11/22/33) pour retomber
-// directement sur la même grammaire symbolique que les cartes numérales (NUMBER_KEYS).
 function nameNumerology(name){
   const normalized = (name||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toUpperCase();
   const letters = normalized.replace(/[^A-Z]/g,"");
@@ -489,10 +500,26 @@ function nameNumerology(name){
     const idx = ch.charCodeAt(0) - 65; // 0-25
     sum += (idx % 9) + 1;
   }
-  while(sum > 9){
-    sum = String(sum).split("").reduce((a,d)=>a+Number(d),0);
-  }
-  return sum;
+  return reduceToDigit(sum);
+}
+
+// Numérologie du temps : année et mois personnels, à partir de la date de naissance
+// ("AAAA-MM-JJ") et de la date du jour — formule classique (jour + mois de naissance +
+// année en cours, puis + mois en cours), même grammaire symbolique que le nombre du
+// prénom (NUMBER_KEYS, réduit 1-9). Contrairement au nombre du prénom (fixe), ces deux-là
+// évoluent avec le temps : l'année personnelle change chaque 1er janvier, le mois
+// personnel chaque mois — une façon de situer où on en est dans son propre cycle.
+function personalYearNumber(birthDate, now){
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(birthDate||"")) return null;
+  const [, month, day] = birthDate.split("-").map(Number);
+  const year = (now||new Date()).getFullYear();
+  return reduceToDigit(day + month + year);
+}
+function personalMonthNumber(birthDate, now){
+  const py = personalYearNumber(birthDate, now);
+  if(py === null) return null;
+  const month = (now||new Date()).getMonth() + 1;
+  return reduceToDigit(py + month);
 }
 
 /* ===================== BIBLIOTHÈQUE SYMBOLIQUE ÉTOFFÉE ===================== */
@@ -935,6 +962,8 @@ function profileForReading(){
   const p = getProfile();
   if(!p) return null;
   const numMeaning = NUMBER_KEYS[p.nameNumber];
+  const py = personalYearNumber(p.birthDate);
+  const pyMeaning = NUMBER_KEYS[py];
   return {
     firstName: p.firstName,
     nameNumber: p.nameNumber,
@@ -942,6 +971,45 @@ function profileForReading(){
     sunSign: p.astral?.sunSign || null,
     moonSign: p.astral?.moonSign || null,
     ascendantSign: p.astral?.ascendant?.sign || null,
+    personalYear: py,
+    personalYearMeaning: pyMeaning ? pyMeaning[0] : null,
+  };
+}
+
+// Tendances dégagées du Journal (carte la plus fréquente, thème de question le plus
+// fréquent) — null tant qu'il n'y a pas assez de tirages enregistrés pour qu'une
+// tendance ait un sens (sinon un seul tirage "deviendrait" une tendance à 100%).
+const JOURNAL_TRENDS_MIN_ENTRIES = 3;
+function journalTrends(){
+  if(journal.length < JOURNAL_TRENDS_MIN_ENTRIES) return null;
+
+  const cardCounts = {};
+  journal.forEach(j=> (j.cards||[]).forEach(name=>{ cardCounts[name] = (cardCounts[name]||0) + 1; }));
+  const topCardEntry = Object.entries(cardCounts).sort((a,b)=>b[1]-a[1])[0];
+  const topCard = (topCardEntry && topCardEntry[1] >= 2) ? { name: topCardEntry[0], count: topCardEntry[1] } : null;
+
+  const domainCounts = {};
+  journal.forEach(j=>{
+    if(!j.question) return;
+    const d = detectDomain(j.question);
+    if(d === DEFAULT_DOMAIN) return; // pas assez spécifique pour compter comme "tendance"
+    domainCounts[d.label] = (domainCounts[d.label]||0) + 1;
+  });
+  const topDomainEntry = Object.entries(domainCounts).sort((a,b)=>b[1]-a[1])[0];
+  const topDomain = (topDomainEntry && topDomainEntry[1] >= 2) ? { label: topDomainEntry[0], count: topDomainEntry[1] } : null;
+
+  if(!topCard && !topDomain) return null;
+  return { totalReadings: journal.length, topCard, topDomain };
+}
+
+// Résumé minimal des tendances du Journal, prêt à envoyer à /api/reading — null si pas
+// (encore) de tendance dégagée (dans ce cas la lecture se comporte exactement comme avant).
+function journalTrendsForReading(){
+  const t = journalTrends();
+  if(!t) return null;
+  return {
+    topCard: t.topCard ? t.topCard.name : null,
+    topDomain: t.topDomain ? t.topDomain.label : null,
   };
 }
 
@@ -961,13 +1029,122 @@ async function fetchAstralProfile({ date, time, place }){
   return data;
 }
 
+/* ===================== HOROSCOPE DU JOUR (transits vs thème natal) ===================== */
+// Positions planétaires du jour (/api/transits, identiques pour tout le monde), mises en
+// cache un jour entier dans localStorage — pas de rappel réseau à chaque affichage de
+// l'accueil, seulement une fois par jour (même mécanique que updateStreak()/localDateKey()).
+function getCachedTransits(){
+  try{
+    const cached = JSON.parse(localStorage.getItem("delphesTransits") || "null");
+    if(cached && cached.date === localDateKey()) return cached.bodies;
+  }catch{ /* cache corrompu, on retombe sur null */ }
+  return null;
+}
+async function fetchTransits(code){
+  const r = await fetch("/api/transits", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-App-Access-Code": code },
+    body: JSON.stringify({})
+  });
+  if(r.status === 401) localStorage.removeItem("delphesAccessCode");
+  if(!r.ok) throw new Error("positions du jour indisponibles");
+  const data = await r.json();
+  localStorage.setItem("delphesTransits", JSON.stringify({ date: localDateKey(), bodies: data.bodies }));
+  return data.bodies;
+}
+let transitsFetchInFlight = false;
+// Lance le calcul des positions du jour en tâche de fond si besoin (déjà en cache : rien
+// à faire ; sinon un seul appel réseau, silencieux en cas d'échec — l'horoscope disparaît
+// simplement pour aujourd'hui, rien d'autre n'est bloqué). Ne déclenche jamais le prompt du
+// code d'accès depuis un simple chargement de l'accueil (voir getAccessCode()) : n'appelle
+// l'API que si un code est déjà mémorisé — ce qui est garanti dès qu'un Profil astral existe,
+// puisque le calculer une première fois est passé par ce même prompt.
+function ensureTransits(){
+  if(!getProfile()?.astral) return;
+  if(getCachedTransits()) return;
+  if(transitsFetchInFlight) return;
+  const code = localStorage.getItem("delphesAccessCode");
+  if(code === null) return;
+  transitsFetchInFlight = true;
+  fetchTransits(code)
+    .then(()=>{ if(route==="home") render(); })
+    .catch(()=>{ /* échec silencieux : pas d'horoscope aujourd'hui */ })
+    .finally(()=>{ transitsFetchInFlight = false; });
+}
+
+// Reprend exactement les mêmes types d'aspect et orbes que api/_lib/astro.js (ASPECTS),
+// pour rester cohérent avec le calcul déjà fait côté serveur pour le thème natal.
+const CLIENT_ASPECTS = [
+  { type:"conjonction", angle:0, orb:8 },
+  { type:"sextile", angle:60, orb:6 },
+  { type:"carré", angle:90, orb:7 },
+  { type:"trigone", angle:120, orb:8 },
+  { type:"opposition", angle:180, orb:8 },
+];
+function findAspect(lon1, lon2){
+  let diff = Math.abs(((lon1-lon2)%360+360)%360);
+  if(diff > 180) diff = 360 - diff;
+  for(const def of CLIENT_ASPECTS){
+    const exactOrb = Math.abs(diff - def.angle);
+    if(exactOrb <= def.orb) return { type:def.type, orb: Math.round(exactOrb*100)/100 };
+  }
+  return null;
+}
+
+const TRANSIT_LABELS = { sun:"Le Soleil", moon:"La Lune", mercury:"Mercure", venus:"Vénus", mars:"Mars" };
+const TRANSIT_ASPECT_PHRASES = {
+  conjonction:"vient renforcer", trigone:"soutient en douceur", sextile:"ouvre une occasion du côté de",
+  carré:"met sous tension", opposition:"invite à trouver un équilibre avec",
+};
+
+// Horoscope du jour : compare les positions transitantes du jour (transits, depuis
+// /api/transits) au thème natal enregistré (profile.astral) — jamais d'appel IA, tout est
+// calculé et rédigé localement (donc gratuit et instantané). Repose sur la même grammaire
+// symbolique que le reste de l'appli : le Soleil et la Lune du jour sont reliés à l'arcane
+// majeur correspondant via ZODIAC_MAJOR_LINKS, déjà utilisé pour "Apprendre".
+function horoscopeDuJour(transits, profile){
+  if(!transits || !profile || !profile.astral) return null;
+  const natalBodies = profile.astral.bodies || {};
+  const natalPoints = [
+    { label:"ton identité", longitude: natalBodies.sun?.longitude },
+    { label:"ton monde intérieur", longitude: natalBodies.moon?.longitude },
+  ];
+  if(profile.astral.ascendant) natalPoints.push({ label:"la façon dont tu te présentes", longitude: profile.astral.ascendant.longitude });
+
+  const hits = [];
+  ["sun","moon","mercury","venus","mars"].forEach(tb=>{
+    const tLon = transits[tb]?.longitude;
+    if(tLon == null) return;
+    natalPoints.forEach(np=>{
+      if(np.longitude == null) return;
+      const asp = findAspect(tLon, np.longitude);
+      if(asp) hits.push({ transitBody:tb, natal:np, aspect:asp });
+    });
+  });
+  hits.sort((a,b)=>a.aspect.orb - b.aspect.orb); // l'aspect le plus exact d'abord
+
+  const sunSign = transits.sun?.sign, moonSign = transits.moon?.sign;
+  const sunArcana = sunSign && ZODIAC_MAJOR_LINKS[sunSign] && MAJORS.find(c=>c[0]===ZODIAC_MAJOR_LINKS[sunSign]);
+  const moonArcana = moonSign && ZODIAC_MAJOR_LINKS[moonSign] && MAJORS.find(c=>c[0]===ZODIAC_MAJOR_LINKS[moonSign]);
+
+  const lines = [];
+  if(sunSign) lines.push(`Le Soleil traverse ${sunSign}${sunArcana ? `, une énergie proche de ${cardFullName(sunArcana)}` : ""}.`);
+  if(moonSign) lines.push(`La Lune est en ${moonSign}${moonArcana ? ` — ambiance du jour du côté de ${(moonArcana[3]||"").split("·")[0].trim().toLowerCase()}` : ""}.`);
+  if(hits.length){
+    const h = hits[0];
+    lines.push(`${TRANSIT_LABELS[h.transitBody]} ${TRANSIT_ASPECT_PHRASES[h.aspect.type]} ${h.natal.label}.`);
+  }
+  return lines.length ? lines.join(" ") : null;
+}
+
 async function generateAIReading(question, cards, positions){
   const timeout = new Promise((_,reject)=>setTimeout(()=>reject(new Error("timeout")), 15000));
   const profile = profileForReading();
+  const history = journalTrendsForReading();
   const call = fetch("/api/reading", {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-App-Access-Code": getAccessCode() },
-    body: JSON.stringify({ question, cards, positions, ...(profile ? { profile } : {}) })
+    body: JSON.stringify({ question, cards, positions, ...(profile ? { profile } : {}), ...(history ? { history } : {}) })
   }).then(async r=>{
     if(r.status === 401){
       // Code manquant/incorrect : on l'efface pour qu'il soit redemandé au prochain tirage.
@@ -1079,6 +1256,8 @@ function home(){
   const lore = CARD_LORE[day[0]];
   const links = profileMajorLinks();
   const resonates = !!(links && links.some(l => l.card[0] === day[0]));
+  ensureTransits();
+  const horoscope = horoscopeDuJour(getCachedTransits(), getProfile());
   return `<section class="hero">
     ${homeGlowHTML()}
     <div class="hero-emblem">✦</div>
@@ -1086,6 +1265,8 @@ function home(){
     <p>Un tarot mythologique grec qui s'apprend en le regardant : tirage, symboles reliés entre eux, et un parcours d'apprentissage progressif.</p>
     ${streak > 1 ? `<span class="pill" style="margin-top:10px">✦ ${streak} jours de suite</span>` : ""}
   </section>
+  ${horoscope ? `<div class="section-title centered"><h3>Horoscope du jour</h3></div>
+  <p class="lore-text" style="max-width:560px;margin:0 auto 20px;text-align:center;opacity:.85">${escapeHTML(horoscope)}</p>` : ""}
   <div class="section-title centered"><h3>Carte du jour</h3></div>
   <div class="day-card" data-card="${encodeURIComponent(JSON.stringify(day))}">${cardHTML(day,"major")}</div>
   ${resonates ? `<p class="note" style="text-align:center">✦ Cette carte résonne avec ton profil astral.</p>` : ""}
@@ -1614,6 +1795,10 @@ function renderProfilResults(saved){
   const a = saved.astral;
   const numMeaning = NUMBER_KEYS[saved.nameNumber];
   const dateLabel = (saved.birthDate||"").split("-").reverse().join("/");
+  const py = personalYearNumber(saved.birthDate);
+  const pm = personalMonthNumber(saved.birthDate);
+  const pyMeaning = NUMBER_KEYS[py];
+  const pmMeaning = NUMBER_KEYS[pm];
 
   return `<div class="detail">
     <div class="section-title"><h3>Profil astral</h3></div>
@@ -1621,6 +1806,14 @@ function renderProfilResults(saved){
 
     ${numMeaning ? `<div class="symbol-list" style="margin-top:14px">
       <div class="symbol"><b>Nombre du prénom : ${saved.nameNumber} — ${escapeHTML(numMeaning[0])}</b><br>${escapeHTML(numMeaning[2])}</div>
+    </div>` : ""}
+
+    ${(pyMeaning || pmMeaning) ? `
+    <div class="section-title centered" style="margin-top:24px"><h3>Numérologie du temps</h3></div>
+    <p class="note" style="text-align:center">Contrairement au nombre du prénom (fixe), ceux-ci évoluent avec le temps.</p>
+    <div class="symbol-list" style="margin-top:14px">
+      ${pyMeaning ? `<div class="symbol"><b>Année personnelle ${py} — ${escapeHTML(pyMeaning[0])}</b><br>${escapeHTML(pyMeaning[2])}</div>` : ""}
+      ${pmMeaning ? `<div class="symbol"><b>Mois personnel ${pm} — ${escapeHTML(pmMeaning[0])}</b><br>${escapeHTML(pmMeaning[2])}</div>` : ""}
     </div>` : ""}
 
     <div class="section-title centered" style="margin-top:24px"><h3>Thème natal</h3></div>
@@ -1658,7 +1851,14 @@ function renderProfilResults(saved){
 
 function journalView(){
   if(!journal.length) return `<div class="empty"><h2>Ton journal est vide.</h2><p>Le journal reste privé et local sur cet appareil.</p></div>`;
+  const trends = journalTrends();
   return `<section class="hero"><span class="pill">${journal.length} tirage(s)</span><h2>Journal</h2></section>
+  ${trends ? `<div class="symbol-list" style="margin-bottom:20px">
+    <div class="symbol"><b>✦ Tes tendances</b><br>
+      ${trends.topCard ? `La carte <b>${escapeHTML(trends.topCard.name.replace(/^.*—\s*/,""))}</b> revient souvent dans tes tirages (${trends.topCard.count} fois).<br>` : ""}
+      ${trends.topDomain ? `Tu reviens souvent vers <b>${escapeHTML(trends.topDomain.label)}</b> (${trends.topDomain.count} tirages).` : ""}
+    </div>
+  </div>` : ""}
   ${journal.map((j,i)=>`<article class="tile journal-entry" style="margin-bottom:12px">
     <strong>${escapeHTML(j.date)}</strong>
     <span>${escapeHTML(j.question||"Sans question")}</span>
