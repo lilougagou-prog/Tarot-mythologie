@@ -101,12 +101,12 @@ npx vercel dev
 - Détail de carte enrichi : lecture Tarot de Marseille + éclairage mythologique pour les 22 arcanes majeurs
 - Profil : Profil astral (thème natal complet + numérologie du prénom) et Journal des tirages passés, tous les deux en localStorage. Le Journal garde la lecture complète (texte par carte + synthèse, IA ou générée hors-ligne), pas seulement les noms des cartes — repliable sous « Revoir la lecture complète » sur chaque entrée. Ré-enregistrer un tirage déjà sauvegardé met à jour l'entrée existante plutôt que d'en créer une en double.
 - Progression personnelle (onglet Apprendre) : score composite (`learningProgress()`) sur ce qui a été réellement **consulté en détail**, pas seulement tiré — 60% cartes (78), 20% figures mythologiques (58), 20% symboles et nombres (86), chaque fiche comptée une seule fois même revisitée (`markSeen()`/`seenCount()`, `localStorage`)
+- Apprendre met en avant les arcanes majeurs liés à ton profil astral (Soleil/Lune/Ascendant), via une table de correspondance zodiaque ↔ arcane majeur (`ZODIAC_MAJOR_LINKS`, tradition ésotérique classique) — n'apparaît que si un Profil astral est enregistré
 - Animations légères dans toute l'app : illustrations avec léger zoom/pan continu + halo scintillant, transition douce entre écrans, micro-interactions au toucher, retournement des cartes du tirage, barre de progression et lecture qui s'animent (respecte la préférence système « réduire les animations »)
 
 ## Pistes de suite possibles (non bloquantes)
 - Ajouter les illustrations des 6 arcanes majeurs restants + 56 cartes mineures (même gabarit que `assets/`, 500px de large, JPEG qualité ~78)
 - Lecture enrichie similaire (Marseille + mythologie) pour les cartes mineures — actuellement seuls les 22 majeurs ont la double lecture
-- Relier le Profil astral aux arcanes majeurs via les correspondances zodiaque/planètes ↔ divinités déjà présentes dans `MAJORS` (ex. mettre en avant les cartes liées au signe solaire/lunaire du profil)
 - Système de compte / sync cloud si l'app doit devenir multi-appareil (actuellement tout est en localStorage, donc local à l'appareil)
 - Emballage en app native (Capacitor) pour publication App Store / Google Play
 - Suivi des coûts d'API si l'usage grandit (chaque tirage = un appel Claude ; prévoir un cache ou une limite si le trafic augmente)

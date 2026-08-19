@@ -25,6 +25,26 @@ const MAJORS = [
 ["XXI — Le Monde","Gaïa","🌿","Accomplissement · totalité · unité","major","mandorle · racines · monde vivant · quatre figures"]
 ];
 
+// Correspondances signe zodiacal -> arcane majeur, tradition ésotérique classique
+// (Golden Dawn), adaptée à l'ordre Marseille de ce jeu (Justice = VIII, Force = XI —
+// deux attributions qui collent d'ailleurs très bien aux illustrations : la balance pour
+// la Justice/Balance, le lion pour la Force/Lion). Sert à relier le profil astral aux
+// arcanes majeurs dans l'onglet Apprendre (voir profileMajorLinks()).
+const ZODIAC_MAJOR_LINKS = {
+  "Bélier":"IV — L'Empereur",
+  "Taureau":"V — Le Pape",
+  "Gémeaux":"VI — L'Amoureux",
+  "Cancer":"VII — Le Chariot",
+  "Lion":"XI — La Force",
+  "Vierge":"IX — L'Hermite",
+  "Balance":"VIII — La Justice",
+  "Scorpion":"XIII — L'Arcane sans nom",
+  "Sagittaire":"XIV — Tempérance",
+  "Capricorne":"XV — Le Diable",
+  "Verseau":"XVII — L'Étoile",
+  "Poissons":"XVIII — La Lune",
+};
+
 // Fiches enrichies : lecture Tarot de Marseille + éclairage mythologique — pour la carte du jour et le détail des arcanes.
 const CARD_LORE = {
 "Le Mat": {
@@ -1104,8 +1124,31 @@ function learningProgress(){
   return { percent, totalCards, totalFigures, totalSymbols, cardsSeen, figuresSeen, symbolsSeen };
 }
 
+// Relie le profil astral enregistré aux arcanes majeurs (via ZODIAC_MAJOR_LINKS), pour
+// mettre en avant "tes" cartes dans Apprendre. Regroupe Soleil/Lune/Ascendant qui
+// tomberaient sur la même carte plutôt que de l'afficher en double.
+function profileMajorLinks(){
+  const p = getProfile();
+  if(!p || !p.astral) return null;
+  const items = [];
+  if(p.astral.sunSign) items.push({ label:"Soleil", sign:p.astral.sunSign });
+  if(p.astral.moonSign) items.push({ label:"Lune", sign:p.astral.moonSign });
+  if(p.astral.ascendant && p.astral.ascendant.sign) items.push({ label:"Ascendant", sign:p.astral.ascendant.sign });
+
+  const byCard = {};
+  items.forEach(it=>{
+    const cardName = ZODIAC_MAJOR_LINKS[it.sign];
+    const card = cardName && MAJORS.find(c=>c[0]===cardName);
+    if(!card) return;
+    (byCard[cardName] ||= { card, labels:[], sign: it.sign }).labels.push(it.label);
+  });
+  const result = Object.values(byCard);
+  return result.length ? result : null;
+}
+
 function apprendre(){
   const p = learningProgress();
+  const links = profileMajorLinks();
   return `<section class="hero">
     <div class="hero-emblem">✦</div>
     <h2>Apprendre le Tarot de Delphes</h2>
@@ -1113,6 +1156,12 @@ function apprendre(){
     <div class="progress"><span style="width:${p.percent}%"></span></div>
     <small>Progression personnelle : ${p.percent}%</small>
   </section>
+  ${links ? `
+  <div class="section-title centered"><h3>Liées à ton profil astral</h3></div>
+  <div class="card-grid">${links.map(l=>`<div>
+    <p class="suit-h4" style="text-align:center;margin-bottom:6px">${escapeHTML(l.labels.join(" & "))} en ${escapeHTML(l.sign)}</p>
+    ${cardHTML(l.card,"major")}
+  </div>`).join("")}</div>` : ""}
   <div class="grid" style="margin-top:20px">
     <div class="tile" data-learn="majeurs">${illusHTML("assets/learn-majeurs.jpg","majeurs")}<strong>Arcanes majeurs</strong><span>Les 22 grandes figures du jeu.</span></div>
     <div class="tile" data-learn="cour">${illusHTML("assets/learn-cour.jpg","cour")}<strong>Figures de cour</strong><span>16 figures, réparties en 4 enseignes.</span></div>
