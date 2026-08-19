@@ -1,12 +1,17 @@
 // Backend serverless (Vercel) — génère une lecture de tarot via l'API Anthropic.
 //
-// Reçoit en POST : { question: string, cards: [carte1, carte2, carte3], profile? }
+// Reçoit en POST : { question: string, cards: [carte, ...], positions?: [string, ...], profile? }
+//   - cards : de 1 à 12 cartes (tirage "Oui/Non" à "Année à venir", voir SPREADS
+//     dans app.js) — plus la même limitation à exactement 3 cartes.
+//   - positions (optionnel) : intitulé de chaque position dans le tirage, dans le même
+//     ordre que cards (ex. "Défi", "Résultat"...) — donne à l'IA le sens de chaque carte
+//     dans les tirages autres que le tirage général.
 //   - profile (optionnel, envoyé par le client quand un Profil astral est enregistré) :
 //     { firstName, nameNumber, nameNumberMeaning, sunSign, moonSign, ascendantSign }
 //     ascendantSign peut être absent/null (heure de naissance inconnue). N'importe quel
 //     champ manquant ou profile absent au complet ne change rien au comportement — la
 //     lecture reste identique à avant que cette fonctionnalité existe.
-// Renvoie : { card1, card2, card3, synthesis }
+// Renvoie : { cards: [string, ...] (même longueur et ordre que cards en entrée), synthesis }
 //
 // La clé API Anthropic vit uniquement ici, côté serveur, dans la variable
 // d'environnement ANTHROPIC_API_KEY (jamais exposée au navigateur).
@@ -55,16 +60,17 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  const { question, cards, profile } = req.body || {};
+  const { question, cards, positions, profile } = req.body || {};
 
   if (
     typeof question !== "string" ||
     !question.trim() ||
     !Array.isArray(cards) ||
-    cards.length !== 3
+    cards.length < 1 ||
+    cards.length > 12
   ) {
     res.status(400).json({
-      error: "Requête invalide : { question: string, cards: [3 cartes] } attendu.",
+      error: "Requête invalide : { question: string, cards: [1 à 12 cartes] } attendu.",
     });
     return;
   }
@@ -79,7 +85,8 @@ module.exports = async function handler(req, res) {
     .map((c, i) => {
       const keywords = cardField(c, 3, "keywords") || "";
       const symbols = cardField(c, 5, "symbols") || "";
-      return `${i + 1}. ${cardFullName(c)} — mots-clés : ${keywords} — symboles : ${symbols}`;
+      const posLabel = Array.isArray(positions) && typeof positions[i] === "string" ? ` (position : ${positions[i]})` : "";
+      return `${i + 1}. ${cardFullName(c)}${posLabel} — mots-clés : ${keywords} — symboles : ${symbols}`;
     })
     .join("\n");
 
@@ -108,25 +115,29 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  // Prompt exact repris de generateAIReading() dans app.js.
+  const n = cards.length;
+  const hasPositions = Array.isArray(positions) && positions.some((p) => typeof p === "string" && p);
+
+  // Prompt repris de generateAIReading() dans app.js, généralisé pour n'importe quel
+  // nombre de cartes (1 à 12 selon le tirage choisi — voir SPREADS dans app.js).
   const prompt = `Tu es un tarologue professionnel, chaleureux, direct et humain. Une personne pose cette question : "${question}"
 
-Elle a tiré ces trois cartes, dans cet ordre :
+Elle a tiré ${n === 1 ? "cette carte" : `ces ${n} cartes`}, dans cet ordre${hasPositions ? " (avec la position de chacune dans le tirage entre parenthèses)" : ""} :
 ${cardBlock}
 ${personalBlock}
 Rédige une lecture de tarot en français, comme le ferait un professionnel expérimenté en face à face. Règles strictes :
 - Appelle toujours chaque carte par son nom exact donné ci-dessus (par exemple "le 10 d'Épées", "Le Chariot") — jamais par un simple mot-clé comme "Harmonie".
-- Réponds vraiment et précisément à la question posée, pas de façon générique.
+${hasPositions ? "- Tiens compte du sens de la position de chaque carte dans le tirage (donnée entre parenthèses) pour son interprétation.\n" : ""}- Réponds vraiment et précisément à la question posée, pas de façon générique.
 - Ton chaleureux, direct, humain — pas mécanique, pas de formule toute faite du type "si je devais résumer".
 - Varie la structure : adapte-toi vraiment au contenu et au type de question (décision, sentiment, timing, etc.), ne suis pas un plan fixe.
 
 Réponds UNIQUEMENT avec un objet JSON valide, sans texte autour, sans balises markdown, exactement sous cette forme :
-{"card1":"1-2 phrases sur ce que cette carte apporte à la question","card2":"...","card3":"...","synthesis":"un paragraphe de 3-5 phrases qui répond vraiment à la question en s'appuyant sur les trois cartes ensemble"}`;
+{"cards":[tableau de ${n} chaîne${n>1?"s":""} de texte, dans le même ordre que les cartes ci-dessus, chacune 1-2 phrases sur ce que cette carte apporte à la question],"synthesis":"un paragraphe de 3-5 phrases qui répond vraiment à la question en s'appuyant sur l'ensemble des cartes ensemble"}`;
 
   try {
     const message = await anthropic.messages.create({
       model: "claude-sonnet-4-6",
-      max_tokens: 1000,
+      max_tokens: Math.min(3500, Math.max(1000, 300 + n * 220)),
       messages: [{ role: "user", content: prompt }],
     });
 
@@ -137,7 +148,7 @@ Réponds UNIQUEMENT avec un objet JSON valide, sans texte autour, sans balises m
     const clean = text.replace(/```json|```/g, "").trim();
     const parsed = JSON.parse(clean);
 
-    if (!parsed.card1 || !parsed.synthesis) {
+    if (!Array.isArray(parsed.cards) || parsed.cards.length !== n || !parsed.synthesis) {
       throw new Error("Réponse IA incomplète");
     }
 

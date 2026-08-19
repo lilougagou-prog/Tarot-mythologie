@@ -433,7 +433,43 @@ const NUMBER_KEYS = {
 10:["cycle accompli","cercle fermé · récolte · graine prête à être replantée","aboutissement · transmission"]
 };
 
-const DRAW_POSITIONS = ["I","II","III"]; // discrets, sans intitulé imposé
+// Types de tirage proposés dans l'onglet Tirage. "general" est le tirage historique de
+// l'app (inchangé) ; les autres réutilisent exactement le même mécanisme (pioche face
+// cachée, choix manuel, lecture IA ou repli local) avec un nombre de cartes et des
+// intitulés de position différents.
+const SPREADS = {
+  general: {
+    key:"general", name:"Tirage général", glyph:"✦",
+    description:"Le tirage classique : une lecture ouverte sur ta question.",
+    count:3, poolSize:15,
+    positions:["Passé récent","Situation actuelle","Évolution possible"],
+  },
+  yesno: {
+    key:"yesno", name:"Oui / Non", glyph:"◐",
+    description:"Une carte, une réponse directe et nuancée.",
+    count:1, poolSize:9,
+    positions:["Réponse"],
+  },
+  amour: {
+    key:"amour", name:"Amour", glyph:"♡",
+    description:"Un éclairage sur toi, l'autre, et ce qui se joue entre vous.",
+    count:3, poolSize:15,
+    positions:["Toi","L'autre","La relation"],
+  },
+  celtic: {
+    key:"celtic", name:"Croix celtique", glyph:"✛",
+    description:"Le grand tirage classique, pour une question qui mérite une vraie exploration.",
+    count:10, poolSize:24,
+    positions:["Situation actuelle","Défi","Racine (passé)","Passé récent","Ce qui te guide","Futur proche","Toi-même","Entourage","Espoirs et craintes","Résultat"],
+  },
+  annee: {
+    key:"annee", name:"Année à venir", glyph:"❋",
+    description:"Un aperçu mois par mois de l'année qui vient.",
+    count:12, poolSize:24,
+    positions:["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"],
+  },
+};
+function spreadConf(){ return SPREADS[tirageState.spreadType] || SPREADS.general; }
 
 // Numérologie du prénom (méthode pythagoricienne classique : A=1, B=2… I=9, J=1…).
 // Volontairement réduite à 1-9 (jamais de nombre maître 11/22/33) pour retomber
@@ -643,8 +679,11 @@ let journal = JSON.parse(localStorage.getItem("arcanes-journal") || "[]");
 let route = "home";
 
 let tirageState = JSON.parse(localStorage.getItem("arcanes-tirage-state") || "null") || {
-  question: "", spread: null, picks: [], notes: "", saved: false, savedIndex: null, aiReading: null, aiStatus: "idle"
+  question: "", spreadType: null, spread: null, picks: [], notes: "", saved: false, savedIndex: null, aiReading: null, aiStatus: "idle"
 };
+// Compatibilité : un tirage en cours sauvegardé avant l'ajout des types de tirage n'a pas
+// de spreadType — on le traite comme le tirage général (3 cartes), déjà en cours.
+if(tirageState.spread && !tirageState.spreadType) tirageState.spreadType = "general";
 function saveTirageState(){ localStorage.setItem("arcanes-tirage-state", JSON.stringify(tirageState)); }
 
 /* ===================== UTILITAIRES ===================== */
@@ -753,11 +792,14 @@ function cardFullName(c){
   return c[0];
 }
 
-function interpretationFor(card, index, domain){
+// `positionLabel` n'est utilisé que pour les tirages autres que "general" (qui garde sa
+// propre narration en 3 temps, plus travaillée) — cf. currentReadingTexts().
+function interpretationFor(card, index, domain, positionLabel){
   const name = cardFullName(card);
   const core = (card[3]||"").split("·")[0].trim().toLowerCase();
   const symbols = (card[5]||"").split("·").map(s=>s.trim()).filter(Boolean);
   const hint = symbols.length ? ` Le symbole de ${symbols[0]} en dit long ici.` : "";
+  if(positionLabel) return `Pour « ${positionLabel} », ${name} met en avant ${core}.${hint}`;
   if(index === 0) return `${name} est déjà à l'œuvre autour de ${core}, même si ce n'est pas encore nommé clairement dans ${domain.label}.${hint}`;
   if(index === 1) return `${name} pointe vers ${core} comme point essentiel. C'est souvent là, et pas dans ce qui saute aux yeux, que se joue vraiment ${domain.label}.${hint}`;
   return `${name} indique une évolution possible autour de ${core} — une direction, pas une certitude figée.${hint}`;
@@ -814,6 +856,24 @@ function synthesisParagraphs(question, cards, domain){
     p3 = `Prises ensemble, ces trois cartes racontent moins un verdict qu'un mouvement : de ${cores[0]}, en passant par ${cores[1]}, vers ${cores[2]}.`;
   }
   return [p1, p2, p3];
+}
+
+// Synthèse de repli pour les tirages autres que "general" (1, 10 ou 12 cartes) — plus
+// sobre que synthesisParagraphs (pensée pour exactement 3 cartes), utilisée seulement
+// quand la lecture IA échoue ou dépasse le délai.
+function synthesisParagraphsGeneric(question, cards, domain){
+  const subject = extractSubject(question);
+  const hasSubject = subject.length > 3;
+  const subjectPhrase = hasSubject ? subject : domain.label;
+  const names = cards.map(c=>cardFullName(c));
+  if(names.length === 1){
+    return [`Face à ${hasSubject ? "ta question — " + subjectPhrase : subjectPhrase}, ${names[0]} donne une réponse claire, à prendre comme une direction plutôt qu'un verdict absolu.`];
+  }
+  const middle = names.slice(1,-1).join(", ") || "ce qui se joue entre les deux";
+  return [
+    `Face à ${hasSubject ? "ta question — " + subjectPhrase : subjectPhrase}, ces ${names.length} cartes dessinent ensemble une trajectoire plutôt qu'une suite de réponses isolées.`,
+    `Prises dans l'ordre, elles vont de ${names[0]} à ${names[names.length-1]}, en passant par ${middle}.`,
+  ];
 }
 
 /* ===================== LECTURE GÉNÉRÉE PAR IA (avec repli automatique) ===================== */
@@ -895,13 +955,13 @@ async function fetchAstralProfile({ date, time, place }){
   return data;
 }
 
-async function generateAIReading(question, cards){
+async function generateAIReading(question, cards, positions){
   const timeout = new Promise((_,reject)=>setTimeout(()=>reject(new Error("timeout")), 15000));
   const profile = profileForReading();
   const call = fetch("/api/reading", {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-App-Access-Code": getAccessCode() },
-    body: JSON.stringify({ question, cards, ...(profile ? { profile } : {}) })
+    body: JSON.stringify({ question, cards, positions, ...(profile ? { profile } : {}) })
   }).then(async r=>{
     if(r.status === 401){
       // Code manquant/incorrect : on l'efface pour qu'il soit redemandé au prochain tirage.
@@ -912,7 +972,7 @@ async function generateAIReading(question, cards){
   });
 
   const parsed = await Promise.race([call, timeout]);
-  if(!parsed.card1 || !parsed.synthesis) throw new Error("réponse incomplète");
+  if(!Array.isArray(parsed.cards) || parsed.cards.length !== cards.length || !parsed.synthesis) throw new Error("réponse incomplète");
   return parsed;
 }
 
@@ -922,7 +982,8 @@ function startAIReading(){
   saveTirageState();
   render();
   const chosen = tirageState.picks.map(i=>tirageState.spread[i]);
-  generateAIReading(tirageState.question, chosen)
+  const positions = spreadConf().positions.slice(0, chosen.length);
+  generateAIReading(tirageState.question, chosen, positions)
     .then(result => { tirageState.aiReading = result; tirageState.aiStatus = "done"; saveTirageState(); render(); })
     .catch(() => { tirageState.aiStatus = "error"; saveTirageState(); render(); }); // repli silencieux vers le template
 }
@@ -1033,20 +1094,37 @@ function home(){
 }
 
 function tirage(){
-  if(!tirageState.spread){
+  if(!tirageState.spreadType){
     return `<section class="draw-zone">
       ${oracleGlowHTML()}
       <div class="hero-emblem small">✦</div>
-      <p class="note">Pose ta question, puis choisis toi-même trois cartes dans le jeu, face cachée.</p>
+      <p class="note">Choisis le tirage qui correspond à ta question.</p>
+    </section>
+    <div class="grid" style="margin-top:10px">
+      ${Object.values(SPREADS).map(s=>`<div class="tile" data-spread="${s.key}">
+        <strong>${s.glyph} ${escapeHTML(s.name)}</strong>
+        <span>${escapeHTML(s.description)} (${s.count} carte${s.count>1?"s":""})</span>
+      </div>`).join("")}
+    </div>`;
+  }
+  const conf = spreadConf();
+  if(!tirageState.spread){
+    return `<section class="draw-zone">
+      ${oracleGlowHTML()}
+      <div class="hero-emblem small">${conf.glyph}</div>
+      <span class="pill">${escapeHTML(conf.name)}</span>
+      <p class="note">Pose ta question, puis choisis toi-même ${conf.count} carte${conf.count>1?"s":""} dans le jeu, face cachée.</p>
       <textarea id="drawQuestion" class="draw-question" placeholder="Écris ta question ici…">${escapeHTML(tirageState.question)}</textarea>
       <button class="primary" id="drawBtn" ${tirageState.question.trim()?"":"disabled"}>Consulter les arcanes</button>
+      <button class="ghost" id="changeSpread">← Changer de tirage</button>
     </section>`;
   }
   const { spread, picks, question } = tirageState;
-  if(picks.length < 3){
+  if(picks.length < conf.count){
+    const remaining = conf.count - picks.length;
     return `<section class="draw-zone compact">
-      <p class="note">Choisis ${3-picks.length} carte${3-picks.length>1?"s":""} parmi celles-ci.</p>
-      <p class="picks-counter">${picks.length} / 3 choisies</p>
+      <p class="note">Choisis ${remaining} carte${remaining>1?"s":""} parmi celles-ci.</p>
+      <p class="picks-counter">${picks.length} / ${conf.count} choisies</p>
     </section>
     <div class="deck-grid">${spread.map((c,i)=>cardBackHTML(i, picks.includes(i))).join("")}</div>`;
   }
@@ -1090,12 +1168,15 @@ function oracleGlowHTML(){
 // cours — utilisé à la fois pour l'affichage (renderDrawResult) et pour l'enregistrement
 // dans le Journal, qui garde ainsi la lecture complète et pas seulement les noms des cartes.
 function currentReadingTexts(){
-  const { question, spread, picks, aiReading, aiStatus } = tirageState;
+  const { question, spread, picks, aiReading, aiStatus, spreadType } = tirageState;
   const chosen = picks.map(i=>spread[i]);
   const domain = detectDomain(question);
+  const conf = spreadConf();
   const useAI = aiStatus === "done" && aiReading;
-  const cardTexts = chosen.map((c,i)=> useAI ? aiReading[`card${i+1}`] : interpretationFor(c,i,domain));
-  const synthesis = useAI ? [aiReading.synthesis] : synthesisParagraphs(question,chosen,domain);
+  const cardTexts = chosen.map((c,i)=> useAI ? aiReading.cards[i] : interpretationFor(c,i,domain, spreadType==="general" ? null : conf.positions[i]));
+  const synthesis = useAI
+    ? [aiReading.synthesis]
+    : (spreadType==="general" ? synthesisParagraphs(question,chosen,domain) : synthesisParagraphsGeneric(question,chosen,domain));
   return { cardTexts, synthesis, source: useAI ? "ai" : "local" };
 }
 
@@ -1103,6 +1184,7 @@ function renderDrawResult(){
   const { question, spread, picks, notes, saved, aiStatus } = tirageState;
   const chosen = picks.map(i=>spread[i]);
   const domain = detectDomain(question);
+  const conf = spreadConf();
   const loading = aiStatus === "loading";
   const reading = loading ? null : currentReadingTexts();
 
@@ -1115,7 +1197,7 @@ function renderDrawResult(){
     <p class="question-recall">« ${escapeHTML(question)} »</p>
     <div class="reading-grid">
       ${chosen.map((c,i)=>`<article class="reading-block">
-        <div class="reading-roman">${DRAW_POSITIONS[i]}</div>
+        <div class="reading-roman">${escapeHTML(conf.positions[i]||"")}</div>
         ${cardHTML(c,c[4]==="major"?"major":(SUITS[c[6]]?.[0]||"major"))}
         <p class="card-name-recall">${escapeHTML(cardFullName(c))}</p>
         ${loading ? `<div class="ai-loading-magic small">${starLoaderHTML("sm")}</div>` : `<p>${escapeHTML(reading.cardTexts[i])}</p>`}
@@ -1680,7 +1762,7 @@ function bindDeck(){
   document.querySelectorAll("[data-pick]").forEach(el=>{
     el.onclick = ()=>{
       const idx = Number(el.dataset.pick);
-      if(tirageState.picks.includes(idx) || tirageState.picks.length>=3) return;
+      if(tirageState.picks.includes(idx) || tirageState.picks.length>=spreadConf().count) return;
       // Petit temps de bascule (la carte "se retourne" visuellement, voir .tarot-card-back.revealed
       // dans styles.css) avant de mettre à jour l'état et de re-rendre l'écran.
       el.classList.add("revealed");
@@ -1719,12 +1801,19 @@ function bind(){
   const dayCard = document.querySelector(".day-card[data-card]");
   if(dayCard) dayCard.onclick = ()=> showDetail(JSON.parse(decodeURIComponent(dayCard.dataset.card)));
 
+  document.querySelectorAll("[data-spread]").forEach(el=>{
+    el.onclick = ()=>{ tirageState.spreadType = el.dataset.spread; saveTirageState(); render(); };
+  });
+  const changeSpread = document.getElementById("changeSpread");
+  if(changeSpread) changeSpread.onclick = ()=>{ tirageState.spreadType = null; saveTirageState(); render(); };
+
   const draw = document.getElementById("drawBtn");
   const question = document.getElementById("drawQuestion");
   if(question && draw){
     question.addEventListener("input", ()=>{ tirageState.question=question.value; saveTirageState(); draw.disabled=!question.value.trim(); });
     draw.onclick = ()=>{
-      tirageState = { question: tirageState.question, spread: shuffledDeck().slice(0,15), picks: [], notes:"", saved:false, savedIndex:null, aiReading:null, aiStatus:"idle" };
+      const poolSize = spreadConf().poolSize;
+      tirageState = { question: tirageState.question, spreadType: tirageState.spreadType, spread: shuffledDeck().slice(0,poolSize), picks: [], notes:"", saved:false, savedIndex:null, aiReading:null, aiStatus:"idle" };
       saveTirageState(); render();
     };
   }
@@ -1759,7 +1848,7 @@ function bind(){
     render();
   };
   const clearDraw = document.getElementById("clearDraw");
-  if(clearDraw) clearDraw.onclick = ()=>{ tirageState = {question:"",spread:null,picks:[],notes:"",saved:false,savedIndex:null,aiReading:null,aiStatus:"idle"}; saveTirageState(); render(); };
+  if(clearDraw) clearDraw.onclick = ()=>{ tirageState = {question:"",spreadType:null,spread:null,picks:[],notes:"",saved:false,savedIndex:null,aiReading:null,aiStatus:"idle"}; saveTirageState(); render(); };
   // .delete-entry est maintenant lié directement dans showJournal() (le Journal n'est
   // plus une route de premier niveau, voir l'onglet Profil).
 
@@ -1771,7 +1860,7 @@ function bind(){
 
   bindCards(); bindChips(); bindDeck();
 
-  if(route==="tirage" && tirageState.spread && tirageState.picks.length===3 && tirageState.aiStatus==="idle"){
+  if(route==="tirage" && tirageState.spread && tirageState.picks.length===spreadConf().count && tirageState.aiStatus==="idle"){
     startAIReading();
   }
 }
