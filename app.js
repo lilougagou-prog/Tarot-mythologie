@@ -388,6 +388,7 @@ Object.assign(CARD_IMAGES, {
   "XVII — L'Étoile": "assets/card-17-etoile.jpg",
   "XVIII — La Lune": "assets/card-18-lune.jpg",
   "XIX — Le Soleil": "assets/card-19-soleil.jpg",
+  "XX — Le Jugement": "assets/card-20-jugement.jpg",
   "XXI — Le Monde": "assets/card-21-monde.jpg",
 });
 
