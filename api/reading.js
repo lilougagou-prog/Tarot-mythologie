@@ -1,16 +1,20 @@
 // Backend serverless (Vercel) — génère une lecture de tarot via l'API Anthropic.
 //
-// Reçoit en POST : { question: string, cards: [carte, ...], positions?: [string, ...], profile? }
+// Reçoit en POST : { question: string, cards: [carte, ...], positions?: [string, ...], profile?, history? }
 //   - cards : de 1 à 12 cartes (tirage "Oui/Non" à "Année à venir", voir SPREADS
 //     dans app.js) — plus la même limitation à exactement 3 cartes.
 //   - positions (optionnel) : intitulé de chaque position dans le tirage, dans le même
 //     ordre que cards (ex. "Défi", "Résultat"...) — donne à l'IA le sens de chaque carte
 //     dans les tirages autres que le tirage général.
 //   - profile (optionnel, envoyé par le client quand un Profil astral est enregistré) :
-//     { firstName, nameNumber, nameNumberMeaning, sunSign, moonSign, ascendantSign }
-//     ascendantSign peut être absent/null (heure de naissance inconnue). N'importe quel
-//     champ manquant ou profile absent au complet ne change rien au comportement — la
-//     lecture reste identique à avant que cette fonctionnalité existe.
+//     { firstName, nameNumber, nameNumberMeaning, sunSign, moonSign, ascendantSign,
+//     personalYear, personalYearMeaning }. ascendantSign peut être absent/null (heure de
+//     naissance inconnue). N'importe quel champ manquant ou profile absent au complet ne
+//     change rien au comportement — la lecture reste identique à avant cette fonctionnalité.
+//   - history (optionnel, envoyé par le client quand le Journal dégage une tendance —
+//     voir journalTrendsForReading() dans app.js) : { topCard, topDomain }, l'un ou l'autre
+//     pouvant être absent/null. Absent au complet tant que le Journal n'a pas assez
+//     d'entrées pour qu'une tendance ait un sens.
 // Renvoie : { cards: [string, ...] (même longueur et ordre que cards en entrée), synthesis }
 //
 // La clé API Anthropic vit uniquement ici, côté serveur, dans la variable
@@ -60,7 +64,7 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  const { question, cards, positions, profile } = req.body || {};
+  const { question, cards, positions, profile, history } = req.body || {};
 
   if (
     typeof question !== "string" ||
@@ -110,8 +114,30 @@ module.exports = async function handler(req, res) {
     if (typeof profile.ascendantSign === "string" && profile.ascendantSign) astralParts.push(`Ascendant ${profile.ascendantSign}`);
     if (astralParts.length) lines.push(`Thème astral : ${astralParts.join(", ")}.`);
 
+    if (Number.isFinite(profile.personalYear)) {
+      const meaning = typeof profile.personalYearMeaning === "string" ? profile.personalYearMeaning : null;
+      lines.push(`Année personnelle (numérologie) : ${profile.personalYear}${meaning ? ` — ${meaning}` : ""}.`);
+    }
+
     if (lines.length) {
       personalBlock = `\nContexte sur la personne qui consulte (${lines.join(" — ")}) : tu peux t'en servir avec subtilité pour nuancer ta lecture si c'est pertinent — jamais de façon appuyée ni comme un horoscope générique, et jamais au détriment des cartes tirées, qui restent le cœur de la lecture.\n`;
+    }
+  }
+
+  // Bloc de tendances du Journal optionnel (voir journalTrendsForReading() dans app.js) —
+  // même logique de discrétion que personalBlock ci-dessus : un indice de plus, jamais
+  // une contrainte qui prendrait le pas sur les cartes tirées aujourd'hui.
+  let historyBlock = "";
+  if (history && typeof history === "object") {
+    const parts = [];
+    if (typeof history.topCard === "string" && history.topCard) {
+      parts.push(`la carte "${history.topCard}" revient souvent dans ses tirages précédents`);
+    }
+    if (typeof history.topDomain === "string" && history.topDomain) {
+      parts.push(`cette personne pose souvent des questions liées à ${history.topDomain}`);
+    }
+    if (parts.length) {
+      historyBlock = `\nHistorique de ses tirages précédents (${parts.join(" ; ")}) : tu peux t'en servir avec beaucoup de subtilité si c'est pertinent pour cette question précise — jamais de façon appuyée, et jamais au détriment des cartes tirées aujourd'hui.\n`;
     }
   }
 
@@ -122,9 +148,9 @@ module.exports = async function handler(req, res) {
   // nombre de cartes (1 à 12 selon le tirage choisi — voir SPREADS dans app.js).
   const prompt = `Tu es un tarologue professionnel, chaleureux, direct et humain. Une personne pose cette question : "${question}"
 
-Elle a tiré ${n === 1 ? "cette carte" : `ces ${n} cartes`}, dans cet ordre${hasPositions ? " (avec la position de chacune dans le tirage entre parenthèses)" : ""} :
+Cette personne a tiré ${n === 1 ? "cette carte" : `ces ${n} cartes`}, dans cet ordre${hasPositions ? " (avec la position de chacune dans le tirage entre parenthèses)" : ""} :
 ${cardBlock}
-${personalBlock}
+${personalBlock}${historyBlock}
 Rédige une lecture de tarot en français, comme le ferait un professionnel expérimenté en face à face. Règles strictes :
 - Appelle toujours chaque carte par son nom exact donné ci-dessus (par exemple "le 10 d'Épées", "Le Chariot") — jamais par un simple mot-clé comme "Harmonie".
 ${hasPositions ? "- Tiens compte du sens de la position de chaque carte dans le tirage (donnée entre parenthèses) pour son interprétation.\n" : ""}- Réponds vraiment et précisément à la question posée, pas de façon générique.
