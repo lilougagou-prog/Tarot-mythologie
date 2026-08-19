@@ -545,16 +545,67 @@ function personalMonthNumber(birthDate, now){
 
 const SYMBOL_LIBRARY = {
   // Lieux & passages
-  "porte":{icon:"🚪",label:"Porte",category:"Lieux & passages",desc:"Seuil, choix à faire, passage d'un état à un autre.",links:[]},
-  "chemin":{icon:"🛤",label:"Chemin",category:"Lieux & passages",desc:"Évolution en cours, quête, direction prise plutôt qu'imposée.",links:[]},
-  "pont":{icon:"🌉",label:"Pont",category:"Lieux & passages",desc:"Transition, lien construit entre deux états qui semblaient séparés.",links:[]},
-  "grotte":{icon:"🕳",label:"Grotte",category:"Lieux & passages",desc:"Inconscient, retrait nécessaire, initiation loin du regard des autres.",links:[]},
-  "montagne":{icon:"⛰",label:"Montagne",category:"Lieux & passages",desc:"Épreuve, élévation progressive, objectif qui se mérite.",links:[]},
-  "forêt":{icon:"🌲",label:"Forêt",category:"Lieux & passages",desc:"Inconnu, instinct, risque de s'égarer avant de retrouver son chemin.",links:[]},
-  "mer":{icon:"🌊",label:"Mer",category:"Lieux & passages",desc:"Inconscient, immensité, départ vers un ailleurs incertain.",links:["poséidon","nérée"]},
-  "rivière":{icon:"🏞",label:"Rivière",category:"Lieux & passages",desc:"Passage, changement continu, ce qui circule sans jamais s'arrêter.",links:[]},
-  "temple":{icon:"🏛",label:"Temple",category:"Lieux & passages",desc:"Connaissance sacrée, initiation, seuil entre le profane et le sacré.",links:[]},
-  "monde souterrain":{icon:"⚱",label:"Enfer / monde souterrain",category:"Lieux & passages",desc:"Transformation profonde, mort symbolique, vérité qui ne peut plus rester cachée.",links:["hadès","perséphone"]},
+  "porte":{icon:"🚪",label:"Porte",category:"Lieux & passages",desc:"Seuil, choix à faire, passage d'un état à un autre.",links:[],lore:[
+    "Dans la mythologie grecque, les portes ne sont jamais anodines : elles séparent deux mondes et marquent le moment où un choix devient irréversible.",
+    "Homère décrit dans l'Odyssée deux portes du sommeil, l'une de corne, l'autre d'ivoire : les rêves qui passent par la porte de corne se réalisent, ceux qui passent par la porte d'ivoire ne sont que des illusions trompeuses. Franchir une porte n'est donc jamais un geste neutre — encore faut-il savoir laquelle on choisit.",
+    "Les portes des Enfers, elles, gardées par Cerbère, ne se franchissent que dans un sens pour les mortels ordinaires : entrer y est possible, en ressortir exige une faveur exceptionnelle.",
+    "La porte est ainsi devenue un symbole de seuil, de choix décisif, de passage d'un état à un autre et de ce qui sépare l'illusion de la vérité.",
+  ]},
+  "chemin":{icon:"🛤",label:"Chemin",category:"Lieux & passages",desc:"Évolution en cours, quête, direction prise plutôt qu'imposée.",links:[],lore:[
+    "Le chemin est l'un des symboles les plus anciens du choix humain, et la mythologie grecque en a fait une véritable scène philosophique.",
+    "Selon un récit rapporté par le sophiste Prodicos, le jeune Héraclès, arrivé à un carrefour, vit apparaître deux figures : la Vertu, qui lui promettait une vie difficile mais glorieuse, et le Vice, qui lui promettait une vie facile mais sans grandeur. Héraclès dut choisir sa route avant même d'avoir accompli le moindre exploit.",
+    "Le chemin qu'on choisit à ce carrefour engage tout ce qui suivra — non pas un simple décor, mais une direction qui façonne le reste de l'histoire.",
+    "Le chemin est devenu un symbole de choix, de direction assumée, de quête et d'évolution en cours plutôt qu'imposée.",
+  ]},
+  "pont":{icon:"🌉",label:"Pont",category:"Lieux & passages",desc:"Transition, lien construit entre deux états qui semblaient séparés.",links:[],lore:[
+    "Le pont est un symbole plus discret dans la mythologie grecque que la porte ou le chemin : les récits antiques franchissent plus souvent les frontières par un passeur (Charon sur le Styx) ou par les airs (Hermès, Iris) que par une construction humaine.",
+    "C'est peut-être ce qui rend le pont particulier : contrairement au passeur qu'il faut payer ou au messager qu'il faut attendre, le pont est un lien qu'on peut bâtir soi-même entre deux rives qui semblaient séparées pour toujours.",
+    "Il est ainsi devenu un symbole de transition choisie, de lien construit et de réconciliation entre deux états qui semblaient incompatibles.",
+  ]},
+  "grotte":{icon:"🕳",label:"Grotte",category:"Lieux & passages",desc:"Inconscient, retrait nécessaire, initiation loin du regard des autres.",links:[],lore:[
+    "La grotte occupe une place à part dans la mythologie grecque : c'est un lieu caché, à l'écart du regard des dieux comme des hommes, où peuvent se produire des événements décisifs.",
+    "Le mythe le plus célèbre est celui de la naissance de Zeus lui-même : pour le soustraire à son père Cronos, qui dévorait ses enfants, sa mère Rhéa le cacha dans une grotte du mont Ida, en Crète, où il fut élevé en secret jusqu'à pouvoir renverser son père.",
+    "Les grottes abritent aussi des figures oraculaires, comme celle de Trophonios, où l'on descendait consulter un oracle si redoutable que ceux qui en ressortaient étaient dits ne plus jamais sourire.",
+    "La grotte est devenue un symbole de retrait nécessaire, d'initiation loin du regard des autres et de protection avant de pouvoir affronter le monde.",
+  ]},
+  "montagne":{icon:"⛰",label:"Montagne",category:"Lieux & passages",desc:"Épreuve, élévation progressive, objectif qui se mérite.",links:[],lore:[
+    "La montagne la plus importante de la mythologie grecque est bien sûr l'Olympe, demeure des dieux, si haute que son sommet touchait, croyait-on, le domaine céleste lui-même.",
+    "Le mont Parnasse, non loin de Delphes, était quant à lui consacré à Apollon et aux Muses : c'est sur ses pentes que résonnait l'inspiration poétique et prophétique.",
+    "Gravir une montagne dans l'imaginaire grec n'est donc jamais seulement un effort physique : c'est se rapprocher d'un savoir ou d'une présence qui ne se donne pas au niveau du sol.",
+    "La montagne est devenue un symbole d'épreuve, d'élévation progressive et d'objectif qui se mérite à chaque pas.",
+  ]},
+  "forêt":{icon:"🌲",label:"Forêt",category:"Lieux & passages",desc:"Inconnu, instinct, risque de s'égarer avant de retrouver son chemin.",links:[],lore:[
+    "La forêt appartient au domaine d'Artémis, déesse de la chasse et des espaces sauvages, qui y règne avec ses nymphes loin des cités et de leurs lois.",
+    "C'est aussi le territoire de Pan, dieu à moitié bouc, dont la présence dans les bois profonds pouvait saisir le voyageur d'une terreur soudaine et irraisonnée — la « panique » lui doit d'ailleurs son nom.",
+    "La forêt grecque n'est donc pas un simple décor : c'est un lieu où les repères de la civilisation s'effacent, où l'instinct reprend le dessus sur la raison.",
+    "Elle est devenue un symbole d'inconnu, d'instinct, de risque de s'égarer avant de retrouver son chemin — et de nature qui échappe à tout contrôle.",
+  ]},
+  "mer":{icon:"🌊",label:"Mer",category:"Lieux & passages",desc:"Inconscient, immensité, départ vers un ailleurs incertain.",links:["poséidon","nérée"],lore:[
+    "La mer appartient avant tout à Poséidon, dieu des océans et des tremblements de terre, dont l'humeur changeante pouvait aussi bien porter les navires que les briser.",
+    "Elle abrite aussi des figures plus anciennes et plus paisibles, comme Nérée, le « Vieillard de la mer », doué de sagesse et de don de prophétie, père des cinquante Néréides.",
+    "La mer réunit ainsi deux visages : la puissance instable de Poséidon et la sagesse discrète de Nérée — la même immensité peut engloutir ou révéler.",
+    "Elle est devenue un symbole d'inconscient, d'immensité, de départ vers un ailleurs incertain et de puissance qu'on ne maîtrise jamais complètement.",
+    "La mer est particulièrement associée à Poséidon et à Nérée.",
+  ]},
+  "rivière":{icon:"🏞",label:"Rivière",category:"Lieux & passages",desc:"Passage, changement continu, ce qui circule sans jamais s'arrêter.",links:[],lore:[
+    "Les fleuves occupent une place à part dans la mythologie grecque : ce sont des divinités à part entière, et certains d'entre eux marquent la frontière entre le monde des vivants et celui des morts.",
+    "Le Styx, fleuve des Enfers, est si sacré que les dieux eux-mêmes prêtaient sur ses eaux leurs serments les plus solennels — un serment fait sur le Styx ne pouvait jamais être rompu. Le Léthé, lui, faisait oublier aux âmes leur vie passée à celles qui buvaient de ses eaux avant de renaître.",
+    "Une rivière, dans cet imaginaire, n'est donc jamais un simple obstacle : elle engage, elle efface, elle fait passer d'un état à un autre sans retour possible.",
+    "La rivière est devenue un symbole de passage, de changement continu et de ce qui circule sans jamais s'arrêter — parfois au prix d'un serment ou d'un oubli.",
+  ]},
+  "temple":{icon:"🏛",label:"Temple",category:"Lieux & passages",desc:"Connaissance sacrée, initiation, seuil entre le profane et le sacré.",links:[],lore:[
+    "Le temple est le lieu où le sacré se rend accessible aux mortels, sans jamais leur appartenir tout à fait.",
+    "Le plus célèbre d'entre eux, pour ce tarot, est sans doute le temple d'Apollon à Delphes, où la Pythie, assise sur son trépied, rendait des oracles réputés infaillibles — et où était gravée la maxime « Connais-toi toi-même ».",
+    "Franchir le seuil d'un temple, c'était donc quitter le monde profane pour entrer dans un espace où la parole divine pouvait se faire entendre, à condition de savoir l'écouter.",
+    "Le temple est devenu un symbole de savoir sacré, d'initiation et de seuil entre le monde profane et ce qui le dépasse.",
+  ]},
+  "monde souterrain":{icon:"⚱",label:"Enfer / monde souterrain",category:"Lieux & passages",desc:"Transformation profonde, mort symbolique, vérité qui ne peut plus rester cachée.",links:["hadès","perséphone"],lore:[
+    "Le monde souterrain est le royaume d'Hadès, frère de Zeus et de Poséidon, qui en hérita lors du partage du cosmos entre les trois dieux.",
+    "Perséphone y règne à ses côtés une partie de l'année, après avoir été enlevée par Hadès et liée aux Enfers pour avoir mangé quelques grains de grenade (voir la fiche « Grenade »). Son passage entre les deux mondes rythme les saisons.",
+    "Contrairement à une idée reçue, ce monde souterrain n'est pas un lieu de punition pour tous : c'est avant tout le domaine de ce qui a été transformé, de ce qui ne peut plus revenir en arrière — un passage plus qu'un châtiment.",
+    "Il est devenu un symbole de transformation profonde, de mort symbolique et de vérité qui ne peut plus rester cachée une fois qu'on y est descendu.",
+    "Le monde souterrain est particulièrement associé à Hadès et à Perséphone.",
+  ]},
 
   // Mythologie — attributs et divinités
   "caducée":{icon:"⚕",label:"Caducée",category:"Mythologie",desc:"Attribut d'Hermès : médiation, circulation, communication entre des mondes séparés.",links:["hermès"],lore:[
@@ -594,7 +645,13 @@ const SYMBOL_LIBRARY = {
     "Il est devenu un symbole de puissance, de maîtrise des forces naturelles, de mer, de profondeur et de force indomptable.",
     "Le trident est particulièrement associé à Poséidon.",
   ]},
-  "lyre":{icon:"🎵",label:"Lyre",category:"Mythologie",desc:"Attribut d'Apollon : harmonie, vérité transmise par la beauté plutôt qu'imposée.",links:["apollon"]},
+  "lyre":{icon:"🎵",label:"Lyre",category:"Mythologie",desc:"Attribut d'Apollon : harmonie, vérité transmise par la beauté plutôt qu'imposée.",links:["apollon"],lore:[
+    "La lyre est l'instrument d'Apollon, dieu de la musique, de la poésie et de la lumière — mais elle ne fut pas inventée par lui.",
+    "Selon le mythe, c'est Hermès, encore enfant, qui façonna la première lyre à partir d'une carapace de tortue et de cordes tendues, avant de l'offrir à Apollon en échange du troupeau de bœufs qu'il lui avait dérobé. L'instrument de la beauté naît ainsi d'un geste de ruse réparé par un cadeau.",
+    "Entre les mains d'Apollon, la lyre devient l'instrument d'une vérité qui persuade par l'harmonie plutôt que par la force — à l'opposé de l'arc, autre attribut du dieu, qui frappe à distance.",
+    "La lyre est devenue un symbole d'harmonie, d'inspiration et de vérité transmise par la beauté plutôt qu'imposée.",
+    "La lyre est particulièrement associée à Apollon.",
+  ]},
   "arc":{icon:"🏹",label:"Arc",category:"Mythologie",desc:"Attribut d'Éros : intention, concentration, désir qui vise juste sans toujours consulter la raison.",links:["éros"],lore:[
     "L'arc est l'instrument du chasseur : il permet d'atteindre sa cible à distance.",
     "Il est particulièrement associé à Artémis, déesse de la chasse et des espaces sauvages. Dans l'Hymne homérique qui lui est consacré, elle est explicitement décrite comme une chasseuse qui porte son arc et ses flèches.",
@@ -642,8 +699,20 @@ const SYMBOL_LIBRARY = {
     "Le char représente donc une force qui possède une direction et que le conducteur doit être capable de maîtriser.",
     "Il est devenu un symbole de direction, de maîtrise, de progression, de mouvement et de conquête d'un chemin.",
   ]},
-  "arc-en-ciel":{icon:"🌈",label:"Arc-en-ciel",category:"Mythologie",desc:"Attribut d'Iris : médiation, passage, réconciliation entre deux états.",links:["iris"]},
-  "flûte":{icon:"🎶",label:"Flûte",category:"Mythologie",desc:"Attribut de Pan : instinct non policé par la raison, appel de la nature brute.",links:["pan"]},
+  "arc-en-ciel":{icon:"🌈",label:"Arc-en-ciel",category:"Mythologie",desc:"Attribut d'Iris : médiation, passage, réconciliation entre deux états.",links:["iris"],lore:[
+    "L'arc-en-ciel est le corps même d'Iris, déesse messagère qui relie l'Olympe à la terre et à la mer en empruntant ce pont de couleurs.",
+    "Iris tient un rôle proche de celui d'Hermès, mais tourné vers les dieux plutôt que vers les hommes : elle porte leurs messages et, selon certaines traditions, va puiser l'eau sacrée du Styx sur laquelle les dieux prêtent leurs serments les plus solennels.",
+    "Apparaître après l'orage, relier le ciel et la terre en un instant fragile : l'arc-en-ciel condense en une image la fonction même d'Iris, messagère et médiatrice.",
+    "Il est devenu un symbole de médiation, de passage et de réconciliation entre deux états qui semblaient incompatibles.",
+    "L'arc-en-ciel est particulièrement associé à Iris.",
+  ]},
+  "flûte":{icon:"🎶",label:"Flûte",category:"Mythologie",desc:"Attribut de Pan : instinct non policé par la raison, appel de la nature brute.",links:["pan"],lore:[
+    "La flûte de Pan, ou syrinx, naît d'une histoire de fuite et de métamorphose.",
+    "Pan, dieu à moitié bouc, poursuivait de son désir la nymphe Syrinx. Pour lui échapper, elle se réfugia au bord d'un fleuve et fut changée en roseaux au moment même où Pan croyait enfin la saisir. Ne serrant dans ses bras que des tiges creuses, il en assembla plusieurs de longueurs différentes pour en tirer un instrument — et lui donna le nom de la nymphe.",
+    "La flûte de Pan porte ainsi la trace d'un désir qui n'a pas obtenu ce qu'il cherchait, mais qui en a fait naître autre chose : une musique instinctive, non policée par la raison, à l'image du dieu qui la joue.",
+    "Elle est devenue un symbole d'instinct, d'appel de la nature brute et de désir transformé plutôt qu'assouvi.",
+    "La flûte est particulièrement associée à Pan.",
+  ]},
   "balance":{icon:"⚖",label:"Balance",category:"Mythologie",desc:"Attribut de Thémis (et de Minos au Jugement) : équilibre, justice, mesure exacte avant toute décision.",links:["thémis","minos"],lore:[
     "La balance représente ce qui doit être pesé et comparé avant qu'un jugement soit rendu.",
     "Cette idée existe déjà dans la mythologie grecque : Zeus est représenté pesant le destin des guerriers sur une balance, notamment dans les scènes de psychostasie, où le sort des combattants est mis en balance.",
@@ -651,7 +720,13 @@ const SYMBOL_LIBRARY = {
     "La balance est donc devenue un symbole de justice, d'équilibre, de mesure, de jugement et d'impartialité.",
     "Elle peut être associée à Thémis et à Dikè, personnifications de l'ordre divin et de la justice.",
   ]},
-  "ailes":{icon:"🕊",label:"Ailes",category:"Mythologie",desc:"Selon le contexte : Niké (victoire), Hermès (rapidité, message) ou Éros (désir qui s'envole). Toujours un mouvement qui échappe à la pesanteur ordinaire.",links:["hermès","éros"]},
+  "ailes":{icon:"🕊",label:"Ailes",category:"Mythologie",desc:"Selon le contexte : Niké (victoire), Hermès (rapidité, message) ou Éros (désir qui s'envole). Toujours un mouvement qui échappe à la pesanteur ordinaire.",links:["hermès","éros"],lore:[
+    "Les ailes, dans la mythologie grecque, distinguent ceux qui échappent à la pesanteur ordinaire du monde.",
+    "Hermès porte des sandales ailées qui lui permettent de voyager entre l'Olympe, le monde des hommes et celui des morts à une vitesse que rien ne peut freiner. Éros, lui, est représenté avec des ailes qui traduisent la rapidité et l'imprévisibilité du désir amoureux, qui se pose où il veut sans qu'on puisse le retenir. Niké, déesse de la victoire, vole vers celui ou celle qu'elle choisit de couronner, et sa venue ne se commande pas.",
+    "Trois figures, trois façons d'échapper au sol : le message, le désir, la victoire — chacun a ses propres ailes.",
+    "Elles sont devenues un symbole de mouvement qui échappe à la pesanteur ordinaire, de rapidité et de ce qui ne peut être ni retenu ni forcé.",
+    "Les ailes sont particulièrement associées à Hermès et à Éros.",
+  ]},
 
   // Objets classiques du Tarot
   "bâton":{icon:"🪄",label:"Bâton",category:"Objets",desc:"Enseigne liée au feu : volonté, énergie, croissance par l'action.",links:[],lore:[
@@ -738,8 +813,20 @@ const SYMBOL_LIBRARY = {
     "Le voile peut également représenter le passage d'un état à un autre, notamment dans le mariage, où la jeune femme change de statut.",
     "Il est ainsi devenu un symbole de secret, de connaissance cachée, de mystère, de frontière, de transformation et de passage — ce qui existe derrière le monde visible mais qui n'est pas encore révélé.",
   ]},
-  "chaîne":{icon:"⛓",label:"Chaîne",category:"Objets mythologiques",desc:"Attachement, dépendance, lien — la question est toujours de savoir s'il enferme ou s'il peut être dénoué.",links:["pan","prométhée"]},
-  "roue":{icon:"☸",label:"Roue",category:"Objets mythologiques",desc:"Cycle, changement, destin qui tourne sans considération pour le mérite.",links:["tyché"]},
+  "chaîne":{icon:"⛓",label:"Chaîne",category:"Objets mythologiques",desc:"Attachement, dépendance, lien — la question est toujours de savoir s'il enferme ou s'il peut être dénoué.",links:["pan","prométhée"],lore:[
+    "La chaîne la plus célèbre de la mythologie grecque est celle qui retint Prométhée sur un rocher du Caucase, en punition d'avoir donné le feu aux hommes contre la volonté de Zeus.",
+    "Chaque jour, un aigle venait dévorer son foie, qui repoussait chaque nuit, prolongeant son supplice sans fin — jusqu'à ce qu'Héraclès le libère bien plus tard.",
+    "La chaîne de Prométhée dit quelque chose de plus large que la simple punition : elle montre qu'un don fait sans autorisation a toujours un prix, et que l'attachement qui en résulte peut aussi bien enfermer que devenir, avec le temps, la preuve de ce qu'on a osé offrir.",
+    "Elle est devenue un symbole d'attachement, de dépendance et de lien — la question étant toujours de savoir s'il enferme ou s'il peut être dénoué.",
+    "La chaîne est particulièrement associée à Prométhée.",
+  ]},
+  "roue":{icon:"☸",label:"Roue",category:"Objets mythologiques",desc:"Cycle, changement, destin qui tourne sans considération pour le mérite.",links:["tyché"],lore:[
+    "La roue est l'attribut de Tyché, déesse du hasard et de la fortune, souvent représentée les yeux bandés, un gouvernail à la main pour rappeler qu'elle dirige le destin des hommes sans qu'ils puissent l'influencer.",
+    "Sa roue tourne sans considération pour le mérite : elle peut élever un inconnu au sommet ou faire chuter un roi, dans un mouvement que ni la vertu ni la faute ne peuvent arrêter.",
+    "Contrairement à une punition ou une récompense méritée, ce que fait tourner la roue de Tyché échappe à toute logique morale — c'est précisément ce qui en fait un symbole aussi redouté que fascinant.",
+    "Elle est devenue un symbole de cycle, de changement et de destin qui tourne sans considération pour le mérite.",
+    "La roue est particulièrement associée à Tyché.",
+  ]},
   "char":{icon:"🏇",label:"Char",category:"Objets mythologiques",desc:"Direction, maîtrise, progression réglée vers un but choisi.",links:["apollon","hélios"],lore:[
     "Le char est un objet majeur de la mythologie grecque parce qu'il permet aux dieux de parcourir le ciel.",
     "Le char d'Hélios traverse chaque jour le ciel et fait apparaître le soleil. Celui d'Apollon sera également associé au parcours solaire dans les traditions plus tardives.",
@@ -945,18 +1032,72 @@ const SYMBOL_LIBRARY = {
   ]},
 
   // Éléments
-  "feu":{icon:"🔥",label:"Feu",category:"Éléments",desc:"Flamme, étincelle, soleil, fumée : action, volonté, élan.",links:[]},
-  "eau":{icon:"💧",label:"Eau",category:"Éléments",desc:"Source, rivière, vague, pluie, miroir : émotion, relation, ce qui circule.",links:[]},
-  "air":{icon:"🌬",label:"Air",category:"Éléments",desc:"Vent, souffle, plume, nuage : pensée, décision, clarté mentale.",links:[]},
-  "terre":{icon:"🌿",label:"Terre",category:"Éléments",desc:"Racine, pierre, sol, montagne : matière, croissance, incarnation concrète.",links:[]},
+  "feu":{icon:"🔥",label:"Feu",category:"Éléments",desc:"Flamme, étincelle, soleil, fumée : action, volonté, élan.",links:[],lore:[
+    "Le feu occupe une place unique dans la mythologie grecque : c'est le seul élément que les dieux ont d'abord refusé aux hommes.",
+    "Prométhée le déroba à l'Olympe, caché dans une tige de fenouil, pour l'offrir à l'humanité — un geste qui lui valut d'être enchaîné pour l'éternité (voir la fiche « Chaîne »). Le feu devint ainsi le premier outil véritablement humain, celui qui permit la technique, la cuisson, la métallurgie et la civilisation elle-même.",
+    "Le philosophe Empédocle en fit plus tard l'une des quatre racines de toute matière, aux côtés de l'eau, de l'air et de la terre — une théorie qui a nourri toute la pensée grecque sur la nature du monde, bien après les mythes qui l'avaient d'abord racontée.",
+    "Le feu est devenu un symbole d'action, de volonté, d'élan — et du prix qu'il faut parfois payer pour ce qu'on ose transmettre.",
+  ]},
+  "eau":{icon:"💧",label:"Eau",category:"Éléments",desc:"Source, rivière, vague, pluie, miroir : émotion, relation, ce qui circule.",links:[],lore:[
+    "L'eau est, dans la mythologie grecque, l'élément qui traverse aussi bien le monde des vivants que celui des morts : les fleuves des Enfers (Styx, Léthé, Achéron) sont tous des cours d'eau, et c'est sur l'eau du Styx que les dieux prêtaient leurs serments les plus sacrés.",
+    "Elle est aussi le domaine de Poséidon et de tout un peuple de divinités marines et fluviales, des Néréides aux dieux-fleuves, qui montrent que l'eau n'est jamais un simple décor mais un ensemble de forces vivantes.",
+    "Empédocle en fit l'une des quatre racines de toute matière, aux côtés du feu, de l'air et de la terre — l'élément de ce qui coule, se mêle et jamais ne reste immobile.",
+    "L'eau est devenue un symbole d'émotion, de relation et de ce qui circule sans jamais s'arrêter tout à fait.",
+  ]},
+  "air":{icon:"🌬",label:"Air",category:"Éléments",desc:"Vent, souffle, plume, nuage : pensée, décision, clarté mentale.",links:[],lore:[
+    "L'air, dans la mythologie grecque, est le domaine où circulent les messages : c'est par les airs qu'Hermès porte ses nouvelles et qu'Iris tend son arc-en-ciel entre le ciel et la terre.",
+    "C'est aussi le souffle (pneuma) que les Anciens associaient à la vie elle-même et, plus tard, à la pensée et à l'inspiration — respirer et penser relevaient d'un même principe invisible.",
+    "Empédocle en fit l'une des quatre racines de toute matière, aux côtés du feu, de l'eau et de la terre — l'élément qu'on ne voit jamais directement, mais dont les effets se sentent partout.",
+    "L'air est devenu un symbole de pensée, de décision et de clarté mentale — ce qui circule sans jamais se laisser saisir.",
+  ]},
+  "terre":{icon:"🌿",label:"Terre",category:"Éléments",desc:"Racine, pierre, sol, montagne : matière, croissance, incarnation concrète.",links:[],lore:[
+    "La terre est, dans la mythologie grecque, une puissance primordiale : Gaïa, la Terre elle-même, engendre en premier le Ciel (Ouranos) et donne naissance à toutes les générations divines qui suivront, y compris les Titans et, à travers eux, les dieux de l'Olympe.",
+    "Elle est aussi le domaine de Déméter, déesse des moissons, dont le chagrin après l'enlèvement de Perséphone rend la terre stérile chaque année, avant que son retour ne la fasse à nouveau produire.",
+    "Empédocle en fit l'une des quatre racines de toute matière, aux côtés du feu, de l'eau et de l'air — l'élément le plus stable, celui qui porte et nourrit tous les autres.",
+    "La terre est devenue un symbole de matière, de croissance et d'incarnation concrète — ce qui accueille, porte et fait pousser.",
+  ]},
 
   // Astres & phénomènes
-  "soleil":{icon:"☀",label:"Soleil",category:"Astres & phénomènes",desc:"Clarté, conscience, vitalité, vérité qui n'a plus besoin de se cacher.",links:["hélios"]},
-  "lune":{icon:"🌙",label:"Lune",category:"Astres & phénomènes",desc:"Inconscient, intuition, cycles, incertitude qui n'empêche pas d'avancer.",links:["séléné","métis"]},
-  "étoiles":{icon:"✦",label:"Étoile",category:"Astres & phénomènes",desc:"Orientation, espoir, inspiration retrouvée après l'épreuve.",links:["hécate"]},
-  "aurore":{icon:"🌅",label:"Aurore",category:"Astres & phénomènes",desc:"Commencement, renaissance, ce qui redémarre après l'obscurité.",links:[]},
-  "éclipse":{icon:"🌑",label:"Éclipse",category:"Astres & phénomènes",desc:"Obscurcissement temporaire, transition, révélation qui attend son heure.",links:[]},
-  "éclair":{icon:"⚡",label:"Éclair",category:"Astres & phénomènes",desc:"Révélation brutale, rupture soudaine, énergie qui ne prévient pas.",links:["zeus","poséidon"]},
+  "soleil":{icon:"☀",label:"Soleil",category:"Astres & phénomènes",desc:"Clarté, conscience, vitalité, vérité qui n'a plus besoin de se cacher.",links:["hélios"],lore:[
+    "Le soleil est le corps même d'Hélios, qui traverse chaque jour le ciel sur son char de feu, voyant tout ce qui se passe sur terre sans qu'aucun secret ne puisse lui échapper.",
+    "Son fils Phaéton, voulant un jour conduire le char à sa place, en perdit le contrôle et faillit embraser la terre entière — un rappel que la lumière qui révèle tout est aussi une force qu'il faut savoir maîtriser.",
+    "Le soleil ne se cache jamais : c'est précisément ce qui en fait, dans cette mythologie, le témoin par excellence, celui devant qui rien ne reste dans l'ombre.",
+    "Il est devenu un symbole de clarté, de conscience, de vitalité et de vérité qui n'a plus besoin de se cacher.",
+    "Le soleil est particulièrement associé à Hélios.",
+  ]},
+  "lune":{icon:"🌙",label:"Lune",category:"Astres & phénomènes",desc:"Inconscient, intuition, cycles, incertitude qui n'empêche pas d'avancer.",links:["séléné","métis"],lore:[
+    "La lune est le corps de Séléné, qui traverse le ciel nocturne comme son frère Hélios traverse le ciel diurne.",
+    "Son mythe le plus connu est celui d'Endymion, berger d'une beauté si parfaite que Séléné, tombée amoureuse, obtint pour lui un sommeil éternel plutôt que la mort — afin de pouvoir continuer, chaque nuit, à venir le contempler.",
+    "La lune porte aussi la trace de Métis, titanide de la ruse et de la sagesse cachée : un savoir qui, comme la lune elle-même, ne se montre jamais tout entier d'un coup, mais se dévoile par phases.",
+    "Elle est devenue un symbole d'inconscient, d'intuition, de cycles et d'incertitude qui n'empêche pas d'avancer.",
+    "La lune est particulièrement associée à Séléné et à Métis.",
+  ]},
+  "étoiles":{icon:"✦",label:"Étoile",category:"Astres & phénomènes",desc:"Orientation, espoir, inspiration retrouvée après l'épreuve.",links:["hécate"],lore:[
+    "Les étoiles se rattachent à Hécate par sa mère, Astéria, titanide dont le nom signifie littéralement « étoilée ».",
+    "Pour échapper aux avances de Zeus, Astéria se jeta dans la mer et fut changée en île — Délos, selon certaines traditions — après avoir été un temps assimilée aux étoiles filantes. Sa fille Hécate hérita de cette proximité avec le ciel nocturne et l'orientation qu'il offre à qui sait le lire.",
+    "Contrairement au soleil qui révèle tout d'un coup, les étoiles n'éclairent que faiblement — mais elles suffisent à orienter celui qui a perdu son chemin dans l'obscurité.",
+    "Elles sont devenues un symbole d'orientation, d'espoir et d'inspiration retrouvée après l'épreuve.",
+    "Les étoiles sont particulièrement associées à Hécate, par sa mère Astéria.",
+  ]},
+  "aurore":{icon:"🌅",label:"Aurore",category:"Astres & phénomènes",desc:"Commencement, renaissance, ce qui redémarre après l'obscurité.",links:[],lore:[
+    "L'aurore est le corps d'Éos, déesse aux doigts de rose qui ouvre chaque jour les portes du ciel pour annoncer le passage d'Hélios.",
+    "Éos est aussi connue pour ses amours mortelles, comme Tithonos, à qui elle obtint l'immortalité sans penser à demander aussi l'éternelle jeunesse — un rappel que même un don des dieux peut se retourner si l'on ne pense pas à tout.",
+    "Chaque aurore répète ainsi un même geste : ouvrir à nouveau ce qui semblait clos, redonner une chance après la nuit la plus sombre.",
+    "Elle est devenue un symbole de commencement, de renaissance et de ce qui redémarre après l'obscurité.",
+  ]},
+  "éclipse":{icon:"🌑",label:"Éclipse",category:"Astres & phénomènes",desc:"Obscurcissement temporaire, transition, révélation qui attend son heure.",links:[],lore:[
+    "Longtemps, une éclipse fut perçue comme un présage redoutable : le soleil ou la lune s'éteignant sans explication ne pouvait, croyait-on, qu'annoncer un désordre plus grand encore.",
+    "C'est un Grec, le philosophe Anaxagore, qui proposa au Ve siècle avant notre ère l'une des premières explications naturelles de ce phénomène : l'éclipse ne serait pas un signe des dieux mais l'ombre portée d'un astre sur un autre — une idée si audacieuse pour son temps qu'elle lui valut d'être accusé d'impiété.",
+    "L'éclipse raconte ainsi, mieux qu'aucun autre phénomène céleste, le moment où le mythe cède la place à l'explication — sans que le sentiment de mystère ne disparaisse tout à fait.",
+    "Elle est devenue un symbole d'obscurcissement temporaire, de transition et de révélation qui attend son heure pour se manifester.",
+  ]},
+  "éclair":{icon:"⚡",label:"Éclair",category:"Astres & phénomènes",desc:"Révélation brutale, rupture soudaine, énergie qui ne prévient pas.",links:["zeus","poséidon"],lore:[
+    "L'éclair partage son origine avec la foudre (voir cette fiche) : c'est l'arme que les Cyclopes forgèrent pour Zeus après sa victoire sur les Titans.",
+    "Mais l'éclair est aussi ce qui rend visible, l'espace d'un instant, ce que l'obscurité cachait — une déchirure brève dans la nuit, plutôt que le coup qui suit. Poséidon, de son côté, produit une violence tout aussi soudaine mais depuis le sol : ses coups de trident font trembler la terre avec la même absence totale de préavis.",
+    "Zeus dans le ciel, Poséidon sous la terre : à eux deux, ils montrent qu'aucun des deux royaumes, ni le plus haut ni le plus profond, n'est à l'abri d'une violence instantanée.",
+    "L'éclair est devenu un symbole de révélation brutale, de rupture soudaine et d'énergie qui ne prévient pas.",
+    "L'éclair est particulièrement associé à Zeus et à Poséidon.",
+  ]},
 };
 
 // Alias : formes alternatives pointant vers la même fiche
