@@ -1,8 +1,8 @@
 /* ===================== DONNÉES : ARCANES MAJEURS (correspondances verrouillées) ===================== */
 
 const MAJORS = [
-["Le Mat","Dionysos","🍇","Liberté · instinct · départ · lâcher-prise","major","lierre · vigne · panthère · sac de voyage"],
-["I — Le Bateleur","Hermès","☿","Commencement · potentiel · habileté","major","caducée · quatre enseignes · table · sac de voyage"],
+["Le Mat","Dionysos","🍇","Liberté · instinct · départ · lâcher-prise","major","lierre · vigne · panthère · sac de voyage · bâton"],
+["I — Le Bateleur","Hermès","☿","Commencement · potentiel · habileté","major","caducée · bâton · coupe · épée · denier · table · sac de voyage"],
 ["II — La Papesse","Métis","📖","Savoir caché · intuition · connaissance","major","voile · colonnes · livre · lune"],
 ["III — L'Impératrice","Héra","🦚","Souveraineté · création · fécondité","major","paon · couronne · sceptre · grenade"],
 ["IV — L'Empereur","Zeus","⚡","Autorité · structure · pouvoir","major","foudre · aigle · sceptre · trône"],
@@ -652,7 +652,7 @@ const SYMBOL_LIBRARY = {
     "La lyre est devenue un symbole d'harmonie, d'inspiration et de vérité transmise par la beauté plutôt qu'imposée.",
     "La lyre est particulièrement associée à Apollon.",
   ]},
-  "arc":{icon:"🏹",label:"Arc",category:"Mythologie",desc:"Attribut d'Éros : intention, concentration, désir qui vise juste sans toujours consulter la raison.",links:["éros"],lore:[
+  "arc":{icon:"🏹",label:"Arc",category:"Mythologie",desc:"Attribut d'Artémis la chasseresse — et, dans le Tarot, d'Éros : intention, concentration, désir qui vise juste sans toujours consulter la raison.",links:["artémis","éros"],lore:[
     "L'arc est l'instrument du chasseur : il permet d'atteindre sa cible à distance.",
     "Il est particulièrement associé à Artémis, déesse de la chasse et des espaces sauvages. Dans l'Hymne homérique qui lui est consacré, elle est explicitement décrite comme une chasseuse qui porte son arc et ses flèches.",
     "Son arc représente donc une puissance maîtrisée : la chasse n'est pas un geste désordonné, mais une concentration de l'attention sur une cible.",
@@ -758,18 +758,21 @@ const SYMBOL_LIBRARY = {
   ]},
 
   // Objets mythologiques
-  "couronne":{icon:"👑",label:"Couronne",category:"Objets mythologiques",desc:"Autorité légitime, accomplissement, souveraineté assumée avec dignité.",links:["héra"],lore:[
+  "couronne":{icon:"👑",label:"Couronne",category:"Objets mythologiques",desc:"Autorité légitime, accomplissement, souveraineté assumée avec dignité.",links:["héra","apollon"],lore:[
     "La couronne est l'objet qui rend visible le rang de celui ou celle qui la porte. Dans la mythologie grecque, les dieux souverains sont représentés avec des attributs qui manifestent leur autorité, et les couronnes végétales servent également à distinguer les vainqueurs, les héros et ceux qui ont reçu une reconnaissance divine.",
-    "La couronne de laurier d'Apollon, par exemple, devient le signe d'une victoire et d'un accomplissement après la transformation de Daphné en laurier.",
-    "La couronne réunit donc deux idées : celui qui règne et celui qui a accompli quelque chose qui mérite d'être reconnu.",
+    "Héra, reine de l'Olympe, porte la sienne comme signe visible d'une souveraineté qui ne se discute pas — une autorité de naissance, non conquise (voir la fiche « Héra »).",
+    "La couronne de laurier d'Apollon, elle, se mérite : elle devient le signe d'une victoire et d'un accomplissement après la transformation de Daphné en laurier.",
+    "La couronne réunit donc deux idées : celui qui règne de droit et celui qui a accompli quelque chose qui mérite d'être reconnu.",
     "Elle est devenue un symbole de souveraineté, d'autorité, de victoire, d'accomplissement et de reconnaissance.",
+    "La couronne est particulièrement associée à Héra et à Apollon — deux légitimités différentes, l'une de rang, l'autre de mérite.",
   ]},
   "sceptre":{icon:"🔱",label:"Sceptre",category:"Objets mythologiques",desc:"Pouvoir stable, commandement exercé avec constance plutôt qu'imposé par la force.",links:["zeus","héra"],lore:[
     "Le sceptre est le signe du pouvoir exercé par celui qui gouverne.",
     "Dans les récits homériques, Zeus tient le sceptre comme signe de sa souveraineté sur les dieux et les hommes. Le sceptre n'est donc pas seulement une arme : il représente l'autorité légitime et le droit de commander.",
+    "Héra, reine de l'Olympe, porte elle aussi un sceptre — signe d'une autorité qui n'a besoin d'aucune démonstration de force pour s'imposer, à la différence de celle, plus spectaculaire, de Zeus (voir la fiche « Héra »).",
     "Il est également utilisé par les rois et les magistrats comme marque de leur fonction.",
     "Le sceptre est ainsi devenu un symbole de pouvoir, de commandement, d'autorité, de gouvernement et de responsabilité.",
-    "Le sceptre est particulièrement associé à Zeus et aux figures souveraines.",
+    "Le sceptre est particulièrement associé à Zeus et à Héra, ainsi qu'aux figures souveraines en général.",
   ]},
   "clé":{icon:"🗝",label:"Clé",category:"Objets mythologiques",desc:"Accès, connaissance réservée, passage qui ne s'ouvre qu'à qui sait où chercher.",links:[],lore:[
     "La clé est littéralement ce qui permet de franchir une porte normalement fermée.",
@@ -811,14 +814,16 @@ const SYMBOL_LIBRARY = {
     "Couvrir le visage ou le corps signifie cacher quelque chose au regard ordinaire. Le voile crée donc une frontière entre ce qui peut être vu et ce qui doit rester secret.",
     "Cette symbolique convient particulièrement aux divinités et aux rites liés aux mystères : le sacré n'est pas entièrement accessible au regard profane.",
     "Le voile peut également représenter le passage d'un état à un autre, notamment dans le mariage, où la jeune femme change de statut.",
+    "Dans le Tarot, ce voile est celui de la Papesse, associée à Métis : un savoir qui ne s'expose pas mais agit depuis l'intérieur, retenu derrière un voile plutôt qu'imposé au regard (voir la fiche « Métis »).",
     "Il est ainsi devenu un symbole de secret, de connaissance cachée, de mystère, de frontière, de transformation et de passage — ce qui existe derrière le monde visible mais qui n'est pas encore révélé.",
   ]},
   "chaîne":{icon:"⛓",label:"Chaîne",category:"Objets mythologiques",desc:"Attachement, dépendance, lien — la question est toujours de savoir s'il enferme ou s'il peut être dénoué.",links:["pan","prométhée"],lore:[
     "La chaîne la plus célèbre de la mythologie grecque est celle qui retint Prométhée sur un rocher du Caucase, en punition d'avoir donné le feu aux hommes contre la volonté de Zeus.",
-    "Chaque jour, un aigle venait dévorer son foie, qui repoussait chaque nuit, prolongeant son supplice sans fin — jusqu'à ce qu'Héraclès le libère bien plus tard.",
+    "Chaque jour, un aigle venait dévorer son foie, qui repoussait chaque nuit, prolongeant son supplice sans fin — jusqu'à ce que Chiron accepte de mourir à sa place et qu'Héraclès mette fin à son calvaire (voir la fiche « Prométhée »).",
     "La chaîne de Prométhée dit quelque chose de plus large que la simple punition : elle montre qu'un don fait sans autorisation a toujours un prix, et que l'attachement qui en résulte peut aussi bien enfermer que devenir, avec le temps, la preuve de ce qu'on a osé offrir.",
+    "Dans le Tarot, la chaîne est aussi l'attribut du Diable, associé à Pan : elle n'y figure plus une punition méritée mais un attachement à l'instinct, moins imposé de l'extérieur qu'accepté de l'intérieur (voir la fiche « Pan »).",
     "Elle est devenue un symbole d'attachement, de dépendance et de lien — la question étant toujours de savoir s'il enferme ou s'il peut être dénoué.",
-    "La chaîne est particulièrement associée à Prométhée.",
+    "La chaîne est particulièrement associée à Prométhée et à Pan — deux attachements de nature très différente.",
   ]},
   "roue":{icon:"☸",label:"Roue",category:"Objets mythologiques",desc:"Cycle, changement, destin qui tourne sans considération pour le mérite.",links:["tyché"],lore:[
     "La roue est l'attribut de Tyché, déesse du hasard et de la fortune, souvent représentée les yeux bandés, un gouvernail à la main pour rappeler qu'elle dirige le destin des hommes sans qu'ils puissent l'influencer.",
@@ -944,13 +949,13 @@ const SYMBOL_LIBRARY = {
     "Il est devenu un symbole de récolte, de nourriture, de travail, de fécondité, de cycle et d'abondance.",
     "Le blé et l'épi sont particulièrement associés à Déméter.",
   ]},
-  "cyprès":{icon:"🌲",label:"Cyprès",category:"Plantes",desc:"Mort, mémoire, passage — arbre funéraire qui reste vert toute l'année.",links:["hadès"],lore:[
-    "Le cyprès possède une association très forte avec la mort et le monde funéraire dans l'Antiquité grecque.",
+  "cyprès":{icon:"🌲",label:"Cyprès",category:"Plantes",desc:"Mort, mémoire, passage — arbre funéraire qui reste vert toute l'année.",links:["hadès","apollon"],lore:[
+    "Le cyprès possède une association très forte avec la mort et le monde funéraire dans l'Antiquité grecque : planté aux abords des tombeaux, son feuillage qui ne tombe jamais en fit l'arbre de la permanence du deuil, dressé à la frontière entre le monde des vivants et celui d'Hadès (voir la fiche « Enfer / monde souterrain »).",
     "Un des récits les plus célèbres est celui de Cyparisse, un jeune homme aimé d'Apollon. Il possédait un cerf qu'il aimait profondément. Après avoir tué accidentellement l'animal, Cyparisse fut inconsolable et demanda à pouvoir pleurer éternellement.",
     "Apollon le transforma alors en cyprès.",
     "Le cyprès devint ainsi l'arbre du deuil et du souvenir. Son feuillage persistant et sa silhouette qui s'élève vers le ciel renforcèrent encore cette association avec la mort, la mémoire et le passage vers l'au-delà.",
     "Le cyprès est devenu un symbole de mort, de deuil, de mémoire, de passage et de permanence du souvenir.",
-    "Le cyprès est particulièrement associé à Cyparisse et aux rites funéraires.",
+    "Le cyprès est particulièrement associé à Hadès et au monde funéraire, ainsi qu'à Apollon à travers le mythe de Cyparisse.",
   ]},
   "rose":{icon:"🌹",label:"Rose",category:"Plantes",desc:"Amour, beauté, désir — et la vulnérabilité qui va avec.",links:["aphrodite"],lore:[
     "La rose est principalement associée à Aphrodite, déesse de l'amour et de la beauté.",
@@ -1107,7 +1112,7 @@ const SYMBOL_ALIASES = {
   "rocher":"chaîne","suspension":"chaîne","faux":"monde souterrain","tour":"chaîne","vagues":"mer",
   "chien":"chien","carrefour":"étoiles","deux tours":"lune","rayons":"soleil","âmes":"balance",
   "trompette":"balance","mandorle":"terre","racines":"terre","monde vivant":"terre","quatre figures":"terre",
-  "quatre enseignes":"caducée","disciples":"bâton","blessure":"bâton","sagesse":"bâton",
+  "disciples":"bâton","blessure":"bâton","sagesse":"bâton",
   "chevaux":"char","source":"eau","rivière":"eau","pluie":"eau","miroir":"eau",
   "vent":"air","souffle":"air","plume":"air","nuage":"air","racine":"terre","pierre":"terre","sol":"terre","montagne":"montagne",
 };
