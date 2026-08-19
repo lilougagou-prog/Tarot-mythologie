@@ -1185,6 +1185,253 @@ const DEITY_NOTES = {
   "cybèle":"Déesse de la terre nourricière, souveraine d'une abondance sauvage.",
 };
 
+// Textes mythologiques développés pour les figures listées ci-dessus (voir showDeityDetail() /
+// Apprendre → Figures mythologiques). Séparé de DEITY_NOTES pour ne pas changer le type de
+// DEITY_NOTES (utilisé partout ailleurs comme simple chaîne courte) : même logique additive
+// que SYMBOL_LIBRARY.lore.
+const DEITY_LORE = {
+  "dionysos": [
+    "Dionysos est le fils de Zeus et d'une mortelle, Sémélé, morte foudroyée en voulant contempler son amant divin dans toute sa splendeur — Zeus dut alors coudre l'enfant à naître dans sa propre cuisse pour le mener à terme, d'où son surnom de « deux fois né ».",
+    "Contrairement aux autres Olympiens, il parcourut le monde des mortels, leur enseignant la culture de la vigne et provoquant sur son passage des scènes de folie collective chez ceux qui refusaient de le reconnaître comme dieu — comme le roi Penthée, déchiré par sa propre mère en plein délire bachique.",
+    "Dieu de la métamorphose autant que de l'ivresse, il incarne ce qui échappe à la raison et à l'ordre établi.",
+  ],
+  "hermès": [
+    "Né dans une grotte du mont Cyllène (voir la fiche « Grotte »), Hermès manifesta son astuce dès le jour de sa naissance : il déroba le troupeau de son frère Apollon, puis inventa la lyre à partir d'une carapace de tortue et la lui offrit en échange de son pardon (voir la fiche « Lyre »).",
+    "Seul dieu à circuler librement entre l'Olympe, la Terre et les Enfers, il devint le messager officiel de Zeus et le guide des âmes des morts vers l'autre monde — un rôle qui en fait le patron des voyageurs, des marchands et de tous ceux qui franchissent des frontières.",
+  ],
+  "métis": [
+    "Titanide de la ruse, Métis fut la première épouse de Zeus. Une prophétie annonçait qu'elle enfanterait un fils plus puissant que son père : Zeus, pour l'empêcher, l'avala tout entière alors qu'elle était enceinte.",
+    "Loin de disparaître, Métis continua d'agir depuis l'intérieur de Zeus, forgeant en secret l'armure de leur fille : le moment venu, Athéna jaillit tout armée du crâne de son père, portant en elle la ruse de sa mère autant que la puissance de Zeus.",
+  ],
+  "héra": [
+    "Sœur et épouse de Zeus, Héra règne sur l'Olympe comme protectrice du mariage et garante de l'ordre légitime — un rôle qu'elle défend avec une fermeté que la mythologie associe souvent à la jalousie, tant les infidélités de son époux sont nombreuses.",
+    "Elle ne se contente jamais d'observer : elle poursuit Héraclès de sa colère toute sa vie durant simplement parce qu'il est le fruit d'une liaison de Zeus, et impose à Léto l'interdiction de mettre au monde ses enfants sur la moindre terre ferme, retardant ainsi la naissance d'Apollon et d'Artémis.",
+    "Reine avant d'être épouse, elle incarne la légitimité et l'autorité plus que la douceur.",
+  ],
+  "zeus": [
+    "Plus jeune fils de Cronos et de Rhéa, Zeus échappa au sort de ses frères et sœurs — avalés à la naissance par un père craignant d'être détrôné — grâce à sa mère, qui le cacha dans une grotte du mont Ida en Crète et fit avaler à Cronos une pierre emmaillotée à sa place.",
+    "Devenu adulte, il libéra ses frères et sœurs et mena la guerre contre les Titans, dont il sortit vainqueur pour établir un nouvel ordre cosmique sur l'Olympe, dont il devint le souverain incontesté, maître de la foudre.",
+    "Garant de l'ordre du monde, il reste pourtant l'un des dieux aux liaisons et aux colères les plus nombreuses de toute la mythologie.",
+  ],
+  "chiron": [
+    "Contrairement aux autres centaures, réputés violents et incontrôlés, Chiron était réputé pour sa sagesse et sa maîtrise de la médecine, de la musique et du tir à l'arc — il forma parmi ses élèves Achille, Jason et Asclépios.",
+    "Immortel, il fut pourtant blessé accidentellement par une flèche empoisonnée d'Héraclès et, ne pouvant ni guérir ni mourir, souffrit sans fin jusqu'à ce qu'il accepte d'échanger son immortalité contre la libération de Prométhée enchaîné (voir la fiche « Prométhée »).",
+    "Sa blessure incurable en fait le symbole du guérisseur qui ne peut se soigner lui-même — celui qui transmet un savoir né de sa propre douleur.",
+  ],
+  "éros": [
+    "Aux origines les plus anciennes du mythe, Éros est une force primordiale née dès l'origine du monde, avant même les dieux de l'Olympe — une puissance d'attraction qui met en mouvement toute chose.",
+    "Les récits plus tardifs en font le fils d'Aphrodite, armé d'un arc dont les flèches font naître l'amour chez quiconque elles atteignent, y compris les dieux eux-mêmes. Son propre amour pour la mortelle Psyché (voir la fiche « Psyché ») ne fut possible qu'au prix d'épreuves redoutables imposées par Aphrodite, jalouse de sa belle-fille.",
+  ],
+  "apollon": [
+    "Fils de Zeus et de Léto, Apollon naquit avec sa sœur jumelle Artémis sur l'île flottante de Délos, seul lieu qui accepta de les accueillir après qu'Héra eut interdit à toute terre ferme de recevoir l'accouchement de sa rivale.",
+    "Dieu de la lumière, de la musique et de la vérité, il conduit le char solaire et rend, depuis son temple de Delphes (voir la fiche « Temple »), des oracles par la voix de la Pythie — sa devise gravée sur le fronton du temple, « Connais-toi toi-même », résume son exigence de clarté.",
+  ],
+  "thémis": [
+    "Titanide antérieure aux dieux de l'Olympe, Thémis personnifie la loi divine et l'ordre juste du monde — non pas la justice humaine, changeante et discutée, mais un principe plus ancien que les dieux eux-mêmes.",
+    "Elle rendit elle-même des oracles à Delphes avant qu'Apollon n'y installe son propre sanctuaire, et resta la conseillère de Zeus, assise à ses côtés sur l'Olympe pour veiller à ce qu'aucune décision divine ne s'écarte de l'ordre juste.",
+  ],
+  "déméter": [
+    "Déesse des moissons, Déméter enseigna aux hommes l'art de l'agriculture — un don qu'elle retira au monde entier de rage et de chagrin lorsque sa fille Perséphone fut enlevée par Hadès (voir la fiche « Enfer / monde souterrain »).",
+    "La terre entière resta stérile jusqu'à ce que Zeus négocie un compromis : Perséphone passerait une partie de l'année aux Enfers et l'autre auprès de sa mère — un partage qui, depuis, rythme les saisons, l'hiver au deuil de Déméter et le printemps à ses retrouvailles.",
+  ],
+  "tyché": [
+    "Déesse de la fortune et du hasard, Tyché échappe à toute généalogie fixe selon les auteurs — tantôt fille de Zeus, tantôt de l'Océan — comme si le hasard lui-même refusait de se laisser enfermer dans une origine unique.",
+    "Représentée portant une corne d'abondance et un gouvernail, parfois les yeux bandés, elle peut combler de richesses comme ruiner en un instant, sans qu'aucun mérite ni aucune faute n'entre en compte — la roue qu'on lui associe (voir la fiche « Roue ») tourne sans se soucier de qui elle élève ou abaisse.",
+  ],
+  "héraclès": [
+    "Fils de Zeus et d'une mortelle, Alcmène, Héraclès fut la cible de la jalousie d'Héra dès le berceau : elle envoya deux serpents l'étrangler dans son sommeil, qu'il étrangla lui-même de ses propres mains encore enfant.",
+    "Rendu fou par Héra à l'âge adulte, il tua sa propre famille dans un accès de délire, et dut, pour se purifier de ce crime, accomplir douze travaux jugés impossibles — de l'étranglement du lion de Némée à la capture de Cerbère aux portes des Enfers.",
+    "Ses travaux ont fait de lui le modèle même de la force mise au service d'une expiation, plutôt que d'une simple conquête.",
+  ],
+  "prométhée": [
+    "Titan resté aux côtés de Zeus pendant la guerre contre les autres Titans, Prométhée façonna aussi, selon certains récits, les premiers hommes à partir d'argile.",
+    "Voyant l'humanité livrée au froid et à l'ignorance, il déroba le feu aux dieux et l'offrit aux mortels (voir la fiche « Feu ») — un don qui lui valut d'être enchaîné à un rocher du Caucase, où un aigle venait chaque jour dévorer son foie, qui repoussait chaque nuit, jusqu'à ce que Chiron accepte de mourir à sa place pour le libérer (voir la fiche « Chiron »).",
+    "Son nom reste attaché à tout affranchissement payé au prix fort — le savoir arraché plutôt que donné.",
+  ],
+  "hadès": [
+    "Fils de Cronos et de Rhéa, Hadès hérita du monde souterrain lors du partage du cosmos entre lui et ses frères Zeus et Poséidon — un lot que la tradition présente souvent comme le moins enviable, mais qu'il gouverne avec une rigueur incorruptible plutôt qu'avec cruauté.",
+    "Il quitte rarement son royaume, à l'exception notable de l'enlèvement de Perséphone (voir la fiche « Perséphone »), dont il tombe amoureux et qu'il installe à ses côtés comme reine des Enfers.",
+    "Contrairement à une image tardive qui en fait un dieu maléfique, Hadès reste dans les mythes grecs un juge impartial, gardien d'un ordre auquel nul, pas même les dieux, ne peut se soustraire.",
+  ],
+  "perséphone": [
+    "Fille de Zeus et de Déméter, Perséphone cueillait des fleurs dans un pré lorsque la terre s'ouvrit sous elle et qu'Hadès l'emporta sur son char vers son royaume souterrain.",
+    "Ayant mangé quelques grains de grenade offerts par Hadès (voir la fiche « Grenade »), elle se lia irrévocablement aux Enfers et dut, par un accord négocié par Zeus, y passer une partie de chaque année, devenant reine des morts autant que fille de la déesse des moissons.",
+    "Son passage entre les deux mondes en fait la figure même de la transformation qui n'efface jamais totalement ce qu'on était avant.",
+  ],
+  "iris": [
+    "Fille du Titan Thaumas et de l'Océanide Électre, Iris personnifie l'arc-en-ciel (voir la fiche « Arc-en-ciel »), pont visible entre le ciel et la terre qu'elle emprunte pour porter les messages des dieux aux mortels comme aux autres divinités.",
+    "Contrairement à Hermès, dont les missions relèvent souvent de la ruse ou du commerce, Iris est associée à la fidélité du message transmis sans détour — une messagère de confiance, jamais rusée ni trompeuse.",
+  ],
+  "pan": [
+    "Fils d'Hermès, Pan naquit avec des cornes, des sabots de bouc et un visage si étrange que sa propre mère fuit à sa vue — les autres dieux, eux, s'amusèrent de son apparence et l'adoptèrent comme l'un des leurs.",
+    "Il règne sur les forêts et les troupeaux (voir la fiche « Forêt ») et peut, d'un simple cri, saisir les voyageurs d'une terreur irraisonnée dans les bois profonds — la « panique » lui doit d'ailleurs son nom.",
+  ],
+  "poséidon": [
+    "Frère de Zeus et d'Hadès, Poséidon reçut la mer en partage lors de la division du cosmos (voir la fiche « Mer »). D'humeur aussi changeante que les flots qu'il gouverne, il peut aussi bien porter les navires que déchaîner tempêtes et tremblements de terre d'un coup de son trident.",
+    "Sa rivalité avec Athéna pour devenir le patron d'Athènes — il fit jaillir une source d'eau salée du rocher, elle offrit un olivier — illustre bien son tempérament : la force spectaculaire face à la sagesse durable, et c'est cette dernière que la ville choisit.",
+  ],
+  "hécate": [
+    "Déesse des carrefours et des passages, Hécate est représentée sous une triple forme, tournée à la fois vers le ciel, la terre et les Enfers — l'une des seules divinités, avec Perséphone, à circuler librement entre les trois royaumes.",
+    "Elle fut la seule à entendre les cris de Perséphone lors de son enlèvement et l'aida ensuite à retrouver sa mère Déméter ; depuis, elle veille sur les carrefours nocturnes, la magie et tout ce qui exige de choisir une direction dans l'obscurité.",
+  ],
+  "séléné": [
+    "Déesse de la lune, Séléné traverse le ciel nocturne sur un char tiré par des chevaux ailés, tandis que son frère Hélios conduit celui du soleil le jour (voir la fiche « Lune »).",
+    "Éprise du berger Endymion (voir la fiche « Endymion »), elle obtint de Zeus qu'il reste éternellement jeune et endormi, afin de pouvoir le contempler chaque nuit sans jamais le voir vieillir ni mourir.",
+  ],
+  "hélios": [
+    "Dieu du soleil, Hélios traverse chaque jour le ciel sur un char de feu, de l'orient à l'occident, avant de regagner l'Océan pendant la nuit pour reprendre sa course au matin suivant (voir la fiche « Soleil »).",
+    "Son fils Phaéton, voulant prouver sa filiation, obtint un jour de conduire le char à sa place — incapable d'en maîtriser les chevaux, il faillit embraser la terre entière avant que Zeus ne le foudroie pour l'arrêter.",
+  ],
+  "minos": [
+    "Roi légendaire de Crète de son vivant, Minos devint après sa mort l'un des trois juges des Enfers, réputé pour la rigueur impartiale de ses jugements — une réputation acquise du temps où il régnait déjà avec une justice sans complaisance.",
+    "Sur terre, il fit construire par Dédale le Labyrinthe pour y enfermer le Minotaure, fruit d'une union contre nature de son épouse — un épisode qui n'entacha jamais, dans les Enfers, la légitimité de son jugement sur les autres âmes.",
+  ],
+  "gaïa": [
+    "Déesse primordiale, Gaïa est la Terre elle-même, apparue au tout début du monde depuis le Chaos originel — mère de toutes choses, des Titans aux Cyclopes en passant par les monstres les plus redoutables.",
+    "C'est elle qui, lassée de la tyrannie de son époux Ouranos, poussa leur fils Cronos à le renverser, puis, plus tard, encouragea Zeus à faire de même contre les Titans devenus à leur tour trop puissants — la Terre choisissant toujours, en dernier recours, l'équilibre plutôt que la démesure d'un seul.",
+  ],
+  "athéna": [
+    "Née tout armée du crâne de Zeus, après qu'il eut avalé sa mère Métis enceinte (voir la fiche « Métis »), Athéna hérita à la fois de la puissance de son père et de la ruse de sa mère.",
+    "Déesse de la sagesse stratégique plutôt que de la guerre brutale, elle protège les héros rusés — Ulysse, Persée, Bellérophon — en leur offrant conseils et objets plutôt qu'en combattant à leur place, et devint la patronne d'Athènes après avoir offert à la ville l'olivier, symbole de paix durable.",
+  ],
+  "aphrodite": [
+    "Déesse de l'amour et de la beauté, Aphrodite naquit, selon le récit le plus ancien, de l'écume de mer formée autour des membres tranchés d'Ouranos — un mythe plus ancien que la naissance de la plupart des autres Olympiens.",
+    "Sa beauté suscite jalousies et rivalités jusque parmi les dieux : c'est elle qui remporte le jugement de Pâris en lui promettant l'amour de la plus belle femme du monde, Hélène — une promesse qui déclenchera la guerre de Troie.",
+  ],
+  "nérée": [
+    "Surnommé le « Vieillard de la mer », Nérée est un dieu marin plus ancien que Poséidon, réputé pour sa sagesse, sa bienveillance et son don de prophétie, contrairement à d'autres divinités marines plus tumultueuses.",
+    "Père de cinquante Néréides dont Thétis, mère d'Achille, il incarne un versant plus paisible de la mer (voir la fiche « Mer ») — la sagesse plutôt que la tempête.",
+  ],
+  "bellérophon": [
+    "Héros grec, Bellérophon parvint à dompter Pégase, le cheval ailé né du sang de la Gorgone Méduse, grâce à un mors d'or offert par Athéna en songe.",
+    "Monté sur Pégase, il vainquit la Chimère, monstre crachant le feu — mais voulut ensuite s'élever jusqu'à l'Olympe lui-même, un excès de démesure que Zeus punit en envoyant un taon piquer Pégase, précipitant Bellérophon à terre pour le reste de sa vie.",
+  ],
+  "éos": [
+    "Déesse de l'aurore, Éos ouvre chaque matin les portes du ciel pour annoncer le passage du char d'Hélios, son frère — ses doigts de rose colorent le ciel juste avant le lever du jour (voir la fiche « Aurore »).",
+    "Éprise de plusieurs mortels, dont Tithonos, elle obtint pour lui l'immortalité mais oublia de demander aussi l'éternelle jeunesse : il vieillit sans jamais pouvoir mourir, jusqu'à se réduire, dit-on, à une simple voix.",
+  ],
+  "niké": [
+    "Déesse ailée de la victoire, Niké accompagne indifféremment les vainqueurs, sans jamais prendre elle-même part au combat — elle couronne l'issue plutôt que de la déterminer.",
+    "Fille du Titan Pallas et de Styx, elle se rangea aux côtés de Zeus dès la guerre contre les Titans, et resta depuis une fidèle compagne de son char, symbole d'un triomphe qui se mérite sans jamais se garantir d'avance.",
+  ],
+  "hestia": [
+    "Sœur aînée de Zeus, Hestia est la déesse du foyer et gardienne de la flamme sacrée qui brûle au centre de chaque maison comme de chaque cité.",
+    "Courtisée par Apollon et Poséidon, elle refusa tout mariage et obtint de Zeus de rester à jamais vierge, s'installant définitivement au cœur de l'Olympe plutôt que de suivre l'un ou l'autre — une place discrète mais essentielle, puisque aucun foyer ne peut exister sans elle.",
+  ],
+  "héphaïstos": [
+    "Fils d'Héra, Héphaïstos naquit si chétif ou si laid, selon les versions, que sa mère le rejeta du haut de l'Olympe — une chute qui le laissa boiteux pour le restant de son existence.",
+    "Devenu le forgeron des dieux malgré ce rejet initial, il créa les armes et merveilles les plus admirées de l'Olympe, du bouclier d'Achille aux flèches d'Éros, prouvant par son art ce que sa naissance semblait lui interdire.",
+  ],
+  "himeros": [
+    "Dieu ailé du désir soudain, Himeros accompagne Éros et Aphrodite dans leur cortège, incarnant cette part du désir qui surgit sans prévenir, avant même que la raison n'ait le temps d'intervenir.",
+    "Moins connu qu'Éros, il en partage le même registre — le désir irrésistible — mais dans sa forme la plus immédiate : l'élan plutôt que la flèche qui vise.",
+  ],
+  "énée": [
+    "Fils d'Aphrodite et du mortel Anchise, Énée combattit du côté troyen pendant la guerre de Troie, protégé à plusieurs reprises par sa mère au cœur des combats.",
+    "À la chute de Troie, il porta sur son dos son père âgé et mena son fils par la main hors de la ville en flammes, fidèle jusque dans la ruine de sa cité — un périple qui, selon la légende romaine, le mènera à fonder la lignée dont naîtra Rome.",
+  ],
+  "zéphyr": [
+    "Dieu du vent d'ouest, Zéphyr est réputé le plus doux des vents, celui qui annonce le printemps et fait éclore les fleurs sur son passage.",
+    "Il n'en reste pas moins capable de jalousie brutale : amoureux éconduit de Chloris (voir la fiche « Chloris »), il détourna par dépit un disque lancé par Apollon, tuant accidentellement le jeune Hyacinthe que le dieu aimait — preuve que même le plus doux des vents peut tourner à la tempête.",
+  ],
+  "éole": [
+    "Gardien des vents, Éole les tient enfermés dans une outre ou une caverne selon les récits, ne les libérant qu'au compte-goutte pour ne pas déchaîner le chaos sur terre et sur mer.",
+    "Il offrit un jour à Ulysse une outre contenant tous les vents contraires, ne laissant souffler que celui qui le ramènerait chez lui — un cadeau que l'équipage du héros, croyant y trouver un trésor, ouvrit par curiosité, relâchant la tempête qui les ramena au point de départ.",
+  ],
+  "chloris": [
+    "Déesse des fleurs, Chloris transforme en jardin chaque lieu qu'elle traverse — son simple souffle suffit, dit-on, à faire éclore les plantes sur son passage.",
+    "Enlevée par Zéphyr, le vent d'ouest, qui l'épousa ensuite en réparation, elle devint la déesse romaine Flora sous une autre identité — l'un des rares mythes grecs où la déesse enlevée obtient en retour un domaine et un pouvoir propres.",
+  ],
+  "triptolème": [
+    "Jeune prince formé par Déméter elle-même, en reconnaissance de l'hospitalité que sa famille lui offrit alors qu'elle cherchait sa fille Perséphone à travers le monde, Triptolème reçut de la déesse l'art de cultiver le blé.",
+    "Monté sur un char ailé tiré par des dragons, il parcourut la terre entière pour enseigner l'agriculture à tous les peuples, devenant ainsi le messager du plus grand don de Déméter aux hommes.",
+  ],
+  "ploutos": [
+    "Dieu de la richesse et de l'abondance des récoltes, Ploutos est le fils de Déméter — un lien qui rattache la richesse à la fertilité de la terre plutôt qu'à l'or amassé.",
+    "Zeus le rendit aveugle pour qu'il distribue ses faveurs sans favoritisme, sans distinguer les bons des mauvais — une richesse qui, depuis, tombe autant sur le mérite que sur le hasard.",
+  ],
+  "jason": [
+    "Héritier légitime du trône d'Iolcos, spolié par son oncle Pélias, Jason reçut de ce dernier une mission jugée impossible en échange de la couronne : ramener la Toison d'or, gardée par un dragon ne dormant jamais, aux confins du monde connu.",
+    "Il rassembla pour ce voyage les plus grands héros grecs de sa génération à bord du navire Argo, les Argonautes, et ne parvint à ses fins qu'avec l'aide de Médée, magicienne éprise de lui qui trahit son propre père pour l'aider à s'emparer de la Toison.",
+  ],
+  "achille": [
+    "Fils de la Néréide Thétis (voir la fiche « Nérée ») et d'un mortel, Achille fut plongé enfant dans le Styx par sa mère pour le rendre invulnérable — seul son talon, par lequel elle le tenait, resta vulnérable.",
+    "Le plus grand guerrier de la guerre de Troie, il se retira des combats après une querelle avec Agamemnon, laissant les Grecs perdre du terrain, jusqu'à ce que la mort de son ami Patrocle le pousse à revenir se battre dans une colère qui ne s'éteignit qu'avec la mort d'Hector.",
+  ],
+  "atlas": [
+    "Titan ayant combattu aux côtés de ses frères contre Zeus, Atlas fut condamné, à leur défaite, à porter la voûte céleste sur ses épaules pour l'éternité — non la Terre, comme on le croit souvent, mais le ciel lui-même.",
+    "Héraclès, venu chercher les pommes d'or du jardin des Hespérides gardé par les filles d'Atlas, proposa un temps de porter le ciel à sa place pendant qu'Atlas allait chercher les pommes — un répit que le Titan dut abandonner, ruse d'Héraclès à l'appui, pour reprendre son fardeau.",
+  ],
+  "psyché": [
+    "Mortelle d'une beauté si extraordinaire qu'elle suscita la jalousie d'Aphrodite, Psyché fut aimée en secret par Éros, qui lui interdit de jamais chercher à voir son visage.",
+    "Rongée par la curiosité, elle finit par l'éclairer une nuit à la lueur d'une lampe et le perdit aussitôt ; pour le retrouver, elle dut accomplir pour Aphrodite une série d'épreuves presque impossibles, avant d'obtenir enfin l'immortalité et d'être réunie à lui pour toujours.",
+  ],
+  "charites": [
+    "Trois déesses de la grâce et de la joie — le plus souvent nommées Aglaé, Euphrosyne et Thalie —, les Charites ne sont jamais représentées seules : elles dansent toujours ensemble, indissociables les unes des autres.",
+    "Compagnes d'Aphrodite et des Muses, elles président à tout ce qui rend la vie belle sans nécessité — la beauté, la fête, la reconnaissance — plutôt qu'à ce qui est simplement utile.",
+  ],
+  "narcisse": [
+    "Jeune homme d'une beauté remarquable, Narcisse repoussait sans exception tous ceux qui l'aimaient, dont la nymphe Écho (voir la fiche « Écho »), inconsolable de son rejet.",
+    "Puni pour son indifférence, il aperçut un jour son propre reflet dans une source et en tomba éperdument amoureux, incapable de s'en détacher jusqu'à en mourir sur place — incapable de voir qu'aucun amour, pas même le sien, ne pouvait lui être rendu par une image.",
+  ],
+  "écho": [
+    "Nymphe bavarde, Écho fut punie par Héra, qui découvrit qu'elle la distrayait volontairement pour couvrir les infidélités de Zeus : elle perdit dès lors la capacité de parler la première, condamnée à ne répéter que les derniers mots d'autrui.",
+    "Éprise de Narcisse, elle ne put jamais lui déclarer son amour autrement qu'en répétant ses propres paroles, et se consuma de chagrin après son rejet jusqu'à ne plus laisser d'elle qu'une voix, dit-on, résonnant encore dans les montagnes.",
+  ],
+  "circé": [
+    "Magicienne experte en herbes et en breuvages, Circé vit sur une île isolée où elle transforme en animaux les voyageurs qui s'y aventurent sans méfiance — c'est ainsi qu'elle changea en pourceaux une partie de l'équipage d'Ulysse.",
+    "Ulysse, protégé par une plante magique offerte par Hermès, résista à son sortilège et la contraignit à rendre à ses hommes leur forme humaine ; il resta ensuite une année entière sur son île avant de reprendre la mer.",
+  ],
+  "pythie": [
+    "Prêtresse d'Apollon au temple de Delphes (voir la fiche « Temple »), la Pythie rendait ses oracles assise sur un trépied placé au-dessus d'une faille d'où s'échappaient, croyait-on, des vapeurs inspirant ses transes prophétiques.",
+    "Ses réponses, données dans un état second, étaient réputées ambiguës autant qu'infaillibles — c'est elle qui annonça au roi Crésus que, s'il attaquait la Perse, il détruirait un grand empire, sans préciser lequel des deux ce serait.",
+  ],
+  "endymion": [
+    "Berger — ou, selon d'autres versions, roi ou chasseur — d'une beauté remarquable, Endymion fut aperçu et aimé par Séléné, déesse de la lune (voir la fiche « Séléné »), alors qu'il dormait sur le mont Latmos.",
+    "Pour pouvoir le contempler chaque nuit sans jamais le voir vieillir ni mourir, elle obtint de Zeus qu'il reste plongé dans un sommeil éternel — un amour figé dans l'instant, préservé au prix de tout le reste.",
+  ],
+  "charon": [
+    "Passeur des Enfers, Charon fait traverser aux âmes des morts le fleuve Styx (voir la fiche « Rivière ») à bord de sa barque, à condition qu'elles puissent lui payer l'obole traditionnellement placée sous la langue des défunts.",
+    "Les âmes qui n'ont pas reçu de sépulture ni de pièce pour le passeur restent condamnées à errer sur la rive sans jamais pouvoir traverser — un détail qui rappelle que, dans la Grèce antique, le rite funéraire compte autant que la mort elle-même.",
+  ],
+  "ulysse": [
+    "Roi d'Ithaque réputé pour sa ruse plus que pour sa force, Ulysse conçut le stratagème du cheval de bois qui permit enfin aux Grecs de s'emparer de Troie après dix années de siège infructueux.",
+    "Son retour chez lui prit dix années supplémentaires, semées d'épreuves — le Cyclope Polyphème, les sirènes, Circé, Charybde et Scylla — durant lesquelles son intelligence lui permit chaque fois d'échapper à des périls que la seule force n'aurait pas surmontés.",
+  ],
+  "andromède": [
+    "Princesse éthiopienne, Andromède fut enchaînée à un rocher au bord de la mer en offrande expiatoire à un monstre marin, envoyé par Poséidon pour punir sa mère Cassiopée de s'être vantée d'une beauté supérieure à celle des Néréides.",
+    "Persée, revenant de sa victoire sur la Gorgone Méduse, la découvrit ainsi exposée et la sauva du monstre avant de l'épouser — un couple que les Grecs placèrent ensuite parmi les étoiles (voir la fiche « Étoile »).",
+  ],
+  "persée": [
+    "Fils de Zeus et de la mortelle Danaé, Persée reçut pour mission de rapporter la tête de la Gorgone Méduse, dont le regard pétrifiait quiconque le croisait.",
+    "Guidé par Athéna et muni d'objets magiques — sandales ailées, casque d'invisibilité, bouclier poli comme un miroir —, il trancha la tête de Méduse sans jamais la regarder directement, puis s'en servit comme d'une arme redoutable, notamment pour sauver Andromède (voir la fiche « Andromède »).",
+  ],
+  "érinyes": [
+    "Divinités vengeresses nées, selon un récit, du sang d'Ouranos mutilé, les Érinyes poursuivent sans relâche ceux qui ont commis des crimes contre leur propre famille — matricide, parricide, parjure envers les siens.",
+    "Elles pourchassèrent ainsi Oreste après qu'il eut tué sa mère pour venger son père, jusqu'à ce qu'un tribunal institué par Athéna elle-même vienne, pour la première fois, remplacer leur vengeance sans fin par un jugement.",
+  ],
+  "actéon": [
+    "Chasseur habile, Actéon surprit un jour par mégarde la déesse Artémis se baignant nue dans une source avec ses nymphes.",
+    "Furieuse d'avoir été vue, la déesse le changea sur-le-champ en cerf ; ses propres chiens de chasse, ne le reconnaissant plus, le poursuivirent et le déchirèrent — puni non pour une faute voulue, mais pour avoir simplement vu ce qui ne devait pas l'être.",
+  ],
+  "artémis": [
+    "Sœur jumelle d'Apollon, Artémis naquit la première et, dit-on, aida elle-même sa mère Léto à accoucher de son frère peu après — elle devint ainsi protectrice des accouchements autant que déesse de la chasse.",
+    "Farouchement attachée à sa virginité et à son intimité, elle règne sur les forêts sauvages (voir la fiche « Forêt ») et punit sans hésiter quiconque, comme Actéon (voir la fiche « Actéon »), s'aventure à la surprendre.",
+  ],
+  "protée": [
+    "Dieu marin au service de Poséidon, Protée connaît l'avenir mais refuse de le révéler à quiconque le lui demande directement.",
+    "Pour lui arracher une prophétie, il faut le surprendre pendant son sommeil et le maintenir de force malgré les métamorphoses qu'il enchaîne pour échapper à toute prise — lion, serpent, flamme, eau — jusqu'à ce qu'épuisé, il reprenne sa forme véritable et consente enfin à répondre.",
+  ],
+  "cyclopes": [
+    "Géants à l'œil unique, les Cyclopes forgent pour les dieux leurs armes les plus redoutables — la foudre de Zeus, le trident de Poséidon, le casque d'invisibilité d'Hadès — dans les forges d'Héphaïstos.",
+    "L'un d'eux, Polyphème, rendu tristement célèbre par l'Odyssée, est d'une nature bien différente : berger solitaire et brutal, il enferme Ulysse et ses compagnons dans sa grotte avant d'être aveuglé par la ruse du héros pour leur permettre de s'échapper.",
+  ],
+  "cybèle": [
+    "Déesse originaire d'Asie Mineure assimilée par les Grecs à leur propre panthéon, Cybèle personnifie la terre nourricière dans toute sa puissance sauvage, bien au-delà de la douceur cultivée qu'incarne Déméter.",
+    "Son culte, marqué par une musique frénétique et des rites d'une intensité rare, traversa la Méditerranée jusqu'à Rome, où elle fut officiellement adoptée comme protectrice de la cité en des temps de crise.",
+  ],
+};
+
 /* ===================== ÉTAT ===================== */
 
 let journal = JSON.parse(localStorage.getItem("arcanes-journal") || "[]");
@@ -2474,11 +2721,14 @@ function showDeityDetail(id){
   preDetailScroll = window.scrollY;
   const name = id.charAt(0).toUpperCase()+id.slice(1);
   const related = CARDS.filter(c => (c[4]==="major"||c[4]==="court") && (c[1]||"").toLowerCase()===id);
+  const lore = DEITY_LORE[id];
   document.getElementById("screen").innerHTML = `<div class="detail">
     <div class="symbol-hero">✦</div>
     <h2>${escapeHTML(name)}</h2>
     <p class="symbol-cat-big">Figure mythologique</p>
     <p>${escapeHTML(note)}</p>
+    ${lore && lore.length ? `<div class="section-title"><h3>Le mythe</h3></div>
+      ${lore.map(p=>`<p class="lore-text">${escapeHTML(p)}</p>`).join("")}` : ""}
     ${related.length ? `<div class="section-title"><h3>Carte${related.length>1?"s":""} associée${related.length>1?"s":""}</h3></div>
       <div class="card-grid">${related.map(c=>cardHTML(c, c[4]==="major"?"major":(SUITS[c[6]]?.[0]||"major"))).join("")}</div>` : ""}
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
