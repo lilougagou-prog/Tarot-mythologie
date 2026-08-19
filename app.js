@@ -1270,7 +1270,6 @@ function profileMajorLinks(){
 
 function apprendre(){
   const p = learningProgress();
-  const links = profileMajorLinks();
   return `<section class="hero">
     <div class="hero-emblem">✦</div>
     <h2>Apprendre le Tarot de Delphes</h2>
@@ -1278,12 +1277,6 @@ function apprendre(){
     <div class="progress"><span style="width:${p.percent}%"></span></div>
     <small>Progression personnelle : ${p.percent}%</small>
   </section>
-  ${links ? `
-  <div class="section-title centered"><h3>Liées à ton profil astral</h3></div>
-  <div class="card-grid">${links.map(l=>`<div>
-    <p class="suit-h4" style="text-align:center;margin-bottom:6px">${escapeHTML(l.labels.join(" & "))} en ${escapeHTML(l.sign)}</p>
-    ${cardHTML(l.card,"major")}
-  </div>`).join("")}</div>` : ""}
   <div class="grid" style="margin-top:20px">
     <div class="tile" data-learn="majeurs">${illusHTML("assets/learn-majeurs.jpg","majeurs")}<strong>Arcanes majeurs</strong><span>Les 22 grandes figures du jeu.</span></div>
     <div class="tile" data-learn="cour">${illusHTML("assets/learn-cour.jpg","cour")}<strong>Figures de cour</strong><span>16 figures, réparties en 4 enseignes.</span></div>
@@ -1479,6 +1472,7 @@ function showDeityDetail(id){
 /* ===================== ONGLET PROFIL (profil astral + journal) ===================== */
 
 function profil(){
+  const links = profileMajorLinks();
   return `<section class="hero">
     <div class="hero-emblem">☉</div>
     <h2>Profil</h2>
@@ -1487,7 +1481,13 @@ function profil(){
   <div class="grid" style="margin-top:20px">
     <div class="tile" data-profil-go="astral"><strong>☉ Profil astral</strong><span>Ton thème natal complet, calculé à partir de ta date, heure et lieu de naissance.</span></div>
     <div class="tile" data-profil-go="journal"><strong>☽ Journal</strong><span>${journal.length} tirage${journal.length>1?"s":""} enregistré${journal.length>1?"s":""}.</span></div>
-  </div>`;
+  </div>
+  ${links ? `
+  <div class="section-title centered"><h3>Arcanes majeurs liés à ton profil astral</h3></div>
+  <div class="card-grid">${links.map(l=>`<div>
+    <p class="suit-h4" style="text-align:center;margin-bottom:6px">${escapeHTML(l.labels.join(" & "))} en ${escapeHTML(l.sign)}</p>
+    ${cardHTML(l.card,"major")}
+  </div>`).join("")}</div>` : ""}`;
 }
 
 const PLANET_LABELS = {
