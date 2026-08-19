@@ -6,7 +6,7 @@ Application web (PWA) de tarot mythologique grec — tirage interactif, lecture 
 - `index.html` — structure de la page
 - `styles.css` — tous les styles (police Cinzel/EB Garamond, thème "divinatoire", animation de chargement en étoiles)
 - `app.js` — toute la logique (données des cartes, symboles, tirage, navigation, appel au backend IA)
-- `assets/` — 21 illustrations d'arcanes majeurs sur 22 (Le Mat, Bateleur, Papesse, Impératrice, Empereur, Pape, Amoureux, Chariot, Justice, Hermite, Roue de Fortune, Force, Pendu, Arcane sans nom, Tempérance, Diable, Maison-Dieu, Étoile, Lune, Soleil, Monde) ; seul Le Jugement + les 56 cartes mineures utilisent encore un glyphe emoji en attendant leur illustration. 4 illustrations (`learn-*.jpg`) pour les cases de l'onglet Apprendre, et 4 illustrations (`suit-*.jpg`) pour les 4 enseignes dans les sous-sections « Figures de cour » et « Cartes numérales ».
+- `assets/` — illustrations des 22 arcanes majeurs (Le Mat, Bateleur, Papesse, Impératrice, Empereur, Pape, Amoureux, Chariot, Justice, Hermite, Roue de Fortune, Force, Pendu, Arcane sans nom, Tempérance, Diable, Maison-Dieu, Étoile, Lune, Soleil, Jugement, Monde) — collection complète ; les 56 cartes mineures utilisent encore un glyphe emoji en attendant leur illustration. 4 illustrations (`learn-*.jpg`) pour les cases de l'onglet Apprendre, et 4 illustrations (`suit-*.jpg`) pour les 4 enseignes dans les sous-sections « Figures de cour » et « Cartes numérales ».
 - `manifest.json` + `icon.svg` — nécessaires pour l'installation en PWA
 - `service-worker.js` — cache offline
 - `api/reading.js` — backend serverless (Vercel) qui appelle l'API Anthropic côté serveur
@@ -106,7 +106,7 @@ npx vercel dev
 - Animations légères dans toute l'app : illustrations avec léger zoom/pan continu + halo scintillant, transition douce entre écrans, micro-interactions au toucher, retournement des cartes du tirage, barre de progression et lecture qui s'animent (respecte la préférence système « réduire les animations »)
 
 ## Pistes de suite possibles (non bloquantes)
-- Ajouter l'illustration du dernier arcane majeur (Le Jugement) + 56 cartes mineures (même gabarit que `assets/`, 500px de large, JPEG qualité ~78)
+- Ajouter les illustrations des 56 cartes mineures (même gabarit que `assets/`, 500px de large, JPEG qualité ~78) — les 22 arcanes majeurs sont désormais tous illustrés
 - Lecture enrichie similaire (Marseille + mythologie) pour les cartes mineures — actuellement seuls les 22 majeurs ont la double lecture
 - Système de compte / sync cloud si l'app doit devenir multi-appareil (actuellement tout est en localStorage, donc local à l'appareil)
 - Emballage en app native (Capacitor) pour publication App Store / Google Play
