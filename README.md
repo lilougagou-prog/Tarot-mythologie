@@ -14,15 +14,15 @@ Application web (PWA) de tarot mythologique grec — tirage interactif, lecture 
 - `package.json` — dépendances `@anthropic-ai/sdk` (`api/reading.js`), `luxon` + `astronomy-engine` (`api/astral.js`)
 
 ## Lecture générée par IA — comment ça marche
-La fonction `generateAIReading(question, cards)` dans `app.js` envoie `{question, cards}` en `POST` vers `/api/reading`. Cette fonction serverless (`api/reading.js`) :
-1. reconstruit le prompt exact (tarologue professionnel, format JSON strict),
+La fonction `generateAIReading(question, cards, positions)` dans `app.js` envoie `{question, cards, positions}` en `POST` vers `/api/reading` — `positions` (les intitulés des positions du tirage choisi, ex. « Défi », « Résultat ») donne à l'IA le sens de chaque carte dans les tirages autres que le tirage général. Cette fonction serverless (`api/reading.js`), agnostique du type de tirage (1 à 12 cartes, voir `SPREADS` dans `app.js`) :
+1. reconstruit le prompt exact (tarologue professionnel, format JSON strict, tient compte des positions si fournies),
 2. appelle l'API Anthropic avec la clé stockée dans la variable d'environnement **`ANTHROPIC_API_KEY`** (jamais exposée au navigateur),
-3. renvoie `{card1, card2, card3, synthesis}` au client.
+3. renvoie `{cards: [...], synthesis}` au client (un texte par carte, dans le même ordre, quel que soit le nombre de cartes du tirage).
 
-Si l'appel échoue ou dépasse 15 secondes, l'app bascule automatiquement sur un texte généré localement (`synthesisParagraphs` / `interpretationFor`) — l'utilisateur n'est jamais bloqué.
+Si l'appel échoue ou dépasse 15 secondes, l'app bascule automatiquement sur un texte généré localement (`synthesisParagraphs`/`synthesisParagraphsGeneric` selon le tirage, `interpretationFor`) — l'utilisateur n'est jamais bloqué.
 
 ### Protéger l'usage IA (recommandé tant que l'appli est personnelle)
-Coût réel : ~1 centime par tirage (facturation à l'usage sur console.anthropic.com, indépendante d'un éventuel abonnement Claude.ai — les deux sont des produits distincts). Pour éviter que quelqu'un d'autre qui tomberait sur l'URL de l'appli déclenche des appels avec ta clé :
+Coût réel : de l'ordre du centime par tirage, variable selon le nombre de cartes (facturation à l'usage sur console.anthropic.com, indépendante d'un éventuel abonnement Claude.ai — les deux sont des produits distincts ; les grands tirages comme la Croix celtique ou l'Année à venir coûtent proportionnellement plus qu'un tirage à 1 ou 3 cartes). Pour éviter que quelqu'un d'autre qui tomberait sur l'URL de l'appli déclenche des appels avec ta clé :
 - Définir une variable d'environnement **`APP_ACCESS_CODE`** (n'importe quelle chaîne secrète). Tant qu'elle est définie, le backend refuse toute requête qui ne fournit pas ce même code — l'appli le demande une fois côté client et le mémorise.
 - Recommandé en complément, quel que soit l'usage : fixer un **plafond de dépense mensuel strict** sur console.anthropic.com (Settings → Limits) pour ne jamais pouvoir dépasser un montant que tu choisis.
 - Pour ouvrir l'appli à d'autres plus tard : supprimer `APP_ACCESS_CODE` sur Vercel — aucun changement de code nécessaire. Penser alors à revoir le plafond de dépense en conséquence.
@@ -96,7 +96,7 @@ npx vercel dev
 
 ## État actuel du reste de l'app
 - Navigation 5 onglets (Accueil / Tirage / Apprendre / Symboles / Profil)
-- Tirage : pioche de 15 cartes face cachée, l'utilisateur en choisit 3 ; lecture personnalisée générée par IA avec animation de chargement (étoiles dorées scintillantes), enrichie par le Profil astral quand il existe
+- Tirage : 5 types de tirage au choix (`SPREADS` dans `app.js`), écran de sélection animé (halo scintillant + pluie d'étoiles) — Tirage général (3 cartes, pioche de 15), Oui/Non (1 carte, pioche de 9), Amour (3 cartes — Toi / L'autre / La relation, pioche de 15), Croix celtique (10 cartes avec position dédiée pour chacune, pioche de 24), Année à venir (12 cartes, une par mois, pioche de 24). Bouton « ← Changer de tirage » pour revenir à la sélection. Lecture personnalisée générée par IA (tient compte de la position de chaque carte dans le tirage), avec animation de chargement (étoiles dorées scintillantes) et repli local si l'IA ne répond pas, enrichie par le Profil astral quand il existe
 - Bibliothèque de 86 symboles et nombres, triés par ordre alphabétique, tous cliquables et reliés aux cartes/divinités ; position de scroll préservée à la navigation
 - Détail de carte enrichi : lecture Tarot de Marseille + éclairage mythologique pour les 22 arcanes majeurs
 - Profil : Profil astral (thème natal complet + numérologie du prénom) et Journal des tirages passés, tous les deux en localStorage. Le Journal garde la lecture complète (texte par carte + synthèse, IA ou générée hors-ligne), pas seulement les noms des cartes — repliable sous « Revoir la lecture complète » sur chaque entrée. Ré-enregistrer un tirage déjà sauvegardé met à jour l'entrée existante plutôt que d'en créer une en double.
