@@ -1165,6 +1165,7 @@ const DEITY_NOTES = {
   /* ----- Autres figures mentionnées dans les lectures des cartes numérales ----- */
   "jason":"Chef des Argonautes, parti à la conquête de la Toison d'or à bord de l'Argo.",
   "achille":"Le plus grand guerrier de la guerre de Troie, connu pour sa bravoure et sa colère.",
+  "thétis":"Néréide insaisissable, mère d'Achille, dont la ténacité et le don de métamorphose défièrent le destin annoncé pour son fils.",
   "atlas":"Titan condamné à porter le poids du ciel sur ses épaules pour l'éternité.",
   "psyché":"Mortelle aimée d'Éros, unie à lui après avoir traversé de nombreuses épreuves.",
   "charites":"Trois déesses de la grâce et de la joie, toujours représentées ensemble, jamais seules.",
@@ -1300,7 +1301,7 @@ const DEITY_LORE = {
   ],
   "nérée": [
     "Surnommé le « Vieillard de la mer », Nérée est un dieu marin plus ancien que Poséidon, réputé pour sa sagesse, sa bienveillance et son don de prophétie, contrairement à d'autres divinités marines plus tumultueuses.",
-    "Père de cinquante Néréides dont Thétis, mère d'Achille, il incarne un versant plus paisible de la mer (voir la fiche « Mer ») — la sagesse plutôt que la tempête.",
+    "Père de cinquante Néréides dont Thétis (voir la fiche « Thétis »), mère d'Achille, il incarne un versant plus paisible de la mer (voir la fiche « Mer ») — la sagesse plutôt que la tempête.",
   ],
   "bellérophon": [
     "Héros grec, Bellérophon parvint à dompter Pégase, le cheval ailé né du sang de la Gorgone Méduse, grâce à un mors d'or offert par Athéna en songe.",
@@ -1355,7 +1356,7 @@ const DEITY_LORE = {
     "Il rassembla pour ce voyage les plus grands héros grecs de sa génération à bord du navire Argo, les Argonautes, et ne parvint à ses fins qu'avec l'aide de Médée, magicienne éprise de lui qui trahit son propre père pour l'aider à s'emparer de la Toison.",
   ],
   "achille": [
-    "Fils de la Néréide Thétis (voir la fiche « Nérée ») et d'un mortel, Achille fut plongé enfant dans le Styx par sa mère pour le rendre invulnérable — seul son talon, par lequel elle le tenait, resta vulnérable.",
+    "Fils de la Néréide Thétis (voir la fiche « Thétis ») et d'un mortel, Achille fut plongé enfant dans le Styx par sa mère pour le rendre invulnérable — seul son talon, par lequel elle le tenait, resta vulnérable.",
     "Le plus grand guerrier de la guerre de Troie, il se retira des combats après une querelle avec Agamemnon, laissant les Grecs perdre du terrain, jusqu'à ce que la mort de son ami Patrocle le pousse à revenir se battre dans une colère qui ne s'éteignit qu'avec la mort d'Hector.",
   ],
   "atlas": [
@@ -1380,7 +1381,14 @@ const DEITY_LORE = {
   ],
   "circé": [
     "Magicienne experte en herbes et en breuvages, Circé vit sur une île isolée où elle transforme en animaux les voyageurs qui s'y aventurent sans méfiance — c'est ainsi qu'elle changea en pourceaux une partie de l'équipage d'Ulysse.",
-    "Ulysse, protégé par une plante magique offerte par Hermès, résista à son sortilège et la contraignit à rendre à ses hommes leur forme humaine ; il resta ensuite une année entière sur son île avant de reprendre la mer.",
+    "Ulysse, protégé par une plante magique offerte par Hermès, résista à son sortilège et la contraignit à rendre à ses hommes leur forme humaine. Il resta ensuite une année entière sur son île, dont naquit un fils, Télégonos — qui, des années plus tard et sans le reconnaître, tuera son propre père, achevant malgré lui une prophétie qui pesait sur Ulysse depuis son retour à Ithaque.",
+    "Sa magie ne sert pas qu'à punir les intrus : par jalousie, elle change aussi la nymphe Scylla en monstre. Éprise du dieu marin Glaucos, lui-même épris de Scylla, Circé empoisonne la source où celle-ci se baigne — la nymphe en ressort affublée d'une ceinture de têtes de chiens hurlants, condamnée à hanter pour toujours un détroit périlleux, face au tourbillon de Charybde (voir la fiche « Mer »).",
+    "Elle inflige un sort semblable à Picus, roi du Latium déjà marié à la nymphe Canens : le voyant refuser ses avances par fidélité, elle le change en pic — l'oiseau porte encore aujourd'hui son nom latin, picus. Deux amours contrariés, deux métamorphoses : la magie de Circé transforme aussi souvent qu'elle punit.",
+  ],
+  "thétis": [
+    "Fille de Nérée (voir la fiche « Nérée »), Thétis est une Néréide capable de se métamorphoser à volonté — feu, eau, lion, serpent — pour échapper à qui cherche à la retenir. Zeus et Poséidon la convoitèrent tous deux, jusqu'à ce qu'une prophétie annonce que le fils de Thétis surpasserait son père : par prudence, les deux dieux renoncèrent et la marièrent à un simple mortel, Pélée.",
+    "Pélée ne put l'épouser qu'en la maintenant de force à travers toutes ses métamorphoses, sur les conseils de Chiron (voir la fiche « Chiron ») — une lutte que Thétis finit par accepter sans jamais renoncer à sa propre nature changeante. Leurs noces, auxquelles la déesse de la Discorde ne fut pas conviée, déclenchèrent l'épisode de la pomme d'or qui mènera plus tard au jugement de Pâris.",
+    "De cette union naquit Achille (voir la fiche « Achille »), qu'elle tenta de rendre invulnérable en le plongeant dans le Styx (voir la fiche « Rivière »), puis de soustraire à son destin en le déguisant en jeune fille à la cour du roi Lycomède — une ruse qu'Ulysse finit par déjouer. Jusqu'au bout, Thétis lutta avec une ténacité sans faille contre une prophétie qu'elle savait pourtant ne jamais pouvoir empêcher.",
   ],
   "pythie": [
     "Prêtresse d'Apollon au temple de Delphes (voir la fiche « Temple »), la Pythie rendait ses oracles assise sur un trépied placé au-dessus d'une faille d'où s'échappaient, croyait-on, des vapeurs inspirant ses transes prophétiques.",
