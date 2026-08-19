@@ -973,16 +973,56 @@ function homeGlowHTML(){
   return `<div class="home-glow">${motes.map(m=>`<span class="mote" style="left:${m.left};width:${m.size}px;height:${m.size}px;animation-duration:${m.dur}s;animation-delay:${m.delay}s"></span>`).join("")}</div>`;
 }
 
+function localDateKey(d){
+  d = d || new Date();
+  const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,"0"), day = String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${day}`;
+}
+
+// Numéro du jour dans l'année (1-366), pour répartir la carte du jour sur tout le
+// calendrier plutôt que sur les 1-31 jours du mois (l'ancien calcul faisait retomber le
+// 1er de chaque mois sur exactement la même carte).
+function dayOfYear(d){
+  d = d || new Date();
+  const start = new Date(d.getFullYear(), 0, 0);
+  return Math.floor((d - start) / 86400000);
+}
+
+// Série de jours consécutifs : incrémentée une fois par jour à la première visite de
+// l'accueil (idempotent le reste de la journée), remise à 1 s'il y a eu un jour sans
+// visite entre-temps.
+function updateStreak(){
+  let state;
+  try{ state = JSON.parse(localStorage.getItem("delphesStreak") || "null"); }catch{ state = null; }
+  if(!state || typeof state.streak !== "number") state = { lastVisitDate:null, streak:0 };
+
+  const today = localDateKey();
+  if(state.lastVisitDate === today) return state.streak; // déjà compté aujourd'hui
+
+  const yesterday = localDateKey(new Date(Date.now() - 24*60*60*1000));
+  state.streak = (state.lastVisitDate === yesterday) ? state.streak + 1 : 1;
+  state.lastVisitDate = today;
+  localStorage.setItem("delphesStreak", JSON.stringify(state));
+  return state.streak;
+}
+
 function home(){
-  const day = MAJORS[new Date().getDate() % MAJORS.length];
+  const streak = updateStreak();
+  const day = MAJORS[dayOfYear() % MAJORS.length];
+  const lore = CARD_LORE[day[0]];
+  const links = profileMajorLinks();
+  const resonates = !!(links && links.some(l => l.card[0] === day[0]));
   return `<section class="hero">
     ${homeGlowHTML()}
     <div class="hero-emblem">✦</div>
     <h2>Tarot de Delphes</h2>
     <p>Un tarot mythologique grec qui s'apprend en le regardant : tirage, symboles reliés entre eux, et un parcours d'apprentissage progressif.</p>
+    ${streak > 1 ? `<span class="pill" style="margin-top:10px">✦ ${streak} jours de suite</span>` : ""}
   </section>
   <div class="section-title centered"><h3>Carte du jour</h3></div>
   <div class="day-card" data-card="${encodeURIComponent(JSON.stringify(day))}">${cardHTML(day,"major")}</div>
+  ${resonates ? `<p class="note" style="text-align:center">✦ Cette carte résonne avec ton profil astral.</p>` : ""}
+  ${lore ? `<p class="lore-text" style="max-width:560px;margin:14px auto 0;text-align:center;opacity:.85">${escapeHTML(lore.myth.length > 220 ? lore.myth.slice(0,220).trim()+"…" : lore.myth)}</p>` : ""}
   <p class="tap-hint">touche la carte pour en découvrir la lecture complète</p>
   <div class="grid" style="margin-top:30px">
     <div class="tile" data-go="tirage"><strong>✦ Tirer les cartes</strong><span>Choisis toi-même trois cartes dans le jeu.</span></div>
