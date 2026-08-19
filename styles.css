@@ -106,8 +106,13 @@ main{max-width:900px;margin:auto;padding:22px 18px}
 .swords{background:linear-gradient(160deg,#f5f3ef,#c9d2d3)}
 .coins{background:linear-gradient(160deg,#fff8dc,#d8d5ae)}
 .card-img{width:100%;border-radius:10px;object-fit:cover;object-position:center;aspect-ratio:2/3;box-shadow:0 4px 10px rgba(41,28,29,.15);display:block}
-.tarot-card.has-img{padding:6px}
-.tarot-card.has-img .frame{padding:6px;justify-content:center;align-items:center}
+/* Cartes avec illustration : pas de double contour doré statique par-dessus — le
+   ratio 2/3.45 du contour ne correspondait pas exactement au 2/3 de l'image, ce qui
+   se voyait quand l'illustration "respire" (zoom/pan). Le contour épouse maintenant
+   exactement le ratio de l'image et la découpe (overflow hidden), donc plus d'écart. */
+.tarot-card.has-img{aspect-ratio:2/3;padding:0;border:none;background:none}
+.tarot-card.has-img .frame{padding:0;border:none;border-radius:0}
+.tarot-card.has-img .card-img{border-radius:0;box-shadow:none}
 
 .pips{width:100%;display:grid;justify-items:center;align-items:center;gap:3px;flex:1;padding:8px 2px}
 .pips-1{grid-template-columns:1fr}
