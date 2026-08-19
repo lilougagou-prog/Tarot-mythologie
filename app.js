@@ -1111,9 +1111,12 @@ function findAspect(lon1, lon2){
 
 const TRANSIT_LABELS = { sun:"Le Soleil", moon:"La Lune", mercury:"Mercure", venus:"Vénus", mars:"Mars" };
 // Vocabulaire d'aspect générique (pas seulement pour les transits) : réutilisé plus bas
-// pour les aspects natals du Profil astral (natalAspectSentence()).
+// pour les aspects natals du Profil astral (natalAspectSentence()). Décrit la nature
+// structurelle de l'aspect (facile/tendu/à équilibrer) sans jamais prêter à la planète un
+// "ton" qui contredirait sa nature — ex. trigone : "s'accorde naturellement avec" plutôt
+// que "soutient en douceur", qui sonnait faux pour une planète comme Mars.
 const ASPECT_ACTION_PHRASES = {
-  conjonction:"vient renforcer", trigone:"soutient en douceur", sextile:"ouvre une occasion du côté de",
+  conjonction:"vient renforcer", trigone:"s'accorde naturellement avec", sextile:"ouvre une occasion du côté de",
   carré:"met sous tension", opposition:"invite à trouver un équilibre avec",
 };
 
@@ -1148,8 +1151,8 @@ function horoscopeDuJour(transits, profile){
   const moonArcana = signArcana(moonSign);
 
   const lines = [];
-  if(sunSign) lines.push(`Le Soleil traverse ${sunSign}${sunArcana ? `, une énergie proche de ${cardFullName(sunArcana)}` : ""}.`);
-  if(moonSign) lines.push(`La Lune est en ${moonSign}${moonArcana ? ` — ambiance du jour du côté de ${(moonArcana[3]||"").split("·")[0].trim().toLowerCase()}` : ""}.`);
+  if(sunSign) lines.push(`Le Soleil traverse ${sunSign}${sunArcana ? `, une énergie proche ${deCardName(cardFullName(sunArcana))}` : ""}.`);
+  if(moonSign) lines.push(`La Lune est en ${moonSign}${moonArcana ? ` — ambiance du jour du côté ${elideDe(signQuality(moonSign))}` : ""}.`);
   if(hits.length){
     const h = hits[0];
     lines.push(`${TRANSIT_LABELS[h.transitBody]} ${ASPECT_ACTION_PHRASES[h.aspect.type]} ${h.natal.label}.`);
@@ -1708,9 +1711,11 @@ const PLANET_LABELS = {
 };
 const PLANET_ORDER = ["sun","moon","mercury","venus","mars","jupiter","saturn","uranus","neptune","pluto"];
 
-// Domaine de vie associé à chaque planète — vocabulaire court, réutilisé pour expliquer sa
-// position par signe et ses aspects dans le Profil astral (natalPlanetSentence/
-// natalAspectSentence ci-dessous), ainsi que pour l'horoscope du jour (horoscopeDuJour).
+// Domaine de vie associé à chaque planète — vocabulaire court, réutilisé pour expliquer ses
+// aspects natals (natalAspectSentence ci-dessous) et pour l'horoscope du jour
+// (horoscopeDuJour). La phrase "position par signe" de chaque planète, elle, a sa propre
+// formulation dédiée (PLANET_SIGN_SENTENCE ci-dessous) — pas de formule générique répétée
+// dix fois, pour éviter un effet "copier-coller" à la lecture.
 const PLANET_THEMES = {
   sun:"ton identité, ce que tu affirmes", moon:"ton monde intérieur, tes émotions",
   mercury:"ta façon de penser et de communiquer", venus:"ce que tu aimes, tes valeurs, tes relations",
@@ -1718,7 +1723,6 @@ const PLANET_THEMES = {
   saturn:"ce qui te structure, tes limites, ton sens du devoir", uranus:"ta part de rupture, ton besoin de liberté",
   neptune:"ton intuition, tes rêves, ton imaginaire", pluto:"ta capacité de transformation profonde",
 };
-const ASCENDANT_THEME = "la façon dont tu te présentes aux autres";
 
 // Signe zodiacal -> mot-clé qualitatif court, en réutilisant la table de correspondance
 // avec les arcanes majeurs (ZODIAC_MAJOR_LINKS) déjà utilisée pour "Apprendre" et
@@ -1733,23 +1737,55 @@ function signQuality(sign){
   return card ? (card[3]||"").split("·")[0].trim().toLowerCase() : null;
 }
 
-// Une phrase expliquant ce que représente une planète (ou l'Ascendant) placée dans son
-// signe — utilisée pour chaque ligne de la section "Planètes" du Profil astral.
+// Élision de "de" devant un mot-clé commençant par une voyelle ("d'espoir", jamais "de
+// espoir") — les mots-clés de signQuality() commencent aussi bien par une consonne que par
+// une voyelle ("victoire" mais aussi "équilibre", "instinct"…), l'élision doit donc être
+// gérée ici plutôt que codée en dur dans chaque phrase qui l'utilise.
+function elideDe(word){
+  return /^[aàâeéèêëiîïoôœuùûüyh]/i.test(word) ? `d'${word}` : `de ${word}`;
+}
+// Combine "de" avec un nom de carte qui inclut déjà son propre article ("Le Chariot" ->
+// "du Chariot", "La Force" -> "de la Force", "L'Empereur" -> "de l'Empereur",
+// "Tempérance", sans article, -> "de Tempérance") — utilisé par horoscopeDuJour().
+function deCardName(name){
+  if(/^Le /.test(name)) return `du ${name.slice(3)}`;
+  if(/^La /.test(name)) return `de la ${name.slice(3)}`;
+  if(/^L['’]/.test(name)) return `de l'${name.slice(2)}`;
+  return `de ${name}`;
+}
+
+// Une phrase par planète (et une pour l'Ascendant) expliquant sa position dans son signe —
+// verbe et construction propres à chaque planète (pas un même gabarit répété dix fois),
+// pour que la liste reste agréable à lire d'un bout à l'autre.
+const PLANET_SIGN_SENTENCE = {
+  sun: (sign, q) => `Ton identité s'exprime en ${sign}${q ? `, du côté ${elideDe(q)}` : ""}.`,
+  moon: (sign, q) => `Tes émotions se vivent en ${sign}${q ? `, avec une tonalité ${elideDe(q)}` : ""}.`,
+  mercury: (sign, q) => `Ta façon de penser et de communiquer se déploie en ${sign}${q ? `, sur fond ${elideDe(q)}` : ""}.`,
+  venus: (sign, q) => `Ce que tu aimes porte la marque de ${sign}${q ? `, dans une dynamique ${elideDe(q)}` : ""}.`,
+  mars: (sign, q) => `Ton énergie et ta façon d'agir prennent la forme de ${sign}${q ? `, en résonance avec ${q}` : ""}.`,
+  jupiter: (sign, q) => `Ta confiance et ta capacité à grandir s'appuient sur ${sign}${q ? `, du côté ${elideDe(q)}` : ""}.`,
+  saturn: (sign, q) => `Ton sens du devoir et tes limites se construisent en ${sign}${q ? `, avec une tonalité ${elideDe(q)}` : ""}.`,
+  uranus: (sign, q) => `Ton besoin de liberté et ta part de rupture s'expriment en ${sign}${q ? `, sur fond ${elideDe(q)}` : ""}.`,
+  neptune: (sign, q) => `Ton intuition et tes rêves flottent en ${sign}${q ? `, dans une dynamique ${elideDe(q)}` : ""}.`,
+  pluto: (sign, q) => `Ta capacité de transformation s'ancre en ${sign}${q ? `, en résonance avec ${q}` : ""}.`,
+};
 function natalPlanetSentence(key, body){
-  const theme = PLANET_THEMES[key];
-  if(!theme || !body || !body.sign) return null;
+  const builder = PLANET_SIGN_SENTENCE[key];
+  if(!builder || !body || !body.sign) return null;
   const quality = signQuality(body.sign);
-  const capitalized = theme.charAt(0).toUpperCase() + theme.slice(1);
   const retro = body.retrograde ? " Rétrograde à ta naissance, cette énergie se vit souvent plus intérieurement qu'elle ne se montre." : "";
-  return `${capitalized}, en ${body.sign}${quality ? `, se teinte de ${quality}` : ""}.${retro}`;
+  return `${builder(body.sign, quality)}${retro}`;
 }
 function natalAscendantSentence(ascendant){
   if(!ascendant || !ascendant.sign) return null;
   const quality = signQuality(ascendant.sign);
-  return `${ASCENDANT_THEME.charAt(0).toUpperCase()+ASCENDANT_THEME.slice(1)}, en ${ascendant.sign}${quality ? `, se teinte de ${quality}` : ""}.`;
+  return `La façon dont tu te présentes aux autres emprunte les couleurs de ${ascendant.sign}${quality ? `, du côté ${elideDe(quality)}` : ""}.`;
 }
 // Une phrase expliquant un aspect natal entre deux planètes — même vocabulaire d'aspect
 // (ASPECT_ACTION_PHRASES) que l'horoscope du jour, pour rester cohérent dans toute l'appli.
+// Ces verbes décrivent la nature structurelle de l'aspect (facile/tendu/à équilibrer) sans
+// jamais prêter à la planète un "ton" qui contredirait sa nature (ex. Mars n'est jamais
+// décrit comme agissant "en douceur", même sur un aspect harmonieux).
 function natalAspectSentence(asp){
   const label1 = PLANET_LABELS[asp.bodies[0]], label2 = PLANET_LABELS[asp.bodies[1]];
   const theme2 = PLANET_THEMES[asp.bodies[1]];
