@@ -15,6 +15,10 @@
 //     voir journalTrendsForReading() dans app.js) : { topCard, topDomain }, l'un ou l'autre
 //     pouvant être absent/null. Absent au complet tant que le Journal n'a pas assez
 //     d'entrées pour qu'une tendance ait un sens.
+//   - memory (optionnel, envoyé par le client quand une des cartes tirées aujourd'hui est
+//     déjà apparue dans un tirage précédent sur un sujet proche — voir cardMemory() dans
+//     app.js) : { cardName, date, domainLabel }. Ne contient jamais le texte de la question
+//     passée, seulement le nom de la carte, sa date, et le domaine détecté.
 // Renvoie : { cards: [string, ...] (même longueur et ordre que cards en entrée), synthesis }
 //
 // La clé API Anthropic vit uniquement ici, côté serveur, dans la variable
@@ -64,7 +68,7 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  const { question, cards, positions, profile, history } = req.body || {};
+  const { question, cards, positions, profile, history, memory } = req.body || {};
 
   if (
     typeof question !== "string" ||
@@ -143,6 +147,22 @@ module.exports = async function handler(req, res) {
     }
   }
 
+  // Bloc de mémoire optionnel (voir cardMemory() dans app.js) : une des cartes tirées
+  // aujourd'hui est déjà apparue dans un tirage précédent sur un sujet proche. Ne contient
+  // jamais le texte de la question passée, seulement le nom de la carte, sa date et le
+  // domaine détecté.
+  let memoryBlock = "";
+  if (
+    memory &&
+    typeof memory === "object" &&
+    typeof memory.cardName === "string" &&
+    memory.cardName &&
+    typeof memory.date === "string" &&
+    typeof memory.domainLabel === "string"
+  ) {
+    memoryBlock = `\nRemarque : la carte "${memory.cardName}" est déjà apparue dans un tirage précédent de cette personne sur un sujet proche (${memory.domainLabel}), le ${memory.date}. Tu peux le mentionner brièvement si c'est pertinent et naturel pour cette lecture — jamais de façon appuyée, et seulement si ça enrichit vraiment la lecture.\n`;
+  }
+
   const n = cards.length;
   const hasPositions = Array.isArray(positions) && positions.some((p) => typeof p === "string" && p);
 
@@ -152,7 +172,7 @@ module.exports = async function handler(req, res) {
 
 Cette personne a tiré ${n === 1 ? "cette carte" : `ces ${n} cartes`}, dans cet ordre${hasPositions ? " (avec la position de chacune dans le tirage entre parenthèses)" : ""} :
 ${cardBlock}
-${personalBlock}${historyBlock}
+${personalBlock}${historyBlock}${memoryBlock}
 Rédige une lecture de tarot en français, comme le ferait un professionnel expérimenté en face à face. Règles strictes :
 - Appelle toujours chaque carte par son nom exact donné ci-dessus (par exemple "le 10 d'Épées", "Le Chariot") — jamais par un simple mot-clé comme "Harmonie".
 ${hasPositions ? "- Tiens compte du sens de la position de chaque carte dans le tirage (donnée entre parenthèses) pour son interprétation.\n" : ""}- Réponds vraiment et précisément à la question posée, pas de façon générique.
