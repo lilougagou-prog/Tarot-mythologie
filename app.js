@@ -623,7 +623,7 @@ let journal = JSON.parse(localStorage.getItem("arcanes-journal") || "[]");
 let route = "home";
 
 let tirageState = JSON.parse(localStorage.getItem("arcanes-tirage-state") || "null") || {
-  question: "", spread: null, picks: [], notes: "", saved: false, aiReading: null, aiStatus: "idle"
+  question: "", spread: null, picks: [], notes: "", saved: false, savedIndex: null, aiReading: null, aiStatus: "idle"
 };
 function saveTirageState(){ localStorage.setItem("arcanes-tirage-state", JSON.stringify(tirageState)); }
 
@@ -1026,21 +1026,30 @@ function oracleGlowHTML(){
   return `<div class="oracle-glow" style="--halo-delay:${haloDelay}s;--flash-delay:${flashDelay}s">${stars}</div>`;
 }
 
+// Calcule le texte de lecture (par carte + synthèse, IA ou repli local) pour le tirage en
+// cours — utilisé à la fois pour l'affichage (renderDrawResult) et pour l'enregistrement
+// dans le Journal, qui garde ainsi la lecture complète et pas seulement les noms des cartes.
+function currentReadingTexts(){
+  const { question, spread, picks, aiReading, aiStatus } = tirageState;
+  const chosen = picks.map(i=>spread[i]);
+  const domain = detectDomain(question);
+  const useAI = aiStatus === "done" && aiReading;
+  const cardTexts = chosen.map((c,i)=> useAI ? aiReading[`card${i+1}`] : interpretationFor(c,i,domain));
+  const synthesis = useAI ? [aiReading.synthesis] : synthesisParagraphs(question,chosen,domain);
+  return { cardTexts, synthesis, source: useAI ? "ai" : "local" };
+}
+
 function renderDrawResult(){
-  const { question, spread, picks, notes, saved, aiReading, aiStatus } = tirageState;
+  const { question, spread, picks, notes, saved, aiStatus } = tirageState;
   const chosen = picks.map(i=>spread[i]);
   const domain = detectDomain(question);
   const loading = aiStatus === "loading";
-  const useAI = aiStatus === "done" && aiReading;
-
-  const cardText = (c,i) => useAI ? aiReading[`card${i+1}`] : (loading ? "" : interpretationFor(c,i,domain));
+  const reading = loading ? null : currentReadingTexts();
 
   const synthesisHTML = loading
     ? `<div class="ai-loading-magic">${starLoaderHTML("lg")}<p class="ai-loading-text">Les arcanes se consultent…</p></div>`
-    : useAI
-      ? `<p>${escapeHTML(aiReading.synthesis)}</p>`
-      : `${synthesisParagraphs(question,chosen,domain).map(p=>`<p>${escapeHTML(p)}</p>`).join("")}
-         ${aiStatus==="error" ? `<p class="note">(Lecture générée hors-ligne — le service de lecture personnalisée n'a pas répondu.)</p>` : ""}`;
+    : `${reading.synthesis.map(p=>`<p>${escapeHTML(p)}</p>`).join("")}
+       ${reading.source==="local" && aiStatus==="error" ? `<p class="note">(Lecture générée hors-ligne — le service de lecture personnalisée n'a pas répondu.)</p>` : ""}`;
 
   return `
     <p class="question-recall">« ${escapeHTML(question)} »</p>
@@ -1049,7 +1058,7 @@ function renderDrawResult(){
         <div class="reading-roman">${DRAW_POSITIONS[i]}</div>
         ${cardHTML(c,c[4]==="major"?"major":(SUITS[c[6]]?.[0]||"major"))}
         <p class="card-name-recall">${escapeHTML(cardFullName(c))}</p>
-        ${loading ? `<div class="ai-loading-magic small">${starLoaderHTML("sm")}</div>` : `<p>${escapeHTML(cardText(c,i))}</p>`}
+        ${loading ? `<div class="ai-loading-magic small">${starLoaderHTML("sm")}</div>` : `<p>${escapeHTML(reading.cardTexts[i])}</p>`}
         <details class="why">
           <summary>Pourquoi cette carte ?</summary>
           ${symbolChips(c[5])}
@@ -1478,6 +1487,11 @@ function journalView(){
     <span>${escapeHTML(j.question||"Sans question")}</span>
     <p>${escapeHTML((j.cards||[]).join(" · "))}</p>
     ${j.notes?`<p><b>Notes :</b> ${escapeHTML(j.notes)}</p>`:""}
+    ${(j.synthesis && j.synthesis.length) ? `<details class="why">
+      <summary>Revoir la lecture complète${j.source==="local"?" (générée hors-ligne)":""}</summary>
+      ${(j.cards||[]).map((name,idx)=>`<p><b>${escapeHTML(name)}</b> — ${escapeHTML((j.cardTexts||[])[idx]||"")}</p>`).join("")}
+      ${j.synthesis.map(p=>`<p>${escapeHTML(p)}</p>`).join("")}
+    </details>` : ""}
     <button class="ghost delete-entry" data-index="${i}">Supprimer</button>
   </article>`).join("")}`;
 }
@@ -1498,7 +1512,20 @@ function showJournal(){
   };
   cardDetailReturnTo = showJournal;
   document.querySelectorAll(".delete-entry").forEach(b=>{
-    b.onclick = ()=>{ const i=Number(b.dataset.index); journal.splice(i,1); localStorage.setItem("arcanes-journal", JSON.stringify(journal)); showJournal(); };
+    b.onclick = ()=>{
+      const i = Number(b.dataset.index);
+      journal.splice(i,1);
+      localStorage.setItem("arcanes-journal", JSON.stringify(journal));
+      // Garde tirageState.savedIndex cohérent : l'entrée liée au tirage en cours a pu
+      // se décaler (suppression d'une entrée antérieure) ou disparaître (suppression de
+      // l'entrée elle-même).
+      if(Number.isInteger(tirageState.savedIndex)){
+        if(tirageState.savedIndex === i){ tirageState.saved = false; tirageState.savedIndex = null; }
+        else if(tirageState.savedIndex > i){ tirageState.savedIndex -= 1; }
+        saveTirageState();
+      }
+      showJournal();
+    };
   });
 }
 
@@ -1608,7 +1635,7 @@ function bind(){
   if(question && draw){
     question.addEventListener("input", ()=>{ tirageState.question=question.value; saveTirageState(); draw.disabled=!question.value.trim(); });
     draw.onclick = ()=>{
-      tirageState = { question: tirageState.question, spread: shuffledDeck().slice(0,15), picks: [], notes:"", saved:false, aiReading:null, aiStatus:"idle" };
+      tirageState = { question: tirageState.question, spread: shuffledDeck().slice(0,15), picks: [], notes:"", saved:false, savedIndex:null, aiReading:null, aiStatus:"idle" };
       saveTirageState(); render();
     };
   }
@@ -1618,20 +1645,32 @@ function bind(){
   const saveDraw = document.getElementById("saveDraw");
   if(saveDraw) saveDraw.onclick = ()=>{
     const chosen = tirageState.picks.map(i=>tirageState.spread[i]);
-    const domain = detectDomain(tirageState.question);
-    journal.unshift({
+    const reading = currentReadingTexts();
+    const entry = {
       date: new Date().toLocaleString("fr-FR"),
       question: tirageState.question,
       cards: chosen.map(c=>c[0]),
-      notes: tirageState.notes || ""
-    });
+      notes: tirageState.notes || "",
+      cardTexts: reading.cardTexts,
+      synthesis: reading.synthesis,
+      source: reading.source
+    };
+    // Met à jour l'entrée existante plutôt que d'en ajouter une nouvelle si ce tirage a
+    // déjà été enregistré (le bouton dit alors "Mettre à jour" — avant, il rajoutait
+    // silencieusement un doublon à chaque clic).
+    if(tirageState.saved && Number.isInteger(tirageState.savedIndex) && journal[tirageState.savedIndex]){
+      journal[tirageState.savedIndex] = entry;
+    } else {
+      journal.unshift(entry);
+      tirageState.savedIndex = 0;
+    }
     localStorage.setItem("arcanes-journal", JSON.stringify(journal));
     tirageState.saved = true; saveTirageState();
     alert("Tirage enregistré dans le journal.");
     render();
   };
   const clearDraw = document.getElementById("clearDraw");
-  if(clearDraw) clearDraw.onclick = ()=>{ tirageState = {question:"",spread:null,picks:[],notes:"",saved:false,aiReading:null,aiStatus:"idle"}; saveTirageState(); render(); };
+  if(clearDraw) clearDraw.onclick = ()=>{ tirageState = {question:"",spread:null,picks:[],notes:"",saved:false,savedIndex:null,aiReading:null,aiStatus:"idle"}; saveTirageState(); render(); };
   // .delete-entry est maintenant lié directement dans showJournal() (le Journal n'est
   // plus une route de premier niveau, voir l'onglet Profil).
 
