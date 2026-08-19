@@ -1314,6 +1314,40 @@ function profileForReading(){
   };
 }
 
+// Résumé du profil enregistré, prêt à envoyer à /api/portrait (voir ensurePortrait()) —
+// null si aucun profil astral n'est enregistré. Contrairement à profileForReading()
+// (envoyé à chaque lecture), n'est envoyé qu'une seule fois, la première fois que le
+// portrait est généré.
+function profileForPortrait(saved){
+  if(!saved || !saved.astral) return null;
+  const a = saved.astral;
+  const numMeaning = NUMBER_KEYS[saved.nameNumber];
+  const py = personalYearNumber(saved.birthDate);
+  const pyMeaning = NUMBER_KEYS[py];
+  const deity = tutelaryDeity(saved);
+  const topAspects = (a.aspects||[])
+    .slice()
+    .sort((x,y)=>x.orb-y.orb)
+    .slice(0,3)
+    .map(asp=>({
+      type: asp.type,
+      a: (PLANET_LABELS[asp.bodies[0]]||"").replace(/^[☉☽]\s*/,""),
+      b: (PLANET_LABELS[asp.bodies[1]]||"").replace(/^[☉☽]\s*/,""),
+    }));
+  return {
+    firstName: saved.firstName,
+    sunSign: a.sunSign || null,
+    moonSign: a.moonSign || null,
+    ascendantSign: a.ascendant?.sign || null,
+    nameNumber: saved.nameNumber,
+    nameNumberMeaning: numMeaning ? numMeaning[0] : null,
+    personalYear: py,
+    personalYearMeaning: pyMeaning ? pyMeaning[0] : null,
+    tutelaryDeity: deity ? deity.deityName : null,
+    topAspects,
+  };
+}
+
 // Tendances dégagées du Journal (carte la plus fréquente, thème de question le plus
 // fréquent) — null tant qu'il n'y a pas assez de tirages enregistrés pour qu'une
 // tendance ait un sens (sinon un seul tirage "deviendrait" une tendance à 100%).
@@ -1472,6 +1506,52 @@ function ensureTransits(){
     .then(()=>{ if(route==="home") render(); })
     .catch(()=>{ /* échec silencieux : pas d'horoscope aujourd'hui */ })
     .finally(()=>{ transitsFetchInFlight = false; });
+}
+
+/* ===================== PORTRAIT DE PERSONNALITÉ (généré une fois, IA) ===================== */
+// Contrairement à l'horoscope du jour (recalculé chaque jour), le portrait décrit un thème
+// natal qui ne change pas : généré une seule fois par /api/portrait, mis en cache
+// directement dans le profil (profile.portrait) — jamais régénéré tant que le profil n'est
+// pas modifié (voir bindProfilForm(), qui efface ce champ quand la date/heure/lieu change).
+function getCachedPortrait(){
+  const p = getProfile();
+  return (p && typeof p.portrait === "string") ? p.portrait : null;
+}
+async function fetchPortrait(profileSummary, code){
+  const r = await fetch("/api/portrait", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-App-Access-Code": code },
+    body: JSON.stringify({ profile: profileSummary })
+  });
+  if(r.status === 401) localStorage.removeItem("delphesAccessCode");
+  if(!r.ok) throw new Error("portrait indisponible");
+  const data = await r.json();
+  return data.portrait;
+}
+let portraitFetchInFlight = false;
+// Même logique de discrétion qu'ensureTransits() : jamais de prompt de code d'accès
+// déclenché depuis un simple affichage du Profil astral, échec silencieux (le portrait
+// n'apparaît simplement pas), et un seul appel réseau tant qu'aucun portrait n'est en cache.
+function ensurePortrait(){
+  const p = getProfile();
+  if(!p || !p.astral) return;
+  if(getCachedPortrait()) return;
+  if(portraitFetchInFlight) return;
+  const code = localStorage.getItem("delphesAccessCode");
+  if(code === null) return;
+  const summary = profileForPortrait(p);
+  if(!summary) return;
+  portraitFetchInFlight = true;
+  fetchPortrait(summary, code)
+    .then(portrait=>{
+      const fresh = getProfile();
+      if(!fresh) return;
+      fresh.portrait = portrait;
+      saveProfileData(fresh);
+      if(cardDetailReturnTo === showProfilAstral) showProfilAstral();
+    })
+    .catch(()=>{ /* échec silencieux : le portrait n'apparaît simplement pas */ })
+    .finally(()=>{ portraitFetchInFlight = false; });
 }
 
 // Reprend exactement les mêmes types d'aspect et orbes que api/_lib/astro.js (ASPECTS),
@@ -1673,14 +1753,17 @@ function home(){
   const streak = updateStreak();
   const day = MAJORS[dayOfYear() % MAJORS.length];
   const lore = CARD_LORE[day[0]];
+  const profile = getProfile();
   const links = profileMajorLinks();
   const resonates = !!(links && links.some(l => l.card[0] === day[0]));
   ensureTransits();
-  const horoscope = horoscopeDuJour(getCachedTransits(), getProfile());
+  ensurePortrait();
+  const horoscope = horoscopeDuJour(getCachedTransits(), profile);
   return `<section class="hero">
     ${homeGlowHTML()}
     <div class="hero-emblem">✦</div>
     <h2>Tarot de Delphes</h2>
+    ${profile?.firstName ? `<p class="note" style="margin-top:2px">Bonjour ${escapeHTML(profile.firstName)} ✦</p>` : ""}
     <p>Un tarot mythologique grec qui s'apprend en le regardant : tirage, symboles reliés entre eux, et un parcours d'apprentissage progressif.</p>
     ${streak > 1 ? `<span class="pill" style="margin-top:10px">✦ ${streak} jours de suite</span>` : ""}
   </section>
@@ -2212,6 +2295,44 @@ function natalSummaryParagraph(saved){
   return text;
 }
 
+// Poids donnés à chaque corps pour déterminer la "divinité tutélaire" (ci-dessous) : les
+// planètes personnelles (Soleil, Lune, Ascendant, Mercure, Vénus, Mars) pèsent lourd car
+// elles varient vraiment d'une personne à l'autre ; Jupiter/Saturne pèsent peu (partagées
+// par des cohortes de ~1-2 ans) ; Uranus/Neptune/Pluton sont volontairement exclues — elles
+// restent dans le même signe pendant 7 à 20 ans, donc partagées par toute une génération et
+// n'apportent rien à une distinction individuelle.
+const TUTELARY_WEIGHTS = { sun:4, moon:3, mercury:2, venus:2, mars:2, jupiter:1, saturn:1 };
+
+// Détermine la figure mythologique la plus représentée dans le thème natal : chaque corps
+// pesé "vote", via ZODIAC_MAJOR_LINKS (déjà utilisé pour l'horoscope et Apprendre), pour la
+// divinité associée à son signe. Les planètes proches du Soleil (Mercure, Vénus) tombent
+// souvent dans le même signe ou un signe voisin — les votes ne sont donc pas juste "celui du
+// Soleil gagne toujours", même si le Soleil reste le plus lourd en cas d'égalité.
+function tutelaryDeity(saved){
+  const a = saved?.astral;
+  if(!a || !a.bodies) return null;
+
+  const scores = {}; // clé divinité (minuscules) -> score cumulé
+  const order = [];  // ordre de rencontre, pour départager les égalités (Soleil d'abord)
+  const vote = (sign, weight) => {
+    const cardName = sign && ZODIAC_MAJOR_LINKS[sign];
+    const card = cardName && MAJORS.find(c=>c[0]===cardName);
+    if(!card) return;
+    const deityKey = card[1].toLowerCase();
+    if(!(deityKey in scores)) order.push(deityKey);
+    scores[deityKey] = (scores[deityKey]||0) + weight;
+  };
+  Object.entries(TUTELARY_WEIGHTS).forEach(([key,weight])=> vote(a.bodies[key]?.sign, weight));
+  if(a.ascendant?.sign) vote(a.ascendant.sign, 3);
+
+  if(!order.length) return null;
+  const maxScore = Math.max(...Object.values(scores));
+  const winnerKey = order.find(k => scores[k] === maxScore); // premier rencontré = priorité au Soleil
+  const card = MAJORS.find(c=>c[1].toLowerCase()===winnerKey);
+  if(!card) return null;
+  return { deityKey: winnerKey, deityName: card[1], card, note: DEITY_NOTES[winnerKey] || null };
+}
+
 // Écran Profil astral : affiche le résultat s'il existe déjà, sinon le formulaire de
 // première saisie. Comme les autres écrans "detail", le retour ramène au menu Profil.
 function showProfilAstral(){
@@ -2228,6 +2349,8 @@ function showProfilAstral(){
     requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
   };
   document.getElementById("profilEdit").onclick = ()=> showProfilEditForm();
+  bindChips(); // rend cliquable la divinité tutélaire (data-deity)
+  ensurePortrait();
 }
 
 // Formulaire de saisie/modification. `saved` (s'il existe) préremplit les champs ; le
@@ -2328,13 +2451,28 @@ function renderProfilResults(saved){
   const pm = personalMonthNumber(saved.birthDate);
   const pyMeaning = NUMBER_KEYS[py];
   const pmMeaning = NUMBER_KEYS[pm];
+  const portrait = typeof saved.portrait === "string" ? saved.portrait : null; // lu directement sur `saved` (pas via getCachedPortrait()/getProfile()) pour rester cohérent avec le reste de la fonction, qui dérive tout de son propre paramètre
   const summary = natalSummaryParagraph(saved);
+  const deity = tutelaryDeity(saved);
 
   return `<div class="detail">
     <div class="section-title"><h3>Profil astral</h3></div>
     <p class="question-recall">« ${escapeHTML(saved.firstName)} »</p>
 
-    ${summary ? `<p class="lore-text" style="margin-top:10px">${escapeHTML(summary)}</p>` : ""}
+    ${portrait
+      ? portrait.split(/\n\s*\n/).map(p=>`<p class="lore-text" style="margin-top:10px">${escapeHTML(p.trim())}</p>`).join("")
+      : (summary ? `<p class="lore-text" style="margin-top:10px">${escapeHTML(summary)}</p>` : "")}
+
+    ${deity ? `
+    <div class="section-title centered" style="margin-top:24px"><h3>Ta divinité tutélaire</h3></div>
+    <div class="symbol-list">
+      <div class="symbol clickable" data-deity="${escapeHTML(deity.deityKey)}" style="text-align:center">
+        <div style="font-size:32px">${escapeHTML(deity.card[2]||"✦")}</div>
+        <b>${escapeHTML(deity.deityName)}</b>
+        ${deity.note ? `<br><small>${escapeHTML(deity.note)}</small>` : ""}
+      </div>
+    </div>
+    <p class="note" style="text-align:center;margin-top:6px">La figure la plus présente dans ton thème natal — touche pour en savoir plus.</p>` : ""}
 
     ${numMeaning ? `<div class="symbol-list" style="margin-top:14px">
       <div class="symbol"><b>Nombre du prénom : ${saved.nameNumber} — ${escapeHTML(numMeaning[0])}</b><br>${escapeHTML(numMeaning[2])}</div>
