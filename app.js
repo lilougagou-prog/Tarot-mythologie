@@ -1351,6 +1351,70 @@ function journalTrendsForReading(){
   };
 }
 
+// Statistiques complètes sur le Journal — page dédiée (voir statsView()/showStats()),
+// distincte de journalTrends() qui ne sert que d'indice discret pour la lecture IA.
+// Contrairement à journalTrends() (qui exige JOURNAL_TRENDS_MIN_ENTRIES avant de dégager
+// une "tendance"), s'affiche dès le premier tirage enregistré : ce sont des comptages
+// bruts, lisibles quel que soit l'échantillon.
+function journalStats(){
+  if(!journal.length) return null;
+
+  const cardCounts = {};
+  const drawnNames = new Set();
+  let majorDraws = 0, minorDraws = 0, totalDraws = 0;
+  journal.forEach(j=>{
+    (j.cards||[]).forEach(name=>{
+      cardCounts[name] = (cardCounts[name]||0) + 1;
+      drawnNames.add(name);
+      totalDraws++;
+      const card = CARDS.find(c=>c[0]===name);
+      if(card && card[4]==="major") majorDraws++; else minorDraws++;
+    });
+  });
+  const topCards = Object.entries(cardCounts)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,5)
+    .map(([name,count])=>({ name, count }));
+
+  const domainCounts = {};
+  journal.forEach(j=>{
+    if(!j.question) return;
+    const d = detectDomain(j.question);
+    domainCounts[d.label] = (domainCounts[d.label]||0) + 1;
+  });
+  const domainDistribution = Object.entries(domainCounts)
+    .sort((a,b)=>b[1]-a[1])
+    .map(([label,count])=>({ label, count }));
+
+  // Répartition par type de tirage — les entrées enregistrées avant l'existence des types
+  // de tirage (Feature 4) n'ont pas de spreadType : "general" est un repli correct
+  // puisque c'était alors le seul type possible (voir saveDraw() dans bind()).
+  const spreadCounts = {};
+  journal.forEach(j=>{
+    const key = (j.spreadType && SPREADS[j.spreadType]) ? j.spreadType : "general";
+    spreadCounts[key] = (spreadCounts[key]||0) + 1;
+  });
+  const spreadDistribution = Object.keys(SPREADS)
+    .filter(k=>spreadCounts[k])
+    .map(k=>({ key:k, name:SPREADS[k].name, glyph:SPREADS[k].glyph, count:spreadCounts[k] }))
+    .sort((a,b)=>b.count-a.count);
+
+  const { streak, bestStreak } = getStreakState();
+
+  return {
+    totalReadings: journal.length,
+    totalDraws,
+    majorDraws, minorDraws,
+    majorPercent: totalDraws ? Math.round(majorDraws/totalDraws*100) : 0,
+    topCards,
+    uniqueDrawnCount: drawnNames.size,
+    neverDrawnCount: Math.max(0, CARDS.length - drawnNames.size),
+    domainDistribution,
+    spreadDistribution,
+    streak, bestStreak,
+  };
+}
+
 async function fetchAstralProfile({ date, time, place }){
   const r = await fetch("/api/astral", {
     method: "POST",
@@ -1578,16 +1642,28 @@ function dayOfYear(d){
 // Série de jours consécutifs : incrémentée une fois par jour à la première visite de
 // l'accueil (idempotent le reste de la journée), remise à 1 s'il y a eu un jour sans
 // visite entre-temps.
+// Retourne l'état de la série de jours SANS le modifier — utilisé par la page de
+// statistiques (statsView()) pour lire streak/bestStreak sans dépendre d'un appel à
+// updateStreak() (qui, lui, n'est censé être déclenché qu'une fois par jour, à l'accueil).
+function getStreakState(){
+  try{
+    const state = JSON.parse(localStorage.getItem("delphesStreak") || "null");
+    if(state && typeof state.streak === "number") return { streak: state.streak, bestStreak: typeof state.bestStreak === "number" ? state.bestStreak : state.streak };
+  }catch{ /* état corrompu, on retombe sur zéro */ }
+  return { streak:0, bestStreak:0 };
+}
 function updateStreak(){
   let state;
   try{ state = JSON.parse(localStorage.getItem("delphesStreak") || "null"); }catch{ state = null; }
-  if(!state || typeof state.streak !== "number") state = { lastVisitDate:null, streak:0 };
+  if(!state || typeof state.streak !== "number") state = { lastVisitDate:null, streak:0, bestStreak:0 };
+  if(typeof state.bestStreak !== "number") state.bestStreak = state.streak; // migration douce d'un ancien état sans bestStreak
 
   const today = localDateKey();
   if(state.lastVisitDate === today) return state.streak; // déjà compté aujourd'hui
 
   const yesterday = localDateKey(new Date(Date.now() - 24*60*60*1000));
   state.streak = (state.lastVisitDate === yesterday) ? state.streak + 1 : 1;
+  state.bestStreak = Math.max(state.bestStreak, state.streak);
   state.lastVisitDate = today;
   localStorage.setItem("delphesStreak", JSON.stringify(state));
   return state.streak;
@@ -2018,6 +2094,7 @@ function profil(){
   <div class="grid" style="margin-top:20px">
     <div class="tile" data-profil-go="astral"><strong>☉ Profil astral</strong><span>Ton thème natal complet, calculé à partir de ta date, heure et lieu de naissance.</span></div>
     <div class="tile" data-profil-go="journal"><strong>☽ Journal</strong><span>${journal.length} tirage${journal.length>1?"s":""} enregistré${journal.length>1?"s":""}.</span></div>
+    <div class="tile" data-profil-go="stats"><strong>📊 Statistiques</strong><span>Tes tendances : cartes, thèmes, série de jours.</span></div>
   </div>
   ${links ? `
   <div class="section-title centered"><h3>Arcanes majeurs liés à ton profil astral</h3></div>
@@ -2361,6 +2438,57 @@ function showJournal(){
   });
 }
 
+function statsView(){
+  const s = journalStats();
+  if(!s) return `<div class="empty"><h2>Pas encore de tirage enregistré.</h2><p>Tes statistiques apparaîtront ici dès ton premier tirage sauvegardé dans le Journal.</p></div>`;
+
+  const majorPct = s.majorPercent;
+  return `<section class="hero"><span class="pill">${s.totalReadings} tirage${s.totalReadings>1?"s":""}</span><h2>Statistiques</h2></section>
+
+  <div class="section-title centered"><h3>Série de jours</h3></div>
+  <div class="symbol-list" style="grid-template-columns:1fr 1fr">
+    <div class="symbol" style="text-align:center"><b style="font-size:28px;display:block">${s.streak}</b>jour${s.streak>1?"s":""} de suite en ce moment</div>
+    <div class="symbol" style="text-align:center"><b style="font-size:28px;display:block">${s.bestStreak}</b>meilleure série</div>
+  </div>
+
+  <div class="section-title centered" style="margin-top:28px"><h3>Majeurs / Mineurs</h3></div>
+  <p class="note" style="text-align:center">${s.majorDraws} carte${s.majorDraws>1?"s":""} majeure${s.majorDraws>1?"s":""} tirée${s.majorDraws>1?"s":""}, ${s.minorDraws} mineure${s.minorDraws>1?"s":""}, sur ${s.totalDraws} au total.</p>
+  <div class="progress" style="margin-top:10px"><span style="width:${majorPct}%"></span></div>
+  <small style="display:block;text-align:center;margin-top:6px;opacity:.7">${majorPct}% de cartes majeures</small>
+
+  <div class="section-title centered" style="margin-top:28px"><h3>Cartes qui reviennent souvent</h3></div>
+  <div class="symbol-list">
+    ${s.topCards.map(c=>`<div class="symbol"><b>${escapeHTML(c.name.replace(/^.*—\s*/,""))}</b> — ${c.count} fois</div>`).join("")}
+  </div>
+  <p class="note" style="text-align:center;margin-top:10px">${s.uniqueDrawnCount} carte${s.uniqueDrawnCount>1?"s":""} différente${s.uniqueDrawnCount>1?"s":""} tirée${s.uniqueDrawnCount>1?"s":""} sur les 78 du jeu${s.neverDrawnCount ? ` — il t'en reste ${s.neverDrawnCount} à découvrir en tirage` : ", toutes déjà croisées !"}.</p>
+
+  ${s.domainDistribution.length ? `
+  <div class="section-title centered" style="margin-top:28px"><h3>Tes thèmes de question</h3></div>
+  <div class="symbol-list">
+    ${s.domainDistribution.map(d=>`<div class="symbol"><b>${escapeHTML(d.label[0].toUpperCase()+d.label.slice(1))}</b> — ${d.count} tirage${d.count>1?"s":""}</div>`).join("")}
+  </div>` : ""}
+
+  ${s.spreadDistribution.length ? `
+  <div class="section-title centered" style="margin-top:28px"><h3>Types de tirage utilisés</h3></div>
+  <div class="symbol-list">
+    ${s.spreadDistribution.map(sp=>`<div class="symbol"><b>${sp.glyph} ${escapeHTML(sp.name)}</b> — ${sp.count} fois</div>`).join("")}
+  </div>` : ""}`;
+}
+
+function showStats(){
+  preDetailScroll = window.scrollY;
+  document.getElementById("screen").innerHTML = `<div class="detail">${statsView()}
+    <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
+  </div>`;
+  triggerScreenAnim();
+  window.scrollTo(0,0);
+  document.getElementById("detailBack").onclick = ()=>{
+    render();
+    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+  };
+  cardDetailReturnTo = showStats;
+}
+
 function showDetail(c){
   const suit = c[6], cls = c[4]==="major" ? "major" : (SUITS[suit]?.[0] || "major");
   const lore = CARD_LORE[c[0]];
@@ -2454,6 +2582,7 @@ function bind(){
       const key = el.dataset.profilGo;
       if(key==="astral") showProfilAstral();
       else if(key==="journal") showJournal();
+      else if(key==="stats") showStats();
     };
   });
   document.getElementById("homeBtn").onclick=()=>setRoute("home");
@@ -2502,7 +2631,8 @@ function bind(){
       notes: tirageState.notes || "",
       cardTexts: reading.cardTexts,
       synthesis: reading.synthesis,
-      source: reading.source
+      source: reading.source,
+      spreadType: tirageState.spreadType || "general", // absent sur les tirages enregistrés avant l'existence des types de tirage (Feature 4) : "general" est un repli correct puisque c'était alors le seul type possible.
     };
     // Met à jour l'entrée existante plutôt que d'en ajouter une nouvelle si ce tirage a
     // déjà été enregistré (le bouton dit alors "Mettre à jour" — avant, il rajoutait
