@@ -1385,18 +1385,42 @@ function journalTrendsForReading(){
   };
 }
 
+// Mémoire du Journal : est-ce qu'une des cartes tirées aujourd'hui est déjà apparue dans un
+// tirage précédent sur un sujet proche (même domaine détecté par detectDomain) ? `journal`
+// est trié du plus récent au plus ancien (unshift à l'enregistrement), donc le premier
+// match trouvé est le plus récent. Contrairement à journalTrends() (une tendance globale),
+// c'est un rappel ponctuel, propre à CE tirage précis — d'où un nom et une fonction séparés.
+// Ne renvoie jamais le texte de la question passée (vie privée) : seulement le nom de la
+// carte, sa date, et le libellé du domaine détecté.
+function cardMemory(chosenCards, question){
+  const domain = detectDomain(question);
+  if(domain === DEFAULT_DOMAIN) return null; // pas assez spécifique pour un rappel pertinent
+  const chosenNames = new Set(chosenCards.map(c=>c[0]));
+  for(const j of journal){
+    if(!j.question) continue;
+    if(detectDomain(j.question) !== domain) continue;
+    const match = (j.cards||[]).find(name => chosenNames.has(name));
+    if(match) return { cardName: match, date: j.date, domainLabel: domain.label };
+  }
+  return null;
+}
+
 // Statistiques complètes sur le Journal — page dédiée (voir statsView()/showStats()),
 // distincte de journalTrends() qui ne sert que d'indice discret pour la lecture IA.
 // Contrairement à journalTrends() (qui exige JOURNAL_TRENDS_MIN_ENTRIES avant de dégager
 // une "tendance"), s'affiche dès le premier tirage enregistré : ce sont des comptages
 // bruts, lisibles quel que soit l'échantillon.
-function journalStats(){
-  if(!journal.length) return null;
+// `entries` optionnel : sous-ensemble du Journal à analyser (par défaut, le Journal
+// entier) — réutilisé tel quel par journalStatsSince() pour ne regarder que l'année
+// écoulée dans la rétrospective annuelle, sans dupliquer cette logique.
+function journalStats(entries){
+  entries = entries || journal;
+  if(!entries.length) return null;
 
   const cardCounts = {};
   const drawnNames = new Set();
   let majorDraws = 0, minorDraws = 0, totalDraws = 0;
-  journal.forEach(j=>{
+  entries.forEach(j=>{
     (j.cards||[]).forEach(name=>{
       cardCounts[name] = (cardCounts[name]||0) + 1;
       drawnNames.add(name);
@@ -1411,7 +1435,7 @@ function journalStats(){
     .map(([name,count])=>({ name, count }));
 
   const domainCounts = {};
-  journal.forEach(j=>{
+  entries.forEach(j=>{
     if(!j.question) return;
     const d = detectDomain(j.question);
     domainCounts[d.label] = (domainCounts[d.label]||0) + 1;
@@ -1424,7 +1448,7 @@ function journalStats(){
   // de tirage (Feature 4) n'ont pas de spreadType : "general" est un repli correct
   // puisque c'était alors le seul type possible (voir saveDraw() dans bind()).
   const spreadCounts = {};
-  journal.forEach(j=>{
+  entries.forEach(j=>{
     const key = (j.spreadType && SPREADS[j.spreadType]) ? j.spreadType : "general";
     spreadCounts[key] = (spreadCounts[key]||0) + 1;
   });
@@ -1436,7 +1460,7 @@ function journalStats(){
   const { streak, bestStreak } = getStreakState();
 
   return {
-    totalReadings: journal.length,
+    totalReadings: entries.length,
     totalDraws,
     majorDraws, minorDraws,
     majorPercent: totalDraws ? Math.round(majorDraws/totalDraws*100) : 0,
@@ -1447,6 +1471,27 @@ function journalStats(){
     spreadDistribution,
     streak, bestStreak,
   };
+}
+
+// Date d'une entrée du Journal ("date" est un texte déjà formaté par
+// toLocaleString("fr-FR"), pas une date ISO) -> objet Date, ou null si illisible. Utilisé
+// uniquement pour scoper la rétrospective annuelle à "l'année écoulée" ; journalStats()
+// lui-même n'a pas besoin de dates exploitables (il fonctionne sur le Journal entier).
+function parseJournalDate(str){
+  const m = /^(\d{2})\/(\d{2})\/(\d{4})/.exec(str||"");
+  if(!m) return null;
+  const d = new Date(Number(m[3]), Number(m[2])-1, Number(m[1]));
+  return isNaN(d.getTime()) ? null : d;
+}
+
+// journalStats(), restreint aux entrées dont la date est postérieure ou égale à `fromDate`.
+// Les entrées à la date illisible sont ignorées (repli silencieux, pas d'erreur).
+function journalStatsSince(fromDate){
+  const scoped = journal.filter(j=>{
+    const d = parseJournalDate(j.date);
+    return d && d >= fromDate;
+  });
+  return journalStats(scoped);
 }
 
 async function fetchAstralProfile({ date, time, place }){
@@ -1554,6 +1599,136 @@ function ensurePortrait(){
     .finally(()=>{ portraitFetchInFlight = false; });
 }
 
+/* ===================== RÉTROSPECTIVE ANNUELLE (une fois par an, IA) ===================== */
+// Déclenchée à l'anniversaire de naissance (pas le 1er janvier — c'est le repère le plus
+// intuitif pour "une année de ta vie", même si la numérologie du temps, elle, suit l'année
+// civile) : compare le comportement observé (getFullYear()) au dernier généré, jamais deux
+// fois la même année.
+function hasBirthdayPassedThisYear(birthDate, now){
+  now = now || new Date();
+  const parts = (birthDate||"").split("-").map(Number);
+  const bm = parts[1], bd = parts[2];
+  if(!bm || !bd) return false;
+  const thisYearBirthday = new Date(now.getFullYear(), bm-1, bd);
+  return now >= thisYearBirthday;
+}
+const RETROSPECTIVE_MIN_ENTRIES = 3; // même seuil que journalTrends() : en dessous, pas assez de matière pour un vrai bilan
+function getCachedRetrospective(){
+  try{
+    const cached = JSON.parse(localStorage.getItem("delphesRetrospective") || "null");
+    if(cached && typeof cached.text === "string" && typeof cached.year === "number") return cached;
+  }catch{ /* cache corrompu, on retombe sur null */ }
+  return null;
+}
+// Résumé agrégé du Journal de l'année écoulée, prêt à envoyer à /api/retrospective — jamais
+// le texte des questions ni des notes personnelles.
+function retrospectiveSummary(stats, profile){
+  return {
+    firstName: profile.firstName || null,
+    totalReadings: stats.totalReadings,
+    majorPercent: stats.majorPercent,
+    topCards: stats.topCards.slice(0,3).map(c=>({ name: c.name.replace(/^.*—\s*/,""), count: c.count })),
+    topDomains: stats.domainDistribution.slice(0,3).map(d=>({ label: d.label, count: d.count })),
+    bestStreak: stats.bestStreak,
+  };
+}
+async function fetchRetrospective(summary, code){
+  const r = await fetch("/api/retrospective", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-App-Access-Code": code },
+    body: JSON.stringify({ summary })
+  });
+  if(r.status === 401) localStorage.removeItem("delphesAccessCode");
+  if(!r.ok) throw new Error("rétrospective indisponible");
+  const data = await r.json();
+  return data.retrospective;
+}
+let retrospectiveFetchInFlight = false;
+// Même logique de discrétion qu'ensureTransits()/ensurePortrait() : jamais de prompt de
+// code d'accès depuis un simple chargement de l'accueil, échec silencieux, un seul appel
+// tant qu'aucune rétrospective n'existe pour l'année en cours.
+function ensureRetrospective(){
+  const p = getProfile();
+  if(!p || !p.birthDate) return;
+  const now = new Date();
+  if(!hasBirthdayPassedThisYear(p.birthDate, now)) return;
+  const cached = getCachedRetrospective();
+  if(cached && cached.year === now.getFullYear()) return;
+  if(retrospectiveFetchInFlight) return;
+  const oneYearAgo = new Date(now.getFullYear()-1, now.getMonth(), now.getDate());
+  const stats = journalStatsSince(oneYearAgo);
+  if(!stats || stats.totalReadings < RETROSPECTIVE_MIN_ENTRIES) return;
+  const code = localStorage.getItem("delphesAccessCode");
+  if(code === null) return;
+  retrospectiveFetchInFlight = true;
+  fetchRetrospective(retrospectiveSummary(stats, p), code)
+    .then(text=>{
+      localStorage.setItem("delphesRetrospective", JSON.stringify({ year: now.getFullYear(), text }));
+      if(route==="home") render();
+    })
+    .catch(()=>{ /* échec silencieux : pas de rétrospective cette année, réessayé à la prochaine visite */ })
+    .finally(()=>{ retrospectiveFetchInFlight = false; });
+}
+
+/* ===================== RITUEL DU JOUR (recommandation unifiée, IA, 1x/jour) ===================== */
+// Contrairement au portrait et à la rétrospective (générés une fois), rappelé une fois par
+// jour — coût récurrent, du même ordre qu'une lecture à 1 carte. Fusionne carte du jour +
+// transits du jour + mois personnel en UNE recommandation, plutôt que trois blocs séparés
+// à interpréter soi-même (voir "Horoscope du jour" et "Carte du jour", qui restent affichés
+// indépendamment : le rituel n'est qu'une synthèse en plus, jamais un remplacement).
+function ritualSummary(profile, dayCard, transits){
+  if(!dayCard) return null;
+  const pm = profile ? personalMonthNumber(profile.birthDate) : null;
+  const pmMeaning = NUMBER_KEYS[pm];
+  return {
+    firstName: profile?.firstName || null,
+    dayCardName: cardFullName(dayCard),
+    dayCardKeywords: (dayCard[3]||"").split("·")[0].trim(),
+    sunSign: transits?.sun?.sign || null,
+    moonSign: transits?.moon?.sign || null,
+    personalMonth: pm,
+    personalMonthMeaning: pmMeaning ? pmMeaning[0] : null,
+  };
+}
+function getCachedRitual(){
+  try{
+    const cached = JSON.parse(localStorage.getItem("delphesRitual") || "null");
+    if(cached && cached.date === localDateKey()) return cached.text;
+  }catch{ /* cache corrompu, on retombe sur null */ }
+  return null;
+}
+async function fetchRitual(summary, code){
+  const r = await fetch("/api/ritual", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-App-Access-Code": code },
+    body: JSON.stringify({ summary })
+  });
+  if(r.status === 401) localStorage.removeItem("delphesAccessCode");
+  if(!r.ok) throw new Error("rituel du jour indisponible");
+  const data = await r.json();
+  localStorage.setItem("delphesRitual", JSON.stringify({ date: localDateKey(), text: data.ritual }));
+  return data.ritual;
+}
+let ritualFetchInFlight = false;
+// Même logique de discrétion que les autres ensure*() : jamais de prompt de code d'accès
+// depuis un simple chargement de l'accueil, échec silencieux (les blocs Horoscope/Carte du
+// jour restent affichés indépendamment, rien n'est perdu), un seul appel par jour.
+function ensureRitual(dayCard, transits){
+  const profile = getProfile();
+  if(!profile?.astral) return;
+  if(getCachedRitual()) return;
+  if(ritualFetchInFlight) return;
+  const code = localStorage.getItem("delphesAccessCode");
+  if(code === null) return;
+  const summary = ritualSummary(profile, dayCard, transits);
+  if(!summary) return;
+  ritualFetchInFlight = true;
+  fetchRitual(summary, code)
+    .then(()=>{ if(route==="home") render(); })
+    .catch(()=>{ /* échec silencieux */ })
+    .finally(()=>{ ritualFetchInFlight = false; });
+}
+
 // Reprend exactement les mêmes types d'aspect et orbes que api/_lib/astro.js (ASPECTS),
 // pour rester cohérent avec le calcul déjà fait côté serveur pour le thème natal.
 const CLIENT_ASPECTS = [
@@ -1628,10 +1803,11 @@ async function generateAIReading(question, cards, positions){
   const timeout = new Promise((_,reject)=>setTimeout(()=>reject(new Error("timeout")), 15000));
   const profile = profileForReading();
   const history = journalTrendsForReading();
+  const memory = cardMemory(cards, question);
   const call = fetch("/api/reading", {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-App-Access-Code": getAccessCode() },
-    body: JSON.stringify({ question, cards, positions, ...(profile ? { profile } : {}), ...(history ? { history } : {}) })
+    body: JSON.stringify({ question, cards, positions, ...(profile ? { profile } : {}), ...(history ? { history } : {}), ...(memory ? { memory } : {}) })
   }).then(async r=>{
     if(r.status === 401){
       // Code manquant/incorrect : on l'efface pour qu'il soit redemandé au prochain tirage.
@@ -1758,7 +1934,13 @@ function home(){
   const resonates = !!(links && links.some(l => l.card[0] === day[0]));
   ensureTransits();
   ensurePortrait();
-  const horoscope = horoscopeDuJour(getCachedTransits(), profile);
+  ensureRetrospective();
+  const cachedTransits = getCachedTransits();
+  ensureRitual(day, cachedTransits);
+  const horoscope = horoscopeDuJour(cachedTransits, profile);
+  const ritual = getCachedRitual();
+  const retrospective = getCachedRetrospective();
+  const retrospectiveReady = retrospective && retrospective.year === new Date().getFullYear();
   return `<section class="hero">
     ${homeGlowHTML()}
     <div class="hero-emblem">✦</div>
@@ -1767,6 +1949,11 @@ function home(){
     <p>Un tarot mythologique grec qui s'apprend en le regardant : tirage, symboles reliés entre eux, et un parcours d'apprentissage progressif.</p>
     ${streak > 1 ? `<span class="pill" style="margin-top:10px">✦ ${streak} jours de suite</span>` : ""}
   </section>
+  ${retrospectiveReady ? `<div class="grid" style="margin-bottom:20px">
+    <div class="tile" data-go-retrospective="1"><strong>🎂 Ta rétrospective de l'année</strong><span>Un an de tirages, résumé pour toi.</span></div>
+  </div>` : ""}
+  ${ritual ? `<div class="section-title centered"><h3>Ton rituel du jour</h3></div>
+  <p class="lore-text" style="max-width:560px;margin:0 auto 20px;text-align:center;opacity:.9;font-weight:500">${escapeHTML(ritual)}</p>` : ""}
   ${horoscope ? `<div class="section-title centered"><h3>Horoscope du jour</h3></div>
   <p class="lore-text" style="max-width:560px;margin:0 auto 20px;text-align:center;opacity:.85">${escapeHTML(horoscope)}</p>` : ""}
   <div class="section-title centered"><h3>Carte du jour</h3></div>
@@ -2627,6 +2814,26 @@ function showStats(){
   cardDetailReturnTo = showStats;
 }
 
+function retrospectiveView(){
+  const r = getCachedRetrospective();
+  if(!r) return `<div class="empty"><h2>Pas encore de rétrospective.</h2></div>`;
+  return `<section class="hero"><span class="pill">🎂 ${r.year}</span><h2>Ta rétrospective</h2></section>
+  ${r.text.split(/\n\s*\n/).map(p=>`<p class="lore-text" style="margin-top:10px">${escapeHTML(p.trim())}</p>`).join("")}`;
+}
+function showRetrospective(){
+  preDetailScroll = window.scrollY;
+  document.getElementById("screen").innerHTML = `<div class="detail">${retrospectiveView()}
+    <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
+  </div>`;
+  triggerScreenAnim();
+  window.scrollTo(0,0);
+  document.getElementById("detailBack").onclick = ()=>{
+    render();
+    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+  };
+  cardDetailReturnTo = showRetrospective;
+}
+
 function showDetail(c){
   const suit = c[6], cls = c[4]==="major" ? "major" : (SUITS[suit]?.[0] || "major");
   const lore = CARD_LORE[c[0]];
@@ -2706,6 +2913,7 @@ function bind(){
   cardDetailReturnTo = () => render();
   document.querySelectorAll("[data-route]").forEach(b=>b.onclick=()=>setRoute(b.dataset.route));
   document.querySelectorAll("[data-go]").forEach(el=>el.onclick=()=>setRoute(el.dataset.go));
+  document.querySelectorAll("[data-go-retrospective]").forEach(el=>el.onclick=()=>showRetrospective());
   document.querySelectorAll("[data-learn]").forEach(el=>{
     el.onclick = ()=>{
       const key = el.dataset.learn;
