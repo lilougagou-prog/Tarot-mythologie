@@ -2886,10 +2886,15 @@ function showLearnSuit(kind, suit){
 function showLearnFigures(){
   preDetailScroll = window.scrollY;
   const entries = Object.entries(DEITY_NOTES).sort((a,b)=>a[0].localeCompare(b[0],"fr"));
+  // Recherche en direct, même mécanisme que symboles() (#symbolSearch/[data-search]) mais
+  // avec son propre id : cet écran ne passe pas par render()/bind(), qui ne câble que
+  // #symbolSearch — un id dédié, câblé ici même, reste cohérent avec le reste de l'écran
+  // qui gère déjà son propre bindChips() plutôt que de dépendre de bind().
   document.getElementById("screen").innerHTML = `<div class="detail">
     <div class="section-title"><h3>Figures mythologiques</h3></div>
     <p class="note">${entries.length} figures citées dans le jeu — certaines ont leur propre carte, d'autres n'apparaissent que dans une lecture.</p>
-    <div class="symbol-list">${entries.map(([id,note])=>`<div class="symbol clickable" data-deity="${escapeHTML(id)}"><b>${escapeHTML(id.charAt(0).toUpperCase()+id.slice(1))}</b><br><small>${escapeHTML(note)}</small></div>`).join("")}</div>
+    <div class="search"><input id="figuresSearch" placeholder="Rechercher une figure…"></div>
+    <div class="symbol-list" style="margin-top:14px">${entries.map(([id,note])=>`<div class="symbol clickable" data-deity="${escapeHTML(id)}" data-search="${escapeHTML((id+" "+note).toLowerCase())}"><b>${escapeHTML(id.charAt(0).toUpperCase()+id.slice(1))}</b><br><small>${escapeHTML(note)}</small></div>`).join("")}</div>
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
   triggerScreenAnim("detail");
@@ -2907,6 +2912,11 @@ function showLearnFigures(){
   // Pour qu'une figure cliquée dans cette liste revienne bien ici plutôt que de sauter
   // au menu Apprendre (même logique que showSymbolDetail() etc.).
   cardDetailReturnTo = () => showLearnFigures();
+  const search = document.getElementById("figuresSearch");
+  search.addEventListener("input", ()=>{
+    const q = search.value.toLowerCase().trim();
+    document.querySelectorAll("#screen [data-search]").forEach(el=>{ el.hidden = q && !el.dataset.search.includes(q); });
+  });
   bindChips();
 }
 
