@@ -1,10 +1,15 @@
 // Backend serverless (Vercel) — rédige UNE recommandation concrète pour la journée en
-// cours, qui relie carte du jour + transits du jour + mois personnel en un conseil
-// cohérent plutôt que trois blocs séparés à interpréter soi-même.
+// cours, qui relie carte du jour + transits du jour (signes + aspect le plus marqué avec
+// le thème natal) + mois personnel en un conseil cohérent plutôt que des blocs séparés à
+// interpréter soi-même. Absorbe ce que faisait un ancien bloc "Horoscope du jour" affiché
+// à part (redondant : mêmes signes du jour, juste dits autrement).
 //
 // Reçoit en POST : { summary: { firstName?, dayCardName, dayCardKeywords?, sunSign?,
-//   moonSign?, personalMonth?, personalMonthMeaning? } }
+//   moonSign?, transitAspect?: {body, action, natal}, personalMonth?, personalMonthMeaning? } }
 //   - dayCardName : seul champ obligatoire (nom de la carte du jour).
+//   - transitAspect (voir strongestTransitAspect() dans app.js) : l'aspect le plus marqué
+//     entre une planète rapide du jour et un point du thème natal, déjà mis en mots par le
+//     client (ex. body:"Mercure", action:"met sous tension", natal:"ton monde intérieur").
 //   - Résumé agrégé uniquement (voir ritualSummary() dans app.js) — jamais de données du
 //     Journal ni de questions personnelles.
 // Renvoie : { ritual: string } — 2-3 phrases, prêtes à être affichées telles quelles.
@@ -61,6 +66,10 @@ module.exports = async function handler(req, res) {
   const lines = [`Carte du jour : ${summary.dayCardName.trim()}${typeof summary.dayCardKeywords === "string" && summary.dayCardKeywords ? ` (${summary.dayCardKeywords})` : ""}`];
   if (typeof summary.sunSign === "string" && summary.sunSign) lines.push(`Soleil du jour en ${summary.sunSign}`);
   if (typeof summary.moonSign === "string" && summary.moonSign) lines.push(`Lune du jour en ${summary.moonSign}`);
+  const ta = summary.transitAspect;
+  if (ta && typeof ta.body === "string" && typeof ta.action === "string" && typeof ta.natal === "string") {
+    lines.push(`Aspect du jour le plus marqué avec son thème natal : ${ta.body} ${ta.action} ${ta.natal}`);
+  }
   if (Number.isFinite(summary.personalMonth)) {
     const meaning = typeof summary.personalMonthMeaning === "string" ? summary.personalMonthMeaning : null;
     lines.push(`Mois personnel : ${summary.personalMonth}${meaning ? ` (${meaning})` : ""}`);
