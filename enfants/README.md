@@ -8,7 +8,7 @@ Pour la tester en local : servir ce dossier avec n'importe quel serveur statique
 16 fiches (les 12 Olympiens + Hadès, Perséphone, Héraclès et Pan), chacune avec un nom, un titre, un domaine, un symbole, une description et une « info rigolote », pensées pour un enfant de 6 ans (pas de scène violente ou effrayante).
 
 ## Mini-jeux
-- **Coloriage** — un emblème SVG par dieu (fond, couronne de laurier, symbole, étoiles), à colorier région par région.
+- **Coloriage** — deux moteurs cohabitent : pour les dieux listés dans `COLORING_IMAGES` (`game-coloriage.js`), une illustration dessinée (PNG, `assets/coloriage/`) coloriable au « pot de peinture » (remplissage par propagation sur canvas, borné par les traits noirs) ; pour les autres, l'emblème SVG généré en JS (fond, couronne de laurier, symbole, étoiles), colorié région par région. Pour ajouter une illustration à un dieu qui n'en a pas encore : déposer le PNG dans `assets/coloriage/` et ajouter une entrée dans `COLORING_IMAGES`.
 - **Objets cachés** — retrouver les symboles dispersés dans une scène et les associer au bon dieu.
 - **Labyrinthe** — labyrinthe généré aléatoirement (3 niveaux de difficulté), à parcourir au clavier, à la souris ou au D-pad tactile, pour retrouver un dieu.
 - **Mémo** — jeu de paires classique (carte « nom du dieu » ↔ carte « symbole »), en 6 ou 8 paires.
