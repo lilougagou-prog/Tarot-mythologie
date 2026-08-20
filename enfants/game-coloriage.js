@@ -22,13 +22,21 @@ const COLORING_IMAGES = {
   athena: "assets/coloriage/athena.png",
   apollon: "assets/coloriage/apollon.png",
   artemis: "assets/coloriage/artemis.png",
+  aphrodite: "assets/coloriage/aphrodite.png",
+  demeter: "assets/coloriage/demeter.png",
+  dionysos: "assets/coloriage/dionysos.png",
+  hephaistos: "assets/coloriage/hephaistos.png",
+  hestia: "assets/coloriage/hestia.png",
 };
 
 // résolution de travail max du canvas (largeur, en px) : suffisant pour un
 // dessin net à l'écran, tout en gardant le remplissage rapide sur mobile.
 const COL_CANVAS_MAX_WIDTH = 800;
 // luminosité (0-255) en dessous de laquelle un pixel est considéré comme un
-// trait noir (frontière), et non comme une zone à colorier.
+// trait noir (frontière), et non comme une zone à colorier. Assez strict
+// pour ne jamais laisser le remplissage déborder au travers d'un trait fin,
+// même antialiasé (testé sur toutes les illustrations : marge blanche fine
+// mais nette autour de chaque trait plutôt qu'un débordement).
 const COL_LINE_THRESHOLD = 246;
 
 function col_hexToRgb(hex) {
@@ -191,8 +199,9 @@ function renderColoriageImageGame(container, god) {
     currentData = ctx.createImageData(width, height);
     currentData.data.set(originalData.data);
 
-    fillableMask = new Uint8Array(width * height);
     everFilled = new Uint8Array(width * height);
+
+    fillableMask = new Uint8Array(width * height);
     totalFillable = 0;
     for (let i = 0; i < width * height; i++) {
       const o = i * 4;
@@ -252,14 +261,44 @@ function renderColoriageImageGame(container, god) {
     checkComplete();
   }
 
-  canvas.addEventListener("click", (ev) => {
-    if (!ctx) return;
+  // Peindre au doigt/souris : un simple clic remplit une zone, mais glisser
+  // (comme un pinceau) remplit d'affilée toutes les petites zones traversées
+  // — bien plus rapide sur les dessins avec beaucoup de petits détails (plis,
+  // mèches...) qu'un tapotement zone par zone.
+  let dragging = false;
+  let lastX = -1;
+  let lastY = -1;
+
+  const pixelFromEvent = (ev) => {
     const rect = canvas.getBoundingClientRect();
-    const x = Math.floor(((ev.clientX - rect.left) / rect.width) * width);
-    const y = Math.floor(((ev.clientY - rect.top) / rect.height) * height);
+    return {
+      x: Math.floor(((ev.clientX - rect.left) / rect.width) * width),
+      y: Math.floor(((ev.clientY - rect.top) / rect.height) * height),
+    };
+  };
+
+  canvas.addEventListener("pointerdown", (ev) => {
+    if (!ctx) return;
+    dragging = true;
+    canvas.setPointerCapture(ev.pointerId);
+    const { x, y } = pixelFromEvent(ev);
+    lastX = x;
+    lastY = y;
+    if (x >= 0 && x < width && y >= 0 && y < height) floodFill(x, y);
+  });
+  canvas.addEventListener("pointermove", (ev) => {
+    if (!dragging || !ctx) return;
+    const { x, y } = pixelFromEvent(ev);
     if (x < 0 || x >= width || y < 0 || y >= height) return;
+    if (Math.abs(x - lastX) < 5 && Math.abs(y - lastY) < 5) return;
+    lastX = x;
+    lastY = y;
     floodFill(x, y);
   });
+  const stopDragging = () => (dragging = false);
+  canvas.addEventListener("pointerup", stopDragging);
+  canvas.addEventListener("pointerleave", stopDragging);
+  canvas.addEventListener("pointercancel", stopDragging);
 
   wrap.querySelector("#col-clear").addEventListener("click", () => {
     if (!ctx) return;
@@ -273,7 +312,10 @@ function renderColoriageImageGame(container, god) {
 
   function checkComplete() {
     if (celebrated || !totalFillable) return;
-    if (coloredCount / totalFillable < 0.9) return;
+    // Seuil volontairement pas trop strict : certains dessins ont beaucoup
+    // de tout petits détails (mèches, plis) qu'un enfant ne coloriera pas
+    // forcément un par un, et ce n'est pas grave.
+    if (coloredCount / totalFillable < 0.7) return;
     celebrated = true;
     markColored(god.id);
     confettiBurst();

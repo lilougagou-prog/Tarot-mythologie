@@ -5,7 +5,7 @@ Application web (PWA) pour enfants dès 6 ans, pour découvrir les dieux et hér
 Pour la tester en local : servir ce dossier avec n'importe quel serveur statique (ex. `npx serve enfants` ou `python3 -m http.server` depuis `enfants/`) et ouvrir `index.html`. Le déploiement se fait comme un site statique classique, à l'adresse `/enfants/`.
 
 ## Contenu
-16 fiches (les 12 Olympiens + Hadès, Perséphone, Héraclès et Pan), chacune avec un nom, un titre, un domaine, un symbole, une description et une « info rigolote », pensées pour un enfant de 6 ans (pas de scène violente ou effrayante).
+17 fiches (les 12 Olympiens + Hadès, Perséphone, Héraclès, Pan et Hestia), chacune avec un nom, un titre, un domaine, un symbole, une description et une « info rigolote », pensées pour un enfant de 6 ans (pas de scène violente ou effrayante).
 
 ## Mini-jeux
 - **Coloriage** — deux moteurs cohabitent : pour les dieux listés dans `COLORING_IMAGES` (`game-coloriage.js`), une illustration dessinée (PNG, `assets/coloriage/`) coloriable au « pot de peinture » (remplissage par propagation sur canvas, borné par les traits noirs) ; pour les autres, l'emblème SVG généré en JS (fond, couronne de laurier, symbole, étoiles), colorié région par région. Pour ajouter une illustration à un dieu qui n'en a pas encore : déposer le PNG dans `assets/coloriage/` et ajouter une entrée dans `COLORING_IMAGES`.
@@ -18,7 +18,7 @@ La progression (dieux découverts, coloriages terminés, parties jouées) est en
 ## Structure
 - `index.html` — structure de la page, chargement des polices (Baloo 2) et des scripts
 - `styles.css` — tous les styles
-- `data.js` — fiches des 16 dieux/héros (`GODS`)
+- `data.js` — fiches des 17 dieux/héros (`GODS`)
 - `icons.js` — bibliothèque de 16 symboles vectoriels dessinés en JS (`SYMBOLS`), rendu en badge plat ou en régions coloriables, + gabarit de page de coloriage (`buildColoringPage`)
 - `progress.js` — progression (`localStorage`) et animation de confettis
 - `app.js` — routeur (hash-based), écran d'accueil, galerie des dieux, fiche détaillée
