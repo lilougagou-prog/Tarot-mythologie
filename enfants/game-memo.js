@@ -64,9 +64,12 @@ function renderMemoGame(container) {
       el.type = "button";
       el.className = "memo-card";
       el.style.setProperty("--god-color", god.color);
+      const portrait = PORTRAIT_IMAGES[god.id];
       const face =
         card.type === "god"
-          ? `<div class="memo-face memo-face-god">${god.name}</div>`
+          ? portrait
+            ? `<div class="memo-face memo-face-portrait"><img src="${portrait}" alt="${god.name}"><span>${god.name}</span></div>`
+            : `<div class="memo-face memo-face-god">${god.name}</div>`
           : `<div class="memo-face memo-face-symbol">${renderSymbolBadge(god.symbol)}</div>`;
       el.innerHTML = `
         <div class="memo-card-inner">
