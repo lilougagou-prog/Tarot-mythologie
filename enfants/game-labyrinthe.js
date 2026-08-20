@@ -8,6 +8,9 @@ const MAZE_LEVELS = [
   { key: "difficile", label: "Difficile", size: 11 },
 ];
 
+// petits objets purement décoratifs semés sur le chemin (aucun effet de jeu)
+const MAZE_DECOR = ["🏺", "🛡️", "📜", "🌿", "🏛️"];
+
 // Astérion, le petit Minotaure : mascotte du labyrinthe, dessinée mignonne et
 // souriante à dessein (grands yeux, cornes toutes rondes) — pas question de
 // faire peur ! C'est aussi son vrai nom dans la mythologie.
@@ -72,10 +75,10 @@ function renderLabyrintheGame(container) {
   const wrap = document.createElement("section");
   wrap.className = "maze-screen";
   wrap.innerHTML = `
-    <p class="screen-intro">Aide Astérion, le gentil Minotaure, à sortir de son labyrinthe pour retrouver un dieu !</p>
+    <p class="screen-intro maze-banner">Aide Astérion, le gentil Minotaure, à sortir de son labyrinthe pour retrouver un dieu !</p>
     <p class="screen-subintro">💡 Le sais-tu ? Dans la mythologie, le Minotaure s'appelle en réalité Astérion.</p>
     <div class="maze-levels" id="maze-levels"></div>
-    <div class="maze-wrap"><div class="maze-grid" id="maze-grid"></div></div>
+    <div class="maze-frame"><div class="maze-wrap"><div class="maze-grid" id="maze-grid"></div></div></div>
     <div class="dpad" id="maze-dpad">
       <button type="button" class="dpad-btn dpad-up" data-dir="up" aria-label="Haut">▲</button>
       <button type="button" class="dpad-btn dpad-left" data-dir="left" aria-label="Gauche">◀</button>
@@ -119,23 +122,45 @@ function renderLabyrintheGame(container) {
     gridEl.style.gridTemplateRows = `repeat(${rows}, ${cellPx}px)`;
     gridEl.innerHTML = "";
 
+    const wallColor = "#8a6a3d";
+    const openCells = [];
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         const cell = cells[r][c];
         const div = document.createElement("div");
         div.className = "maze-cell";
-        div.style.borderTop = cell.N ? "3px solid #2b2b2b" : "3px solid transparent";
-        div.style.borderRight = cell.E ? "3px solid #2b2b2b" : "3px solid transparent";
-        div.style.borderBottom = cell.S ? "3px solid #2b2b2b" : "3px solid transparent";
-        div.style.borderLeft = cell.W ? "3px solid #2b2b2b" : "3px solid transparent";
-        if (r === rows - 1 && c === cols - 1) {
+        div.style.borderTop = cell.N ? `3px solid ${wallColor}` : "3px solid transparent";
+        div.style.borderRight = cell.E ? `3px solid ${wallColor}` : "3px solid transparent";
+        div.style.borderBottom = cell.S ? `3px solid ${wallColor}` : "3px solid transparent";
+        div.style.borderLeft = cell.W ? `3px solid ${wallColor}` : "3px solid transparent";
+        const isStart = r === 0 && c === 0;
+        const isGoal = r === rows - 1 && c === cols - 1;
+        if (isGoal) {
           div.classList.add("maze-goal");
           div.innerHTML = renderSymbolBadge(goalGod.symbol);
           div.style.setProperty("--god-color", goalGod.color);
+        } else if (!isStart) {
+          openCells.push({ r, c });
         }
         gridEl.appendChild(div);
       }
     }
+
+    // quelques objets grecs semés sur le chemin, juste pour le décor
+    const decorCount = Math.min(MAZE_DECOR.length, Math.floor((cols * rows) / 16));
+    shuffleArray(openCells)
+      .slice(0, decorCount)
+      .forEach((cell, i) => {
+        const deco = document.createElement("div");
+        deco.className = "maze-decor";
+        deco.style.left = cell.c * cellPx + "px";
+        deco.style.top = cell.r * cellPx + "px";
+        deco.style.width = cellPx + "px";
+        deco.style.height = cellPx + "px";
+        deco.style.fontSize = cellPx * 0.55 + "px";
+        deco.textContent = MAZE_DECOR[i % MAZE_DECOR.length];
+        gridEl.appendChild(deco);
+      });
 
     let player = gridEl.querySelector(".maze-player");
     if (!player) {

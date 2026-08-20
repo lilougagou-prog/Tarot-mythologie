@@ -253,6 +253,39 @@ function shuffleArray(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
 }
 
+// Portraits et cartes-attributs illustrés (Mémo + Retrouve les attributs).
+// Seuls 12 des 17 dieux/héros en ont pour l'instant ; le reste garde le
+// traitement texte/SVG existant.
+const PORTRAIT_IMAGES = {
+  zeus: "assets/memo/zeus.jpg",
+  hera: "assets/memo/hera.jpg",
+  poseidon: "assets/memo/poseidon.jpg",
+  athena: "assets/memo/athena.jpg",
+  apollon: "assets/memo/apollon.jpg",
+  artemis: "assets/memo/artemis.jpg",
+  ares: "assets/memo/ares.jpg",
+  aphrodite: "assets/memo/aphrodite.jpg",
+  hermes: "assets/memo/hermes.jpg",
+  dionysos: "assets/memo/dionysos.jpg",
+  hestia: "assets/memo/hestia.jpg",
+  demeter: "assets/memo/demeter.jpg",
+};
+
+const ATTRIBUTE_IMAGES = {
+  zeus: "assets/memo/zeus-attr.jpg",
+  hera: "assets/memo/hera-attr.jpg",
+  poseidon: "assets/memo/poseidon-attr.jpg",
+  athena: "assets/memo/athena-attr.jpg",
+  apollon: "assets/memo/apollon-attr.jpg",
+  artemis: "assets/memo/artemis-attr.jpg",
+  ares: "assets/memo/ares-attr.jpg",
+  aphrodite: "assets/memo/aphrodite-attr.jpg",
+  hermes: "assets/memo/hermes-attr.jpg",
+  dionysos: "assets/memo/dionysos-attr.jpg",
+  hestia: "assets/memo/hestia-attr.jpg",
+  demeter: "assets/memo/demeter-attr.jpg",
+};
+
 function randomGods(count, excludeIds) {
   const pool = GODS.filter((g) => !excludeIds || !excludeIds.includes(g.id));
   return shuffleArray(pool).slice(0, count);

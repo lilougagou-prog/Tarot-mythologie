@@ -26,7 +26,7 @@ const GAMES_MENU = [
     key: "labyrinthe",
     emoji: "🧭",
     title: "Labyrinthe",
-    desc: "Aide le petit hibou à traverser le labyrinthe.",
+    desc: "Aide Astérion à sortir de son labyrinthe.",
     color: "#3b5bdb",
   },
   {
@@ -35,6 +35,13 @@ const GAMES_MENU = [
     title: "Mémo",
     desc: "Retourne les cartes et retrouve les bonnes paires.",
     color: "#f59f00",
+  },
+  {
+    key: "attributs",
+    emoji: "⚡",
+    title: "Retrouve les attributs",
+    desc: "Associe chaque objet au dieu à qui il appartient.",
+    color: "#ae3ec9",
   },
 ];
 
@@ -92,6 +99,10 @@ function router() {
     case "memo":
       setHeader("Mémo", true);
       renderMemoGame(screenEl);
+      break;
+    case "attributs":
+      setHeader("Retrouve les attributs", true);
+      renderAttributsGame(screenEl);
       break;
     default:
       setHeader("Mini Olympe", false);
@@ -165,8 +176,12 @@ function renderGalerie(container) {
     card.className = "god-card";
     card.style.setProperty("--god-color", g.color);
     const found = p.discovered.includes(g.id);
+    const portrait = PORTRAIT_IMAGES[g.id];
+    const badge = portrait
+      ? `<div class="god-card-badge god-card-portrait"><img src="${portrait}" alt="${g.name}"></div>`
+      : `<div class="god-card-badge">${renderSymbolBadge(g.symbol)}</div>`;
     card.innerHTML = `
-      <div class="god-card-badge">${renderSymbolBadge(g.symbol)}</div>
+      ${badge}
       <div class="god-card-name">${g.name}</div>
       <div class="god-card-title">${g.title}</div>
       ${found ? '<div class="god-card-found" title="Découvert">⭐</div>' : ""}
@@ -191,12 +206,17 @@ function renderFiche(container, id) {
   const prev = GODS[(idx - 1 + GODS.length) % GODS.length];
   const next = GODS[(idx + 1) % GODS.length];
 
+  const portrait = PORTRAIT_IMAGES[god.id];
+  const ficheBadge = portrait
+    ? `<div class="fiche-badge fiche-portrait"><img src="${portrait}" alt="${god.name}"></div>`
+    : `<div class="fiche-badge">${renderSymbolBadge(god.symbol)}</div>`;
+
   const wrap = document.createElement("section");
   wrap.className = "fiche";
   wrap.style.setProperty("--god-color", god.color);
   wrap.style.setProperty("--god-accent", god.accent);
   wrap.innerHTML = `
-    <div class="fiche-badge">${renderSymbolBadge(god.symbol)}</div>
+    ${ficheBadge}
     <h2 class="fiche-name">${god.name}</h2>
     <div class="fiche-title">${god.title}</div>
     <div class="fiche-domain">✦ ${god.domain}</div>

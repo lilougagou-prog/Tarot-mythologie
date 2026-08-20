@@ -2,7 +2,7 @@
 // c'est ce qui rend le service worker "différent" aux yeux du navigateur et
 // déclenche la mise à jour (sinon le fetch de app.js reste servi depuis
 // l'ancien cache indéfiniment, même après un nouveau déploiement).
-const CACHE = "mini-olympe-v6";
+const CACHE = "mini-olympe-v7";
 const ASSETS = [
   "./",
   "./index.html",
@@ -14,6 +14,7 @@ const ASSETS = [
   "./game-objets.js",
   "./game-labyrinthe.js",
   "./game-memo.js",
+  "./game-attributs.js",
   "./app.js",
   "./manifest.json",
   "./icon.svg",
@@ -31,6 +32,30 @@ const ASSETS = [
   "./assets/coloriage/hades.png",
   "./assets/objets/jardin.jpg",
   "./assets/objets/etagere.jpg",
+  "./assets/memo/zeus.jpg",
+  "./assets/memo/hera.jpg",
+  "./assets/memo/poseidon.jpg",
+  "./assets/memo/athena.jpg",
+  "./assets/memo/apollon.jpg",
+  "./assets/memo/artemis.jpg",
+  "./assets/memo/ares.jpg",
+  "./assets/memo/aphrodite.jpg",
+  "./assets/memo/hermes.jpg",
+  "./assets/memo/dionysos.jpg",
+  "./assets/memo/hestia.jpg",
+  "./assets/memo/demeter.jpg",
+  "./assets/memo/zeus-attr.jpg",
+  "./assets/memo/hera-attr.jpg",
+  "./assets/memo/poseidon-attr.jpg",
+  "./assets/memo/athena-attr.jpg",
+  "./assets/memo/apollon-attr.jpg",
+  "./assets/memo/artemis-attr.jpg",
+  "./assets/memo/ares-attr.jpg",
+  "./assets/memo/aphrodite-attr.jpg",
+  "./assets/memo/hermes-attr.jpg",
+  "./assets/memo/dionysos-attr.jpg",
+  "./assets/memo/hestia-attr.jpg",
+  "./assets/memo/demeter-attr.jpg",
 ];
 
 self.addEventListener("install", (event) => {
