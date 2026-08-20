@@ -1812,6 +1812,55 @@ function profileForPortrait(saved){
   };
 }
 
+// Résumé du profil enregistré, prêt à envoyer à /api/astral-text (voir ensureAstralText())
+// — null si aucun profil astral n'est enregistré. Contrairement à profileForPortrait()
+// (un paragraphe d'ensemble), ce résumé sert à générer UNE phrase personnalisée par
+// planète/ascendant/aspect/nombre du prénom, pour remplacer les phrases toutes faites
+// affichées sous chaque case du Profil astral (voir natalPlanetSentence() etc., gardées
+// comme repli tant que ce texte n'est pas encore généré ou en cas d'échec). Les aspects
+// sont plafonnés aux 10 plus exacts (par orbe) pour garder l'appel raisonnable — les
+// aspects au-delà retombent simplement sur la phrase générique.
+const ASTRAL_TEXT_MAX_ASPECTS = 10;
+function profileForAstralText(saved){
+  if(!saved || !saved.astral) return null;
+  const a = saved.astral;
+  const numMeaning = NUMBER_KEYS[saved.nameNumber];
+  const deity = tutelaryDeity(saved);
+  const planets = PLANET_ORDER
+    .map(key => {
+      const b = a.bodies?.[key];
+      if(!b || !b.sign) return null;
+      return { key, label: (PLANET_LABELS[key]||key).replace(/^[☉☽]\s*/,""), sign: b.sign, house: b.house||null, retrograde: !!b.retrograde };
+    })
+    .filter(Boolean);
+  // key : identifiant stable (mêmes clés de corps que a.bodies, jamais traduites) pour que
+  // renderProfilResults() puisse retrouver le texte de CET aspect précis quel que soit
+  // l'ordre — a.aspects n'est pas trié par orbe à l'affichage, contrairement à cette liste.
+  const aspects = (a.aspects||[])
+    .slice()
+    .sort((x,y)=>x.orb-y.orb)
+    .slice(0, ASTRAL_TEXT_MAX_ASPECTS)
+    .map(asp=>({
+      key: `${asp.bodies[0]}_${asp.type}_${asp.bodies[1]}`,
+      type: asp.type,
+      a: (PLANET_LABELS[asp.bodies[0]]||"").replace(/^[☉☽]\s*/,""),
+      b: (PLANET_LABELS[asp.bodies[1]]||"").replace(/^[☉☽]\s*/,""),
+    }));
+  return {
+    firstName: saved.firstName,
+    nameNumber: saved.nameNumber,
+    nameNumberMeaning: numMeaning ? numMeaning[0] : null,
+    ascendantSign: a.ascendant?.sign || null,
+    planets,
+    aspects,
+    tutelaryDeity: deity ? {
+      name: deity.deityName,
+      note: deity.note,
+      contributors: (deity.contributors||[]).map(c=>({ label: c.label, sign: c.sign })),
+    } : null,
+  };
+}
+
 // Tendances dégagées du Journal (carte la plus fréquente, thème de question le plus
 // fréquent) — null tant qu'il n'y a pas assez de tirages enregistrés pour qu'une
 // tendance ait un sens (sinon un seul tirage "deviendrait" une tendance à 100%).
@@ -2063,6 +2112,54 @@ function ensurePortrait(){
     .finally(()=>{ portraitFetchInFlight = false; });
 }
 
+/* ===================== TEXTES ASTRAUX PERSONNALISÉS (générés une fois, IA) ===================== */
+// Une phrase par planète/ascendant/aspect/nombre du prénom + l'explication de la divinité
+// tutélaire, à la place des phrases toutes faites (natalPlanetSentence() etc., voir
+// renderProfilResults()). Même logique de cache que le portrait : généré une seule fois,
+// stocké dans profile.astralText, jamais régénéré tant que le profil n'est pas modifié
+// (bindProfilForm() reconstruit un objet neuf à l'enregistrement, qui efface ce champ comme
+// il efface déjà profile.portrait).
+function getCachedAstralText(){
+  const p = getProfile();
+  return (p && p.astralText && typeof p.astralText === "object") ? p.astralText : null;
+}
+async function fetchAstralText(profileSummary, code){
+  const r = await fetch("/api/astral-text", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-App-Access-Code": code },
+    body: JSON.stringify({ profile: profileSummary })
+  });
+  if(r.status === 401) localStorage.removeItem("delphesAccessCode");
+  if(!r.ok) throw new Error("textes astraux indisponibles");
+  const data = await r.json();
+  return data.text;
+}
+let astralTextFetchInFlight = false;
+// Même logique de discrétion qu'ensurePortrait() : jamais de prompt de code d'accès depuis
+// un simple affichage du Profil astral, échec silencieux (les phrases génériques restent
+// affichées), un seul appel réseau tant qu'aucun texte n'est en cache.
+function ensureAstralText(){
+  const p = getProfile();
+  if(!p || !p.astral) return;
+  if(getCachedAstralText()) return;
+  if(astralTextFetchInFlight) return;
+  const code = localStorage.getItem("delphesAccessCode");
+  if(code === null) return;
+  const summary = profileForAstralText(p);
+  if(!summary) return;
+  astralTextFetchInFlight = true;
+  fetchAstralText(summary, code)
+    .then(text=>{
+      const fresh = getProfile();
+      if(!fresh) return;
+      fresh.astralText = text;
+      saveProfileData(fresh);
+      if(cardDetailReturnTo === showProfilAstral) showProfilAstral();
+    })
+    .catch(()=>{ /* échec silencieux : les phrases génériques restent affichées */ })
+    .finally(()=>{ astralTextFetchInFlight = false; });
+}
+
 /* ===================== RÉTROSPECTIVE ANNUELLE (une fois par an, IA) ===================== */
 // Déclenchée à l'anniversaire de naissance (pas le 1er janvier — c'est le repère le plus
 // intuitif pour "une année de ta vie", même si la numérologie du temps, elle, suit l'année
@@ -2137,19 +2234,23 @@ function ensureRetrospective(){
 /* ===================== RITUEL DU JOUR (recommandation unifiée, IA, 1x/jour) ===================== */
 // Contrairement au portrait et à la rétrospective (générés une fois), rappelé une fois par
 // jour — coût récurrent, du même ordre qu'une lecture à 1 carte. Fusionne carte du jour +
-// transits du jour + mois personnel en UNE recommandation, plutôt que trois blocs séparés
-// à interpréter soi-même (voir "Horoscope du jour" et "Carte du jour", qui restent affichés
-// indépendamment : le rituel n'est qu'une synthèse en plus, jamais un remplacement).
+// transits du jour (signes + aspect le plus marqué avec le thème natal, voir
+// strongestTransitAspect() ci-dessus) + mois personnel en UNE recommandation, plutôt que
+// des blocs séparés à interpréter soi-même — un ancien bloc "Horoscope du jour" affiché en
+// plus faisait doublon (mêmes signes du jour, juste dits autrement) : supprimé, sa matière
+// est maintenant entièrement absorbée ici.
 function ritualSummary(profile, dayCard, transits){
   if(!dayCard) return null;
   const pm = profile ? personalMonthNumber(profile.birthDate) : null;
   const pmMeaning = NUMBER_KEYS[pm];
+  const transitAspect = strongestTransitAspect(transits, profile);
   return {
     firstName: profile?.firstName || null,
     dayCardName: cardFullName(dayCard),
     dayCardKeywords: (dayCard[3]||"").split("·")[0].trim(),
     sunSign: transits?.sun?.sign || null,
     moonSign: transits?.moon?.sign || null,
+    transitAspect: transitAspect ? { body: transitAspect.body, action: transitAspect.action, natal: transitAspect.natal } : null,
     personalMonth: pm,
     personalMonthMeaning: pmMeaning ? pmMeaning[0] : null,
   };
@@ -2223,12 +2324,13 @@ const ASPECT_ACTION_PHRASES = {
   carré:"met sous tension", opposition:"invite à trouver un équilibre avec",
 };
 
-// Horoscope du jour : compare les positions transitantes du jour (transits, depuis
-// /api/transits) au thème natal enregistré (profile.astral) — jamais d'appel IA, tout est
-// calculé et rédigé localement (donc gratuit et instantané). Repose sur la même grammaire
-// symbolique que le reste de l'appli : le Soleil et la Lune du jour sont reliés à l'arcane
-// majeur correspondant via ZODIAC_MAJOR_LINKS, déjà utilisé pour "Apprendre".
-function horoscopeDuJour(transits, profile){
+// Aspect le plus marqué du jour entre les positions transitantes (transits, depuis
+// /api/transits) et le thème natal enregistré (profile.astral) — jamais d'appel IA, tout
+// est calculé localement (donc gratuit et instantané). Alimente uniquement le rituel du
+// jour (ritualSummary() ci-dessous) : un ancien bloc "Horoscope du jour" séparé faisait ce
+// même calcul pour l'afficher indépendamment, mais redisait presque la même chose que le
+// rituel (mêmes signes du Soleil/de la Lune du jour) — fusionné ici plutôt que dupliqué.
+function strongestTransitAspect(transits, profile){
   if(!transits || !profile || !profile.astral) return null;
   const natalBodies = profile.astral.bodies || {};
   const natalPoints = [
@@ -2248,19 +2350,9 @@ function horoscopeDuJour(transits, profile){
     });
   });
   hits.sort((a,b)=>a.aspect.orb - b.aspect.orb); // l'aspect le plus exact d'abord
-
-  const sunSign = transits.sun?.sign, moonSign = transits.moon?.sign;
-  const sunArcana = signArcana(sunSign);
-  const moonArcana = signArcana(moonSign);
-
-  const lines = [];
-  if(sunSign) lines.push(`Le Soleil traverse ${sunSign}${sunArcana ? `, une énergie proche ${deCardName(cardFullName(sunArcana))}` : ""}.`);
-  if(moonSign) lines.push(`La Lune est en ${moonSign}${moonArcana ? ` — ambiance du jour du côté ${elideDe(signQuality(moonSign))}` : ""}.`);
-  if(hits.length){
-    const h = hits[0];
-    lines.push(`${TRANSIT_LABELS[h.transitBody]} ${ASPECT_ACTION_PHRASES[h.aspect.type]} ${h.natal.label}.`);
-  }
-  return lines.length ? lines.join(" ") : null;
+  if(!hits.length) return null;
+  const h = hits[0];
+  return { body: TRANSIT_LABELS[h.transitBody], action: ASPECT_ACTION_PHRASES[h.aspect.type], natal: h.natal.label };
 }
 
 async function generateAIReading(question, cards, positions){
@@ -2402,10 +2494,10 @@ function home(){
   const resonates = !!(links && links.some(l => l.card[0] === day[0]));
   ensureTransits();
   ensurePortrait();
+  ensureAstralText();
   ensureRetrospective();
   const cachedTransits = getCachedTransits();
   ensureRitual(day, cachedTransits);
-  const horoscope = horoscopeDuJour(cachedTransits, profile);
   const ritual = getCachedRitual();
   const retrospective = getCachedRetrospective();
   const retrospectiveReady = retrospective && retrospective.year === new Date().getFullYear();
@@ -2422,8 +2514,6 @@ function home(){
   </div>` : ""}
   ${ritual ? `<div class="section-title centered"><h3>Ton rituel du jour</h3></div>
   <p class="lore-text" style="max-width:560px;margin:0 auto 20px;text-align:center;opacity:.9;font-weight:500">${escapeHTML(ritual)}</p>` : ""}
-  ${horoscope ? `<div class="section-title centered"><h3>Horoscope du jour</h3></div>
-  <p class="lore-text" style="max-width:560px;margin:0 auto 20px;text-align:center;opacity:.85">${escapeHTML(horoscope)}</p>` : ""}
   <div class="section-title centered"><h3>Carte du jour</h3></div>
   <div class="day-card" data-card="${encodeURIComponent(JSON.stringify(day))}">${cardHTML(day,"major")}</div>
   ${resonates ? `<p class="note" style="text-align:center">✦ Cette carte résonne avec ton profil astral.</p>` : ""}
@@ -2869,10 +2959,10 @@ const PLANET_LABELS = {
 const PLANET_ORDER = ["sun","moon","mercury","venus","mars","jupiter","saturn","uranus","neptune","pluto"];
 
 // Domaine de vie associé à chaque planète — vocabulaire court, réutilisé pour expliquer ses
-// aspects natals (natalAspectSentence ci-dessous) et pour l'horoscope du jour
-// (horoscopeDuJour). La phrase "position par signe" de chaque planète, elle, a sa propre
-// formulation dédiée (PLANET_SIGN_SENTENCE ci-dessous) — pas de formule générique répétée
-// dix fois, pour éviter un effet "copier-coller" à la lecture.
+// aspects natals (natalAspectSentence ci-dessous). La phrase "position par signe" de
+// chaque planète, elle, a sa propre formulation dédiée (PLANET_SIGN_SENTENCE ci-dessous) —
+// pas de formule générique répétée dix fois, pour éviter un effet "copier-coller" à la
+// lecture.
 const PLANET_THEMES = {
   sun:"ton identité, ce que tu affirmes", moon:"ton monde intérieur, tes émotions",
   mercury:"ta façon de penser et de communiquer", venus:"ce que tu aimes, tes valeurs, tes relations",
@@ -2900,15 +2990,6 @@ function signQuality(sign){
 // gérée ici plutôt que codée en dur dans chaque phrase qui l'utilise.
 function elideDe(word){
   return /^[aàâeéèêëiîïoôœuùûüyh]/i.test(word) ? `d'${word}` : `de ${word}`;
-}
-// Combine "de" avec un nom de carte qui inclut déjà son propre article ("Le Chariot" ->
-// "du Chariot", "La Force" -> "de la Force", "L'Empereur" -> "de l'Empereur",
-// "Tempérance", sans article, -> "de Tempérance") — utilisé par horoscopeDuJour().
-function deCardName(name){
-  if(/^Le /.test(name)) return `du ${name.slice(3)}`;
-  if(/^La /.test(name)) return `de la ${name.slice(3)}`;
-  if(/^L['’]/.test(name)) return `de l'${name.slice(2)}`;
-  return `de ${name}`;
 }
 
 // Une phrase par planète (et une pour l'Ascendant) expliquant sa position dans son signe —
@@ -2983,29 +3064,46 @@ const TUTELARY_WEIGHTS = { sun:4, moon:3, mercury:2, venus:2, mars:2, jupiter:1,
 // divinité associée à son signe. Les planètes proches du Soleil (Mercure, Vénus) tombent
 // souvent dans le même signe ou un signe voisin — les votes ne sont donc pas juste "celui du
 // Soleil gagne toujours", même si le Soleil reste le plus lourd en cas d'égalité.
+// `contributors` (les corps qui ont voté pour la divinité gagnante, du plus lourd au plus
+// léger) sert à expliquer CE choix — voir tutelaryReason dans profileForAstralText() et
+// showTutelaryReason() ci-dessous.
 function tutelaryDeity(saved){
   const a = saved?.astral;
   if(!a || !a.bodies) return null;
 
   const scores = {}; // clé divinité (minuscules) -> score cumulé
   const order = [];  // ordre de rencontre, pour départager les égalités (Soleil d'abord)
-  const vote = (sign, weight) => {
+  const contributorsByDeity = {}; // clé divinité -> [{label, sign, weight}, ...]
+  const vote = (sign, weight, label) => {
     const cardName = sign && ZODIAC_MAJOR_LINKS[sign];
     const card = cardName && MAJORS.find(c=>c[0]===cardName);
     if(!card) return;
     const deityKey = card[1].toLowerCase();
-    if(!(deityKey in scores)) order.push(deityKey);
+    if(!(deityKey in scores)){ order.push(deityKey); contributorsByDeity[deityKey] = []; }
     scores[deityKey] = (scores[deityKey]||0) + weight;
+    contributorsByDeity[deityKey].push({ label, sign, weight });
   };
-  Object.entries(TUTELARY_WEIGHTS).forEach(([key,weight])=> vote(a.bodies[key]?.sign, weight));
-  if(a.ascendant?.sign) vote(a.ascendant.sign, 3);
+  Object.entries(TUTELARY_WEIGHTS).forEach(([key,weight])=> vote(a.bodies[key]?.sign, weight, (PLANET_LABELS[key]||key).replace(/^[☉☽]\s*/,"")));
+  if(a.ascendant?.sign) vote(a.ascendant.sign, 3, "Ascendant");
 
   if(!order.length) return null;
   const maxScore = Math.max(...Object.values(scores));
   const winnerKey = order.find(k => scores[k] === maxScore); // premier rencontré = priorité au Soleil
   const card = MAJORS.find(c=>c[1].toLowerCase()===winnerKey);
   if(!card) return null;
-  return { deityKey: winnerKey, deityName: card[1], card, note: DEITY_NOTES[winnerKey] || null };
+  const contributors = (contributorsByDeity[winnerKey]||[]).sort((x,y)=>y.weight-x.weight);
+  return { deityKey: winnerKey, deityName: card[1], card, note: DEITY_NOTES[winnerKey] || null, contributors };
+}
+
+// Explication de secours (déterministe, sans IA) tant que le texte généré par
+// /api/astral-text n'est pas encore en cache — voir astralText.tutelaryReason dans
+// renderProfilResults(). Simple énumération des placements qui pèsent le plus dans le
+// score, pas une vraie phrase mythologique (c'est le rôle du texte IA une fois prêt).
+function tutelaryReasonFallback(deity){
+  if(!deity || !deity.contributors || !deity.contributors.length) return null;
+  const top = deity.contributors.slice(0,3).map(c=>`${c.label} en ${c.sign}`);
+  const list = top.length > 1 ? `${top.slice(0,-1).join(", ")} et ${top[top.length-1]}` : top[0];
+  return `Ce choix s'appuie surtout sur ${list} — les placements qui pèsent le plus dans ton thème.`;
 }
 
 // Écran Profil astral : affiche le résultat s'il existe déjà, sinon le formulaire de
@@ -3026,6 +3124,7 @@ function showProfilAstral(){
   document.getElementById("profilEdit").onclick = ()=> showProfilEditForm();
   bindChips(); // rend cliquable la divinité tutélaire (data-deity)
   ensurePortrait();
+  ensureAstralText();
 }
 
 // Formulaire de saisie/modification. `saved` (s'il existe) préremplit les champs ; le
@@ -3127,8 +3226,18 @@ function renderProfilResults(saved){
   const pyMeaning = NUMBER_KEYS[py];
   const pmMeaning = NUMBER_KEYS[pm];
   const portrait = typeof saved.portrait === "string" ? saved.portrait : null; // lu directement sur `saved` (pas via getCachedPortrait()/getProfile()) pour rester cohérent avec le reste de la fonction, qui dérive tout de son propre paramètre
+  const astralText = (saved.astralText && typeof saved.astralText === "object") ? saved.astralText : null; // même logique : lu directement sur `saved`
   const summary = natalSummaryParagraph(saved);
   const deity = tutelaryDeity(saved);
+  // Texte de chaque case : la phrase générée par IA si elle est déjà en cache (astralText),
+  // sinon la phrase toute faite habituelle (natalPlanetSentence() etc.) le temps que la
+  // génération se termine ou si elle échoue — jamais de case vide.
+  const planetText = (key, body) => (astralText?.planets && typeof astralText.planets[key] === "string" ? astralText.planets[key] : natalPlanetSentence(key, body)) || "";
+  const ascendantText = a.ascendant ? ((typeof astralText?.ascendant === "string" ? astralText.ascendant : natalAscendantSentence(a.ascendant)) || "") : "";
+  const aspectKey = asp => `${asp.bodies[0]}_${asp.type}_${asp.bodies[1]}`;
+  const aspectText = asp => (astralText?.aspects && typeof astralText.aspects[aspectKey(asp)] === "string" ? astralText.aspects[aspectKey(asp)] : natalAspectSentence(asp)) || "";
+  const nameNumberText = (typeof astralText?.nameNumber === "string" ? astralText.nameNumber : numMeaning?.[2]) || "";
+  const tutelaryReasonText = (typeof astralText?.tutelaryReason === "string" ? astralText.tutelaryReason : tutelaryReasonFallback(deity)) || "La figure la plus présente dans ton thème natal.";
 
   return `<div class="detail">
     <div class="section-title"><h3>Profil astral</h3></div>
@@ -3147,10 +3256,10 @@ function renderProfilResults(saved){
         ${deity.note ? `<br><small>${escapeHTML(deity.note)}</small>` : ""}
       </div>
     </div>
-    <p class="note" style="text-align:center;margin-top:6px">La figure la plus présente dans ton thème natal — touche pour en savoir plus.</p>` : ""}
+    <p class="note" style="text-align:center;margin-top:6px">${escapeHTML(tutelaryReasonText)} Touche pour en savoir plus.</p>` : ""}
 
     ${numMeaning ? `<div class="symbol-list" style="margin-top:14px">
-      <div class="symbol"><b>Nombre du prénom : ${saved.nameNumber} — ${escapeHTML(numMeaning[0])}</b><br>${escapeHTML(numMeaning[2])}</div>
+      <div class="symbol"><b>Nombre du prénom : ${saved.nameNumber} — ${escapeHTML(numMeaning[0])}</b><br>${escapeHTML(nameNumberText)}</div>
     </div>` : ""}
 
     ${(pyMeaning || pmMeaning) ? `
@@ -3165,10 +3274,10 @@ function renderProfilResults(saved){
     <p class="note" style="text-align:center">${escapeHTML(saved.birthPlace)} · ${escapeHTML(dateLabel)}${saved.timeUnknown ? " · heure inconnue" : (saved.birthTime ? " · " + escapeHTML(saved.birthTime) : "")}</p>
 
     <div class="symbol-list" style="margin-top:14px">
-      <div class="symbol"><b>☉ Soleil en ${escapeHTML(a.sunSign)}</b><br>${escapeHTML(natalPlanetSentence("sun", a.bodies.sun) || "")}</div>
-      <div class="symbol"><b>☽ Lune en ${escapeHTML(a.moonSign)}</b><br>${escapeHTML(natalPlanetSentence("moon", a.bodies.moon) || "")}</div>
+      <div class="symbol"><b>☉ Soleil en ${escapeHTML(a.sunSign)}</b><br>${escapeHTML(planetText("sun", a.bodies.sun))}</div>
+      <div class="symbol"><b>☽ Lune en ${escapeHTML(a.moonSign)}</b><br>${escapeHTML(planetText("moon", a.bodies.moon))}</div>
       ${a.ascendant
-        ? `<div class="symbol"><b>Ascendant ${escapeHTML(a.ascendant.sign)}</b><br>${escapeHTML(natalAscendantSentence(a.ascendant) || "")}</div>`
+        ? `<div class="symbol"><b>Ascendant ${escapeHTML(a.ascendant.sign)}</b><br>${escapeHTML(ascendantText)}</div>`
         : `<div class="symbol"><b>Ascendant</b><br><small>Heure de naissance inconnue — l'ascendant et les maisons ne peuvent pas être calculés avec certitude.</small></div>`}
     </div>
 
@@ -3179,14 +3288,14 @@ function renderProfilResults(saved){
       ${PLANET_ORDER.map(k=>{
         const b = a.bodies[k];
         if(!b) return "";
-        return `<div class="symbol"><b>${PLANET_LABELS[k]} en ${escapeHTML(b.sign)}</b> — ${b.degreeInSign}°${b.house?` · maison ${b.house}`:""}${b.retrograde?" · rétrograde":""}<br>${escapeHTML(natalPlanetSentence(k, b) || "")}</div>`;
+        return `<div class="symbol"><b>${PLANET_LABELS[k]} en ${escapeHTML(b.sign)}</b> — ${b.degreeInSign}°${b.house?` · maison ${b.house}`:""}${b.retrograde?" · rétrograde":""}<br>${escapeHTML(planetText(k, b))}</div>`;
       }).join("")}
     </div>
 
     ${a.aspects && a.aspects.length ? `
     <div class="section-title"><h3>Aspects</h3></div>
     <div class="symbol-list">
-      ${a.aspects.map(asp=>`<div class="symbol"><b>${PLANET_LABELS[asp.bodies[0]]} ${asp.type} ${PLANET_LABELS[asp.bodies[1]]}</b><br>${escapeHTML(natalAspectSentence(asp) || "")}<br><small>orbe ${asp.orb}°</small></div>`).join("")}
+      ${a.aspects.map(asp=>`<div class="symbol"><b>${PLANET_LABELS[asp.bodies[0]]} ${asp.type} ${PLANET_LABELS[asp.bodies[1]]}</b><br>${escapeHTML(aspectText(asp))}<br><small>orbe ${asp.orb}°</small></div>`).join("")}
     </div>` : ""}
 
     <button class="secondary" id="profilEdit" style="margin-top:20px">Modifier mes informations</button>
