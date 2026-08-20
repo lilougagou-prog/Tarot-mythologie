@@ -227,6 +227,14 @@ router();
 // nouvelle version prend la main, on recharge une fois pour l'afficher tout
 // de suite plutôt que d'attendre la prochaine fermeture/réouverture.
 if ("serviceWorker" in navigator) {
+  // Si cette page était déjà contrôlée par un service worker au chargement,
+  // un changement de contrôleur ensuite = une vraie mise à jour → on recharge.
+  // Si elle n'avait PAS encore de contrôleur (tout premier chargement de
+  // l'appli, rien n'était en cache), le "controllerchange" qui suit n'est
+  // qu'une prise en main initiale, sans rien de nouveau à afficher : pas
+  // besoin de recharger la page que l'enfant est justement en train de lire.
+  const hadControllerAtLoad = !!navigator.serviceWorker.controller;
+
   window.addEventListener("load", () => {
     navigator.serviceWorker
       .register("service-worker.js")
@@ -236,7 +244,7 @@ if ("serviceWorker" in navigator) {
 
   let reloadedForUpdate = false;
   navigator.serviceWorker.addEventListener("controllerchange", () => {
-    if (reloadedForUpdate) return;
+    if (!hadControllerAtLoad || reloadedForUpdate) return;
     reloadedForUpdate = true;
     window.location.reload();
   });

@@ -10,10 +10,9 @@
 // ============================================================================
 
 const COL_PALETTE = [
-  "#e03131", "#f76707", "#f59f00", "#ffd43b",
-  "#66a80f", "#12b886", "#15aabf", "#1c7ed6",
-  "#3b5bdb", "#9c36b5", "#e64980", "#a15c2a",
-  "#495057", "#ffffff",
+  "#e03131", "#f76707", "#f59f00", "#ffd43b", "#66a80f", "#12b886",
+  "#15aabf", "#1c7ed6", "#3b5bdb", "#9c36b5", "#e64980", "#a15c2a",
+  "#ffe0bd", "#f1c27d", "#c68642", "#8d5524", "#495057", "#ffffff",
 ];
 
 const COLORING_IMAGES = {
@@ -27,6 +26,8 @@ const COLORING_IMAGES = {
   dionysos: "assets/coloriage/dionysos.png",
   hephaistos: "assets/coloriage/hephaistos.png",
   hestia: "assets/coloriage/hestia.png",
+  poseidon: "assets/coloriage/poseidon.png",
+  hades: "assets/coloriage/hades.png",
 };
 
 // résolution de travail max du canvas (largeur, en px) : suffisant pour un
@@ -42,6 +43,60 @@ const COL_LINE_THRESHOLD = 246;
 function col_hexToRgb(hex) {
   const n = parseInt(hex.slice(1), 16);
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+// Enregistre/partage un <canvas> en PNG. Sur téléphone (partage de fichiers
+// pris en charge), ouvre la feuille de partage native — l'enfant peut choisir
+// « Enregistrer l'image »/« Photos ». Sinon, retombe sur un téléchargement
+// classique (bureau, ou navigateurs sans Web Share).
+function col_downloadCanvas(canvas, filename) {
+  canvas.toBlob(async (blob) => {
+    if (!blob) return;
+    const file = new File([blob], filename, { type: "image/png" });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: filename });
+        return;
+      } catch (e) {
+        // partage annulé ou indisponible : on retombe sur le téléchargement
+      }
+    }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+  }, "image/png");
+}
+
+// Même chose pour l'emblème SVG (moteur 1) : on le redessine sur un canvas
+// avant de l'enregistrer, un fichier .svg ne se sauvegarde pas dans Photos.
+function col_downloadSvg(svgEl, filename) {
+  const clone = svgEl.cloneNode(true);
+  clone.querySelectorAll("[data-region]").forEach((region) => {
+    const fill = region.style.fill;
+    if (fill) region.setAttribute("fill", fill);
+  });
+  const svgString = new XMLSerializer().serializeToString(clone);
+  const svgUrl = URL.createObjectURL(new Blob([svgString], { type: "image/svg+xml;charset=utf-8" }));
+  const img = new Image();
+  img.onload = () => {
+    const vb = svgEl.viewBox.baseVal;
+    const scale = 2;
+    const canvas = document.createElement("canvas");
+    canvas.width = (vb.width || img.naturalWidth) * scale;
+    canvas.height = (vb.height || img.naturalHeight) * scale;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    URL.revokeObjectURL(svgUrl);
+    col_downloadCanvas(canvas, filename);
+  };
+  img.src = svgUrl;
 }
 
 function renderColoriagePicker(container) {
@@ -100,6 +155,7 @@ function col_buildShell(container, god, contentHtml) {
       <div class="color-palette" role="listbox" aria-label="Couleurs"></div>
       <div class="coloriage-buttons">
         <button type="button" class="btn btn-ghost" id="col-clear">↺ Effacer</button>
+        <button type="button" class="btn btn-primary" id="col-save">💾 Enregistrer</button>
       </div>
     </div>
     <div class="coloriage-done-msg" id="col-done" hidden>
@@ -152,6 +208,10 @@ function renderColoriageEmblemGame(container, god) {
     painted.clear();
     celebrated = false;
     wrap.querySelector("#col-done").hidden = true;
+  });
+
+  wrap.querySelector("#col-save").addEventListener("click", () => {
+    col_downloadSvg(svgEl, `${god.id}-mini-olympe.png`);
   });
 
   function checkComplete() {
@@ -308,6 +368,11 @@ function renderColoriageImageGame(container, god) {
     coloredCount = 0;
     celebrated = false;
     doneEl.hidden = true;
+  });
+
+  wrap.querySelector("#col-save").addEventListener("click", () => {
+    if (!ctx) return;
+    col_downloadCanvas(canvas, `${god.id}-mini-olympe.png`);
   });
 
   function checkComplete() {

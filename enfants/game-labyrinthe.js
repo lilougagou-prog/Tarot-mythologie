@@ -8,6 +8,25 @@ const MAZE_LEVELS = [
   { key: "difficile", label: "Difficile", size: 11 },
 ];
 
+// Astérion, le petit Minotaure : mascotte du labyrinthe, dessinée mignonne et
+// souriante à dessein (grands yeux, cornes toutes rondes) — pas question de
+// faire peur ! C'est aussi son vrai nom dans la mythologie.
+const MINOTAUR_SVG = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <ellipse cx="18" cy="48" rx="9" ry="13" fill="#a15c2a"/>
+  <ellipse cx="82" cy="48" rx="9" ry="13" fill="#a15c2a"/>
+  <path d="M24 28 Q10 14 18 2 Q26 14 30 26 Z" fill="#f1e3c8"/>
+  <path d="M76 28 Q90 14 82 2 Q74 14 70 26 Z" fill="#f1e3c8"/>
+  <circle cx="50" cy="54" r="33" fill="#c68642"/>
+  <ellipse cx="50" cy="70" rx="19" ry="13" fill="#e8b382"/>
+  <circle cx="44" cy="71" r="2.4" fill="#5c3a1e"/>
+  <circle cx="56" cy="71" r="2.4" fill="#5c3a1e"/>
+  <circle cx="37" cy="47" r="8" fill="#fff"/>
+  <circle cx="63" cy="47" r="8" fill="#fff"/>
+  <circle cx="38" cy="48" r="4" fill="#3a2313"/>
+  <circle cx="64" cy="48" r="4" fill="#3a2313"/>
+  <path d="M41 77 Q50 83 59 77" stroke="#5c3a1e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+</svg>`;
+
 function maze_generate(cols, rows) {
   const cells = [];
   for (let r = 0; r < rows; r++) {
@@ -53,7 +72,8 @@ function renderLabyrintheGame(container) {
   const wrap = document.createElement("section");
   wrap.className = "maze-screen";
   wrap.innerHTML = `
-    <p class="screen-intro">Aide le petit hibou à traverser le labyrinthe pour retrouver un dieu !</p>
+    <p class="screen-intro">Aide Astérion, le gentil Minotaure, à sortir de son labyrinthe pour retrouver un dieu !</p>
+    <p class="screen-subintro">💡 Le sais-tu ? Dans la mythologie, le Minotaure s'appelle en réalité Astérion.</p>
     <div class="maze-levels" id="maze-levels"></div>
     <div class="maze-wrap"><div class="maze-grid" id="maze-grid"></div></div>
     <div class="dpad" id="maze-dpad">
@@ -121,18 +141,17 @@ function renderLabyrintheGame(container) {
     if (!player) {
       player = document.createElement("div");
       player.className = "maze-player";
-      player.textContent = "🦉";
+      player.innerHTML = MINOTAUR_SVG;
     }
     gridEl.appendChild(player);
     positionPlayer(player);
   }
 
   function positionPlayer(player) {
-    player.style.width = cellPx * 0.72 + "px";
-    player.style.height = cellPx * 0.72 + "px";
-    player.style.fontSize = cellPx * 0.5 + "px";
-    player.style.left = playerC * cellPx + cellPx * 0.14 + "px";
-    player.style.top = playerR * cellPx + cellPx * 0.14 + "px";
+    player.style.width = cellPx * 0.78 + "px";
+    player.style.height = cellPx * 0.78 + "px";
+    player.style.left = playerC * cellPx + cellPx * 0.11 + "px";
+    player.style.top = playerR * cellPx + cellPx * 0.11 + "px";
   }
 
   function tryMove(dc, dr) {
@@ -155,7 +174,7 @@ function renderLabyrintheGame(container) {
         <div class="maze-win-card" style="--god-color:${goalGod.color}">
           <div class="maze-win-badge">${renderSymbolBadge(goalGod.symbol)}</div>
           <div>
-            <div class="maze-win-title">🎉 Bravo ! Tu as retrouvé ${goalGod.name} !</div>
+            <div class="maze-win-title">🎉 Bravo ! Astérion a retrouvé ${goalGod.name} !</div>
             <div class="maze-win-desc">${goalGod.description}</div>
           </div>
         </div>
