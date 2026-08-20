@@ -276,7 +276,7 @@ main.screen { padding: 4px 16px 24px; }
 
 .coloring-canvas-wrap { min-height: 200px; display: flex; align-items: center; justify-content: center; }
 .coloring-loading { color: #868e96; font-weight: 700; padding: 40px 0; text-align: center; }
-.coloring-canvas { width: 100%; height: auto; display: block; border-radius: 12px; cursor: pointer; touch-action: manipulation; }
+.coloring-canvas { width: 100%; height: auto; display: block; border-radius: 12px; cursor: pointer; touch-action: none; }
 
 .coloriage-toolbar {
   background: #fff;

@@ -146,6 +146,20 @@ const GODS = [
       "Héphaïstos est le meilleur bricoleur de l'Olympe : il aurait même fabriqué des servantes en or qui l'aidaient dans son atelier !",
   },
   {
+    id: "hestia",
+    name: "Hestia",
+    title: "La déesse du foyer",
+    domain: "Le feu de la maison et l'accueil",
+    symbol: "flamme",
+    symbolName: "La flamme sacrée",
+    color: "#bf6900",
+    accent: "#ffe8cc",
+    description:
+      "Hestia veille sur le feu qui brûle dans chaque maison et chaque temple. Grâce à elle, les familles se retrouvent au chaud autour du foyer.",
+    funFact:
+      "Hestia a choisi de rester tranquille et de ne jamais se disputer avec les autres dieux : c'est la plus calme et la plus discrète de tout l'Olympe !",
+  },
+  {
     id: "hermes",
     name: "Hermès",
     title: "Le messager des dieux",

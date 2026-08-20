@@ -85,7 +85,7 @@ function panTubes(x0, y0, count, width, gap, maxH, minH) {
 const WAVE_D =
   "M0 90 q12.5 -14 25 0 q12.5 14 25 0 q12.5 -14 25 0 q12.5 14 25 0 L100 100 L0 100 Z";
 
-// --- table des 16 symboles --------------------------------------------------
+// --- table des symboles ------------------------------------------------------
 // Chaque symbole : { parts: [{id, shapes:[...]}], overlay: [...] (optionnel) }
 // Tout est dessiné dans un repère 0..100 x 0..100.
 const SYMBOLS = {
@@ -306,6 +306,26 @@ const SYMBOLS = {
     const { shapes, overlay } = panTubes(12, 15, 7, 9, 2, 78, 26);
     return { parts: [{ id: "main", shapes }], overlay };
   })(),
+  flamme: {
+    parts: [
+      {
+        id: "main",
+        shapes: [
+          {
+            t: "path",
+            d: "M50 4 C34 26 26 44 32 60 C26 56 22 66 26 74 C31 84 42 90 50 90 C62 90 72 80 72 66 C72 54 64 48 62 38 C60 46 54 50 50 46 C56 34 52 16 50 4 Z",
+          },
+        ],
+      },
+      {
+        id: "brasero",
+        shapes: [
+          { t: "path", d: "M22 88 L78 88 L70 100 L30 100 Z" },
+          { t: "ellipse", cx: 50, cy: 88, rx: 28, ry: 7 },
+        ],
+      },
+    ],
+  },
 };
 
 // --- rendu : badge plat (une seule couleur, utilisé partout hors coloriage)

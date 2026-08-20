@@ -1,4 +1,4 @@
-const CACHE = "mini-olympe-v2";
+const CACHE = "mini-olympe-v3";
 const ASSETS = [
   "./",
   "./index.html",
@@ -18,6 +18,11 @@ const ASSETS = [
   "./assets/coloriage/athena.png",
   "./assets/coloriage/apollon.png",
   "./assets/coloriage/artemis.png",
+  "./assets/coloriage/aphrodite.png",
+  "./assets/coloriage/demeter.png",
+  "./assets/coloriage/dionysos.png",
+  "./assets/coloriage/hephaistos.png",
+  "./assets/coloriage/hestia.png",
 ];
 
 self.addEventListener("install", (event) => {
