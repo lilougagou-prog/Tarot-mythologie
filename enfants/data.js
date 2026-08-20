@@ -249,8 +249,11 @@ function getGod(id) {
   return GODS.find((g) => g.id === id) || null;
 }
 
+function shuffleArray(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
 function randomGods(count, excludeIds) {
   const pool = GODS.filter((g) => !excludeIds || !excludeIds.includes(g.id));
-  const shuffled = [...pool].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, count);
+  return shuffleArray(pool).slice(0, count);
 }

@@ -19,7 +19,7 @@ const GAMES_MENU = [
     key: "objets",
     emoji: "🔍",
     title: "Objets cachés",
-    desc: "Retrouve les symboles et associe-les au bon dieu.",
+    desc: "Observe la scène et retrouve tous les symboles grecs.",
     color: "#12b886",
   },
   {

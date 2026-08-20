@@ -1,143 +1,193 @@
 // ============================================================================
-// Mini Olympe — mini-jeu Objets cachés → association au bon dieu
+// Mini Olympe — mini-jeu Objets cachés
+// Une grande scène illustrée + une liste de symboles à retrouver et cocher,
+// façon jeu de « cherche et trouve ». Les coordonnées de chaque objet sont en
+// pourcentage de la largeur/hauteur de l'image (repérées à l'œil sur la
+// scène). Pour ajouter une scène : déposer l'image dans assets/objets/,
+// repérer les coordonnées de chaque symbole, ajouter une entrée ci-dessous.
 // ============================================================================
 
-const OBJ_ROUND_SIZE = 4;
-const OBJ_CELLS = [
-  { x: 22, y: 28 },
-  { x: 78, y: 26 },
-  { x: 24, y: 76 },
-  { x: 76, y: 74 },
+const HIDDEN_SCENES = [
+  {
+    id: "jardin",
+    title: "Le jardin du temple",
+    image: "assets/objets/jardin.jpg",
+    ratio: 1000 / 890,
+    items: [
+      { id: "foudre", label: "Foudre de Zeus", emoji: "⚡", x: 41, y: 13 },
+      { id: "laurier", label: "Couronne de laurier", emoji: "🌿", x: 49, y: 92 },
+      { id: "trident", label: "Trident de Poséidon", emoji: "🔱", x: 18, y: 18 },
+      { id: "chouette", label: "Chouette d'Athéna", emoji: "🦉", x: 30, y: 21 },
+      { id: "lyre", label: "Lyre d'Apollon", emoji: "🎵", x: 78, y: 72 },
+      { id: "pegase", label: "Pégase", emoji: "🐎", x: 49, y: 24 },
+      { id: "oeil", label: "Œil protecteur", emoji: "🧿", x: 62, y: 53 },
+      { id: "grenade", label: "Grenade de Perséphone", emoji: "🔴", x: 39, y: 66 },
+      { id: "serpent", label: "Serpent d'Asclépios", emoji: "🐍", x: 7, y: 48 },
+      { id: "casque", label: "Casque grec", emoji: "🪖", x: 55, y: 75 },
+      { id: "vase", label: "Vase antique", emoji: "🏺", x: 6, y: 18 },
+      { id: "flamme", label: "Flamme olympique", emoji: "🔥", x: 88, y: 31 },
+      { id: "labyrinthe", label: "Labyrinthe du Minotaure", emoji: "🌀", x: 14, y: 62 },
+      { id: "navire", label: "Navire grec", emoji: "⛵", x: 24, y: 75 },
+    ],
+  },
+  {
+    id: "etagere",
+    title: "L'étagère aux trésors",
+    image: "assets/objets/etagere.jpg",
+    ratio: 1000 / 1122,
+    items: [
+      { id: "laurier", label: "Couronne de laurier", emoji: "🌿", x: 25, y: 11 },
+      { id: "chouette", label: "Chouette d'Athéna", emoji: "🦉", x: 52, y: 11 },
+      { id: "casque", label: "Casque grec", emoji: "🪖", x: 65, y: 10 },
+      { id: "vase", label: "Vase antique", emoji: "🏺", x: 12, y: 11 },
+      { id: "pegase", label: "Pégase", emoji: "🐎", x: 35, y: 29 },
+      { id: "lyre", label: "Lyre d'Apollon", emoji: "🎵", x: 50, y: 29 },
+      { id: "oeil", label: "Œil protecteur", emoji: "🧿", x: 40, y: 47 },
+      { id: "navire", label: "Navire grec", emoji: "⛵", x: 55, y: 49 },
+      { id: "trident", label: "Trident de Poséidon", emoji: "🔱", x: 70, y: 43 },
+      { id: "flamme", label: "Flamme olympique", emoji: "🔥", x: 9, y: 65 },
+      { id: "labyrinthe", label: "Labyrinthe du Minotaure", emoji: "🌀", x: 25, y: 65 },
+      { id: "grenade", label: "Grenade de Perséphone", emoji: "🔴", x: 56, y: 66 },
+      { id: "serpent", label: "Serpent d'Asclépios", emoji: "🐍", x: 81, y: 64 },
+    ],
+  },
 ];
 
-function obj_shuffle(arr) {
-  return [...arr].sort(() => Math.random() - 0.5);
-}
+const HUNT_HIT_RADIUS = 5.5; // % de la largeur de l'image, sauf override par objet (r)
 
 function renderObjetsGame(container) {
-  let sessionOrder = obj_shuffle(GODS);
-  let sessionIndex = 0;
-  let roundNum = 0;
-  let matched = new Set();
-  let selectedId = null;
+  let sceneIndex = 0;
+  let found = new Set();
+  let celebrated = false;
 
   const wrap = document.createElement("section");
   wrap.className = "objets-screen";
   wrap.innerHTML = `
-    <p class="screen-intro">Clique sur un symbole caché, puis sur le nom du dieu à qui il appartient !</p>
-    <div class="objets-round-label" id="obj-round"></div>
-    <div class="hidden-scene" id="obj-scene">
-      <span class="scene-deco deco-1" aria-hidden="true">🏛️</span>
-      <span class="scene-deco deco-2" aria-hidden="true">🌿</span>
-      <span class="scene-deco deco-3" aria-hidden="true">☁️</span>
-      <span class="scene-deco deco-4" aria-hidden="true">🌿</span>
+    <p class="screen-intro">Observe bien l'image et retrouve tous les symboles de la liste !</p>
+    <div class="maze-levels" id="hunt-scenes"></div>
+    <div class="hunt-scene-wrap" id="hunt-scene-wrap">
+      <img class="hunt-scene-img" id="hunt-img" alt="">
+      <div class="hunt-targets" id="hunt-targets"></div>
     </div>
-    <div class="objets-targets" id="obj-targets"></div>
-    <div class="objets-done-msg" id="obj-done" hidden>
-      <p id="obj-done-text"></p>
-      <button type="button" class="btn btn-primary" id="obj-next">Manche suivante ▶</button>
+    <div class="hunt-toolbar">
+      <div class="hunt-progress" id="hunt-progress"></div>
+      <button type="button" class="btn btn-ghost" id="hunt-hint">🔍 Indice</button>
+    </div>
+    <div class="hunt-checklist" id="hunt-checklist"></div>
+    <div class="objets-done-msg" id="hunt-done" hidden>
+      <p id="hunt-done-text"></p>
+      <button type="button" class="btn btn-primary" id="hunt-next">Manche suivante ▶</button>
     </div>
   `;
   container.appendChild(wrap);
 
-  const sceneEl = wrap.querySelector("#obj-scene");
-  const targetsEl = wrap.querySelector("#obj-targets");
-  const roundLabel = wrap.querySelector("#obj-round");
-  const doneMsg = wrap.querySelector("#obj-done");
-  const doneText = wrap.querySelector("#obj-done-text");
-
-  wrap.querySelector("#obj-next").addEventListener("click", startRound);
-
-  function nextBatch() {
-    if (sessionIndex >= sessionOrder.length) {
-      sessionOrder = obj_shuffle(GODS);
-      sessionIndex = 0;
-    }
-    const batch = sessionOrder.slice(sessionIndex, sessionIndex + OBJ_ROUND_SIZE);
-    sessionIndex += OBJ_ROUND_SIZE;
-    return batch;
-  }
-
-  function startRound() {
-    roundNum++;
-    matched = new Set();
-    selectedId = null;
-    doneMsg.hidden = true;
-    const gods = nextBatch();
-    roundLabel.textContent = `Manche ${roundNum}`;
-
-    sceneEl.querySelectorAll(".obj-symbol").forEach((n) => n.remove());
-    const shuffledSymbols = obj_shuffle(gods);
-    shuffledSymbols.forEach((g, i) => {
-      const cell = OBJ_CELLS[i] || { x: 50, y: 50 };
-      const jitterX = (Math.random() - 0.5) * 8;
-      const jitterY = (Math.random() - 0.5) * 8;
-      const tile = document.createElement("button");
-      tile.type = "button";
-      tile.className = "obj-symbol";
-      tile.style.left = cell.x + jitterX + "%";
-      tile.style.top = cell.y + jitterY + "%";
-      tile.style.setProperty("--god-color", g.color);
-      tile.dataset.godId = g.id;
-      tile.innerHTML = renderSymbolBadge(g.symbol);
-      tile.setAttribute("aria-label", "Symbole caché");
-      tile.addEventListener("click", () => onSymbolClick(g.id, tile));
-      sceneEl.appendChild(tile);
+  const scenesEl = wrap.querySelector("#hunt-scenes");
+  HIDDEN_SCENES.forEach((scene, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "level-btn" + (i === 0 ? " selected" : "");
+    btn.textContent = scene.title;
+    btn.addEventListener("click", () => {
+      sceneIndex = i;
+      scenesEl.querySelectorAll(".level-btn").forEach((b) => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      startScene();
     });
+    scenesEl.appendChild(btn);
+  });
+
+  const sceneWrapEl = wrap.querySelector("#hunt-scene-wrap");
+  const imgEl = wrap.querySelector("#hunt-img");
+  const targetsEl = wrap.querySelector("#hunt-targets");
+  const checklistEl = wrap.querySelector("#hunt-checklist");
+  const progressEl = wrap.querySelector("#hunt-progress");
+  const doneEl = wrap.querySelector("#hunt-done");
+  const doneTextEl = wrap.querySelector("#hunt-done-text");
+
+  wrap.querySelector("#hunt-next").addEventListener("click", () => {
+    sceneIndex = (sceneIndex + 1) % HIDDEN_SCENES.length;
+    scenesEl.querySelectorAll(".level-btn").forEach((b, i) => b.classList.toggle("selected", i === sceneIndex));
+    startScene();
+  });
+
+  wrap.querySelector("#hunt-hint").addEventListener("click", () => {
+    const scene = HIDDEN_SCENES[sceneIndex];
+    const remaining = scene.items.filter((it) => !found.has(it.id));
+    if (!remaining.length) return;
+    const pick = remaining[Math.floor(Math.random() * remaining.length)];
+    const target = targetsEl.querySelector(`[data-id="${pick.id}"]`);
+    if (target) {
+      target.classList.add("hint");
+      setTimeout(() => target.classList.remove("hint"), 2200);
+    }
+  });
+
+  function startScene() {
+    const scene = HIDDEN_SCENES[sceneIndex];
+    found = new Set();
+    celebrated = false;
+    doneEl.hidden = true;
+
+    sceneWrapEl.style.aspectRatio = scene.ratio;
+    imgEl.src = scene.image;
+    imgEl.alt = scene.title;
 
     targetsEl.innerHTML = "";
-    obj_shuffle(gods).forEach((g) => {
-      const chip = document.createElement("button");
-      chip.type = "button";
-      chip.className = "obj-target";
-      chip.style.setProperty("--god-color", g.color);
-      chip.dataset.godId = g.id;
-      chip.innerHTML = `<span>${g.name}</span><span class="obj-target-title">${g.title}</span>`;
-      chip.addEventListener("click", () => onTargetClick(g.id, chip));
-      targetsEl.appendChild(chip);
+    scene.items.forEach((item) => {
+      const t = document.createElement("button");
+      t.type = "button";
+      t.className = "hunt-target";
+      t.dataset.id = item.id;
+      t.style.left = item.x + "%";
+      t.style.top = item.y + "%";
+      const r = item.r || HUNT_HIT_RADIUS;
+      t.style.width = r * 2 + "%";
+      t.setAttribute("aria-label", item.label);
+      t.addEventListener("click", () => onFound(item));
+      targetsEl.appendChild(t);
     });
+
+    checklistEl.innerHTML = "";
+    scene.items.forEach((item) => {
+      const row = document.createElement("div");
+      row.className = "hunt-check-row";
+      row.dataset.id = item.id;
+      row.innerHTML = `
+        <span class="hunt-check-box">✓</span>
+        <span class="hunt-check-emoji">${item.emoji}</span>
+        <span class="hunt-check-label">${item.label}</span>
+      `;
+      checklistEl.appendChild(row);
+    });
+
+    updateProgress();
   }
 
-  function onSymbolClick(godId, tile) {
-    if (matched.has(godId)) return;
-    selectedId = godId;
-    sceneEl.querySelectorAll(".obj-symbol").forEach((t) => t.classList.remove("selected"));
-    tile.classList.add("selected");
+  function onFound(item) {
+    if (found.has(item.id)) return;
+    found.add(item.id);
+    const target = targetsEl.querySelector(`[data-id="${item.id}"]`);
+    if (target) target.classList.add("found");
+    const row = checklistEl.querySelector(`.hunt-check-row[data-id="${item.id}"]`);
+    if (row) row.classList.add("found");
+    updateProgress();
+    checkComplete();
   }
 
-  function onTargetClick(godId, chip) {
-    if (matched.has(godId)) return;
-    if (!selectedId) {
-      chip.classList.add("nudge");
-      setTimeout(() => chip.classList.remove("nudge"), 400);
-      return;
-    }
-    if (selectedId === godId) {
-      matched.add(godId);
-      chip.classList.add("matched");
-      chip.disabled = true;
-      const symTile = sceneEl.querySelector(`.obj-symbol[data-god-id="${godId}"]`);
-      if (symTile) {
-        symTile.classList.remove("selected");
-        symTile.classList.add("matched");
-        symTile.disabled = true;
-      }
-      selectedId = null;
-      checkRoundComplete();
-    } else {
-      chip.classList.add("shake");
-      setTimeout(() => chip.classList.remove("shake"), 400);
-    }
+  function updateProgress() {
+    const scene = HIDDEN_SCENES[sceneIndex];
+    progressEl.textContent = `${found.size} / ${scene.items.length} trouvés`;
   }
 
-  function checkRoundComplete() {
-    const total = targetsEl.querySelectorAll(".obj-target").length;
-    if (matched.size < total) return;
-    incGameCount("objets", [...matched]);
+  function checkComplete() {
+    const scene = HIDDEN_SCENES[sceneIndex];
+    if (celebrated || found.size < scene.items.length) return;
+    celebrated = true;
+    incGameCount("objets");
     confettiBurst();
-    doneText.textContent = `🎉 Bravo ! Tu as retrouvé les ${total} symboles ! 🎉`;
-    doneMsg.hidden = false;
+    doneTextEl.textContent = `🎉 Bravo ! Tu as retrouvé tous les symboles de « ${scene.title} » ! 🎉`;
+    doneEl.hidden = false;
   }
 
-  startRound();
+  startScene();
 }
