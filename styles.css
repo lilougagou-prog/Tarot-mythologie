@@ -7,7 +7,7 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;touch-action:manipulation} /* pas de zoom au double-tap : évite un zoom accidentel resté "coincé" en tapant vite sur la pioche */
-body{margin:0;background:radial-gradient(circle at 50% -10%,#fffaf0 0,#f8f1e4 40%,#e9d7bd 100%);color:var(--deep);font-family:"EB Garamond",Georgia,serif;font-size:17px;position:relative}
+body{margin:0;overflow-x:hidden;background:radial-gradient(circle at 50% -10%,#fffaf0 0,#f8f1e4 40%,#e9d7bd 100%);color:var(--deep);font-family:"EB Garamond",Georgia,serif;font-size:17px;position:relative}
 button,input,textarea{font-family:"EB Garamond",Georgia,serif}
 button{color:inherit}
 #app{min-height:100vh;padding-bottom:86px;position:relative;z-index:1}
@@ -27,6 +27,11 @@ body::before{
   0%{opacity:.5;transform:translate(0,0) scale(1)}
   100%{opacity:1;transform:translate(-3%,4%) scale(1.2)}
 }
+/* Teinte du halo qui varie doucement selon l'heure du jour (voir applyTimeOfDay() dans
+   app.js, calculé une fois au chargement) — "tod-day" garde le halo par défaut ci-dessus. */
+body.tod-dawn::before{background:radial-gradient(circle at 50% 10%, rgba(255,205,205,.55) 0%, rgba(255,205,205,0) 45%)}
+body.tod-dusk::before{background:radial-gradient(circle at 50% 10%, rgba(255,190,135,.55) 0%, rgba(255,190,135,0) 45%)}
+body.tod-night::before{background:radial-gradient(circle at 50% 10%, rgba(178,168,255,.32) 0%, rgba(178,168,255,0) 45%)}
 
 /* ===== Barre du haut, centrée, style divinatoire ===== */
 .topbar{position:sticky;top:0;z-index:10;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;padding:14px 14px 10px;background:rgba(248,241,228,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
@@ -42,6 +47,11 @@ main{max-width:900px;margin:auto;padding:22px 18px}
 
 /* ===== Hero / accueil ===== */
 .hero{padding:20px 8px 14px;text-align:center;position:relative}
+/* Filigrane de constellation (voir constellationHTML() dans app.js) : posé derrière le
+   contenu du hero — les enfants "normaux" restent au-dessus grâce au z-index explicite,
+   sinon un élément position:absolute peinturerait par-dessus le contenu statique. */
+.constellation-bg{position:absolute;inset:0;width:100%;height:100%;opacity:.16;pointer-events:none;z-index:0}
+.hero > :not(.constellation-bg){position:relative;z-index:1}
 .hero-emblem{font-size:30px;color:var(--gold);margin-bottom:6px;display:inline-block;animation:emblem-breathe 4s ease-in-out infinite}
 .hero-emblem.small{font-size:22px;margin-bottom:10px}
 .hero p{max-width:560px;margin:10px auto 0;line-height:1.7;opacity:.78;font-size:16px}
@@ -127,19 +137,53 @@ main{max-width:900px;margin:auto;padding:22px 18px}
 .pips-9,.pips-10{grid-template-rows:repeat(5,1fr)}
 .pip{font-size:20px;line-height:1}
 
-/* ===== Dos de carte (pioche) ===== */
+/* ===== Carte de la pioche : flip 3D dos → face (voir cardBackHTML() dans app.js) ===== */
 .deck-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
-.tarot-card-back{aspect-ratio:2/3.2;border-radius:14px;cursor:pointer;border:2px solid var(--gold);box-shadow:0 8px 20px rgba(41,28,29,.15);background:
+.flip-slot{position:relative;aspect-ratio:2/3.2;cursor:pointer;perspective:1200px}
+.flip-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.34,1.56,.64,1)}
+.flip-slot:hover .flip-inner{transform:translateY(-3px)}
+.flip-slot.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px}
+.flip-back{border:2px solid var(--gold);box-shadow:0 8px 20px rgba(41,28,29,.15);background:
   radial-gradient(circle at 50% 50%, #6d3934 0%, #4a2622 70%),
-  repeating-linear-gradient(45deg, rgba(201,163,90,.08) 0 6px, transparent 6px 12px);
-  transition:transform .38s cubic-bezier(.34,1.56,.64,1),opacity .3s ease .05s,box-shadow .15s ease}
-.tarot-card-back:hover{transform:translateY(-3px)}
-.tarot-card-back.revealed{transform:rotateY(90deg) scale(.85);opacity:0;pointer-events:none}
+  repeating-linear-gradient(45deg, rgba(201,163,90,.08) 0 6px, transparent 6px 12px)}
+.flip-front{transform:rotateY(180deg);pointer-events:none}
+.flip-slot.flipped .flip-front{pointer-events:auto}
+.flip-slot.flipped .flip-back{pointer-events:none}
+.flip-front .tarot-card{width:100%;height:100%;aspect-ratio:auto;margin:0}
 .back-frame{height:100%;display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,163,90,.5);border-radius:10px;margin:5px}
 .back-glyph{font-size:22px;color:var(--gold-bright)}
+
+/* Pluie de particules dorées au moment où une carte est choisie (voir spawnGoldBurst()) */
+.gold-burst{position:absolute;inset:0;pointer-events:none;z-index:5}
+.gold-burst span{position:absolute;top:50%;left:50%;width:6px;height:6px;border-radius:50%;
+  background:radial-gradient(circle,#fff6df 0%,var(--gold-bright) 55%,transparent 75%);
+  animation:gold-spark .75s ease-out forwards}
+@keyframes gold-spark{
+  from{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  to{opacity:0;transform:translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.3)}
+}
+
+/* Ripple doré au clic sur les boutons (voir l'écouteur délégué en fin d'app.js) */
+.primary,.secondary,.ghost{position:relative;overflow:hidden}
+.ripple-fx{position:absolute;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,246,223,.9) 0%,rgba(219,185,111,.55) 60%,transparent 75%);
+  pointer-events:none;animation:ripple-grow .6s ease-out forwards}
+@keyframes ripple-grow{from{transform:scale(0);opacity:.9}to{transform:scale(16);opacity:0}}
 .picks-counter{font-family:"Cinzel",serif;letter-spacing:.08em;font-size:12px;opacity:.65;text-align:center;margin-top:4px}
 
-.detail{max-width:600px;margin:auto}
+.detail{max-width:600px;margin:auto;position:relative}
+/* Flash "Première découverte" (voir discoveryFX() dans app.js) */
+.discovery-badge{position:absolute;top:0;right:0;font-family:"Cinzel",serif;font-size:10px;
+  letter-spacing:.08em;color:#fff8ef;background:linear-gradient(135deg,var(--gold-bright),var(--terracotta));
+  padding:6px 12px;border-radius:999px;box-shadow:0 4px 14px rgba(138,77,70,.35);
+  pointer-events:none;z-index:3;animation:discovery-pop 2.6s ease forwards}
+@keyframes discovery-pop{
+  0%{opacity:0;transform:translateY(-6px) scale(.85)}
+  12%{opacity:1;transform:translateY(0) scale(1)}
+  78%{opacity:1;transform:translateY(0) scale(1)}
+  100%{opacity:0;transform:translateY(-4px) scale(.96)}
+}
 .detail .tarot-card{max-width:270px;margin:10px auto 20px}
 .detail p{line-height:1.75}
 .lore-text{font-size:16px}
@@ -234,6 +278,9 @@ textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;paddin
 .chip:disabled{opacity:.4;cursor:default}
 .answer{margin-top:20px;padding:22px;border-radius:20px;background:rgba(255,255,255,.55);border:1px solid var(--line)}
 .answer p{line-height:1.75;font-size:16px}
+/* Lecture d'ensemble façon "oracle qui parle" — voir typewriterHTML() dans app.js */
+.tword{display:inline-block;animation:tword-in .4s ease forwards}
+@keyframes tword-in{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
 .draw-notes{margin:14px 0}
 
 .day-card{max-width:220px;margin:14px auto 8px}
@@ -260,14 +307,21 @@ textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;paddin
 
 @media(min-width:700px){main{padding:35px 28px}.bottom-nav{max-width:900px;margin:auto;border-radius:20px 20px 0 0}}
 
-/* ===== Transition douce à chaque changement d'écran (onglet ou écran de détail) ===== */
-@keyframes screen-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.screen-anim{animation:screen-in .32s ease both}
+/* ===== Transition à chaque changement d'écran (voir triggerScreenAnim() dans app.js) =====
+   .screen-anim : onglets + retour vers un écran parent — léger zoom arrière, comme un pas
+   en arrière qui prend du recul.
+   .screen-anim-detail : entrée dans une fiche (carte/symbole/figure/sous-liste Apprendre)
+   — léger zoom avant, comme un pas en avant vers le détail. */
+@keyframes screen-in{from{opacity:0;transform:translateY(10px) scale(1.03)}to{opacity:1;transform:translateY(0) scale(1)}}
+.screen-anim{animation:screen-in .34s cubic-bezier(.22,1,.36,1) both}
+@keyframes screen-in-detail{from{opacity:0;transform:translateY(8px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.screen-anim-detail{animation:screen-in-detail .36s cubic-bezier(.22,1,.36,1) both}
 
 /* Respecte la préférence système "réduire les animations" */
 @media (prefers-reduced-motion: reduce){
-  .tile-img,.card-img,.illus .spark,.screen-anim,.reading-block,.progress>span,
-  .tile,.primary,.secondary,.chip,.icon-btn,.ghost,.bottom-nav button,.tarot-card,.tarot-card-back,
+  .tile-img,.card-img,.illus .spark,.screen-anim,.screen-anim-detail,.reading-block,.progress>span,
+  .tile,.primary,.secondary,.chip,.icon-btn,.ghost,.bottom-nav button,.tarot-card,
+  .flip-inner,.flip-slot .flip-inner,.tword,.discovery-badge,
   body::before,.hero-emblem,.home-glow .mote,.star,
   .oracle-glow::before,.oracle-glow::after,.oracle-glow .spark-star{
     animation:none !important;transition:none !important
