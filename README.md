@@ -2,6 +2,8 @@
 
 Application web (PWA) de tarot mythologique grec — tirage interactif, lecture personnalisée générée par IA, bibliothèque de symboles, journal.
 
+> Ce dépôt contient aussi, dans `enfants/`, une seconde application indépendante : **Mini Olympe**, destinée aux enfants (dès 6 ans) pour découvrir les dieux grecs par le jeu. Voir `enfants/README.md`.
+
 ## Structure
 - `index.html` — structure de la page
 - `styles.css` — tous les styles (police Cinzel/EB Garamond, thème "divinatoire", animation de chargement en étoiles)
