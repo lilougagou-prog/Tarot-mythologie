@@ -1077,7 +1077,7 @@ const SYMBOL_LIBRARY = {
     "Elle est devenue un symbole d'inconscient, d'intuition, de cycles et d'incertitude qui n'empêche pas d'avancer.",
     "La lune est particulièrement associée à Séléné et à Métis.",
   ]},
-  "étoiles":{icon:"✦",label:"Étoile",category:"Astres & phénomènes",desc:"Orientation, espoir, inspiration retrouvée après l'épreuve.",links:["hécate"],lore:[
+  "étoiles":{icon:"✦",label:"Étoile",category:"Astres & phénomènes",desc:"Orientation, espoir, inspiration retrouvée après l'épreuve.",links:["hécate","astéria"],lore:[
     "Les étoiles se rattachent à Hécate par sa mère, Astéria, titanide dont le nom signifie littéralement « étoilée ».",
     "Pour échapper aux avances de Zeus, Astéria se jeta dans la mer et fut changée en île — Délos, selon certaines traditions — après avoir été un temps assimilée aux étoiles filantes. Sa fille Hécate hérita de cette proximité avec le ciel nocturne et l'orientation qu'il offre à qui sait le lire.",
     "Contrairement au soleil qui révèle tout d'un coup, les étoiles n'éclairent que faiblement — mais elles suffisent à orienter celui qui a perdu son chemin dans l'obscurité.",
@@ -1187,6 +1187,13 @@ const DEITY_NOTES = {
   "actéon":"Chasseur changé en cerf par Artémis pour l'avoir surprise au bain, puis déchiré par ses propres chiens.",
   "artémis":"Déesse de la chasse et de la nature sauvage, farouchement protectrice de son intimité.",
   "orion":"Géant chasseur aimé d'Éos puis compagnon de chasse d'Artémis, changé en étoiles après une mort injuste.",
+  "iphigénie":"Fille d'Agamemnon, sauvée in extremis du sacrifice par Artémis, qui la fit prêtresse de son temple.",
+  "ariane":"Fille de Minos, elle guide Thésée hors du Labyrinthe grâce à un fil, puis devient l'épouse immortelle de Dionysos.",
+  "sémélé":"Mère mortelle de Dionysos, morte en voyant Zeus dans sa splendeur, puis ramenée de l'Olympe par son fils et déifiée.",
+  "hébé":"Déesse de la jeunesse, échanson des dieux sur l'Olympe, devenue l'épouse d'Héraclès après sa divinisation.",
+  "ilithyie":"Déesse de l'accouchement, capable aussi bien de faciliter une naissance que de la retenir sur ordre d'Héra.",
+  "léto":"Titanide aimée de Zeus, elle ne put accoucher d'Apollon et d'Artémis qu'après avoir trouvé refuge sur l'île de sa sœur Astéria.",
+  "astéria":"Titanide changée en île pour fuir Zeus, devenue Délos — refuge plus tard offert à sa sœur Léto.",
   "protée":"Dieu marin insaisissable, capable de changer sans cesse de forme.",
   "cyclopes":"Artisans géants à l'œil unique, forgerons associés à Héphaïstos dans les grandes œuvres divines.",
   "cybèle":"Déesse de la terre nourricière, souveraine d'une abondance sauvage.",
@@ -1198,8 +1205,9 @@ const DEITY_NOTES = {
 // que SYMBOL_LIBRARY.lore.
 const DEITY_LORE = {
   "dionysos": [
-    "Dionysos est le fils de Zeus et d'une mortelle, Sémélé, morte foudroyée en voulant contempler son amant divin dans toute sa splendeur — Zeus dut alors coudre l'enfant à naître dans sa propre cuisse pour le mener à terme, d'où son surnom de « deux fois né ».",
+    "Dionysos est le fils de Zeus et d'une mortelle, Sémélé, morte foudroyée en voulant contempler son amant divin dans toute sa splendeur — Zeus dut alors coudre l'enfant à naître dans sa propre cuisse pour le mener à terme, d'où son surnom de « deux fois né » (voir la fiche « Sémélé »).",
     "Contrairement aux autres Olympiens, il parcourut le monde des mortels, leur enseignant la culture de la vigne et provoquant sur son passage des scènes de folie collective chez ceux qui refusaient de le reconnaître comme dieu — comme le roi Penthée, déchiré par sa propre mère en plein délire bachique.",
+    "Sur l'île de Naxos, il trouva Ariane abandonnée par Thésée et l'épousa, lui offrant l'immortalité (voir la fiche « Ariane ») — et, une fois adulte, il n'oublia jamais sa mère : il descendit jusqu'aux Enfers pour la ramener parmi les dieux de l'Olympe.",
     "Dieu de la métamorphose autant que de l'ivresse, il incarne ce qui échappe à la raison et à l'ordre établi.",
   ],
   "hermès": [
@@ -1212,7 +1220,7 @@ const DEITY_LORE = {
   ],
   "héra": [
     "Sœur et épouse de Zeus, Héra règne sur l'Olympe comme protectrice du mariage et garante de l'ordre légitime — un rôle qu'elle défend avec une fermeté que la mythologie associe souvent à la jalousie, tant les infidélités de son époux sont nombreuses.",
-    "Elle ne se contente jamais d'observer : elle poursuit Héraclès de sa colère toute sa vie durant simplement parce qu'il est le fruit d'une liaison de Zeus, et impose à Léto l'interdiction de mettre au monde ses enfants sur la moindre terre ferme, retardant ainsi la naissance d'Apollon et d'Artémis.",
+    "Elle ne se contente jamais d'observer : elle pousse Sémélé à sa perte par ruse (voir la fiche « Sémélé »), poursuit Héraclès de sa colère toute sa vie durant simplement parce qu'il est le fruit d'une liaison de Zeus (voir la fiche « Héraclès »), et impose à Léto l'interdiction de mettre au monde ses enfants sur la moindre terre ferme, retardant ainsi la naissance d'Apollon et d'Artémis (voir la fiche « Léto »).",
     "Reine avant d'être épouse, elle incarne la légitimité et l'autorité plus que la douceur.",
   ],
   "zeus": [
@@ -1230,7 +1238,7 @@ const DEITY_LORE = {
     "Les récits plus tardifs en font le fils d'Aphrodite, armé d'un arc dont les flèches font naître l'amour chez quiconque elles atteignent, y compris les dieux eux-mêmes. Son propre amour pour la mortelle Psyché (voir la fiche « Psyché ») ne fut possible qu'au prix d'épreuves redoutables imposées par Aphrodite, jalouse de sa belle-fille.",
   ],
   "apollon": [
-    "Fils de Zeus et de Léto, Apollon naquit avec sa sœur jumelle Artémis sur l'île flottante de Délos, seul lieu qui accepta de les accueillir après qu'Héra eut interdit à toute terre ferme de recevoir l'accouchement de sa rivale.",
+    "Fils de Zeus et de Léto (voir la fiche « Léto »), Apollon naquit avec sa sœur jumelle Artémis sur l'île flottante de Délos, seul lieu qui accepta de les accueillir après qu'Héra eut interdit à toute terre ferme de recevoir l'accouchement de sa rivale.",
     "Dieu de la lumière, de la musique et de la vérité, il conduit le char solaire et rend, depuis son temple de Delphes (voir la fiche « Temple »), des oracles par la voix de la Pythie — sa devise gravée sur le fronton du temple, « Connais-toi toi-même », résume son exigence de clarté.",
   ],
   "thémis": [
@@ -1246,9 +1254,9 @@ const DEITY_LORE = {
     "Représentée portant une corne d'abondance et un gouvernail, parfois les yeux bandés, elle peut combler de richesses comme ruiner en un instant, sans qu'aucun mérite ni aucune faute n'entre en compte — la roue qu'on lui associe (voir la fiche « Roue ») tourne sans se soucier de qui elle élève ou abaisse.",
   ],
   "héraclès": [
-    "Fils de Zeus et d'une mortelle, Alcmène, Héraclès fut la cible de la jalousie d'Héra dès le berceau : elle envoya deux serpents l'étrangler dans son sommeil, qu'il étrangla lui-même de ses propres mains encore enfant.",
+    "Fils de Zeus et d'une mortelle, Alcmène, Héraclès fut la cible de la jalousie d'Héra avant même sa naissance : elle chargea Ilithyie de retenir l'accouchement par magie, une ruse à peine déjouée (voir la fiche « Ilithyie »), puis, une fois l'enfant né, envoya deux serpents l'étrangler dans son sommeil — qu'il étrangla lui-même de ses propres mains encore enfant.",
     "Rendu fou par Héra à l'âge adulte, il tua sa propre famille dans un accès de délire, et dut, pour se purifier de ce crime, accomplir douze travaux jugés impossibles — de l'étranglement du lion de Némée à la capture de Cerbère aux portes des Enfers.",
-    "Ses travaux ont fait de lui le modèle même de la force mise au service d'une expiation, plutôt que d'une simple conquête.",
+    "Ses travaux ont fait de lui le modèle même de la force mise au service d'une expiation, plutôt que d'une simple conquête — et lui valurent, une fois mort et accueilli parmi les dieux, d'épouser Hébé, déesse de la jeunesse éternelle (voir la fiche « Hébé »).",
   ],
   "prométhée": [
     "Titan resté aux côtés de Zeus pendant la guerre contre les autres Titans, Prométhée façonna aussi, selon certains récits, les premiers hommes à partir d'argile.",
@@ -1278,7 +1286,7 @@ const DEITY_LORE = {
     "Sa rivalité avec Athéna pour devenir le patron d'Athènes — il fit jaillir une source d'eau salée du rocher, elle offrit un olivier — illustre bien son tempérament : la force spectaculaire face à la sagesse durable, et c'est cette dernière que la ville choisit.",
   ],
   "hécate": [
-    "Déesse des carrefours et des passages, Hécate est représentée sous une triple forme, tournée à la fois vers le ciel, la terre et les Enfers — l'une des seules divinités, avec Perséphone, à circuler librement entre les trois royaumes.",
+    "Fille de la titanide Astéria (voir la fiche « Astéria »), Hécate hérita de sa mère une proximité particulière avec le ciel nocturne. Déesse des carrefours et des passages, elle est représentée sous une triple forme, tournée à la fois vers le ciel, la terre et les Enfers — l'une des seules divinités, avec Perséphone, à circuler librement entre les trois royaumes.",
     "Elle fut la seule à entendre les cris de Perséphone lors de son enlèvement et l'aida ensuite à retrouver sa mère Déméter ; depuis, elle veille sur les carrefours nocturnes, la magie et tout ce qui exige de choisir une direction dans l'obscurité.",
   ],
   "séléné": [
@@ -1291,7 +1299,7 @@ const DEITY_LORE = {
   ],
   "minos": [
     "Roi légendaire de Crète de son vivant, Minos devint après sa mort l'un des trois juges des Enfers, réputé pour la rigueur impartiale de ses jugements — une réputation acquise du temps où il régnait déjà avec une justice sans complaisance.",
-    "Sur terre, il fit construire par Dédale le Labyrinthe pour y enfermer le Minotaure, fruit d'une union contre nature de son épouse — un épisode qui n'entacha jamais, dans les Enfers, la légitimité de son jugement sur les autres âmes.",
+    "Sur terre, il fit construire par Dédale le Labyrinthe pour y enfermer le Minotaure, fruit d'une union contre nature de son épouse — un épisode qui n'entacha jamais, dans les Enfers, la légitimité de son jugement sur les autres âmes. C'est sa propre fille Ariane qui, en secret, permit à Thésée d'en ressortir vivant (voir la fiche « Ariane »).",
   ],
   "gaïa": [
     "Déesse primordiale, Gaïa est la Terre elle-même, apparue au tout début du monde depuis le Chaos originel — mère de toutes choses, des Titans aux Cyclopes en passant par les monstres les plus redoutables.",
@@ -1430,9 +1438,10 @@ const DEITY_LORE = {
     "Furieuse d'avoir été vue, la déesse le changea sur-le-champ en cerf ; ses propres chiens de chasse, ne le reconnaissant plus, le poursuivirent et le déchirèrent — puni non pour une faute voulue, mais pour avoir simplement vu ce qui ne devait pas l'être.",
   ],
   "artémis": [
-    "Sœur jumelle d'Apollon, Artémis naquit la première et, dit-on, aida elle-même sa mère Léto à accoucher de son frère peu après — elle devint ainsi protectrice des accouchements autant que déesse de la chasse.",
+    "Sœur jumelle d'Apollon, Artémis naquit la première et, dit-on, aida elle-même sa mère Léto (voir la fiche « Léto ») à accoucher de son frère peu après — elle devint ainsi protectrice des accouchements autant que déesse de la chasse.",
     "Farouchement attachée à sa virginité et à son intimité, elle règne sur les forêts sauvages (voir la fiche « Forêt ») et punit sans hésiter quiconque, comme Actéon (voir la fiche « Actéon »), s'aventure à la surprendre.",
     "Elle fit pourtant une exception pour le chasseur Orion, devenu son compagnon de chasse le plus proche — jusqu'à ce que la jalousie de son frère mette fin à cette amitié (voir la fiche « Orion »).",
+    "Sa colère peut se muer en pitié tout aussi soudainement : sur le point de laisser sacrifier Iphigénie à Aulis, elle la sauva au dernier instant en substituant une biche sur l'autel (voir la fiche « Iphigénie »).",
   ],
   "orion": [
     "Orion est un chasseur géant, réputé pour sa beauté autant que pour son habileté à la chasse — au point qu'Éos, déesse de l'aurore, tomba amoureuse de lui et l'emporta à Délos pour vivre à ses côtés (voir la fiche « Éos »).",
@@ -1440,6 +1449,47 @@ const DEITY_LORE = {
     "Apollon, craignant de voir sa sœur s'éprendre d'un mortel, lança un scorpion géant à la poursuite d'Orion, qui ne put lui échapper qu'en se jetant à la mer. Désignant alors à Artémis une forme sombre qui nageait au loin sans lui dire qui elle était, il la mit au défi de l'atteindre de ses flèches — elle visa juste, sans jamais savoir qu'elle venait de tuer celui qu'elle aimait.",
     "Bouleversée, elle obtint que le corps d'Orion soit placé parmi les étoiles ; le scorpion y fut envoyé lui aussi, mais assez loin pour que les deux constellations ne se lèvent jamais ensemble dans le ciel.",
     "Orion est particulièrement associé à Éos et à Artémis.",
+  ],
+  "iphigénie": [
+    "Fille du roi Agamemnon, Iphigénie fut promise au sacrifice à Aulis, où la flotte grecque en partance pour Troie restait immobilisée par l'absence de vent — une punition d'Artémis, que le roi avait offensée.",
+    "Un devin annonça que seul le sacrifice d'Iphigénie apaiserait la déesse. Mais au moment même où la lame allait s'abattre, Artémis, prise de pitié, substitua une biche sur l'autel et emporta la jeune fille, restée invisible à tous, jusqu'en Tauride (voir la fiche « Artémis »).",
+    "Elle y devint prêtresse du temple d'Artémis, chargée des rites du sanctuaire — loin de la mort qu'on lui promettait, une seconde vie entièrement consacrée à la déesse qui l'avait sauvée.",
+    "Iphigénie est particulièrement associée à Artémis.",
+  ],
+  "ariane": [
+    "Fille de Minos, roi de Crète (voir la fiche « Minos »), et de Pasiphaé, Ariane tomba amoureuse de Thésée le jour où il arriva parmi les jeunes gens envoyés en tribut au Minotaure, enfermé au cœur du Labyrinthe.",
+    "Pour lui permettre d'en ressortir vivant après avoir affronté le monstre, elle lui confia une pelote de fil à dérouler en avançant — le fameux « fil d'Ariane », resté depuis l'expression même de ce qui permet de retrouver son chemin dans ce qui semblait inextricable.",
+    "Thésée l'emmena avec lui en fuyant la Crète, mais l'abandonna endormie sur l'île de Naxos. C'est là que Dionysos la trouva, en tomba amoureux et l'épousa, lui offrant l'immortalité et une couronne d'or que l'on retrouve, dit-on, parmi les étoiles sous la forme d'une constellation (voir la fiche « Dionysos »).",
+    "Ariane est particulièrement associée à Dionysos.",
+  ],
+  "sémélé": [
+    "Fille de Cadmos, roi de Thèbes, Sémélé fut aimée de Zeus — une liaison qui attira aussitôt la jalousie d'Héra, toujours prompte à se venger d'une rivale mortelle.",
+    "Déguisée en vieille nourrice, Héra convainquit Sémélé de demander à son amant de se montrer à elle dans toute sa splendeur divine. Zeus, lié par une promesse qu'il ne pouvait rompre, dut s'exécuter — et la vision foudroya Sémélé sur-le-champ. Il sauva l'enfant qu'elle portait en le cousant dans sa propre cuisse jusqu'à son terme (voir la fiche « Dionysos »).",
+    "Devenu adulte, Dionysos n'oublia jamais sa mère : il descendit jusqu'aux Enfers pour l'en faire remonter, et obtint qu'elle soit accueillie parmi les dieux de l'Olympe sous un nouveau nom, Thyoné — la seule mortelle jamais divinisée pour avoir simplement été aimée d'un dieu.",
+    "Sémélé est particulièrement associée à Dionysos.",
+  ],
+  "hébé": [
+    "Fille de Zeus et d'Héra, Hébé personnifie la jeunesse éternelle qui règne sur l'Olympe. C'est elle qui, avant d'être remplacée par le jeune Ganymède, servait le nectar et l'ambroisie aux dieux lors de leurs banquets — la boisson même de l'immortalité.",
+    "Lorsque Héraclès mourut de ses souffrances et fut accueilli parmi les dieux en récompense de ses travaux (voir la fiche « Héraclès »), c'est Hébé qui devint son épouse sur l'Olympe — un mariage qui scella sa victoire finale sur la mortalité elle-même.",
+    "Hébé est particulièrement associée à Héraclès.",
+  ],
+  "ilithyie": [
+    "Fille de Zeus et d'Héra, Ilithyie préside aux accouchements : c'est elle qui, dit-on, permet à l'enfant de venir au monde — ou qui, si elle le choisit, peut retenir une naissance presque indéfiniment.",
+    "Lorsque Héraclès dut naître, Héra, jalouse comme toujours d'un enfant de Zeus né d'une mortelle, envoya Ilithyie s'asseoir devant la porte d'Alcmène, jambes et doigts croisés, pour empêcher l'accouchement de se conclure (voir la fiche « Héraclès »).",
+    "Une servante d'Alcmène, comprenant la ruse, annonça faussement que l'enfant venait de naître : surprise, Ilithyie décroisa un instant les mains — juste assez pour que la naissance, enfin libérée, puisse avoir lieu.",
+    "Ilithyie est particulièrement associée à Héraclès et à Héra.",
+  ],
+  "léto": [
+    "Titanide, fille de Coéos et de Phoebé, Léto est la sœur d'Astéria (voir la fiche « Astéria »). Aimée de Zeus, elle devint aussitôt la cible de la jalousie d'Héra, qui interdit à toute terre ferme de l'accueillir pour son accouchement (voir la fiche « Héra »).",
+    "Léto erra ainsi de rivage en rivage, refusée partout, jusqu'à atteindre Délos — l'île errante en laquelle sa propre sœur Astéria s'était autrefois changée pour échapper à Zeus. N'étant plus à proprement parler une « terre ferme » ancrée nulle part, Délos put l'accueillir sans enfreindre l'interdit d'Héra.",
+    "C'est là que Léto mit au monde ses jumeaux, Apollon et Artémis (voir les fiches « Apollon » et « Artémis ») — un accouchement rendu possible, au bout du compte, par la solidarité d'une sœur devenue elle-même un refuge.",
+    "Léto est particulièrement associée à Apollon, à Artémis et à Astéria.",
+  ],
+  "astéria": [
+    "Titanide, fille de Coéos et de Phoebé, Astéria — dont le nom signifie littéralement « étoilée » (voir la fiche « Étoile ») — est la sœur de Léto (voir la fiche « Léto »).",
+    "Poursuivie par les avances de Zeus, elle refusa de se laisser posséder et se jeta dans la mer plutôt que de céder, se changeant en île errante, un temps assimilée aux étoiles filantes avant de se fixer sous le nom de Délos.",
+    "C'est sur cette même île qu'elle offrit, sans le savoir encore, un refuge à sa sœur Léto, venue y accoucher d'Apollon et d'Artémis après avoir été rejetée de partout ailleurs. Avec le dieu marin Persès, Astéria est aussi mère d'Hécate (voir la fiche « Hécate »), qui hérita de sa proximité avec le ciel nocturne.",
+    "Astéria est particulièrement associée à Léto et à Hécate.",
   ],
   "protée": [
     "Dieu marin au service de Poséidon, Protée connaît l'avenir mais refuse de le révéler à quiconque le lui demande directement.",
