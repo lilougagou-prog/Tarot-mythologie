@@ -2826,8 +2826,14 @@ function showLearnMajors(){
   triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
+    // Capturé avant l'appel : render() (ou tout écran qu'il affiche) peut lui-même
+    // réécrire preDetailScroll pour SES propres besoins avant qu'on ait pu le relire —
+    // exactement le même risque de corruption que cardDetailReturnTo (voir le commentaire
+    // au-dessus de showSymbolDetail()), pour la même raison : une seule variable globale
+    // mutable, réutilisée par tous les écrans "detail".
+    const scrollTarget = preDetailScroll;
     render();
-    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
   cardDetailReturnTo = showLearnMajors;
   bindCards();
@@ -2846,8 +2852,14 @@ function showLearnCategory(kind){
   triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
+    // Capturé avant l'appel : render() (ou tout écran qu'il affiche) peut lui-même
+    // réécrire preDetailScroll pour SES propres besoins avant qu'on ait pu le relire —
+    // exactement le même risque de corruption que cardDetailReturnTo (voir le commentaire
+    // au-dessus de showSymbolDetail()), pour la même raison : une seule variable globale
+    // mutable, réutilisée par tous les écrans "detail".
+    const scrollTarget = preDetailScroll;
     render();
-    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
   document.querySelectorAll("[data-learn-suit]").forEach(el=>{
     el.onclick = ()=> showLearnSuit(el.dataset.learnKind, el.dataset.learnSuit);
@@ -2883,8 +2895,14 @@ function showLearnFigures(){
   triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
+    // Capturé avant l'appel : render() (ou tout écran qu'il affiche) peut lui-même
+    // réécrire preDetailScroll pour SES propres besoins avant qu'on ait pu le relire —
+    // exactement le même risque de corruption que cardDetailReturnTo (voir le commentaire
+    // au-dessus de showSymbolDetail()), pour la même raison : une seule variable globale
+    // mutable, réutilisée par tous les écrans "detail".
+    const scrollTarget = preDetailScroll;
     render();
-    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
   // Pour qu'une figure cliquée dans cette liste revienne bien ici plutôt que de sauter
   // au menu Apprendre (même logique que showSymbolDetail() etc.).
@@ -2956,8 +2974,11 @@ function showSymbolDetail(id, backTo = cardDetailReturnTo){
   triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
+    // Capturé avant l'appel, même raison que ci-dessus pour backTo() : l'écran vers
+    // lequel on revient peut réécrire preDetailScroll pour ses propres besoins.
+    const scrollTarget = preDetailScroll;
     backTo();
-    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
   cardDetailReturnTo = () => showSymbolDetail(id, backTo);
   bindCards(); bindChips();
@@ -2982,8 +3003,11 @@ function showNumberDetail(n, backTo = cardDetailReturnTo){
   triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
+    // Capturé avant l'appel, même raison que ci-dessus pour backTo() : l'écran vers
+    // lequel on revient peut réécrire preDetailScroll pour ses propres besoins.
+    const scrollTarget = preDetailScroll;
     backTo();
-    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
   cardDetailReturnTo = () => showNumberDetail(n, backTo);
   bindCards(); bindChips();
@@ -3012,8 +3036,11 @@ function showDeityDetail(id, backTo = cardDetailReturnTo){
   triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
+    // Capturé avant l'appel, même raison que ci-dessus pour backTo() : l'écran vers
+    // lequel on revient peut réécrire preDetailScroll pour ses propres besoins.
+    const scrollTarget = preDetailScroll;
     backTo();
-    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
   cardDetailReturnTo = () => showDeityDetail(id, backTo);
   bindCards(); bindChips();
@@ -3207,8 +3234,14 @@ function showProfilAstral(){
   triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
+    // Capturé avant l'appel : render() (ou tout écran qu'il affiche) peut lui-même
+    // réécrire preDetailScroll pour SES propres besoins avant qu'on ait pu le relire —
+    // exactement le même risque de corruption que cardDetailReturnTo (voir le commentaire
+    // au-dessus de showSymbolDetail()), pour la même raison : une seule variable globale
+    // mutable, réutilisée par tous les écrans "detail".
+    const scrollTarget = preDetailScroll;
     render();
-    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
   document.getElementById("profilEdit").onclick = ()=> showProfilEditForm();
   bindChips(); // rend cliquable la divinité tutélaire (data-deity)
@@ -3427,8 +3460,14 @@ function showJournal(){
   triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
+    // Capturé avant l'appel : render() (ou tout écran qu'il affiche) peut lui-même
+    // réécrire preDetailScroll pour SES propres besoins avant qu'on ait pu le relire —
+    // exactement le même risque de corruption que cardDetailReturnTo (voir le commentaire
+    // au-dessus de showSymbolDetail()), pour la même raison : une seule variable globale
+    // mutable, réutilisée par tous les écrans "detail".
+    const scrollTarget = preDetailScroll;
     render();
-    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
   cardDetailReturnTo = showJournal;
   document.querySelectorAll(".delete-entry").forEach(b=>{
@@ -3494,8 +3533,14 @@ function showStats(){
   triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
+    // Capturé avant l'appel : render() (ou tout écran qu'il affiche) peut lui-même
+    // réécrire preDetailScroll pour SES propres besoins avant qu'on ait pu le relire —
+    // exactement le même risque de corruption que cardDetailReturnTo (voir le commentaire
+    // au-dessus de showSymbolDetail()), pour la même raison : une seule variable globale
+    // mutable, réutilisée par tous les écrans "detail".
+    const scrollTarget = preDetailScroll;
     render();
-    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
   cardDetailReturnTo = showStats;
 }
@@ -3514,8 +3559,14 @@ function showRetrospective(){
   triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
+    // Capturé avant l'appel : render() (ou tout écran qu'il affiche) peut lui-même
+    // réécrire preDetailScroll pour SES propres besoins avant qu'on ait pu le relire —
+    // exactement le même risque de corruption que cardDetailReturnTo (voir le commentaire
+    // au-dessus de showSymbolDetail()), pour la même raison : une seule variable globale
+    // mutable, réutilisée par tous les écrans "detail".
+    const scrollTarget = preDetailScroll;
     render();
-    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
   cardDetailReturnTo = showRetrospective;
 }
@@ -3547,8 +3598,11 @@ function showDetail(c, backTo = cardDetailReturnTo){
   triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
+    // Capturé avant l'appel, même raison que ci-dessus pour backTo() : l'écran vers
+    // lequel on revient peut réécrire preDetailScroll pour ses propres besoins.
+    const scrollTarget = preDetailScroll;
     backTo();
-    requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
   // Pour qu'un lien cliqué depuis cette fiche (nom de la figure, symbole…) revienne bien
   // ici plutôt que de sauter directement à l'écran qui nous a menés à cette carte.
