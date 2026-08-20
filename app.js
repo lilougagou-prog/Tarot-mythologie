@@ -1186,6 +1186,7 @@ const DEITY_NOTES = {
   "érinyes":"Divinités vengeresses qui poursuivent les coupables sans relâche, jusque dans leurs rêves.",
   "actéon":"Chasseur changé en cerf par Artémis pour l'avoir surprise au bain, puis déchiré par ses propres chiens.",
   "artémis":"Déesse de la chasse et de la nature sauvage, farouchement protectrice de son intimité.",
+  "orion":"Géant chasseur aimé d'Éos puis compagnon de chasse d'Artémis, changé en étoiles après une mort injuste.",
   "protée":"Dieu marin insaisissable, capable de changer sans cesse de forme.",
   "cyclopes":"Artisans géants à l'œil unique, forgerons associés à Héphaïstos dans les grandes œuvres divines.",
   "cybèle":"Déesse de la terre nourricière, souveraine d'une abondance sauvage.",
@@ -1315,6 +1316,7 @@ const DEITY_LORE = {
   "éos": [
     "Déesse de l'aurore, Éos ouvre chaque matin les portes du ciel pour annoncer le passage du char d'Hélios, son frère — ses doigts de rose colorent le ciel juste avant le lever du jour (voir la fiche « Aurore »).",
     "Éprise de plusieurs mortels, dont Tithonos, elle obtint pour lui l'immortalité mais oublia de demander aussi l'éternelle jeunesse : il vieillit sans jamais pouvoir mourir, jusqu'à se réduire, dit-on, à une simple voix.",
+    "Elle aima aussi le chasseur Orion, qu'elle emporta à Délos pour vivre à ses côtés, avant qu'il ne devienne le compagnon de chasse d'Artémis (voir la fiche « Orion »).",
   ],
   "niké": [
     "Déesse ailée de la victoire, Niké accompagne indifféremment les vainqueurs, sans jamais prendre elle-même part au combat — elle couronne l'issue plutôt que de la déterminer.",
@@ -1430,6 +1432,14 @@ const DEITY_LORE = {
   "artémis": [
     "Sœur jumelle d'Apollon, Artémis naquit la première et, dit-on, aida elle-même sa mère Léto à accoucher de son frère peu après — elle devint ainsi protectrice des accouchements autant que déesse de la chasse.",
     "Farouchement attachée à sa virginité et à son intimité, elle règne sur les forêts sauvages (voir la fiche « Forêt ») et punit sans hésiter quiconque, comme Actéon (voir la fiche « Actéon »), s'aventure à la surprendre.",
+    "Elle fit pourtant une exception pour le chasseur Orion, devenu son compagnon de chasse le plus proche — jusqu'à ce que la jalousie de son frère mette fin à cette amitié (voir la fiche « Orion »).",
+  ],
+  "orion": [
+    "Orion est un chasseur géant, réputé pour sa beauté autant que pour son habileté à la chasse — au point qu'Éos, déesse de l'aurore, tomba amoureuse de lui et l'emporta à Délos pour vivre à ses côtés (voir la fiche « Éos »).",
+    "Il devint plus tard le compagnon de chasse d'Artémis, partageant avec elle de longues journées dans les forêts sauvages (voir la fiche « Forêt ») — une complicité si grande que la déesse, pourtant farouchement attachée à son indépendance, s'attacha à lui plus qu'à quiconque.",
+    "Apollon, craignant de voir sa sœur s'éprendre d'un mortel, lança un scorpion géant à la poursuite d'Orion, qui ne put lui échapper qu'en se jetant à la mer. Désignant alors à Artémis une forme sombre qui nageait au loin sans lui dire qui elle était, il la mit au défi de l'atteindre de ses flèches — elle visa juste, sans jamais savoir qu'elle venait de tuer celui qu'elle aimait.",
+    "Bouleversée, elle obtint que le corps d'Orion soit placé parmi les étoiles ; le scorpion y fut envoyé lui aussi, mais assez loin pour que les deux constellations ne se lèvent jamais ensemble dans le ciel.",
+    "Orion est particulièrement associé à Éos et à Artémis.",
   ],
   "protée": [
     "Dieu marin au service de Poséidon, Protée connaît l'avenir mais refuse de le révéler à quiconque le lui demande directement.",
