@@ -48,13 +48,13 @@ function renderMemoGame(container) {
     lock = false;
     matchedPairs = 0;
 
-    const gods = obj_shuffle(GODS).slice(0, level.pairs);
+    const gods = shuffleArray(GODS).slice(0, level.pairs);
     let deck = [];
     gods.forEach((g) => {
       deck.push({ godId: g.id, type: "god", matched: false });
       deck.push({ godId: g.id, type: "symbol", matched: false });
     });
-    cards = obj_shuffle(deck);
+    cards = shuffleArray(deck);
 
     gridEl.className = "memo-grid memo-grid-" + level.pairs;
     gridEl.innerHTML = "";
