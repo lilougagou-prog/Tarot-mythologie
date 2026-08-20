@@ -1466,6 +1466,36 @@ function escapeHTML(value){
   }[ch]));
 }
 
+// Respecte la préférence système "réduire les animations" pour les effets purement
+// décoratifs déclenchés en JS (particules, ripple…) — les transitions CSS "fonctionnelles"
+// (flip de carte, transition d'écran) sont, elles, gérées directement par la media query
+// prefers-reduced-motion dans styles.css.
+function prefersReducedMotion(){
+  try{ return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches; }
+  catch{ return false; }
+}
+
+// Fait apparaître un texte mot par mot façon oracle qui parle (voir .tword dans
+// styles.css) : le texte complet est bien présent dans le DOM dès le rendu — accessible,
+// sélectionnable, copiable — seule l'opacité de chaque mot est animée en cascade via CSS
+// (délai calculé ici, appliqué en inline style). La durée totale est plafonnée : c'est le
+// nombre de mots qui détermine le délai par mot, jamais l'inverse, pour qu'un texte long
+// ne traîne jamais.
+function typewriterHTML(paragraphs){
+  if(prefersReducedMotion()) return paragraphs.map(p=>`<p>${escapeHTML(p)}</p>`).join("");
+  const totalWords = paragraphs.reduce((n,p)=>n + p.split(/\s+/).filter(Boolean).length, 0);
+  const perWordMs = Math.max(12, Math.min(45, 1300 / Math.max(1, totalWords)));
+  let wordIndex = 0;
+  return paragraphs.map(p => {
+    const spans = p.split(/\s+/).filter(Boolean).map(w => {
+      const delay = Math.round(wordIndex * perWordMs);
+      wordIndex++;
+      return `<span class="tword" style="animation-delay:${delay}ms">${escapeHTML(w)}</span>`;
+    }).join(" ");
+    return `<p>${spans}</p>`;
+  }).join("");
+}
+
 function allCards(){
   const cards = MAJORS.map(x => [...x]);
   for(const [suit, rows] of Object.entries(COURTS)){
@@ -1523,9 +1553,17 @@ function cardHTML(c, cls="major"){
   </div>`;
 }
 
-function cardBackHTML(idx, revealed){
-  return `<div class="tarot-card-back ${revealed?"revealed":""}" data-pick="${idx}">
-    <div class="back-frame"><span class="back-glyph">✦</span></div>
+// Carte de la pioche : dos + face en carton retourné (flip 3D CSS, voir .flip-slot dans
+// styles.css). Tant que la carte n'est pas choisie, la face reste vide (aucune image
+// chargée) — c'est bindDeck() qui l'injecte au clic, juste avant de lancer le flip, pour
+// ne jamais précharger l'illustration des cartes de la pioche jamais retournées.
+function cardBackHTML(idx, card, revealed){
+  const cls = card[4]==="major" ? "major" : (SUITS[card[6]]?.[0] || "major");
+  return `<div class="flip-slot ${revealed?"flipped":""}" data-pick="${idx}">
+    <div class="flip-inner">
+      <div class="flip-face flip-back"><div class="back-frame"><span class="back-glyph">✦</span></div></div>
+      <div class="flip-face flip-front">${revealed ? cardHTML(card, cls) : ""}</div>
+    </div>
   </div>`;
 }
 
@@ -1681,6 +1719,9 @@ function saveProfileData(data){ localStorage.setItem("delphesProfile", JSON.stri
 // Suivi de ce qui a réellement été consulté en détail — pas seulement tiré — dans trois
 // catégories : cartes, figures mythologiques, symboles (nombres inclus). Chaque id n'est
 // compté qu'une fois (Set), quel que soit le nombre de fois où on revisite la fiche.
+// Renvoie true si c'est la toute première fois que cette fiche est consultée (utilisé
+// pour le petit flash de découverte, voir discoveryFX() ci-dessous) — false sinon, y
+// compris pour les appels existants qui ignorent la valeur de retour.
 function markSeen(bucket, id){
   const key = "delphesSeen_" + bucket;
   let list;
@@ -1688,8 +1729,30 @@ function markSeen(bucket, id){
   if(!list.includes(id)){
     list.push(id);
     localStorage.setItem(key, JSON.stringify(list));
+    return true;
   }
+  return false;
 }
+// Petit encart "Première découverte" affiché en haut d'une fiche jamais consultée avant
+// (voir markSeen() ci-dessus) — juste un flash bref et purement décoratif, jamais
+// bloquant, pour rendre la progression (déjà trackée, voir learningProgress()) un peu
+// plus sensorielle qu'une barre qui se remplit en silence.
+function discoveryFX(){
+  return `<div class="discovery-badge">✦ Première découverte</div>`;
+}
+
+// Filigrane statique de constellation posé derrière un ".hero" (voir apprendre() et
+// symboles()) — purement décoratif, un seul motif fixe (pas besoin d'en varier le tracé).
+function constellationHTML(){
+  return `<svg class="constellation-bg" viewBox="0 0 300 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <polyline points="20,90 70,40 130,60 190,20 250,55 280,30" fill="none" stroke="var(--gold)" stroke-width="0.6" opacity="0.4"/>
+    <g fill="var(--gold-bright)">
+      <circle cx="20" cy="90" r="2"/><circle cx="70" cy="40" r="2.4"/><circle cx="130" cy="60" r="1.8"/>
+      <circle cx="190" cy="20" r="2.2"/><circle cx="250" cy="55" r="1.6"/><circle cx="280" cy="30" r="2"/>
+    </g>
+  </svg>`;
+}
+
 function seenCount(bucket){
   try{ return (JSON.parse(localStorage.getItem("delphesSeen_"+bucket) || "[]")).length; }
   catch{ return 0; }
@@ -2239,15 +2302,19 @@ function startAIReading(){
 
 function setRoute(newRoute){ route = newRoute; render(); window.scrollTo(0,0); }
 
-// Rejoue la transition douce (fondu + léger glissement) sur #screen à chaque changement
-// de contenu — on retire puis reforce la classe (avec un reflow entre les deux) car
-// l'élément #screen n'est jamais recréé, seul son innerHTML change.
-function triggerScreenAnim(){
+// Rejoue la transition douce sur #screen à chaque changement de contenu — on retire puis
+// reforce la classe (avec un reflow entre les deux) car l'élément #screen n'est jamais
+// recréé, seul son innerHTML change.
+// kind="detail" (fiche carte/symbole/figure/apprendre — tout ce qui va "plus loin") entre
+// avec un léger zoom avant, pour donner une sensation de profondeur ; kind="base" (onglets
+// et retour vers un écran parent, via render()) entre avec un zoom arrière plus doux — la
+// même paire d'animations partout, plutôt qu'une seule identique pour toute la navigation.
+function triggerScreenAnim(kind="base"){
   const screen = document.getElementById("screen");
   if(!screen) return;
-  screen.classList.remove("screen-anim");
+  screen.classList.remove("screen-anim", "screen-anim-detail");
   void screen.offsetWidth;
-  screen.classList.add("screen-anim");
+  screen.classList.add(kind==="detail" ? "screen-anim-detail" : "screen-anim");
 }
 
 function render(){
@@ -2406,7 +2473,7 @@ function tirage(){
       <p class="note">Choisis ${remaining} carte${remaining>1?"s":""} parmi celles-ci.</p>
       <p class="picks-counter">${picks.length} / ${conf.count} choisies</p>
     </section>
-    <div class="deck-grid">${spread.map((c,i)=>cardBackHTML(i, picks.includes(i))).join("")}</div>`;
+    <div class="deck-grid">${spread.map((c,i)=>cardBackHTML(i, c, picks.includes(i))).join("")}</div>`;
   }
   return renderDrawResult();
 }
@@ -2470,7 +2537,7 @@ function renderDrawResult(){
 
   const synthesisHTML = loading
     ? `<div class="ai-loading-magic">${starLoaderHTML("lg")}<p class="ai-loading-text">Les arcanes se consultent…</p></div>`
-    : `${reading.synthesis.map(p=>`<p>${escapeHTML(p)}</p>`).join("")}
+    : `${typewriterHTML(reading.synthesis)}
        ${reading.source==="local" && aiStatus==="error" ? `<p class="note">(Lecture générée hors-ligne — le service de lecture personnalisée n'a pas répondu.)</p>` : ""}`;
 
   return `
@@ -2553,6 +2620,7 @@ function profileMajorLinks(){
 function apprendre(){
   const p = learningProgress();
   return `<section class="hero">
+    ${constellationHTML()}
     <div class="hero-emblem">✦</div>
     <h2>Apprendre le Tarot de Delphes</h2>
     <p>Explore le jeu par catégorie, ou découvre les figures mythologiques qui l'inspirent.</p>
@@ -2576,7 +2644,7 @@ function showLearnMajors(){
     <div class="card-grid">${MAJORS.map(c=>cardHTML(c)).join("")}</div>
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
-  triggerScreenAnim();
+  triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
     render();
@@ -2596,7 +2664,7 @@ function showLearnCategory(kind){
     <div class="grid">${Object.entries(SUITS).map(([suit,m])=>`<div class="tile" data-learn-kind="${kind}" data-learn-suit="${escapeHTML(suit)}">${illusHTML(SUIT_IMAGES[suit],suit)}<strong>${escapeHTML(suit)}</strong><span>${escapeHTML(m[2])}</span></div>`).join("")}</div>
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
-  triggerScreenAnim();
+  triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
     render();
@@ -2617,7 +2685,7 @@ function showLearnSuit(kind, suit){
     <div class="card-grid">${cards.map(c=>cardHTML(c,SUITS[suit]?.[0]||"major")).join("")}</div>
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
-  triggerScreenAnim();
+  triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=> showLearnCategory(kind);
   cardDetailReturnTo = () => showLearnSuit(kind, suit);
@@ -2633,7 +2701,7 @@ function showLearnFigures(){
     <div class="symbol-list">${entries.map(([id,note])=>`<div class="symbol clickable" data-deity="${escapeHTML(id)}"><b>${escapeHTML(id.charAt(0).toUpperCase()+id.slice(1))}</b><br><small>${escapeHTML(note)}</small></div>`).join("")}</div>
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
-  triggerScreenAnim();
+  triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
     render();
@@ -2654,6 +2722,7 @@ function symboles(){
   ].sort((a,b)=>a.sort.localeCompare(b.sort,"fr"));
 
   return `<section class="hero">
+    ${constellationHTML()}
     <div class="hero-emblem">✦</div>
     <h2>Bibliothèque symbolique</h2>
     <p>Chaque symbole est relié aux cartes et aux figures mythologiques qui l'utilisent.</p>
@@ -2677,11 +2746,12 @@ let cardDetailReturnTo = () => render();
 
 function showSymbolDetail(id){
   const s = SYMBOL_LIBRARY[id]; if(!s) return;
-  markSeen("symbols", id);
+  const wasNew = markSeen("symbols", id);
   preDetailScroll = window.scrollY;
   const related = cardsForSymbol(id);
   const linkedDeities = s.links.filter(l => DEITY_NOTES[l]);
   document.getElementById("screen").innerHTML = `<div class="detail">
+    ${wasNew ? discoveryFX() : ""}
     <div class="symbol-hero">${s.icon}</div>
     <h2>${escapeHTML(s.label)}</h2>
     <p class="symbol-cat-big">${escapeHTML(s.category)}</p>
@@ -2694,7 +2764,7 @@ function showSymbolDetail(id){
       <div class="card-grid">${related.map(c=>cardHTML(c, c[4]==="major"?"major":(SUITS[c[6]]?.[0]||"major"))).join("")}</div>` : ""}
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
-  triggerScreenAnim();
+  triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
     render();
@@ -2706,10 +2776,11 @@ function showSymbolDetail(id){
 
 function showNumberDetail(n){
   const k = NUMBER_KEYS[n]; if(!k) return;
-  markSeen("symbols", "n"+n); // préfixé pour ne jamais entrer en collision avec un id de symbole
+  const wasNew = markSeen("symbols", "n"+n); // préfixé pour ne jamais entrer en collision avec un id de symbole
   preDetailScroll = window.scrollY;
   const related = CARDS.filter(c => c[4]==="number" && c[7]===Number(n));
   document.getElementById("screen").innerHTML = `<div class="detail">
+    ${wasNew ? discoveryFX() : ""}
     <div class="symbol-hero">${n==="1"?"As":n}</div>
     <h2>${n==="1"?"As":n} — ${escapeHTML(k[0])}</h2>
     <p class="symbol-cat-big">Grammaire des nombres</p>
@@ -2718,7 +2789,7 @@ function showNumberDetail(n){
     <div class="card-grid">${related.map(c=>cardHTML(c, SUITS[c[6]]?.[0]||"major")).join("")}</div>
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
-  triggerScreenAnim();
+  triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
     render();
@@ -2730,12 +2801,13 @@ function showNumberDetail(n){
 
 function showDeityDetail(id){
   const note = DEITY_NOTES[id]; if(!note) return;
-  markSeen("figures", id);
+  const wasNew = markSeen("figures", id);
   preDetailScroll = window.scrollY;
   const name = id.charAt(0).toUpperCase()+id.slice(1);
   const related = CARDS.filter(c => (c[4]==="major"||c[4]==="court") && (c[1]||"").toLowerCase()===id);
   const lore = DEITY_LORE[id];
   document.getElementById("screen").innerHTML = `<div class="detail">
+    ${wasNew ? discoveryFX() : ""}
     <div class="symbol-hero">✦</div>
     <h2>${escapeHTML(name)}</h2>
     <p class="symbol-cat-big">Figure mythologique</p>
@@ -2746,7 +2818,7 @@ function showDeityDetail(id){
       <div class="card-grid">${related.map(c=>cardHTML(c, c[4]==="major"?"major":(SUITS[c[6]]?.[0]||"major"))).join("")}</div>` : ""}
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
-  triggerScreenAnim();
+  triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
     render();
@@ -2933,7 +3005,7 @@ function showProfilAstral(){
   if(!saved){ showProfilEditForm(); return; }
 
   document.getElementById("screen").innerHTML = renderProfilResults(saved);
-  triggerScreenAnim();
+  triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
     render();
@@ -2950,7 +3022,7 @@ function showProfilEditForm(){
   preDetailScroll = window.scrollY;
   const saved = getProfile();
   document.getElementById("screen").innerHTML = renderProfilForm(saved);
-  triggerScreenAnim();
+  triggerScreenAnim("detail");
   window.scrollTo(0,0);
   bindProfilForm(saved);
 }
@@ -3142,7 +3214,7 @@ function showJournal(){
   document.getElementById("screen").innerHTML = `<div class="detail">${journalView()}
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
-  triggerScreenAnim();
+  triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
     render();
@@ -3209,7 +3281,7 @@ function showStats(){
   document.getElementById("screen").innerHTML = `<div class="detail">${statsView()}
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
-  triggerScreenAnim();
+  triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
     render();
@@ -3229,7 +3301,7 @@ function showRetrospective(){
   document.getElementById("screen").innerHTML = `<div class="detail">${retrospectiveView()}
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
-  triggerScreenAnim();
+  triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
     render();
@@ -3241,9 +3313,10 @@ function showRetrospective(){
 function showDetail(c){
   const suit = c[6], cls = c[4]==="major" ? "major" : (SUITS[suit]?.[0] || "major");
   const lore = CARD_LORE[c[0]];
-  markSeen("cards", c[0]);
+  const wasNew = markSeen("cards", c[0]);
   preDetailScroll = window.scrollY;
   document.getElementById("screen").innerHTML = `<div class="detail">
+    ${wasNew ? discoveryFX() : ""}
     ${cardHTML(c,cls)}
     <h2>${escapeHTML(c[0])}</h2>
     ${DEITY_NOTES[(c[1]||"").toLowerCase()] ? `<h3 class="clickable-deity" data-deity="${escapeHTML(c[1].toLowerCase())}">${escapeHTML(c[1])}</h3>` : `<h3>${escapeHTML(c[1])}</h3>`}
@@ -3260,7 +3333,7 @@ function showDetail(c){
     ${suit?`<div class="symbol-list" style="margin-top:14px"><div class="symbol"><b>Enseigne</b><br>${escapeHTML(suit)} · ${escapeHTML(SUITS[suit]?.[2]||"")}</div></div>`:""}
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
-  triggerScreenAnim();
+  triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
     cardDetailReturnTo();
@@ -3296,19 +3369,48 @@ function bindChips(){
   });
 }
 
+// Petite pluie de particules dorées qui jaillit depuis un élément au moment d'une action
+// marquante (carte choisie à la pioche…) — purement décoratif, s'auto-nettoie après coup.
+// `el` doit avoir position:relative (voir .flip-slot dans styles.css).
+function spawnGoldBurst(el){
+  if(prefersReducedMotion()) return;
+  const burst = document.createElement("div");
+  burst.className = "gold-burst";
+  const n = 10;
+  for(let i=0;i<n;i++){
+    const p = document.createElement("span");
+    const angle = (Math.PI*2*i)/n + (Math.random()*0.4-0.2);
+    const dist = 34 + Math.random()*26;
+    p.style.setProperty("--dx", (Math.cos(angle)*dist).toFixed(1)+"px");
+    p.style.setProperty("--dy", (Math.sin(angle)*dist).toFixed(1)+"px");
+    p.style.animationDelay = Math.round(Math.random()*70)+"ms";
+    burst.appendChild(p);
+  }
+  el.appendChild(burst);
+  setTimeout(()=> burst.remove(), 900);
+}
+
 function bindDeck(){
-  document.querySelectorAll("[data-pick]").forEach(el=>{
+  document.querySelectorAll(".flip-slot[data-pick]").forEach(el=>{
     el.onclick = ()=>{
       const idx = Number(el.dataset.pick);
       if(tirageState.picks.includes(idx) || tirageState.picks.length>=spreadConf().count) return;
-      // Petit temps de bascule (la carte "se retourne" visuellement, voir .tarot-card-back.revealed
-      // dans styles.css) avant de mettre à jour l'état et de re-rendre l'écran.
-      el.classList.add("revealed");
+      const card = tirageState.spread[idx];
+      const cls = card[4]==="major" ? "major" : (SUITS[card[6]]?.[0] || "major");
+      const front = el.querySelector(".flip-front");
+      if(front) front.innerHTML = cardHTML(card, cls);
+      spawnGoldBurst(el);
+      // Un frame d'écart pour que le navigateur peigne d'abord la face (encore cachée par
+      // le rotateY(180deg) du CSS) avant de lancer le flip — sinon le flip peut démarrer
+      // sur une face encore vide selon les navigateurs.
+      requestAnimationFrame(()=> el.classList.add("flipped"));
+      // Le temps du flip 3D (voir .flip-inner dans styles.css) avant de mettre à jour
+      // l'état et de re-rendre l'écran.
       setTimeout(()=>{
         tirageState.picks.push(idx);
         saveTirageState();
         render();
-      }, 380);
+      }, 650);
     };
   });
 }
@@ -3416,8 +3518,36 @@ function bind(){
   }
 }
 
+// Ambiance de fond qui varie doucement selon l'heure du jour (voir body.tod-* dans
+// styles.css) — calculé une seule fois au chargement, comme les transits/le rituel du
+// jour : pas la peine de recalculer en continu pendant que l'app reste ouverte.
+(function applyTimeOfDay(){
+  if(!document.body) return; // garde défensive (environnements de test sans vrai <body>)
+  const h = new Date().getHours();
+  const cls = (h>=5 && h<8) ? "tod-dawn" : (h>=18 && h<22) ? "tod-dusk" : (h>=22 || h<5) ? "tod-night" : "tod-day";
+  document.body.classList.add(cls);
+})();
+
 if("serviceWorker" in navigator) navigator.serviceWorker.register("./service-worker.js").catch(()=>{});
 // Safari iOS n'active les styles :active que sur les éléments ayant un vrai listener tactile :
 // cet écouteur (vide, passif) suffit à activer les micro-interactions au toucher partout dans l'app.
 document.addEventListener("touchstart", function(){}, { passive:true });
+
+// Petit "ripple" doré au clic sur les boutons — un seul écouteur délégué au document,
+// jamais besoin de le re-binder après un render() puisqu'il ne dépend d'aucun élément
+// particulier du DOM généré.
+document.addEventListener("click", (e)=>{
+  const btn = e.target.closest(".primary,.secondary,.ghost");
+  if(!btn || prefersReducedMotion()) return;
+  const rect = btn.getBoundingClientRect();
+  const x = Number.isFinite(e.clientX) && e.clientX ? e.clientX - rect.left : rect.width/2;
+  const y = Number.isFinite(e.clientY) && e.clientY ? e.clientY - rect.top : rect.height/2;
+  const ripple = document.createElement("span");
+  ripple.className = "ripple-fx";
+  ripple.style.left = x + "px";
+  ripple.style.top = y + "px";
+  btn.appendChild(ripple);
+  setTimeout(()=> ripple.remove(), 600);
+});
+
 render();
