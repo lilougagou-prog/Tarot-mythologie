@@ -1,4 +1,8 @@
-const CACHE = "mini-olympe-v3";
+// Changer ce numéro à CHAQUE déploiement qui touche un fichier mis en cache :
+// c'est ce qui rend le service worker "différent" aux yeux du navigateur et
+// déclenche la mise à jour (sinon le fetch de app.js reste servi depuis
+// l'ancien cache indéfiniment, même après un nouveau déploiement).
+const CACHE = "mini-olympe-v4";
 const ASSETS = [
   "./",
   "./index.html",

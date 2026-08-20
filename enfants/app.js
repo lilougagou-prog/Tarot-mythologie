@@ -221,8 +221,23 @@ function renderFiche(container, id) {
 router();
 
 // PWA : service worker (échoue silencieusement en local file:// ou sans support)
+// Un service worker déjà installé ne revérifie pas toujours s'il existe une
+// nouvelle version au simple réouverture de l'appli (surtout en PWA sur
+// téléphone) : on force la vérification à chaque lancement, et dès qu'une
+// nouvelle version prend la main, on recharge une fois pour l'afficher tout
+// de suite plutôt que d'attendre la prochaine fermeture/réouverture.
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("service-worker.js").catch(() => {});
+    navigator.serviceWorker
+      .register("service-worker.js")
+      .then((reg) => reg.update().catch(() => {}))
+      .catch(() => {});
+  });
+
+  let reloadedForUpdate = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (reloadedForUpdate) return;
+    reloadedForUpdate = true;
+    window.location.reload();
   });
 }
