@@ -2707,6 +2707,9 @@ function showLearnFigures(){
     render();
     requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
   };
+  // Pour qu'une figure cliquée dans cette liste revienne bien ici plutôt que de sauter
+  // au menu Apprendre (même logique que showSymbolDetail() etc.).
+  cardDetailReturnTo = () => showLearnFigures();
   bindChips();
 }
 
@@ -2744,7 +2747,14 @@ let preDetailScroll = 0;
 // sous-liste d'où l'on vient, pas directement au menu principal.
 let cardDetailReturnTo = () => render();
 
-function showSymbolDetail(id){
+// backTo (2e paramètre) : écran vers lequel revenir, capturé UNE SEULE FOIS au moment où
+// cette fiche est ouverte pour la première fois (valeur par défaut = cardDetailReturnTo
+// courant). Le passer explicitement — plutôt que de relire cardDetailReturnTo à chaque
+// appel — est indispensable : cardDetailReturnTo est réécrasé plus bas pour les liens
+// internes de CETTE fiche, donc le relire au moment du clic sur "← Retour" pointerait vers
+// la fiche qu'on vient de quitter, pas vers celle d'où l'on est arrivé (ex. symbole → figure
+// → carte → retour → retour se retrouverait bloqué en boucle sur la carte).
+function showSymbolDetail(id, backTo = cardDetailReturnTo){
   const s = SYMBOL_LIBRARY[id]; if(!s) return;
   const wasNew = markSeen("symbols", id);
   preDetailScroll = window.scrollY;
@@ -2767,14 +2777,15 @@ function showSymbolDetail(id){
   triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
-    render();
+    backTo();
     requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
   };
-  cardDetailReturnTo = () => showSymbolDetail(id);
+  cardDetailReturnTo = () => showSymbolDetail(id, backTo);
   bindCards(); bindChips();
 }
 
-function showNumberDetail(n){
+// Voir le commentaire au-dessus de showSymbolDetail() pour le paramètre backTo.
+function showNumberDetail(n, backTo = cardDetailReturnTo){
   const k = NUMBER_KEYS[n]; if(!k) return;
   const wasNew = markSeen("symbols", "n"+n); // préfixé pour ne jamais entrer en collision avec un id de symbole
   preDetailScroll = window.scrollY;
@@ -2792,14 +2803,15 @@ function showNumberDetail(n){
   triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
-    render();
+    backTo();
     requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
   };
-  cardDetailReturnTo = () => showNumberDetail(n);
+  cardDetailReturnTo = () => showNumberDetail(n, backTo);
   bindCards(); bindChips();
 }
 
-function showDeityDetail(id){
+// Voir le commentaire au-dessus de showSymbolDetail() pour le paramètre backTo.
+function showDeityDetail(id, backTo = cardDetailReturnTo){
   const note = DEITY_NOTES[id]; if(!note) return;
   const wasNew = markSeen("figures", id);
   preDetailScroll = window.scrollY;
@@ -2821,10 +2833,10 @@ function showDeityDetail(id){
   triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
-    render();
+    backTo();
     requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
   };
-  cardDetailReturnTo = () => showDeityDetail(id);
+  cardDetailReturnTo = () => showDeityDetail(id, backTo);
   bindCards(); bindChips();
 }
 
@@ -3310,7 +3322,8 @@ function showRetrospective(){
   cardDetailReturnTo = showRetrospective;
 }
 
-function showDetail(c){
+// Voir le commentaire au-dessus de showSymbolDetail() pour le paramètre backTo.
+function showDetail(c, backTo = cardDetailReturnTo){
   const suit = c[6], cls = c[4]==="major" ? "major" : (SUITS[suit]?.[0] || "major");
   const lore = CARD_LORE[c[0]];
   const wasNew = markSeen("cards", c[0]);
@@ -3336,9 +3349,12 @@ function showDetail(c){
   triggerScreenAnim("detail");
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=>{
-    cardDetailReturnTo();
+    backTo();
     requestAnimationFrame(()=>window.scrollTo(0,preDetailScroll));
   };
+  // Pour qu'un lien cliqué depuis cette fiche (nom de la figure, symbole…) revienne bien
+  // ici plutôt que de sauter directement à l'écran qui nous a menés à cette carte.
+  cardDetailReturnTo = () => showDetail(c, backTo);
   bindChips();
 }
 
