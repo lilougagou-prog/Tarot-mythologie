@@ -2604,8 +2604,109 @@ function updateStreak(){
   return state.streak;
 }
 
+/* ===================== CALENDRIER ATTIQUE ===================== */
+// Calendrier civil d'Athènes antique : luni-solaire, douze mois lunaires (parfois treize,
+// une année sur deux ou trois, pour rattraper le retard sur le soleil) qui commencent
+// chacun à la nouvelle lune, la nouvelle année elle-même s'ouvrant à la première nouvelle
+// lune suivant le solstice d'été. Calculé ici entièrement côté client, par pure
+// arithmétique (aucun appel réseau) — approximatif par nature : la date du solstice
+// utilise la formule basse précision de Meeus (Astronomical Algorithms, ch. 27, sans les
+// termes périodiques correctifs, exacts à moins d'un jour) et les nouvelles lunes sont
+// dérivées d'une lunaison moyenne (29,530588861 j) depuis une nouvelle lune de référence
+// connue (6 janvier 2000, ~18h14 UT) — le calendrier attique réel dépendait en pratique de
+// l'observation directe du ciel par les autorités religieuses, jamais parfaitement
+// régulière. Suffisant pour donner une date et une divinité du jour plausibles, pas pour
+// une reconstitution savante au jour près.
+const ATTIC_MONTHS = [
+  "Hécatombéion", "Métageitnion", "Boédromion", "Pyanepsion", "Maimactérion", "Poséidéion",
+  "Gaméliion", "Anthestérion", "Élaphébolion", "Mounichion", "Thargélion", "Skirophorion",
+];
+const ATTIC_NEW_MOON_EPOCH_JD = 2451550.1; // nouvelle lune de référence : 6 janvier 2000, ~18h14 UT
+const ATTIC_SYNODIC_MONTH = 29.530588861; // durée moyenne d'une lunaison, en jours
+
+// Jour julien (approximatif, midi local pris comme référence — suffisant à l'échelle
+// d'une journée) d'une date calendaire grégorienne. Algorithme classique (Fliegel &
+// Van Flandern / Meeus).
+function julianDayFromYMD(y, m, d){
+  if(m <= 2){ y -= 1; m += 12; }
+  const A = Math.floor(y/100);
+  const B = 2 - A + Math.floor(A/4);
+  return Math.floor(365.25*(y+4716)) + Math.floor(30.6001*(m+1)) + d + B - 1524.5 + 0.5; // +0.5 : midi local
+}
+
+// Jour julien approximatif du solstice de juin d'une année donnée (formule basse
+// précision de Meeus, valable env. 1000 à 3000 apr. J.-C., sans les 24 termes
+// périodiques de raffinement — exacte à moins d'un jour, ce qui suffit ici).
+function juneSolsticeJD(year){
+  const Y = (year - 2000) / 1000;
+  return 2451716.56767 + 365241.62603*Y + 0.00325*Y*Y + 0.00888*Y*Y*Y - 0.00030*Y*Y*Y*Y;
+}
+
+// Divinités traditionnellement honorées à date fixe du mois, quel que soit le mois lui-
+// même — les « jours sacrés » du calendrier attique attestés chez les auteurs anciens
+// (Hésiode, Proclus) et la pratique religieuse courante : la Tétrade (4) pour Hermès,
+// Aphrodite, Héraclès et Éros, tous nés ce jour-là ; le 6 pour Artémis et le 7 pour
+// Apollon (nés eux aussi ces jours), le 7 et le 20 (Eikas) restant l'un et l'autre
+// consacrés à Apollon ; le 8 pour Poséidon. Le dernier jour du mois (Héné kai néa, « la
+// vieille et la nouvelle »), nuit de lune noire, est le Deipnon d'Hécate. Beaucoup de
+// jours n'ont aucune divinité qui leur soit propre : la fonction renvoie alors un tableau
+// vide plutôt que d'en inventer une.
+const ATTIC_SACRED_DAYS = {
+  1: ["apollon", "séléné"],
+  4: ["hermès", "aphrodite", "héraclès", "éros"],
+  6: ["artémis"],
+  7: ["apollon"],
+  8: ["poséidon"],
+  20: ["apollon"],
+};
+function atticSacredDeities(day, daysInMonth){
+  if(day === daysInMonth) return ["hécate"]; // Héné kai néa : Deipnon d'Hécate
+  return ATTIC_SACRED_DAYS[day] || [];
+}
+
+// Calcule la date du jour dans le calendrier attique : mois (avec repli sur un « mois
+// intercalaire » approximatif au-delà du douzième, les années embolimiques ayant
+// traditionnellement inséré un second Poséidéion), jour du mois (1-indexé) et nombre de
+// jours de ce mois (29 ou 30, un mois « creux » ou « plein » selon l'écart réel entre
+// deux nouvelles lunes).
+function atticCalendarInfo(date){
+  date = date || new Date();
+  const y = date.getFullYear(), m = date.getMonth()+1, d = date.getDate();
+  const todayJD = julianDayFromYMD(y, m, d);
+
+  let refYear = y;
+  let solsticeJD = juneSolsticeJD(y);
+  if(todayJD < solsticeJD){ refYear = y - 1; solsticeJD = juneSolsticeJD(refYear); }
+
+  const k0 = Math.ceil((solsticeJD - ATTIC_NEW_MOON_EPOCH_JD) / ATTIC_SYNODIC_MONTH);
+  const yearStartJD = ATTIC_NEW_MOON_EPOCH_JD + k0*ATTIC_SYNODIC_MONTH; // Noménie d'Hécatombéion
+
+  const elapsed = Math.max(0, todayJD - yearStartJD);
+  const monthIndex = Math.min(12, Math.floor(elapsed / ATTIC_SYNODIC_MONTH));
+  const monthStartJD = yearStartJD + monthIndex*ATTIC_SYNODIC_MONTH;
+  const nextMonthStartJD = yearStartJD + (monthIndex+1)*ATTIC_SYNODIC_MONTH;
+  const daysInMonth = Math.max(29, Math.min(30, Math.round(nextMonthStartJD - monthStartJD)));
+  const day = Math.max(1, Math.min(daysInMonth, Math.floor(todayJD - monthStartJD) + 1));
+  const isEmbolimic = monthIndex === 12;
+  const monthName = isEmbolimic ? "Poséidéion II (mois intercalaire)" : ATTIC_MONTHS[monthIndex];
+
+  return { monthName, day, daysInMonth, isEmbolimic, deities: atticSacredDeities(day, daysInMonth) };
+}
+
+// Membre de phrase "— à honorer aujourd'hui : X" (une ou plusieurs divinités, jointes à la
+// française) à ajouter après la date attique, ou chaîne vide si ce jour du mois n'a pas de
+// divinité qui lui soit propre. Chaque nom est une puce cliquable (.clickable-deity, liée
+// par bindChips()) qui ouvre la fiche complète de la divinité.
+function atticDeityNoteHTML(deities){
+  if(!deities.length) return "";
+  const chips = deities.map(id => `<span class="clickable-deity" data-deity="${escapeHTML(id)}">${escapeHTML(id.charAt(0).toUpperCase()+id.slice(1))}</span>`);
+  const joined = chips.length === 1 ? chips[0] : `${chips.slice(0,-1).join(", ")} et ${chips[chips.length-1]}`;
+  return ` — à honorer aujourd'hui : ${joined}`;
+}
+
 function home(){
   const streak = updateStreak();
+  const attic = atticCalendarInfo();
   const day = MAJORS[dayOfYear() % MAJORS.length];
   const lore = CARD_LORE[day[0]];
   const profile = getProfile();
@@ -2625,6 +2726,7 @@ function home(){
     <div class="hero-emblem">✦</div>
     <h2>Tarot de Delphes</h2>
     ${profile?.firstName ? `<p class="note" style="margin-top:2px">Bonjour ${escapeHTML(profile.firstName)} ✦</p>` : ""}
+    <p class="note" style="margin-top:2px">📜 ${attic.day} ${escapeHTML(attic.monthName)} <span style="opacity:.7">(calendrier attique)</span>${atticDeityNoteHTML(attic.deities)}</p>
     <p>Un tarot mythologique grec qui s'apprend en le regardant : tirage, symboles reliés entre eux, et un parcours d'apprentissage progressif.</p>
     ${streak > 1 ? `<span class="pill" style="margin-top:10px">✦ ${streak} jours de suite</span>` : ""}
   </section>
