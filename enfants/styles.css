@@ -623,8 +623,18 @@ main.screen { padding: 4px 16px 24px; }
 }
 .memo-card.flipped .memo-card-inner { transform: rotateY(180deg); }
 .memo-card-back, .memo-face {
+  /* top/left/width/height explicites plutôt que inset:0 : sur Safari, la
+     hauteur d'un élément absolu descendant d'un ancêtre avec
+     transform-style:preserve-3d (le contexte 3D du flip) ne se résout pas
+     de façon fiable quand elle dérive de la boîte du parent (que ce soit
+     via un pourcentage ou via inset:0) — seule une longueur déjà résolue
+     en pixels (ici via la variable --memo-card-h, posée en JS) est fiable
+     dans ce contexte, quel que soit le navigateur. */
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--memo-card-h, 120px);
   border-radius: 14px;
   display: flex;
   align-items: center;
@@ -653,29 +663,29 @@ main.screen { padding: 4px 16px 24px; }
 .memo-face-symbol svg { width: 100%; height: 100%; }
 .memo-face-portrait {
   /* Doit rester en position absolute (comme .memo-face dont hérite cette
-     règle) pour remplir exactement la carte quelle que soit sa hauteur en
-     pixels : sans ça, cette boîte reprend la hauteur naturelle de l'image
-     (variable selon le portrait), d'où bande blanche ou débordement/
-     chevauchement selon que l'image est plus courte ou plus haute que la
-     carte. */
+     règle) pour remplir exactement la carte, avec une hauteur en pixels
+     explicite plutôt que dérivée du parent (voir commentaire ci-dessus
+     sur .memo-card-back, .memo-face) : sans ça, cette boîte reprend la
+     hauteur naturelle de l'image (variable selon le portrait), d'où bande
+     blanche ou débordement/chevauchement selon l'image. */
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--memo-card-h, 120px);
   padding: 0;
   overflow: hidden;
   background: #dbe4ff;
 }
 .memo-face-portrait img {
-  /* position:absolute + inset:0 plutôt que width/height:100% : sur Safari,
-     une hauteur en pourcentage ne se résout pas de façon fiable pour un
-     descendant placé dans un ancêtre avec transform-style:preserve-3d
-     (contexte 3D du flip) — l'image ne remplissait alors que sa hauteur
-     intrinsèque, laissant une bande vide en haut de la carte. En absolu,
-     la taille est calculée directement par rapport à la boîte du parent,
-     sans ambiguïté. */
+  /* Même logique : hauteur en pixels explicite (--memo-card-h) plutôt que
+     100% ou inset:0, pour ne dépendre d'aucune résolution de la hauteur du
+     parent dans ce contexte 3D. */
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100%;
+  height: var(--memo-card-h, 120px);
   object-fit: cover;
   display: block;
 }
