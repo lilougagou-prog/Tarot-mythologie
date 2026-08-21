@@ -1,5 +1,5 @@
 // ============================================================================
-// Mini Olympe — mini-jeu Mémo (paires dieu ↔ symbole)
+// Mini Olympe — mini-jeu Mémo (retrouver les deux cartes identiques)
 // ============================================================================
 
 const MEMO_LEVELS = [
@@ -17,7 +17,7 @@ function renderMemoGame(container) {
   const wrap = document.createElement("section");
   wrap.className = "memo-screen";
   wrap.innerHTML = `
-    <p class="screen-intro">Retourne deux cartes : trouve le dieu et son symbole !</p>
+    <p class="screen-intro">Retourne deux cartes : retrouve les deux portraits identiques !</p>
     <div class="maze-levels" id="memo-levels"></div>
     <div class="memo-grid" id="memo-grid"></div>
     <div class="memo-win" id="memo-win" hidden></div>
@@ -51,8 +51,8 @@ function renderMemoGame(container) {
     const gods = shuffleArray(GODS).slice(0, level.pairs);
     let deck = [];
     gods.forEach((g) => {
-      deck.push({ godId: g.id, type: "god", matched: false });
-      deck.push({ godId: g.id, type: "symbol", matched: false });
+      deck.push({ godId: g.id, matched: false });
+      deck.push({ godId: g.id, matched: false });
     });
     cards = shuffleArray(deck);
 
@@ -65,12 +65,9 @@ function renderMemoGame(container) {
       el.className = "memo-card";
       el.style.setProperty("--god-color", god.color);
       const portrait = PORTRAIT_IMAGES[god.id];
-      const face =
-        card.type === "god"
-          ? portrait
-            ? `<div class="memo-face memo-face-portrait"><img src="${portrait}" alt="${god.name}"><span>${god.name}</span></div>`
-            : `<div class="memo-face memo-face-god">${god.name}</div>`
-          : `<div class="memo-face memo-face-symbol">${renderSymbolBadge(god.symbol)}</div>`;
+      const face = portrait
+        ? `<div class="memo-face memo-face-portrait"><img src="${portrait}" alt=""></div>`
+        : `<div class="memo-face memo-face-symbol">${renderSymbolBadge(god.symbol)}</div>`;
       el.innerHTML = `
         <div class="memo-card-inner">
           <div class="memo-card-back">❓</div>
@@ -90,7 +87,7 @@ function renderMemoGame(container) {
     if (flipped.length === 2) {
       lock = true;
       const [a, b] = flipped;
-      if (a.godId === b.godId && a.type !== b.type) {
+      if (a.godId === b.godId) {
         a.matched = true;
         b.matched = true;
         matchedPairs++;

@@ -110,12 +110,16 @@ function renderColoriagePicker(container) {
   grid.className = "god-grid";
   GODS.forEach((g) => {
     const done = p.coloriage.includes(g.id);
+    const illustration = COLORING_IMAGES[g.id];
+    const badge = illustration
+      ? `<div class="god-card-badge god-card-portrait god-card-lineart"><img src="${illustration}" alt=""></div>`
+      : `<div class="god-card-badge">${renderSymbolBadge(g.symbol)}</div>`;
     const card = document.createElement("a");
     card.href = `#/coloriage/${g.id}`;
     card.className = "god-card";
     card.style.setProperty("--god-color", g.color);
     card.innerHTML = `
-      <div class="god-card-badge">${renderSymbolBadge(g.symbol)}</div>
+      ${badge}
       <div class="god-card-name">${g.name}</div>
       <div class="god-card-title">${g.title}</div>
       ${done ? '<div class="god-card-found" title="Colorié">🎨</div>' : ""}

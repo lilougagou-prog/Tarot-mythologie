@@ -253,9 +253,8 @@ function shuffleArray(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
 }
 
-// Portraits et cartes-attributs illustrés (Mémo + Retrouve les attributs).
-// Seuls 12 des 17 dieux/héros en ont pour l'instant ; le reste garde le
-// traitement texte/SVG existant.
+// Portraits et cartes-attributs illustrés (Mémo, galerie, fiches, Retrouve
+// les attributs) — les 17 dieux/héros en ont désormais un.
 const PORTRAIT_IMAGES = {
   zeus: "assets/memo/zeus.jpg",
   hera: "assets/memo/hera.jpg",
@@ -269,6 +268,11 @@ const PORTRAIT_IMAGES = {
   dionysos: "assets/memo/dionysos.jpg",
   hestia: "assets/memo/hestia.jpg",
   demeter: "assets/memo/demeter.jpg",
+  hades: "assets/memo/hades.jpg",
+  persephone: "assets/memo/persephone.jpg",
+  heracles: "assets/memo/heracles.jpg",
+  pan: "assets/memo/pan.jpg",
+  hephaistos: "assets/memo/hephaistos.jpg",
 };
 
 const ATTRIBUTE_IMAGES = {
@@ -284,6 +288,11 @@ const ATTRIBUTE_IMAGES = {
   dionysos: "assets/memo/dionysos-attr.jpg",
   hestia: "assets/memo/hestia-attr.jpg",
   demeter: "assets/memo/demeter-attr.jpg",
+  hades: "assets/memo/hades-attr.jpg",
+  persephone: "assets/memo/persephone-attr.jpg",
+  heracles: "assets/memo/heracles-attr.jpg",
+  pan: "assets/memo/pan-attr.jpg",
+  hephaistos: "assets/memo/hephaistos-attr.jpg",
 };
 
 function randomGods(count, excludeIds) {
