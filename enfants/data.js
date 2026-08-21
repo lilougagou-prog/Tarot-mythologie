@@ -310,7 +310,7 @@ function shuffleArray(arr) {
 }
 
 // Portraits et cartes-attributs illustrés (Mémo, galerie, fiches, Retrouve
-// les attributs) — les 17 dieux/héros en ont désormais un.
+// les attributs) — 21 des 21 dieux/héros en ont désormais un.
 const PORTRAIT_IMAGES = {
   zeus: "assets/memo/zeus.jpg",
   hera: "assets/memo/hera.jpg",
@@ -329,6 +329,10 @@ const PORTRAIT_IMAGES = {
   heracles: "assets/memo/heracles.jpg",
   pan: "assets/memo/pan.jpg",
   hephaistos: "assets/memo/hephaistos.jpg",
+  circe: "assets/memo/circe.jpg",
+  hygie: "assets/memo/hygie.jpg",
+  hecate: "assets/memo/hecate.jpg",
+  iris: "assets/memo/iris.jpg",
 };
 
 const ATTRIBUTE_IMAGES = {
@@ -349,6 +353,10 @@ const ATTRIBUTE_IMAGES = {
   heracles: "assets/memo/heracles-attr.jpg",
   pan: "assets/memo/pan-attr.jpg",
   hephaistos: "assets/memo/hephaistos-attr.jpg",
+  circe: "assets/memo/circe-attr.jpg",
+  hygie: "assets/memo/hygie-attr.jpg",
+  hecate: "assets/memo/hecate-attr.jpg",
+  iris: "assets/memo/iris-attr.jpg",
 };
 
 function randomGods(count, excludeIds) {
