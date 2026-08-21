@@ -255,11 +255,26 @@ if ("serviceWorker" in navigator) {
   // besoin de recharger la page que l'enfant est justement en train de lire.
   const hadControllerAtLoad = !!navigator.serviceWorker.controller;
 
+  let swReg = null;
   window.addEventListener("load", () => {
     navigator.serviceWorker
       .register("service-worker.js")
-      .then((reg) => reg.update().catch(() => {}))
+      .then((reg) => {
+        swReg = reg;
+        reg.update().catch(() => {});
+      })
       .catch(() => {});
+  });
+
+  // Sur mobile, rouvrir une PWA depuis l'écran d'accueil ne relance pas
+  // toujours un vrai "load" (l'appli était juste en arrière-plan) : on
+  // revérifie donc aussi à chaque fois que l'onglet redevient visible,
+  // sinon une mise à jour peut ne jamais être détectée tant que l'enfant
+  // ne force pas une fermeture complète.
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && swReg) {
+      swReg.update().catch(() => {});
+    }
   });
 
   let reloadedForUpdate = false;
