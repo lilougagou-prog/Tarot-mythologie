@@ -47,11 +47,27 @@ function renderMemoGame(container) {
   // Ni aspect-ratio ni le "padding-bottom hack" ne se sont montrés fiables
   // dans une grille CSS sur mobile : on mesure donc directement, ce qui
   // garantit que toutes les cartes (retournées ou non) ont la même taille.
+  const MEMO_GRID_GAP = 10; // doit rester synchro avec .memo-grid { gap: ... } en CSS
+
+  // Calculée à partir de la largeur du CONTENEUR (gridEl), pas d'une carte
+  // existante : ça permet de poser la variable AVANT même de construire les
+  // cartes (voir startGame), pour qu'aucune carte ne s'affiche jamais, ne
+  // serait-ce qu'une image, à une taille provisoire (repli 120px) avant
+  // d'être retaillée. Un tel repli transitoire semble pouvoir se figer dans
+  // le calque graphique d'une carte déjà retournée en 3D (perspective +
+  // preserve-3d), laissant une bande vide même une fois la bonne taille
+  // appliquée en layout — d'où le correctif.
+  function computeCardHeight(cols) {
+    const gridW = gridEl.getBoundingClientRect().width;
+    if (gridW <= 0) return null;
+    const cardW = (gridW - MEMO_GRID_GAP * (cols - 1)) / cols;
+    return (cardW * 4) / 3;
+  }
+
   function syncCardHeights() {
-    const firstCard = gridEl.querySelector(".memo-card");
-    if (!firstCard) return;
-    const w = firstCard.getBoundingClientRect().width;
-    if (w > 0) gridEl.style.setProperty("--memo-card-h", (w * 4) / 3 + "px");
+    const cols = gridEl.classList.contains("memo-grid-8") ? 4 : 3;
+    const h = computeCardHeight(cols);
+    if (h) gridEl.style.setProperty("--memo-card-h", h + "px");
   }
 
   let resizeScheduled = false;
@@ -81,6 +97,12 @@ function renderMemoGame(container) {
     cards = shuffleArray(deck);
 
     gridEl.className = "memo-grid memo-grid-" + level.pairs;
+    // Poser la hauteur AVANT d'insérer la moindre carte (voir commentaire
+    // sur computeCardHeight) : la classe memo-grid-N ci-dessus doit déjà
+    // être appliquée, car elle change le nombre de colonnes utilisé pour
+    // le calcul.
+    const h = computeCardHeight(level.pairs === 8 ? 4 : 3);
+    if (h) gridEl.style.setProperty("--memo-card-h", h + "px");
     gridEl.innerHTML = "";
     cards.forEach((card) => {
       const god = getGod(card.godId);
@@ -89,8 +111,13 @@ function renderMemoGame(container) {
       el.className = "memo-card";
       el.style.setProperty("--god-color", god.color);
       const portrait = PORTRAIT_IMAGES[god.id];
+      // Image posée en fond CSS (background-image + background-size:cover)
+      // plutôt qu'en balise <img> : une <img> a son propre mécanisme de
+      // taille intrinsèque, source d'ennuis par le passé (voir styles.css).
+      // Un fond CSS se contente de remplir la boîte de son élément, déjà
+      // correctement calculée.
       const face = portrait
-        ? `<div class="memo-face memo-face-portrait"><img src="${portrait}" alt=""></div>`
+        ? `<div class="memo-face memo-face-portrait" style="background-image:url('${portrait}')" role="img" aria-label=""></div>`
         : `<div class="memo-face memo-face-symbol">${renderSymbolBadge(god.symbol)}</div>`;
       el.innerHTML = `
         <div class="memo-card-inner">

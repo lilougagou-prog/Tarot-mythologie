@@ -601,15 +601,13 @@ main.screen { padding: 4px 16px 24px; }
 .memo-card {
   /* Ni aspect-ratio ni la technique du padding-bottom en pourcentage ne se
      sont montrées fiables ici (cartes retournées/non retournées de tailles
-     différentes sur certains mobiles, l'un et l'autre étant réputés fragiles
-     combinés à une grille CSS + perspective/transform-style). La hauteur est
-     donc calculée en JS à partir de la largeur réellement mesurée de la
-     carte (voir syncCardHeights dans game-memo.js) et posée ici via une
-     variable CSS : solution robuste, indépendante du moteur de rendu. */
+     différentes sur certains mobiles). La hauteur est donc calculée en JS
+     à partir de la largeur réellement disponible pour une carte (voir
+     computeCardHeight dans game-memo.js) et posée ici via une variable
+     CSS : solution robuste, indépendante du moteur de rendu. */
   position: relative;
   width: 100%;
   height: var(--memo-card-h, 120px);
-  perspective: 800px;
   background: none;
   border: none;
   cursor: pointer;
@@ -618,18 +616,20 @@ main.screen { padding: 4px 16px 24px; }
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform 0.4s;
-  transform-style: preserve-3d;
 }
-.memo-card.flipped .memo-card-inner { transform: rotateY(180deg); }
+/* Le retournement était à l'origine un vrai flip 3D (perspective +
+   transform-style:preserve-3d + rotateY + backface-visibility). Repro
+   minimale et reproductible à l'appui (page statique, sans JS ni animation
+   ni clic) : cette combinaison déclenche un bug de PEINTURE non
+   déterministe dans le moteur de rendu pour une image de fond posée sur un
+   élément à l'intérieur de ce contexte 3D — le CSS calculé est pourtant
+   correct (bonne taille, bon fond, background-size:cover), mais le rendu
+   affiché laisse parfois une bande vide, de façon aléatoire d'une image ou
+   d'un chargement de page à l'autre. Remplacé par un fondu-enchaîné 2D pur
+   (opacité + léger « squash » horizontal) : aucune des propriétés en cause
+   (perspective, preserve-3d, rotateY, backface-visibility) n'est utilisée,
+   donc aucune prise sur ce bug, quel que soit le navigateur. */
 .memo-card-back, .memo-face {
-  /* top/left/width/height explicites plutôt que inset:0 : sur Safari, la
-     hauteur d'un élément absolu descendant d'un ancêtre avec
-     transform-style:preserve-3d (le contexte 3D du flip) ne se résout pas
-     de façon fiable quand elle dérive de la boîte du parent (que ce soit
-     via un pourcentage ou via inset:0) — seule une longueur déjà résolue
-     en pixels (ici via la variable --memo-card-h, posée en JS) est fiable
-     dans ce contexte, quel que soit le navigateur. */
   position: absolute;
   top: 0;
   left: 0;
@@ -639,19 +639,32 @@ main.screen { padding: 4px 16px 24px; }
   display: flex;
   align-items: center;
   justify-content: center;
-  backface-visibility: hidden;
   box-shadow: var(--shadow);
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 .memo-card-back {
   background: linear-gradient(135deg, #3b5bdb, #9c36b5);
   color: #fff;
   font-size: 1.6rem;
+  opacity: 1;
+  transform: scaleX(1);
 }
 .memo-face {
-  transform: rotateY(180deg);
   background: #fff;
   border: 3px solid var(--god-color, var(--primary));
   padding: 8px;
+  opacity: 0;
+  transform: scaleX(0.82);
+  pointer-events: none;
+}
+.memo-card.flipped .memo-card-back {
+  opacity: 0;
+  transform: scaleX(0.82);
+}
+.memo-card.flipped .memo-face {
+  opacity: 1;
+  transform: scaleX(1);
+  pointer-events: auto;
 }
 .memo-face-god {
   font-weight: 700;
@@ -662,12 +675,11 @@ main.screen { padding: 4px 16px 24px; }
 .memo-face-symbol { width: 60%; height: 60%; color: var(--god-color, var(--primary)); }
 .memo-face-symbol svg { width: 100%; height: 100%; }
 .memo-face-portrait {
-  /* Doit rester en position absolute (comme .memo-face dont hérite cette
-     règle) pour remplir exactement la carte, avec une hauteur en pixels
-     explicite plutôt que dérivée du parent (voir commentaire ci-dessus
-     sur .memo-card-back, .memo-face) : sans ça, cette boîte reprend la
-     hauteur naturelle de l'image (variable selon le portrait), d'où bande
-     blanche ou débordement/chevauchement selon l'image. */
+  /* Image posée en fond CSS plutôt qu'en <img> (voir game-memo.js) : une
+     boîte de remplacement (<img>) a son propre mécanisme de taille
+     intrinsèque, source d'ennuis par le passé ; un fond CSS se contente de
+     remplir la boîte de son élément, déjà correctement calculée en pixels
+     via --memo-card-h. */
   position: absolute;
   top: 0;
   left: 0;
@@ -675,19 +687,10 @@ main.screen { padding: 4px 16px 24px; }
   height: var(--memo-card-h, 120px);
   padding: 0;
   overflow: hidden;
-  background: #dbe4ff;
-}
-.memo-face-portrait img {
-  /* Même logique : hauteur en pixels explicite (--memo-card-h) plutôt que
-     100% ou inset:0, pour ne dépendre d'aucune résolution de la hauteur du
-     parent dans ce contexte 3D. */
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: var(--memo-card-h, 120px);
-  object-fit: cover;
-  display: block;
+  background-color: #dbe4ff;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 .memo-card.matched .memo-face { opacity: 0.55; }
 .memo-win {
