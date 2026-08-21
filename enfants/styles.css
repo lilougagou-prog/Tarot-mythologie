@@ -651,7 +651,19 @@ main.screen { padding: 4px 16px 24px; }
 }
 .memo-face-symbol { width: 60%; height: 60%; color: var(--god-color, var(--primary)); }
 .memo-face-symbol svg { width: 100%; height: 100%; }
-.memo-face-portrait { padding: 0; overflow: hidden; position: relative; background: #dbe4ff; }
+.memo-face-portrait {
+  /* Doit rester en position absolute (comme .memo-face dont hérite cette
+     règle) pour remplir exactement la carte quelle que soit sa hauteur en
+     pixels : sans ça, cette boîte reprend la hauteur naturelle de l'image
+     (variable selon le portrait), d'où bande blanche ou débordement/
+     chevauchement selon que l'image est plus courte ou plus haute que la
+     carte. */
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #dbe4ff;
+}
 .memo-face-portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .memo-card.matched .memo-face { opacity: 0.55; }
 .memo-win {
