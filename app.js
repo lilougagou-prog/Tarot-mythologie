@@ -2325,8 +2325,9 @@ async function fetchRetrospective(summary, code){
 }
 let retrospectiveFetchInFlight = false;
 // Même logique de discrétion qu'ensureTransits()/ensurePortrait() : jamais de prompt de
-// code d'accès depuis un simple chargement de l'accueil, échec silencieux, un seul appel
-// tant qu'aucune rétrospective n'existe pour l'année en cours.
+// code d'accès depuis un simple chargement du Profil (onglet où vit désormais la tuile
+// "Ta rétrospective de l'année", en 4e position), échec silencieux, un seul appel tant
+// qu'aucune rétrospective n'existe pour l'année en cours.
 function ensureRetrospective(){
   const p = getProfile();
   if(!p || !p.birthDate) return;
@@ -2344,7 +2345,7 @@ function ensureRetrospective(){
   fetchRetrospective(retrospectiveSummary(stats, p), code)
     .then(text=>{
       localStorage.setItem("delphesRetrospective", JSON.stringify({ year: now.getFullYear(), text }));
-      if(route==="home") render();
+      if(route==="profil") render();
     })
     .catch(()=>{ /* échec silencieux : pas de rétrospective cette année, réessayé à la prochaine visite */ })
     .finally(()=>{ retrospectiveFetchInFlight = false; });
@@ -2715,24 +2716,21 @@ function home(){
   ensureTransits();
   ensurePortrait();
   ensureAstralText();
-  ensureRetrospective();
   const cachedTransits = getCachedTransits();
   ensureRitual(day, cachedTransits);
   const ritual = getCachedRitual();
-  const retrospective = getCachedRetrospective();
-  const retrospectiveReady = retrospective && retrospective.year === new Date().getFullYear();
   return `<section class="hero">
     ${homeGlowHTML()}
-    <div class="hero-emblem">✦</div>
+    <div class="hero-emblem-cluster">
+      <span class="hero-emblem mini" style="animation-delay:.6s">✦</span>
+      <span class="hero-emblem">✦</span>
+      <span class="hero-emblem mini" style="animation-delay:1.9s">✦</span>
+    </div>
     <h2>Tarot de Delphes</h2>
-    ${profile?.firstName ? `<p class="note" style="margin-top:2px">Bonjour ${escapeHTML(profile.firstName)} ✦</p>` : ""}
-    <p class="note" style="margin-top:2px">📜 ${attic.day} ${escapeHTML(attic.monthName)} <span style="opacity:.7">(calendrier attique)</span>${atticDeityNoteHTML(attic.deities)}</p>
-    <p>Un tarot mythologique grec qui s'apprend en le regardant : tirage, symboles reliés entre eux, et un parcours d'apprentissage progressif.</p>
+    ${profile?.firstName ? `<p class="note" style="margin-top:2px">✦ Bonjour ${escapeHTML(profile.firstName)} ✦</p>` : ""}
+    <p class="attic-line" style="margin-top:2px">📜 ${attic.day} ${escapeHTML(attic.monthName)} <span style="opacity:.75">(calendrier attique)</span>${atticDeityNoteHTML(attic.deities)}</p>
     ${streak > 1 ? `<span class="pill" style="margin-top:10px">✦ ${streak} jours de suite</span>` : ""}
   </section>
-  ${retrospectiveReady ? `<div class="grid" style="margin-bottom:20px">
-    <div class="tile" data-go-retrospective="1"><strong>🎂 Ta rétrospective de l'année</strong><span>Un an de tirages, résumé pour toi.</span></div>
-  </div>` : ""}
   ${ritual ? `<div class="section-title centered"><h3>Ton rituel du jour</h3></div>
   <p class="lore-text" style="max-width:560px;margin:0 auto 20px;text-align:center;opacity:.9;font-weight:500">${escapeHTML(ritual)}</p>` : ""}
   <div class="section-title centered"><h3>Carte du jour</h3></div>
@@ -3192,6 +3190,9 @@ function showDeityDetail(id, backTo = cardDetailReturnTo){
 
 function profil(){
   const links = profileMajorLinks();
+  ensureRetrospective();
+  const retrospective = getCachedRetrospective();
+  const retrospectiveReady = retrospective && retrospective.year === new Date().getFullYear();
   return `<section class="hero">
     <div class="hero-emblem">☉</div>
     <h2>Profil</h2>
@@ -3201,6 +3202,7 @@ function profil(){
     <div class="tile" data-profil-go="astral"><strong>☉ Profil astral</strong><span>Ton thème natal complet, calculé à partir de ta date, heure et lieu de naissance.</span></div>
     <div class="tile" data-profil-go="journal"><strong>☽ Journal</strong><span>${journal.length} tirage${journal.length>1?"s":""} enregistré${journal.length>1?"s":""}.</span></div>
     <div class="tile" data-profil-go="stats"><strong>📊 Statistiques</strong><span>Tes tendances : cartes, thèmes, série de jours.</span></div>
+    ${retrospectiveReady ? `<div class="tile" data-go-retrospective="1"><strong>🎂 Ta rétrospective de l'année</strong><span>Un an de tirages, résumé pour toi.</span></div>` : ""}
   </div>
   ${links ? `
   <div class="section-title centered"><h3>Arcanes majeurs liés à ton profil astral</h3></div>
