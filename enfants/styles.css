@@ -664,7 +664,21 @@ main.screen { padding: 4px 16px 24px; }
   overflow: hidden;
   background: #dbe4ff;
 }
-.memo-face-portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.memo-face-portrait img {
+  /* position:absolute + inset:0 plutôt que width/height:100% : sur Safari,
+     une hauteur en pourcentage ne se résout pas de façon fiable pour un
+     descendant placé dans un ancêtre avec transform-style:preserve-3d
+     (contexte 3D du flip) — l'image ne remplissait alors que sa hauteur
+     intrinsèque, laissant une bande vide en haut de la carte. En absolu,
+     la taille est calculée directement par rapport à la boîte du parent,
+     sans ambiguïté. */
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 .memo-card.matched .memo-face { opacity: 0.55; }
 .memo-win {
   text-align: center;
