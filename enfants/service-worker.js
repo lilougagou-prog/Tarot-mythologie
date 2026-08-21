@@ -2,7 +2,7 @@
 // c'est ce qui rend le service worker "différent" aux yeux du navigateur et
 // déclenche la mise à jour (sinon le fetch de app.js reste servi depuis
 // l'ancien cache indéfiniment, même après un nouveau déploiement).
-const CACHE = "mini-olympe-v14";
+const CACHE = "mini-olympe-v15";
 const ASSETS = [
   "./",
   "./index.html",
@@ -70,7 +70,22 @@ const ASSETS = [
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting())
+    caches
+      .open(CACHE)
+      .then((cache) =>
+        // cache.addAll() fait un fetch() classique par fichier, qui peut
+        // repêcher une réponse encore "fraîche" dans le cache HTTP du
+        // navigateur (GitHub Pages envoie Cache-Control: max-age=600) —
+        // donc mettre en cache du contenu déjà périmé malgré un nouveau
+        // service worker. { cache: "reload" } force un vrai aller-retour
+        // réseau pour chaque fichier, sans jamais passer par le cache HTTP.
+        Promise.all(
+          ASSETS.map((url) =>
+            fetch(url, { cache: "reload" }).then((res) => cache.put(url, res))
+          )
+        )
+      )
+      .then(() => self.skipWaiting())
   );
 });
 
