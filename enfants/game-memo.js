@@ -42,6 +42,30 @@ function renderMemoGame(container) {
   const gridEl = wrap.querySelector("#memo-grid");
   const winEl = wrap.querySelector("#memo-win");
 
+  // La hauteur des cartes est fixée en pixels via une variable CSS, calculée
+  // à partir de la largeur réellement disponible pour une carte (ratio 3/4).
+  // Ni aspect-ratio ni le "padding-bottom hack" ne se sont montrés fiables
+  // dans une grille CSS sur mobile : on mesure donc directement, ce qui
+  // garantit que toutes les cartes (retournées ou non) ont la même taille.
+  function syncCardHeights() {
+    const firstCard = gridEl.querySelector(".memo-card");
+    if (!firstCard) return;
+    const w = firstCard.getBoundingClientRect().width;
+    if (w > 0) gridEl.style.setProperty("--memo-card-h", (w * 4) / 3 + "px");
+  }
+
+  let resizeScheduled = false;
+  function onResize() {
+    if (resizeScheduled) return;
+    resizeScheduled = true;
+    requestAnimationFrame(() => {
+      resizeScheduled = false;
+      syncCardHeights();
+    });
+  }
+  window.addEventListener("resize", onResize);
+  window.__cleanupScreen = () => window.removeEventListener("resize", onResize);
+
   function startGame() {
     winEl.hidden = true;
     flipped = [];
@@ -78,6 +102,7 @@ function renderMemoGame(container) {
       el.addEventListener("click", () => onCardClick(card));
       gridEl.appendChild(el);
     });
+    requestAnimationFrame(syncCardHeights);
   }
 
   function onCardClick(card) {

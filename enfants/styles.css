@@ -599,24 +599,25 @@ main.screen { padding: 4px 16px 24px; }
 }
 .memo-grid-8 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .memo-card {
+  /* Ni aspect-ratio ni la technique du padding-bottom en pourcentage ne se
+     sont montrées fiables ici (cartes retournées/non retournées de tailles
+     différentes sur certains mobiles, l'un et l'autre étant réputés fragiles
+     combinés à une grille CSS + perspective/transform-style). La hauteur est
+     donc calculée en JS à partir de la largeur réellement mesurée de la
+     carte (voir syncCardHeights dans game-memo.js) et posée ici via une
+     variable CSS : solution robuste, indépendante du moteur de rendu. */
   position: relative;
   width: 100%;
-  height: 0;
-  /* Technique du "padding-bottom en pourcentage" : plus fiable entre
-     navigateurs que la propriété aspect-ratio (notamment sur un <button>
-     combiné à perspective/transform-style, buggé sur certains Safari iOS) —
-     la hauteur est dérivée de la largeur réelle de la carte, garantissant
-     que les cartes retournées et non retournées ont toujours EXACTEMENT
-     la même taille. 133.333% = ratio 3/4 (largeur/hauteur). */
-  padding: 0 0 133.333% 0;
+  height: var(--memo-card-h, 120px);
   perspective: 800px;
   background: none;
   border: none;
   cursor: pointer;
 }
 .memo-card-inner {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  width: 100%;
+  height: 100%;
   transition: transform 0.4s;
   transform-style: preserve-3d;
 }
