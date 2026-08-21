@@ -20,7 +20,6 @@ const HIDDEN_SCENES = [
       { id: "chouette", label: "Chouette d'Athéna", emoji: "🦉", x: 30, y: 21 },
       { id: "lyre", label: "Lyre d'Apollon", emoji: "🎵", x: 78, y: 72 },
       { id: "pegase", label: "Pégase", emoji: "🐎", x: 49, y: 24 },
-      { id: "oeil", label: "Œil protecteur", emoji: "🧿", x: 62, y: 53 },
       { id: "grenade", label: "Grenade de Perséphone", emoji: "🔴", x: 39, y: 66 },
       { id: "serpent", label: "Serpent d'Asclépios", emoji: "🐍", x: 7, y: 48 },
       { id: "casque", label: "Casque grec", emoji: "🪖", x: 55, y: 75 },
@@ -42,7 +41,6 @@ const HIDDEN_SCENES = [
       { id: "vase", label: "Vase antique", emoji: "🏺", x: 12, y: 11 },
       { id: "pegase", label: "Pégase", emoji: "🐎", x: 35, y: 29 },
       { id: "lyre", label: "Lyre d'Apollon", emoji: "🎵", x: 50, y: 29 },
-      { id: "oeil", label: "Œil protecteur", emoji: "🧿", x: 40, y: 47 },
       { id: "navire", label: "Navire grec", emoji: "⛵", x: 55, y: 49 },
       { id: "trident", label: "Trident de Poséidon", emoji: "🔱", x: 70, y: 43 },
       { id: "flamme", label: "Flamme olympique", emoji: "🔥", x: 9, y: 65 },
@@ -54,16 +52,22 @@ const HIDDEN_SCENES = [
 ];
 
 const HUNT_HIT_RADIUS = 5.5; // % de la largeur de l'image, sauf override par objet (r)
+// Rayon (en multiple de HUNT_HIT_RADIUS/r) du recadrage utilisé pour la
+// miniature de chaque symbole dans la liste : un peu plus large que la zone
+// cliquable pour que l'objet soit bien reconnaissable en tout petit.
+const HUNT_THUMB_ZOOM = 1.5;
+const HUNT_THUMB_PX = 96; // résolution de la miniature (backing canvas)
 
 function renderObjetsGame(container) {
   let sceneIndex = 0;
   let found = new Set();
+  let selectedId = null;
   let celebrated = false;
 
   const wrap = document.createElement("section");
   wrap.className = "objets-screen";
   wrap.innerHTML = `
-    <p class="screen-intro">Observe bien l'image et retrouve tous les symboles de la liste !</p>
+    <p class="screen-intro">Choisis d'abord un symbole dans la liste, puis retrouve-le sur l'image !</p>
     <div class="maze-levels" id="hunt-scenes"></div>
     <div class="hunt-scene-wrap" id="hunt-scene-wrap">
       <img class="hunt-scene-img" id="hunt-img" alt="">
@@ -112,10 +116,16 @@ function renderObjetsGame(container) {
 
   wrap.querySelector("#hunt-hint").addEventListener("click", () => {
     const scene = HIDDEN_SCENES[sceneIndex];
-    const remaining = scene.items.filter((it) => !found.has(it.id));
-    if (!remaining.length) return;
-    const pick = remaining[Math.floor(Math.random() * remaining.length)];
-    const target = targetsEl.querySelector(`[data-id="${pick.id}"]`);
+    // Sans symbole choisi, l'indice en sélectionne un pour l'enfant plutôt
+    // que de ne rien faire : l'indice reste toujours utile, tout en gardant
+    // la règle « un symbole choisi à la fois » intacte.
+    if (!selectedId) {
+      const remaining = scene.items.filter((it) => !found.has(it.id));
+      if (!remaining.length) return;
+      const pick = remaining[Math.floor(Math.random() * remaining.length)];
+      selectItem(pick.id);
+    }
+    const target = targetsEl.querySelector(`[data-id="${selectedId}"]`);
     if (target) {
       target.classList.add("hint");
       setTimeout(() => target.classList.remove("hint"), 2200);
@@ -125,6 +135,7 @@ function renderObjetsGame(container) {
   function startScene() {
     const scene = HIDDEN_SCENES[sceneIndex];
     found = new Set();
+    selectedId = null;
     celebrated = false;
     doneEl.hidden = true;
 
@@ -143,33 +154,81 @@ function renderObjetsGame(container) {
       const r = item.r || HUNT_HIT_RADIUS;
       t.style.width = r * 2 + "%";
       t.setAttribute("aria-label", item.label);
-      t.addEventListener("click", () => onFound(item));
+      t.addEventListener("click", () => onTargetClick(item, t));
       targetsEl.appendChild(t);
     });
 
     checklistEl.innerHTML = "";
     scene.items.forEach((item) => {
-      const row = document.createElement("div");
+      const row = document.createElement("button");
+      row.type = "button";
       row.className = "hunt-check-row";
       row.dataset.id = item.id;
       row.innerHTML = `
         <span class="hunt-check-box">✓</span>
-        <span class="hunt-check-emoji">${item.emoji}</span>
+        <canvas class="hunt-check-thumb" width="${HUNT_THUMB_PX}" height="${HUNT_THUMB_PX}"></canvas>
         <span class="hunt-check-label">${item.label}</span>
       `;
+      row.addEventListener("click", () => selectItem(item.id));
       checklistEl.appendChild(row);
     });
 
+    // Les miniatures sont un recadrage exact de la scène elle-même (pas une
+    // icône générique) : un enfant qui ne sait pas encore lire reconnaît
+    // ainsi tout de suite l'objet à chercher. On dessine dès que l'image est
+    // chargée (déjà en cache la plupart du temps → quasi instantané).
+    const drawThumbs = () => {
+      scene.items.forEach((item) => {
+        const canvas = checklistEl.querySelector(`.hunt-check-row[data-id="${item.id}"] canvas`);
+        if (canvas) drawHuntThumb(canvas, imgEl, item);
+      });
+    };
+    if (imgEl.complete && imgEl.naturalWidth) drawThumbs();
+    else imgEl.addEventListener("load", drawThumbs, { once: true });
+
     updateProgress();
+  }
+
+  function selectItem(id) {
+    if (found.has(id)) return;
+    selectedId = selectedId === id ? null : id;
+    checklistEl.querySelectorAll(".hunt-check-row").forEach((row) => {
+      row.classList.toggle("selected", row.dataset.id === selectedId);
+    });
+  }
+
+  function onTargetClick(item, targetEl) {
+    if (found.has(item.id)) return;
+    if (selectedId !== item.id) {
+      // Mauvais endroit pour le symbole actuellement choisi (ou rien choisi
+      // du tout) : un halo rouge bref à l'endroit cliqué, sans rien valider
+      // — il faut d'abord choisir le bon symbole dans la liste.
+      targetEl.classList.remove("wrong");
+      void targetEl.offsetWidth; // relance l'animation si déjà jouée
+      targetEl.classList.add("wrong");
+      setTimeout(() => targetEl.classList.remove("wrong"), 500);
+      const row = checklistEl.querySelector(".hunt-check-row.selected");
+      if (row) {
+        row.classList.remove("nudge");
+        void row.offsetWidth;
+        row.classList.add("nudge");
+      }
+      return;
+    }
+    onFound(item);
   }
 
   function onFound(item) {
     if (found.has(item.id)) return;
     found.add(item.id);
+    selectedId = null;
     const target = targetsEl.querySelector(`[data-id="${item.id}"]`);
     if (target) target.classList.add("found");
     const row = checklistEl.querySelector(`.hunt-check-row[data-id="${item.id}"]`);
-    if (row) row.classList.add("found");
+    if (row) {
+      row.classList.add("found");
+      row.classList.remove("selected");
+    }
     updateProgress();
     checkComplete();
   }
@@ -190,4 +249,19 @@ function renderObjetsGame(container) {
   }
 
   startScene();
+}
+
+// Recadre la scène pile autour d'un symbole pour servir de miniature exacte
+// dans la liste (voir HUNT_THUMB_ZOOM/HUNT_THUMB_PX ci-dessus).
+function drawHuntThumb(canvas, img, item) {
+  if (!img.naturalWidth) return;
+  const ctx = canvas.getContext("2d");
+  const size = canvas.width;
+  const rPct = (item.r || HUNT_HIT_RADIUS) * HUNT_THUMB_ZOOM;
+  const cropW = (rPct / 100) * img.naturalWidth * 2;
+  const cropH = (rPct / 100) * img.naturalHeight * 2;
+  const cx = (item.x / 100) * img.naturalWidth;
+  const cy = (item.y / 100) * img.naturalHeight;
+  ctx.clearRect(0, 0, size, size);
+  ctx.drawImage(img, cx - cropW / 2, cy - cropH / 2, cropW, cropH, 0, 0, size, size);
 }
