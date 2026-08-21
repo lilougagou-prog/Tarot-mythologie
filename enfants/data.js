@@ -243,6 +243,62 @@ const GODS = [
     funFact:
       "Quand Pan poussait un grand cri surprise dans la forêt, tout le monde s'enfuyait terrorisé... c'est de son nom que vient le mot « panique » !",
   },
+  {
+    id: "circe",
+    name: "Circé",
+    title: "La magicienne de l'île",
+    domain: "La magie et les potions",
+    symbol: "chaudron",
+    symbolName: "Le chaudron magique",
+    color: "#7048e8",
+    accent: "#d0bfff",
+    description:
+      "Circé vit seule sur une île entourée d'animaux qu'elle a apprivoisés. Dans son jardin, elle cueille des plantes pour préparer des potions extraordinaires.",
+    funFact:
+      "On raconte que Circé connaît une potion magique capable de transformer quelqu'un en animal, un peu comme dans un conte de fées !",
+  },
+  {
+    id: "hygie",
+    name: "Hygie",
+    title: "La déesse de la santé",
+    domain: "La santé et la propreté",
+    symbol: "coupe",
+    symbolName: "La coupe et le serpent",
+    color: "#0ca678",
+    accent: "#96f2d7",
+    description:
+      "Hygie est la fille du dieu de la médecine Asclépios. Elle veille à ce que tout le monde reste en bonne santé, bien propre et plein d'énergie.",
+    funFact:
+      "Le mot « hygiène », qui veut dire se laver et rester propre, vient directement du nom d'Hygie !",
+  },
+  {
+    id: "hecate",
+    name: "Hécate",
+    title: "La déesse de la magie et de la nuit",
+    domain: "La magie et les carrefours",
+    symbol: "flambeau",
+    symbolName: "Le flambeau",
+    color: "#5f3dc4",
+    accent: "#b2a4ff",
+    description:
+      "Hécate porte toujours une torche allumée pour éclairer la nuit. Elle aide les voyageurs à retrouver leur chemin aux croisées des chemins.",
+    funFact:
+      "On dit qu'Hécate a trois visages qui regardent dans trois directions à la fois, pour ne jamais rien manquer autour d'elle !",
+  },
+  {
+    id: "iris",
+    name: "Iris",
+    title: "La messagère de l'arc-en-ciel",
+    domain: "L'arc-en-ciel et les messages",
+    symbol: "arcenciel",
+    symbolName: "L'arc-en-ciel",
+    color: "#15aabf",
+    accent: "#99e9f2",
+    description:
+      "Iris est la messagère des dieux. Pour porter ses messages d'un bout à l'autre du ciel le plus vite possible, elle emprunte le chemin de l'arc-en-ciel.",
+    funFact:
+      "Chaque fois qu'un arc-en-ciel apparaît dans le ciel après la pluie, c'est peut-être Iris qui vient de passer !",
+  },
 ];
 
 function getGod(id) {

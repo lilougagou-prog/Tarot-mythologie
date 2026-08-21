@@ -28,6 +28,11 @@ const COLORING_IMAGES = {
   hestia: "assets/coloriage/hestia.png",
   poseidon: "assets/coloriage/poseidon.png",
   hades: "assets/coloriage/hades.png",
+  hermes: "assets/coloriage/hermes.png",
+  circe: "assets/coloriage/circe.png",
+  hygie: "assets/coloriage/hygie.png",
+  hecate: "assets/coloriage/hecate.png",
+  iris: "assets/coloriage/iris.png",
 };
 
 // résolution de travail max du canvas (largeur, en px) : suffisant pour un
