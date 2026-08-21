@@ -6,7 +6,7 @@
 // puis clic sur le portrait du dieu correspondant.
 // ============================================================================
 
-const ATTR_ROUND_SIZE = 4;
+const ATTR_ROUND_SIZE = 6;
 
 function renderAttributsGame(container) {
   const pool = Object.keys(PORTRAIT_IMAGES).filter((id) => ATTRIBUTE_IMAGES[id]);
@@ -20,8 +20,13 @@ function renderAttributsGame(container) {
   wrap.className = "attr-screen";
   wrap.innerHTML = `
     <p class="screen-intro">Clique sur un attribut, puis sur le portrait du dieu à qui il appartient !</p>
-    <div class="attr-round-label" id="attr-round"></div>
+    <div class="attr-toolbar">
+      <div class="attr-round-label" id="attr-round"></div>
+      <div class="hunt-progress" id="attr-progress"></div>
+    </div>
+    <div class="attr-section-label">Les attributs</div>
     <div class="attr-cards" id="attr-cards"></div>
+    <div class="attr-section-label">Les dieux</div>
     <div class="attr-gods" id="attr-gods"></div>
     <div class="objets-done-msg" id="attr-done" hidden>
       <p id="attr-done-text"></p>
@@ -33,6 +38,7 @@ function renderAttributsGame(container) {
   const cardsEl = wrap.querySelector("#attr-cards");
   const godsEl = wrap.querySelector("#attr-gods");
   const roundLabel = wrap.querySelector("#attr-round");
+  const progressEl = wrap.querySelector("#attr-progress");
   const doneEl = wrap.querySelector("#attr-done");
   const doneTextEl = wrap.querySelector("#attr-done-text");
 
@@ -55,6 +61,7 @@ function renderAttributsGame(container) {
     doneEl.hidden = true;
     const ids = nextBatch();
     roundLabel.textContent = `Manche ${roundNum}`;
+    updateProgress(ids.length);
 
     cardsEl.innerHTML = "";
     shuffleArray(ids).forEach((id) => {
@@ -106,11 +113,17 @@ function renderAttributsGame(container) {
         attrCard.disabled = true;
       }
       selectedId = null;
+      updateProgress();
       checkRoundComplete();
     } else {
       card.classList.add("shake");
       setTimeout(() => card.classList.remove("shake"), 400);
     }
+  }
+
+  function updateProgress(total) {
+    const t = total || godsEl.querySelectorAll(".attr-god-card").length;
+    progressEl.textContent = `${matched.size} / ${t} trouvés`;
   }
 
   function checkRoundComplete() {

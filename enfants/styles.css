@@ -229,8 +229,10 @@ main.screen { padding: 4px 16px 24px; }
   border-radius: 12px;
   overflow: hidden;
   margin: 0 0 8px;
+  background: #dbe4ff;
 }
 .god-card-portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.god-card-lineart { background: #f8f4ea; box-shadow: inset 0 0 0 1px #e4dcc8; }
 .god-card-name { font-weight: 700; font-size: 1rem; }
 .god-card-title { font-size: 0.72rem; color: #868e96; margin-top: 2px; }
 .god-card-found {
@@ -259,6 +261,7 @@ main.screen { padding: 4px 16px 24px; }
   overflow: hidden;
   box-shadow: var(--shadow);
   border: 3px solid var(--god-color, var(--primary));
+  background: #dbe4ff;
 }
 .fiche-portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .fiche-name { margin: 0; font-size: 1.7rem; }
@@ -548,6 +551,14 @@ main.screen { padding: 4px 16px 24px; }
   justify-content: center;
   margin: 0 auto 16px;
   width: fit-content;
+  /* "sticky" garde toujours une vraie marge avec le tout bas de l'écran :
+     sur les petits téléphones le labyrinthe peut remplir tout l'écran et
+     coller les flèches au bord, où un appui/glissé ferme parfois l'appli
+     (geste du navigateur). En restant collé à quelques pixels du bas au
+     lieu de continuer jusqu'au bord, ce risque disparaît. */
+  position: sticky;
+  bottom: max(14px, env(safe-area-inset-bottom, 0px) + 8px);
+  z-index: 5;
 }
 .dpad-btn {
   background: #fff;
@@ -632,20 +643,8 @@ main.screen { padding: 4px 16px 24px; }
 }
 .memo-face-symbol { width: 60%; height: 60%; color: var(--god-color, var(--primary)); }
 .memo-face-symbol svg { width: 100%; height: 100%; }
-.memo-face-portrait { padding: 0; overflow: hidden; position: relative; }
+.memo-face-portrait { padding: 0; overflow: hidden; position: relative; background: #dbe4ff; }
 .memo-face-portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.memo-face-portrait span {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 4px 2px 3px;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.62), transparent);
-  color: #fff;
-  font-size: 0.68rem;
-  font-weight: 700;
-  text-align: center;
-}
 .memo-card.matched .memo-face { opacity: 0.55; }
 .memo-win {
   text-align: center;
@@ -679,15 +678,17 @@ main.screen { padding: 4px 16px 24px; }
 }
 
 /* ---------- retrouve les attributs -------------------------------------------- */
-.attr-round-label { text-align: center; font-weight: 700; color: var(--primary-dark); margin-bottom: 10px; }
+.attr-toolbar { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.attr-round-label { text-align: center; font-weight: 700; color: var(--primary-dark); background: #fff; box-shadow: var(--shadow); border-radius: 999px; padding: 8px 16px; }
+.attr-section-label { text-align: center; font-weight: 700; color: #868e96; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; margin: 4px 0 8px; }
 .attr-cards, .attr-gods {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-bottom: 16px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
 }
 .attr-card {
-  background: #fff;
+  background: #f8f4ea;
   border: 3px solid #dee2e6;
   border-radius: 14px;
   box-shadow: var(--shadow);
@@ -699,7 +700,7 @@ main.screen { padding: 4px 16px 24px; }
 .attr-card.selected { outline: 4px solid #2b2b3a; transform: scale(1.05); }
 .attr-card.matched { opacity: 0.35; cursor: default; }
 .attr-god-card {
-  background: #fff;
+  background: #dbe4ff;
   border: none;
   border-radius: 14px;
   box-shadow: var(--shadow);

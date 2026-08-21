@@ -2,7 +2,7 @@
 // c'est ce qui rend le service worker "différent" aux yeux du navigateur et
 // déclenche la mise à jour (sinon le fetch de app.js reste servi depuis
 // l'ancien cache indéfiniment, même après un nouveau déploiement).
-const CACHE = "mini-olympe-v7";
+const CACHE = "mini-olympe-v8";
 const ASSETS = [
   "./",
   "./index.html",
@@ -56,6 +56,16 @@ const ASSETS = [
   "./assets/memo/dionysos-attr.jpg",
   "./assets/memo/hestia-attr.jpg",
   "./assets/memo/demeter-attr.jpg",
+  "./assets/memo/hades.jpg",
+  "./assets/memo/persephone.jpg",
+  "./assets/memo/heracles.jpg",
+  "./assets/memo/pan.jpg",
+  "./assets/memo/hephaistos.jpg",
+  "./assets/memo/hades-attr.jpg",
+  "./assets/memo/persephone-attr.jpg",
+  "./assets/memo/heracles-attr.jpg",
+  "./assets/memo/pan-attr.jpg",
+  "./assets/memo/hephaistos-attr.jpg",
 ];
 
 self.addEventListener("install", (event) => {
