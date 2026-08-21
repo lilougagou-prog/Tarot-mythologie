@@ -927,8 +927,8 @@ const SYMBOL_LIBRARY = {
   ]},
 
   // Plantes & végétaux
-  "laurier":{icon:"🌿",label:"Laurier",category:"Plantes",desc:"Victoire, gloire, accomplissement mérité après l'effort.",links:["apollon"],lore:[
-    "Le laurier est intimement lié à Apollon. Selon le mythe, Apollon poursuivit la nymphe Daphné, dont il était tombé amoureux. Daphné, refusant ses avances, demanda à être sauvée et fut transformée en laurier par son père, le dieu-fleuve Pénée.",
+  "laurier":{icon:"🌿",label:"Laurier",category:"Plantes",desc:"Victoire, gloire, accomplissement mérité après l'effort.",links:["apollon","éros"],lore:[
+    "Le laurier est intimement lié à Apollon. Selon le mythe, Apollon, frappé d'une flèche d'or par Éros après l'avoir raillé sur son habileté à l'arc (voir la fiche « Éros »), tomba éperdument amoureux de la nymphe Daphné — elle-même atteinte d'une flèche de plomb qui la rendit incapable de l'aimer en retour. Daphné, refusant ses avances, demanda à être sauvée et fut transformée en laurier par son père, le dieu-fleuve Pénée.",
     "Apollon, comprenant qu'il ne pourrait jamais l'avoir, déclara alors que le laurier lui serait désormais consacré. Il en porta une couronne et en fit un arbre sacré.",
     "Les Grecs offrirent ensuite des couronnes de laurier aux vainqueurs, aux poètes et à ceux qui avaient accompli de grandes choses. À Delphes, le laurier était également associé aux pratiques prophétiques d'Apollon.",
     "Le laurier est ainsi devenu un symbole de victoire, de gloire, d'accomplissement, de poésie, de prophétie et de reconnaissance.",
@@ -1215,7 +1215,9 @@ const DEITY_LORE = {
   ],
   "hermès": [
     "Né dans une grotte du mont Cyllène (voir la fiche « Grotte »), Hermès manifesta son astuce dès le jour de sa naissance : il déroba le troupeau de son frère Apollon, puis inventa la lyre à partir d'une carapace de tortue et la lui offrit en échange de son pardon (voir la fiche « Lyre »).",
-    "Seul dieu à circuler librement entre l'Olympe, la Terre et les Enfers, il devint le messager officiel de Zeus et le guide des âmes des morts vers l'autre monde — un rôle qui en fait le patron des voyageurs, des marchands et de tous ceux qui franchissent des frontières.",
+    "Messager officiel de Zeus et guide des âmes des morts vers l'autre monde, Hermès franchit sans entrave les frontières entre l'Olympe, la terre et les Enfers — un privilège qu'on lui prête souvent, à tort, comme exclusif : Iris relie elle aussi le ciel et la terre, et va jusqu'aux portes du Styx lorsqu'il faut y puiser l'eau du serment sacré (voir la fiche « Iris »), tandis qu'Hécate, de par sa nature triple, circule tout aussi librement entre les trois royaumes (voir la fiche « Hécate »). Ce qui distingue Hermès n'est donc pas l'exclusivité du passage, mais la diversité des rôles qu'il y joue : messager, psychopompe, patron des voyageurs, des marchands et des voleurs.",
+    "Sa vie amoureuse est aussi mouvementée que ses voyages. D'Aphrodite (voir la fiche « Aphrodite »), il eut un fils à la double nature, Hermaphrodite, fusionné plus tard avec la nymphe Salmacis en un seul être aux deux sexes. De la nymphe Dryope, il eut Pan (voir la fiche « Pan »), né avec des cornes et des sabots de bouc, que sa propre mère fuit à sa naissance. D'une troisième union, avec Chioné, naquit Autolycos, voleur si habile qu'il pouvait changer à volonté la forme et la couleur de tout ce qu'il dérobait — un don hérité directement de son père, et qui fera de lui, plus tard, le grand-père maternel d'Ulysse (voir la fiche « Ulysse »).",
+    "Dans le Tarot, Hermès est le Bateleur (I), la carte du potentiel et de l'habileté à mettre en mouvement ce qui existe déjà : comme lui, le Bateleur ne crée rien à partir de rien — il détourne un troupeau en pardon, une carapace en instrument, un désir en descendance rusée, et fait de chaque passage une occasion plutôt qu'un simple trajet.",
   ],
   "métis": [
     "Titanide de la ruse, Métis fut la première épouse de Zeus. Une prophétie annonçait qu'elle enfanterait un fils plus puissant que son père : Zeus, pour l'empêcher, l'avala tout entière alors qu'elle était enceinte.",
@@ -1239,6 +1241,8 @@ const DEITY_LORE = {
   "éros": [
     "Aux origines les plus anciennes du mythe, Éros est une force primordiale née dès l'origine du monde, avant même les dieux de l'Olympe — une puissance d'attraction qui met en mouvement toute chose.",
     "Les récits plus tardifs en font le fils d'Aphrodite, armé d'un arc dont les flèches font naître l'amour chez quiconque elles atteignent, y compris les dieux eux-mêmes. Son propre amour pour la mortelle Psyché (voir la fiche « Psyché ») ne fut possible qu'au prix d'épreuves redoutables imposées par Aphrodite, jalouse de sa belle-fille.",
+    "Un jour où Apollon venait de terrasser le serpent Python, il railla le jeune Éros, jugeant son arc d'enfant indigne d'un dieu de la guerre. Vexé, Éros lui prouva le contraire : il lui décocha une flèche d'or, qui embrase le désir chez qui elle touche, et visa la nymphe Daphné d'une flèche de plomb, qui provoque au contraire un rejet total. Apollon, foudroyé de désir, se lança à la poursuite de Daphné, qui le fuyait avec la même intensité — jusqu'à ce qu'elle obtienne d'être changée en laurier plutôt que rattrapée (voir la fiche « Laurier »). Ce concours improvisé, où le plus jeune des deux prouva qu'il visait plus juste que le plus grand, resta la meilleure démonstration qu'aucune flèche, fût-elle celle d'un dieu de la lumière, ne vaut celle d'Éros.",
+    "Dans le Tarot, Éros est l'Amoureux (VI), la carte du choix qui échappe en partie à la raison : ses flèches, dorées ou de plomb, rappellent que le désir n'attend jamais la permission de la volonté — Apollon lui-même, dieu de la mesure et de la clarté, en fit les frais face à un enfant armé d'un simple arc.",
   ],
   "apollon": [
     "Fils de Zeus et de Léto (voir la fiche « Léto »), Apollon naquit avec sa sœur jumelle Artémis sur l'île flottante de Délos, seul lieu qui accepta de les accueillir après qu'Héra eut interdit à toute terre ferme de recevoir l'accouchement de sa rivale.",
@@ -1274,8 +1278,11 @@ const DEITY_LORE = {
   ],
   "hadès": [
     "Fils de Cronos et de Rhéa, Hadès hérita du monde souterrain lors du partage du cosmos entre lui et ses frères Zeus et Poséidon — un lot que la tradition présente souvent comme le moins enviable, mais qu'il gouverne avec une rigueur incorruptible plutôt qu'avec cruauté.",
+    "Sa part dans la victoire des Olympiens sur les Titans fut pourtant décisive : les Cyclopes, libérés du Tartare par Zeus en échange de leur aide, forgèrent à chacun des trois frères un présent capable de renverser le combat — la foudre pour Zeus, le trident pour Poséidon, et pour Hadès un casque qui rend invisible celui qui le porte. Coiffé de ce casque, il put s'approcher sans être vu pour dérober les armes des Titans ou frapper sans jamais être repéré — une contribution aussi discrète que déterminante.",
     "Il quitte rarement son royaume, à l'exception notable de l'enlèvement de Perséphone (voir la fiche « Perséphone »), dont il tombe amoureux et qu'il installe à ses côtés comme reine des Enfers.",
+    "Avant elle, ou selon d'autres versions alors même qu'il en était déjà l'époux, Hadès s'était épris de la naïade Menthé. Perséphone, découvrant cette liaison, la piétina de rage jusqu'à la changer en la plante odorante qui porte encore son nom — la menthe, dont le parfum ne se libère jamais aussi fort que lorsqu'on la foule aux pieds, comme un dernier écho de la colère qui l'a transformée.",
     "Contrairement à une image tardive qui en fait un dieu maléfique, Hadès reste dans les mythes grecs un juge impartial, gardien d'un ordre auquel nul, pas même les dieux, ne peut se soustraire.",
+    "Dans le Tarot, Hadès est l'Arcane sans nom (XIII), celui qui fauche sans jamais détruire gratuitement : son casque d'invisibilité pendant la guerre des Titans, sa discrétion presque totale hors de son royaume, jusqu'à la façon dont il vit ses amours, tout chez lui agit en silence — une transformation qui opère sans jamais chercher à se faire remarquer.",
   ],
   "perséphone": [
     "Fille de Zeus et de Déméter, Perséphone cueillait des fleurs dans un pré lorsque la terre s'ouvrit sous elle et qu'Hadès l'emporta sur son char vers son royaume souterrain.",
@@ -1284,10 +1291,10 @@ const DEITY_LORE = {
   ],
   "iris": [
     "Fille du Titan Thaumas et de l'Océanide Électre, Iris personnifie l'arc-en-ciel (voir la fiche « Arc-en-ciel »), pont visible entre le ciel et la terre qu'elle emprunte pour porter les messages des dieux aux mortels comme aux autres divinités.",
-    "Contrairement à Hermès, dont les missions relèvent souvent de la ruse ou du commerce, Iris est associée à la fidélité du message transmis sans détour — une messagère de confiance, jamais rusée ni trompeuse.",
+    "Contrairement à Hermès, dont les missions relèvent souvent de la ruse ou du commerce, Iris est associée à la fidélité du message transmis sans détour — une messagère de confiance, jamais rusée ni trompeuse. Son rôle ne s'arrête d'ailleurs pas au seul lien entre le ciel et la terre : lorsqu'un dieu doit prêter le serment le plus sacré qui soit, c'est elle qui va puiser, aux portes des Enfers, l'eau du Styx dans laquelle jurer un tel serment (voir la fiche « Hermès »).",
   ],
   "pan": [
-    "Fils d'Hermès, Pan naquit avec des cornes, des sabots de bouc et un visage si étrange que sa propre mère fuit à sa vue — les autres dieux, eux, s'amusèrent de son apparence et l'adoptèrent comme l'un des leurs.",
+    "Fils d'Hermès et de la nymphe Dryope (voir la fiche « Hermès »), Pan naquit avec des cornes, des sabots de bouc et un visage si étrange que sa propre mère fuit à sa vue — les autres dieux, eux, s'amusèrent de son apparence et l'adoptèrent comme l'un des leurs.",
     "Il règne sur les forêts et les troupeaux (voir la fiche « Forêt ») et peut, d'un simple cri, saisir les voyageurs d'une terreur irraisonnée dans les bois profonds — la « panique » lui doit d'ailleurs son nom.",
   ],
   "poséidon": [
@@ -1296,7 +1303,9 @@ const DEITY_LORE = {
   ],
   "hécate": [
     "Fille de la titanide Astéria (voir la fiche « Astéria »), Hécate hérita de sa mère une proximité particulière avec le ciel nocturne. Déesse des carrefours et des passages, elle est représentée sous une triple forme, tournée à la fois vers le ciel, la terre et les Enfers — l'une des seules divinités, avec Perséphone, à circuler librement entre les trois royaumes.",
+    "Lorsque Zeus renversa les Titans et redistribua les pouvoirs de l'univers, il réserva à Hécate un traitement à part : seule parmi les divinités de l'ancienne génération, elle conserva l'intégralité de ses privilèges sur la terre, la mer et le ciel. Hésiode raconte que Zeus l'honora plus qu'aucune autre, lui laissant le pouvoir d'accorder ou de refuser son aide aux marins, aux chasseurs, aux athlètes en compétition et à quiconque l'invoque — sans jamais lui retirer la moindre part de ce qu'elle possédait avant lui.",
     "Elle fut la seule à entendre les cris de Perséphone lors de son enlèvement et l'aida ensuite à retrouver sa mère Déméter ; depuis, elle veille sur les carrefours nocturnes, la magie et tout ce qui exige de choisir une direction dans l'obscurité.",
+    "Dans le Tarot, Hécate est l'Étoile (XVII), la carte de l'orientation silencieuse plutôt que de la certitude bruyante : le privilège que lui accorda Zeus n'est jamais un pouvoir qui s'impose — comme la torche qu'elle porte, il éclaire un chemin sans jamais choisir à la place de celui qui le suit.",
   ],
   "séléné": [
     "Déesse de la lune, Séléné traverse le ciel nocturne sur un char tiré par des chevaux ailés, tandis que son frère Hélios conduit celui du soleil le jour (voir la fiche « Lune »).",
@@ -1320,6 +1329,7 @@ const DEITY_LORE = {
   "athéna": [
     "Née tout armée du crâne de Zeus, après qu'il eut avalé sa mère Métis enceinte (voir la fiche « Métis »), Athéna hérita à la fois de la puissance de son père et de la ruse de sa mère.",
     "Déesse de la sagesse stratégique plutôt que de la guerre brutale, elle protège les héros rusés — Ulysse, Persée, Bellérophon — en leur offrant conseils et objets plutôt qu'en combattant à leur place, et devint la patronne d'Athènes après avoir offert à la ville l'olivier, symbole de paix durable.",
+    "Il lui arrive aussi d'endosser un rôle plus maternel malgré elle : lorsque Héphaïstos, épris d'elle, la poursuit et se voit repoussé, Gaïa recueille de cette rencontre manquée l'enfant Érichthonios et le confie à Athéna pour qu'elle l'élève (voir la fiche « Héphaïstos ») — un enfant qu'elle n'a pas conçu, mais qu'elle protège avec la même rigueur qu'elle réserve à ses héros favoris.",
   ],
   "aphrodite": [
     "Déesse de l'amour et de la beauté, Aphrodite naquit, selon le récit le plus ancien, de l'écume de mer formée autour des membres tranchés d'Ouranos — un mythe plus ancien que la naissance de la plupart des autres Olympiens.",
@@ -1353,6 +1363,8 @@ const DEITY_LORE = {
   "héphaïstos": [
     "Fils d'Héra, Héphaïstos naquit si chétif ou si laid, selon les versions, que sa mère le rejeta du haut de l'Olympe — une chute qui le laissa boiteux pour le restant de son existence.",
     "Devenu le forgeron des dieux malgré ce rejet initial, il créa les armes et merveilles les plus admirées de l'Olympe, du bouclier d'Achille aux flèches d'Éros, prouvant par son art ce que sa naissance semblait lui interdire.",
+    "Épris d'Athéna (voir la fiche « Athéna »), qui refusait pourtant tout mariage, il tenta un jour de s'unir à elle de force. Elle se déroba, et sa semence tomba sur la terre lorsqu'elle l'essuya avec un morceau de laine — de ce contact naquit Érichthonios, mi-enfant mi-serpent, que Gaïa, mère de toutes choses, remit alors à Athéna elle-même pour qu'elle l'élève. N'étant fils d'Athéna que par cette adoption, Érichthonios grandit sous sa seule protection avant de devenir, une fois adulte, l'un des premiers rois légendaires d'Athènes.",
+    "Dans le Tarot, Héphaïstos est le Roi de Bâtons, l'autorité qui se forge plutôt qu'elle ne se reçoit : rejeté par sa mère, repoussé par Athéna elle-même, il n'obtient jamais rien par simple droit de naissance — pas même une descendance, puisque Érichthonios naît de son désir déçu et grandit dans les mains d'une autre. Ce qu'il crée, en revanche, arme, palais ou enfant né malgré lui de la terre, reste par la force ce qu'il a lui-même façonné jusqu'au bout.",
   ],
   "himeros": [
     "Dieu ailé du désir soudain, Himeros accompagne Éros et Aphrodite dans leur cortège, incarnant cette part du désir qui surgit sans prévenir, avant même que la raison n'ait le temps d'intervenir.",
@@ -1361,6 +1373,8 @@ const DEITY_LORE = {
   "énée": [
     "Fils d'Aphrodite et du mortel Anchise (voir la fiche « Aphrodite »), Énée combattit du côté troyen pendant la guerre de Troie, protégé à plusieurs reprises par sa mère au cœur des combats.",
     "À la chute de Troie, il porta sur son dos son père âgé et mena son fils par la main hors de la ville en flammes, fidèle jusque dans la ruine de sa cité — un périple qui, selon la légende romaine, le mènera à fonder la lignée dont naîtra Rome.",
+    "Après des années d'errance en mer, sa flotte échoue à Carthage, où règne la reine Didon. Elle s'éprend de lui — un amour qu'Aphrodite favorise elle-même en secret, en envoyant son fils Éros attiser leur passion (voir la fiche « Éros ») — et Énée s'attarde à ses côtés, prêt à oublier sa mission pour y rester. Zeus, inquiet de le voir s'égarer de son destin, envoie Hermès (voir la fiche « Hermès ») lui rappeler qu'il ne lui appartient pas de choisir : il doit repartir fonder en Italie la lignée d'où naîtra Rome. Énée s'exécute et quitte Carthage sans un dernier adieu ; Didon, désespérée, se donne la mort sur un bûcher, non sans avoir maudit sa descendance — une malédiction que la tradition romaine lira plus tard comme l'origine mythique des guerres puniques entre Rome et Carthage.",
+    "Dans le Tarot, Énée est le Cavalier de Coupes, celui qui avance porté par le cœur plus que par la stratégie — mais son passage à Carthage montre la limite de cette carte : l'amour vécu avec Didon était sincère, et pourtant il n'était pas son chemin. La vraie fidélité de ce Cavalier n'est donc pas seulement celle qu'il porte à qui il aime, mais celle qu'il garde envers ce qu'il doit accomplir, même au prix d'un cœur brisé derrière lui.",
   ],
   "zéphyr": [
     "Dieu du vent d'ouest, Zéphyr est réputé le plus doux des vents, celui qui annonce le printemps et fait éclore les fleurs sur son passage.",
@@ -1440,7 +1454,7 @@ const DEITY_LORE = {
     "Les âmes qui n'ont pas reçu de sépulture ni de pièce pour le passeur restent condamnées à errer sur la rive sans jamais pouvoir traverser — un détail qui rappelle que, dans la Grèce antique, le rite funéraire compte autant que la mort elle-même.",
   ],
   "ulysse": [
-    "Roi d'Ithaque réputé pour sa ruse plus que pour sa force, Ulysse conçut le stratagème du cheval de bois qui permit enfin aux Grecs de s'emparer de Troie après dix années de siège infructueux.",
+    "Roi d'Ithaque réputé pour sa ruse plus que pour sa force — une ruse qu'on dit héritée de son grand-père maternel Autolycos, fils d'Hermès et voleur incomparable (voir la fiche « Hermès ») —, Ulysse conçut le stratagème du cheval de bois qui permit enfin aux Grecs de s'emparer de Troie après dix années de siège infructueux.",
     "Son retour chez lui prit dix années supplémentaires, semées d'épreuves — le Cyclope Polyphème, les sirènes, Circé, Charybde et Scylla — durant lesquelles son intelligence lui permit chaque fois d'échapper à des périls que la seule force n'aurait pas surmontés.",
   ],
   "andromède": [
@@ -1505,7 +1519,10 @@ const DEITY_LORE = {
   "léto": [
     "Titanide, fille de Coéos et de Phoebé, Léto est la sœur d'Astéria (voir la fiche « Astéria »). Aimée de Zeus, elle devint aussitôt la cible de la jalousie d'Héra, qui interdit à toute terre ferme de l'accueillir pour son accouchement (voir la fiche « Héra »).",
     "Léto erra ainsi de rivage en rivage, refusée partout, jusqu'à atteindre Délos — l'île errante en laquelle sa propre sœur Astéria s'était autrefois changée pour échapper à Zeus. N'étant plus à proprement parler une « terre ferme » ancrée nulle part, Délos put l'accueillir sans enfreindre l'interdit d'Héra.",
+    "Fuyant la colère d'Héra avec ses jumeaux encore nourrissons, elle s'arrêta un jour en Lycie pour boire à un étang et y baigner ses enfants. Des paysans du lieu, par pure méchanceté, troublèrent l'eau à coups de pied pour l'empêcher de se désaltérer et la chassèrent en l'insultant. Léto, épuisée, les changea sur-le-champ en grenouilles, condamnées depuis à barboter pour toujours dans la vase de cet étang qu'ils lui avaient interdit.",
     "C'est là que Léto mit au monde ses jumeaux, Apollon et Artémis (voir les fiches « Apollon » et « Artémis ») — un accouchement rendu possible, au bout du compte, par la solidarité d'une sœur devenue elle-même un refuge.",
+    "Devenue mère comblée, elle ne tolère pourtant aucun outrage fait à ses enfants. Niobé, reine de Thèbes et mère de quatorze enfants, se vanta un jour d'être plus digne d'admiration que Léto, qui n'en avait mis au monde que deux. Léto, blessée dans son orgueil de mère, envoya Apollon et Artémis venger l'insulte : l'un abattit à l'arc tous les fils de Niobé, l'autre toutes ses filles, sans qu'aucune supplication n'arrête leurs flèches. Pétrifiée de chagrin, Niobé se changea en rocher sur le mont Sipyle, d'où continue, dit-on, de suinter une eau semblable à des larmes sans fin.",
+    "Léto n'a pas de carte qui porte son nom dans ce tarot, mais son histoire précède et rend possible celle de la carte VII — Le Chariot, celle de son fils Apollon : avant la maîtrise éclatante du char solaire, il y a l'endurance silencieuse d'une mère rejetée de toutes parts, qui doit d'abord trouver refuge avant que quiconque, chez elle, ne puisse triompher. Sa vengeance envers Niobé rappelle enfin qu'une victoire acquise dans la douleur ne pardonne jamais l'insulte faite à ce prix.",
     "Léto est particulièrement associée à Apollon, à Artémis et à Astéria.",
   ],
   "astéria": [
