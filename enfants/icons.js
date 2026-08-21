@@ -326,6 +326,90 @@ const SYMBOLS = {
       },
     ],
   },
+  chaudron: {
+    parts: [
+      {
+        id: "pot",
+        shapes: [
+          { t: "path", d: "M22 46 L78 46 L72 78 Q72 92 50 92 Q28 92 28 78 Z" },
+        ],
+      },
+      {
+        id: "bulles",
+        shapes: [
+          { t: "circle", cx: 40, cy: 30, r: 5 },
+          { t: "circle", cx: 53, cy: 19, r: 6 },
+          { t: "circle", cx: 63, cy: 32, r: 4 },
+        ],
+      },
+    ],
+    overlay: [
+      { t: "path", d: "M18 50 Q6 56 14 66" },
+      { t: "path", d: "M82 50 Q94 56 86 66" },
+    ],
+  },
+  coupe: {
+    parts: [
+      {
+        id: "coupe",
+        shapes: [
+          { t: "path", d: "M30 18 Q30 42 50 46 Q70 42 70 18 Z" },
+          { t: "rect", x: 46, y: 46, w: 8, h: 30, rx: 2 },
+          { t: "rect", x: 34, y: 76, w: 32, h: 8, rx: 3 },
+        ],
+      },
+      {
+        id: "serpent",
+        shapes: [
+          { t: "circle", cx: 76, cy: 26, r: 7 },
+          { t: "circle", cx: 83, cy: 37, r: 6.5 },
+          { t: "circle", cx: 80, cy: 49, r: 6 },
+          { t: "circle", cx: 71, cy: 57, r: 6 },
+          { t: "circle", cx: 67, cy: 68, r: 5.5 },
+          { t: "circle", cx: 73, cy: 78, r: 5 },
+        ],
+      },
+    ],
+  },
+  flambeau: {
+    parts: [
+      {
+        id: "manche",
+        shapes: [
+          { t: "rect", x: 44, y: 40, w: 12, h: 54, rx: 3 },
+          { t: "path", d: "M34 40 L66 40 L60 24 L40 24 Z" },
+        ],
+      },
+      {
+        id: "flamme",
+        shapes: [
+          {
+            t: "path",
+            d: "M50 2 C40 14 36 24 42 32 C38 30 36 36 40 40 C44 46 56 46 60 40 C64 36 62 30 58 32 C62 22 56 10 50 2 Z",
+          },
+        ],
+      },
+    ],
+  },
+  arcenciel: {
+    parts: [
+      {
+        id: "bandes",
+        shapes: [
+          { t: "path", d: "M2 90 A48 48 0 0 1 98 90 L86 90 A36 36 0 0 0 14 90 Z" },
+          { t: "path", d: "M16 90 A34 34 0 0 1 84 90 L72 90 A22 22 0 0 0 28 90 Z" },
+          { t: "path", d: "M30 90 A20 20 0 0 1 70 90 L58 90 A8 8 0 0 0 42 90 Z" },
+        ],
+      },
+      {
+        id: "nuages",
+        shapes: [
+          { t: "ellipse", cx: 10, cy: 90, rx: 10, ry: 7 },
+          { t: "ellipse", cx: 90, cy: 90, rx: 10, ry: 7 },
+        ],
+      },
+    ],
+  },
 };
 
 // --- rendu : badge plat (une seule couleur, utilisé partout hors coloriage)
