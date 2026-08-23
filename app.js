@@ -521,12 +521,15 @@ function nameNumerology(name){
   return reduceToDigit(sum);
 }
 
-// Numérologie du temps : année et mois personnels, à partir de la date de naissance
+// Numérologie du temps : année, mois et jour personnels, à partir de la date de naissance
 // ("AAAA-MM-JJ") et de la date du jour — formule classique (jour + mois de naissance +
-// année en cours, puis + mois en cours), même grammaire symbolique que le nombre du
-// prénom (NUMBER_KEYS, réduit 1-9). Contrairement au nombre du prénom (fixe), ces deux-là
-// évoluent avec le temps : l'année personnelle change chaque 1er janvier, le mois
-// personnel chaque mois — une façon de situer où on en est dans son propre cycle.
+// année en cours, puis + mois en cours, puis + jour en cours), même grammaire symbolique
+// que le nombre du prénom (NUMBER_KEYS, réduit 1-9). Contrairement au nombre du prénom
+// (fixe), ces trois-là évoluent avec le temps : l'année personnelle change chaque
+// 1er janvier, le mois personnel chaque mois, le jour personnel chaque jour — une façon de
+// situer où on en est dans son propre cycle, à trois échelles. Le jour personnel sert
+// notamment à l'horoscope du jour (ritualSummary() ci-dessous) : contrairement au mois
+// personnel, il garantit une donnée qui change réellement tous les jours.
 function personalYearNumber(birthDate, now){
   if(!/^\d{4}-\d{2}-\d{2}$/.test(birthDate||"")) return null;
   const [, month, day] = birthDate.split("-").map(Number);
@@ -538,6 +541,12 @@ function personalMonthNumber(birthDate, now){
   if(py === null) return null;
   const month = (now||new Date()).getMonth() + 1;
   return reduceToDigit(py + month);
+}
+function personalDayNumber(birthDate, now){
+  const pm = personalMonthNumber(birthDate, now);
+  if(pm === null) return null;
+  const day = (now||new Date()).getDate();
+  return reduceToDigit(pm + day);
 }
 
 /* ===================== BIBLIOTHÈQUE SYMBOLIQUE ÉTOFFÉE ===================== */
@@ -2351,28 +2360,42 @@ function ensureRetrospective(){
     .finally(()=>{ retrospectiveFetchInFlight = false; });
 }
 
-/* ===================== RITUEL DU JOUR (recommandation unifiée, IA, 1x/jour) ===================== */
+/* ===================== HOROSCOPE DU JOUR (recommandation unifiée, IA, 1x/jour) ===================== */
+// Affiché côté interface sous le titre "Horoscope du jour" — le nom interne (ritualSummary,
+// ensureRitual, delphesRitual…) reste "ritual", hérité d'un premier essai de wording, pour
+// éviter de renommer toute une chaîne de fonctions/clé localStorage pour un simple
+// changement de libellé visible.
+//
 // Contrairement au portrait et à la rétrospective (générés une fois), rappelé une fois par
 // jour — coût récurrent, du même ordre qu'une lecture à 1 carte. Fusionne carte du jour +
 // transits du jour (signes + aspect le plus marqué avec le thème natal, voir
-// strongestTransitAspect() ci-dessus) + mois personnel en UNE recommandation, plutôt que
-// des blocs séparés à interpréter soi-même — un ancien bloc "Horoscope du jour" affiché en
-// plus faisait doublon (mêmes signes du jour, juste dits autrement) : supprimé, sa matière
-// est maintenant entièrement absorbée ici.
+// strongestTransitAspect() ci-dessus) + thème natal fixe (Soleil/Lune/ascendant de
+// naissance) + nombre personnel DU JOUR en UNE recommandation, plutôt que des blocs
+// séparés à interpréter soi-même — un ancien bloc "Horoscope du jour" affiché à part
+// faisait doublon (mêmes signes du jour, juste dits autrement) : supprimé il y a
+// plusieurs versions, sa matière absorbée ici. Le thème natal fixe et le nombre DU JOUR
+// (plutôt que du mois, qui ne changeait pas assez souvent) ont été ajoutés ensuite,
+// après un retour direct : sans eux, deux jours qui partagent la même carte (le cycle ne
+// compte que 22 majeurs) et le même signe solaire transitant (constant tout un mois)
+// produisaient un texte quasi identique.
 function ritualSummary(profile, dayCard, transits){
   if(!dayCard) return null;
-  const pm = profile ? personalMonthNumber(profile.birthDate) : null;
-  const pmMeaning = NUMBER_KEYS[pm];
+  const pd = profile ? personalDayNumber(profile.birthDate) : null;
+  const pdMeaning = NUMBER_KEYS[pd];
   const transitAspect = strongestTransitAspect(transits, profile);
+  const astral = profile?.astral;
   return {
     firstName: profile?.firstName || null,
     dayCardName: cardFullName(dayCard),
     dayCardKeywords: (dayCard[3]||"").split("·")[0].trim(),
+    natalSunSign: astral?.sunSign || null,
+    natalMoonSign: astral?.moonSign || null,
+    natalAscendantSign: astral?.ascendant?.sign || null,
     sunSign: transits?.sun?.sign || null,
     moonSign: transits?.moon?.sign || null,
     transitAspect: transitAspect ? { body: transitAspect.body, action: transitAspect.action, natal: transitAspect.natal } : null,
-    personalMonth: pm,
-    personalMonthMeaning: pmMeaning ? pmMeaning[0] : null,
+    personalDay: pd,
+    personalDayMeaning: pdMeaning ? pdMeaning[0] : null,
   };
 }
 function getCachedRitual(){
@@ -2731,7 +2754,7 @@ function home(){
     <p class="attic-line" style="margin-top:2px">📜 ${attic.day} ${escapeHTML(attic.monthName)} <span style="opacity:.75">(calendrier attique)</span>${atticDeityNoteHTML(attic.deities)}</p>
     ${streak > 1 ? `<span class="pill" style="margin-top:10px">✦ ${streak} jours de suite</span>` : ""}
   </section>
-  ${ritual ? `<div class="section-title centered"><h3>Ton rituel du jour</h3></div>
+  ${ritual ? `<div class="section-title centered"><h3>Horoscope du jour</h3></div>
   <p class="lore-text" style="max-width:560px;margin:0 auto 20px;text-align:center;opacity:.9;font-weight:500">${escapeHTML(ritual)}</p>` : ""}
   <div class="section-title centered"><h3>Carte du jour</h3></div>
   <div class="day-card" data-card="${encodeURIComponent(JSON.stringify(day))}">${cardHTML(day,"major")}</div>
