@@ -365,7 +365,9 @@ const CARD_LORE = {
 }
 };
 
-// Images (base64) — les 6 premières cartes ont une illustration ; les autres restent en glyphe pour le moment.
+// Images (base64) — les 22 majeurs ont une illustration complète ; les cartes de cour et
+// numérales restent en glyphe/pips pour le moment, sauf celles ajoutées ci-dessous au fil
+// de l'illustration progressive du jeu (56 cartes mineures au total).
 const CARD_IMAGES = {};
 Object.assign(CARD_IMAGES, {
   "Le Mat": "assets/card-0-lemat.jpg",
@@ -390,6 +392,12 @@ Object.assign(CARD_IMAGES, {
   "XIX — Le Soleil": "assets/card-19-soleil.jpg",
   "XX — Le Jugement": "assets/card-20-jugement.jpg",
   "XXI — Le Monde": "assets/card-21-monde.jpg",
+  // Cartes numérales d'Épées (1-5) — premier lot de cartes mineures illustrées.
+  "As de Épées": "assets/card-epees-1.jpg",
+  "2 de Épées": "assets/card-epees-2.jpg",
+  "3 de Épées": "assets/card-epees-3.jpg",
+  "4 de Épées": "assets/card-epees-4.jpg",
+  "5 de Épées": "assets/card-epees-5.jpg",
 });
 
 const COURTS = {
