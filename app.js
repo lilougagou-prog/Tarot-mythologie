@@ -305,11 +305,11 @@ const CARD_LORE = {
 },
 "6 de Épées": {
   marseille:"Un passeur conduit une barque chargée d'épées vers une rive plus calme, deux silhouettes assises à l'arrière : transition, éloignement volontaire d'une zone de trouble vers plus de sérénité.",
-  myth:"Charon menait les âmes à travers le Styx, non vers une fin, mais vers un autre état — un passage nécessaire, jamais un naufrage. Cette carte est ce même mouvement : quitter une eau agitée pour une autre, plus tranquille."
+  myth:"Palioxis, personnification du reflux d'une armée en déroute dans le cortège d'Arès, n'incarne jamais la défaite elle-même, mais le moment où continuer le combat cesserait d'avoir un sens (voir la fiche « Palioxis »). Cette carte est ce même mouvement : quitter une eau agitée pour une autre, plus tranquille."
 },
 "7 de Épées": {
   marseille:"Un personnage s'éloigne d'un camp en emportant cinq épées, en laissant deux derrière lui, avec un air furtif : stratégie, action menée en partie seule, discrétion parfois nécessaire.",
-  myth:"Ulysse conçut le stratagème du cheval de Troie non par la force, mais par une ruse qu'il garda pour lui jusqu'au bout. Cette carte est cette même intelligence tactique — efficace, mais qui flirte parfois avec la limite de l'honnêteté."
+  myth:"Apaté, personnification de la Tromperie, sait exactement jusqu'où une ruse peut aller sans jamais tout à fait devenir un mensonge déclaré (voir la fiche « Apaté »). Cette carte est cette même intelligence tactique — efficace, mais qui flirte parfois avec la limite de l'honnêteté."
 },
 "8 de Épées": {
   marseille:"Une figure entravée et les yeux bandés se tient debout, entourée de huit épées plantées en cercle : sentiment d'enfermement, obstacles qui semblent infranchissables — mais le chemin entre les épées reste ouvert.",
@@ -392,19 +392,21 @@ Object.assign(CARD_IMAGES, {
   "XIX — Le Soleil": "assets/card-19-soleil.jpg",
   "XX — Le Jugement": "assets/card-20-jugement.jpg",
   "XXI — Le Monde": "assets/card-21-monde.jpg",
-  // Cartes numérales d'Épées (1-5) — premier lot de cartes mineures illustrées.
+  // Cartes numérales d'Épées (1-7) — illustration progressive des mineures.
   "As de Épées": "assets/card-epees-1.jpg",
   "2 de Épées": "assets/card-epees-2.jpg",
   "3 de Épées": "assets/card-epees-3.jpg",
   "4 de Épées": "assets/card-epees-4.jpg",
   "5 de Épées": "assets/card-epees-5.jpg",
+  "6 de Épées": "assets/card-epees-6.jpg",
+  "7 de Épées": "assets/card-epees-7.jpg",
 });
 
 // Cartes numérales dotées d'une figure mythologique propre (contrairement aux autres
 // cartes numérales, qui partagent encore un simple mot générique entre les 4 enseignes —
 // voir NUMBER_KEYS) : la divinité associée prend la place de ce mot générique dans les
 // écrans de détail (voir cardDeityLabel() ci-dessous), exactement comme pour les majeurs
-// et les figures de cour. Pour l'instant limité aux 5 cartes d'Épées illustrées
+// et les figures de cour. Pour l'instant limité aux cartes d'Épées illustrées
 // (CARD_IMAGES ci-dessus) ; à étendre au fil des prochaines illustrations mineures.
 const NUMBER_CARD_DEITY = {
   "As de Épées": "aletheia",
@@ -412,6 +414,8 @@ const NUMBER_CARD_DEITY = {
   "3 de Épées": "éris",
   "4 de Épées": "lethée",
   "5 de Épées": "némésis",
+  "6 de Épées": "palioxis",
+  "7 de Épées": "apaté",
 };
 // Nom affiché comme "divinité" d'une carte dans les écrans de détail : la figure propre
 // à la carte si elle existe (NUMBER_CARD_DEITY), sinon c[1] tel quel (le nom du dieu pour
@@ -1246,6 +1250,8 @@ const DEITY_NOTES = {
   "éris":"Déesse de la Discorde, dont la pomme d'or jetée aux noces de Thétis déclencha le jugement de Pâris.",
   "lethée":"Fleuve des Enfers, personnification de l'Oubli — son eau efface jusqu'au souvenir d'avoir vécu.",
   "némésis":"Déesse de la rétribution, qui rétablit l'équilibre chaque fois que la démesure dépasse sa juste limite.",
+  "palioxis":"Personnification du reflux d'une armée en déroute, du cortège d'Arès — le repli, non la défaite.",
+  "apaté":"Personnification de la Tromperie, fille de la Nuit, rivale d'Aletheia la Vérité.",
 };
 
 // Textes mythologiques développés pour les figures listées ci-dessus (voir showDeityDetail() /
@@ -1613,7 +1619,7 @@ const DEITY_LORE = {
   "aletheia": [
     "Aletheia personnifie la Vérité elle-même. Les traditions varient sur son origine : fille de Zeus pour les uns, née de Chronos, le temps primordial, pour les autres — un lien qui a donné naissance à l'adage selon lequel le temps finit toujours par révéler ce qui a été caché.",
     "Son nom grec, alètheia, signifie littéralement « ce qui n'est plus caché » — la négation de lèthè, l'oubli (voir la fiche « Lethée »). Les deux figures se répondent ainsi comme deux pôles opposés : l'une dévoile, l'autre efface.",
-    "Elle a pour rivale Apate, l'esprit de la tromperie échappé du vase de Pandore avec tous les maux du monde. Lassée de voir sa parole détournée et travestie par les hommes, Aletheia se serait retirée au fond d'un puits, loin de la surface où la vérité se déforme si facilement — origine de l'adage antique selon lequel « la vérité est au fond du puits ».",
+    "Elle a pour rivale Apaté (voir la fiche « Apaté »), l'esprit de la tromperie. Lassée de voir sa parole détournée et travestie par les hommes, Aletheia se serait retirée au fond d'un puits, loin de la surface où la vérité se déforme si facilement — origine de l'adage antique selon lequel « la vérité est au fond du puits ».",
     "Dans le Tarot, Aletheia est la figure de l'As d'Épées, où une lame se dresse, nette et couronnée de laurier : la lecture traditionnelle de cette carte — une idée qui perce, une décision prise sans l'ombre d'un doute — est exactement ce que personnifie Aletheia, la vérité qui ne négocie jamais avec ce qui l'entoure.",
   ],
   "ananké": [
@@ -1639,6 +1645,18 @@ const DEITY_LORE = {
     "C'est elle, selon la tradition la plus répandue, qui punit Narcisse (voir la fiche « Narcisse ») pour avoir repoussé sans pitié tous ceux qui l'aimaient : elle le condamna à tomber amoureux de son propre reflet, un amour qu'il ne pourrait jamais obtenir en retour — la faute retournée contre celui qui l'avait commise.",
     "On la représente ailée, tenant parfois une roue — celle de la fortune, qui n'épargne personne indéfiniment — ou un instrument de mesure, rappelant que rien ne doit dépasser sa juste proportion, le fameux « rien de trop » gravé au temple de Delphes.",
     "Dans le Tarot, Némésis est la figure du 5 d'Épées, où une victoire se ramasse avec un sourire ambigu tandis que d'autres s'éloignent, tête baissée : elle rappelle que tout triomphe payé au prix de l'orgueil ou de l'excès finit, tôt ou tard, par se retourner contre celui qui l'a emporté.",
+  ],
+  "palioxis": [
+    "Palioxis personnifie la débandade — le reflux chaotique d'une armée qui rompt les rangs et fuit, à l'opposé exact de la charge conquérante.",
+    "Elle appartient au cortège d'Arès, aux côtés de figures comme Phobos et Deimos (la Peur et la Terreur) ou Kydoimos (la Confusion du combat) : une escorte de forces qui n'affrontent jamais l'ennemi elles-mêmes, mais décident souvent de l'issue d'une bataille en s'emparant d'un camp ou de l'autre.",
+    "Contrairement à Ioké, sa contrepartie qui personnifie la poursuite acharnée du vainqueur, Palioxis n'est pas la défaite elle-même : elle est ce moment où continuer le combat cesserait d'avoir un sens, et où seul reculer permet de préserver ce qui peut encore l'être.",
+    "Dans le Tarot, Palioxis est la figure du 6 d'Épées, où une silhouette conduit une barque chargée de lames vers une rive plus calme : son reflux n'est jamais une honte, mais le choix, souvent le plus lucide, de quitter une eau agitée avant qu'elle n'engloutisse tout.",
+  ],
+  "apaté": [
+    "Apaté personnifie la Tromperie. Hésiode en fait une fille de Nyx, la Nuit, née sans père — au côté d'autres forces sombres comme Éris, la Discorde (voir la fiche « Éris »), ou Géras, la Vieillesse : des puissances qui agissent sur le monde sans jamais avoir besoin d'être invoquées.",
+    "Des traditions plus tardives l'associent aussi aux maux répandus sur le monde lorsque Pandore souleva le couvercle du vase qui lui avait été confié — la tromperie comptant, dans cette lecture, parmi les premières épreuves faites aux hommes.",
+    "Elle a pour rivale Aletheia, la Vérité (voir la fiche « Aletheia ») : l'une dévoile ce que l'autre travestit, et aucune des deux ne l'emporte jamais tout à fait sur l'autre.",
+    "Dans le Tarot, Apaté est la figure du 7 d'Épées, où une silhouette s'éloigne en emportant plusieurs lames, en laissant sciemment les autres derrière elle : une stratégie qui n'est pas un vol pur et simple, mais qui flirte sciemment avec la limite de l'honnêteté — exactement le territoire qu'Apaté ne quitte jamais.",
   ],
 };
 
