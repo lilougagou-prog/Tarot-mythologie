@@ -313,15 +313,15 @@ const CARD_LORE = {
 },
 "8 de Épées": {
   marseille:"Une figure entravée et les yeux bandés se tient debout, entourée de huit épées plantées en cercle : sentiment d'enfermement, obstacles qui semblent infranchissables — mais le chemin entre les épées reste ouvert.",
-  myth:"Andromède, enchaînée au rocher offerte au monstre marin, semblait sans issue jusqu'à ce que Persée vienne rompre ce qui la retenait. Cette carte rappelle que l'entrave est souvent plus mentale que réellement définitive."
+  myth:"Phobos, personnification de la Peur, brandi sur les boucliers pour faire vaciller des rangs entiers avant même le premier coup porté (voir la fiche « Phobos »). Cette carte rappelle que l'entrave est souvent plus mentale que réellement définitive."
 },
 "9 de Épées": {
   marseille:"Un personnage se réveille en sursaut, le visage dans les mains, neuf épées suspendues au-dessus de lui : angoisse nocturne, pensées ressassées qui empêchent le repos.",
-  myth:"Les Érinyes poursuivaient les coupables jusque dans leurs rêves, sans relâche, réveillant sans cesse une culpabilité qu'aucune fuite ne pouvait apaiser. Cette carte est cette même nuit agitée — mais le jour, souvent, dissipe ce que la nuit avait grossi."
+  myth:"Morphée, dieu des songes, sait façonner dans le rêve des visions si parfaites qu'elles se confondent avec la réalité — y compris celles qu'on ne voudrait jamais voir (voir la fiche « Morphée »). Cette carte est cette même nuit agitée — mais le jour, souvent, dissipe ce que la nuit avait grossi."
 },
 "10 de Épées": {
   marseille:"Un personnage gît au sol, transpercé de dix épées, sous un ciel qui commence pourtant à s'éclaircir à l'horizon : fin brutale d'un cycle, mais aussi le signe qu'il ne peut plus rien empirer après cela.",
-  myth:"Actéon, changé en cerf et déchiré par ses propres chiens pour avoir vu Artémis au bain, connut une fin sans appel — mais son histoire, elle, devint un avertissement qui survécut à sa chute. Cette carte est ce point le plus bas d'où, justement, il ne reste qu'à se relever."
+  myth:"Thanatos, personnification de la mort paisible, n'est jamais cruel — seulement inévitable, quoi qu'on tente pour l'enchaîner (voir la fiche « Thanatos »). Cette carte est ce point le plus bas d'où, justement, il ne reste qu'à se relever."
 },
 "As de Deniers": {
   marseille:"Une main tient un unique denier doré au-dessus d'un jardin fleuri : opportunité concrète, début tangible, promesse de croissance matérielle bien enracinée.",
@@ -392,7 +392,8 @@ Object.assign(CARD_IMAGES, {
   "XIX — Le Soleil": "assets/card-19-soleil.jpg",
   "XX — Le Jugement": "assets/card-20-jugement.jpg",
   "XXI — Le Monde": "assets/card-21-monde.jpg",
-  // Cartes numérales d'Épées (1-7) — illustration progressive des mineures.
+  // Cartes numérales d'Épées (1-10) — le jeu numéral complet de cette enseigne est
+  // désormais illustré.
   "As de Épées": "assets/card-epees-1.jpg",
   "2 de Épées": "assets/card-epees-2.jpg",
   "3 de Épées": "assets/card-epees-3.jpg",
@@ -400,6 +401,13 @@ Object.assign(CARD_IMAGES, {
   "5 de Épées": "assets/card-epees-5.jpg",
   "6 de Épées": "assets/card-epees-6.jpg",
   "7 de Épées": "assets/card-epees-7.jpg",
+  "8 de Épées": "assets/card-epees-8.jpg",
+  "9 de Épées": "assets/card-epees-9.jpg",
+  "10 de Épées": "assets/card-epees-10.jpg",
+  // Figures de cour d'Épées — leur divinité (Zéphyr, Bellérophon…) était déjà connue via
+  // COURTS, seule l'illustration manquait.
+  "Valet d'Épées": "assets/card-epees-valet.jpg",
+  "Cavalier d'Épées": "assets/card-epees-cavalier.jpg",
 });
 
 // Cartes numérales dotées d'une figure mythologique propre (contrairement aux autres
@@ -407,7 +415,9 @@ Object.assign(CARD_IMAGES, {
 // voir NUMBER_KEYS) : la divinité associée prend la place de ce mot générique dans les
 // écrans de détail (voir cardDeityLabel() ci-dessous), exactement comme pour les majeurs
 // et les figures de cour. Pour l'instant limité aux cartes d'Épées illustrées
-// (CARD_IMAGES ci-dessus) ; à étendre au fil des prochaines illustrations mineures.
+// (CARD_IMAGES ci-dessus) ; à étendre au fil des prochaines illustrations mineures. Les
+// figures de cour n'ont pas besoin d'entrée ici : COURTS leur attribue déjà une divinité
+// propre nativement (c[1]), contrairement aux cartes numérales.
 const NUMBER_CARD_DEITY = {
   "As de Épées": "aletheia",
   "2 de Épées": "ananké",
@@ -416,6 +426,9 @@ const NUMBER_CARD_DEITY = {
   "5 de Épées": "némésis",
   "6 de Épées": "palioxis",
   "7 de Épées": "apaté",
+  "8 de Épées": "phobos",
+  "9 de Épées": "morphée",
+  "10 de Épées": "thanatos",
 };
 // Nom affiché comme "divinité" d'une carte dans les écrans de détail : la figure propre
 // à la carte si elle existe (NUMBER_CARD_DEITY), sinon c[1] tel quel (le nom du dieu pour
@@ -1252,6 +1265,9 @@ const DEITY_NOTES = {
   "némésis":"Déesse de la rétribution, qui rétablit l'équilibre chaque fois que la démesure dépasse sa juste limite.",
   "palioxis":"Personnification du reflux d'une armée en déroute, du cortège d'Arès — le repli, non la défaite.",
   "apaté":"Personnification de la Tromperie, fille de la Nuit, rivale d'Aletheia la Vérité.",
+  "phobos":"Personnification de la Peur, fils d'Arès et d'Aphrodite, jumeau de Deimos — il escorte les guerriers avant le combat.",
+  "morphée":"Dieu des songes, fils d'Hypnos, capable de prendre dans le rêve la forme parfaite de n'importe quel mortel.",
+  "thanatos":"Personnification de la mort paisible, frère jumeau d'Hypnos le Sommeil — inévitable, jamais cruelle.",
 };
 
 // Textes mythologiques développés pour les figures listées ci-dessus (voir showDeityDetail() /
@@ -1648,7 +1664,7 @@ const DEITY_LORE = {
   ],
   "palioxis": [
     "Palioxis personnifie la débandade — le reflux chaotique d'une armée qui rompt les rangs et fuit, à l'opposé exact de la charge conquérante.",
-    "Elle appartient au cortège d'Arès, aux côtés de figures comme Phobos et Deimos (la Peur et la Terreur) ou Kydoimos (la Confusion du combat) : une escorte de forces qui n'affrontent jamais l'ennemi elles-mêmes, mais décident souvent de l'issue d'une bataille en s'emparant d'un camp ou de l'autre.",
+    "Elle appartient au cortège d'Arès, aux côtés de figures comme Phobos (voir la fiche « Phobos ») et son jumeau Deimos, la Terreur, ou Kydoimos, la Confusion du combat : une escorte de forces qui n'affrontent jamais l'ennemi elles-mêmes, mais décident souvent de l'issue d'une bataille en s'emparant d'un camp ou de l'autre.",
     "Contrairement à Ioké, sa contrepartie qui personnifie la poursuite acharnée du vainqueur, Palioxis n'est pas la défaite elle-même : elle est ce moment où continuer le combat cesserait d'avoir un sens, et où seul reculer permet de préserver ce qui peut encore l'être.",
     "Dans le Tarot, Palioxis est la figure du 6 d'Épées, où une silhouette conduit une barque chargée de lames vers une rive plus calme : son reflux n'est jamais une honte, mais le choix, souvent le plus lucide, de quitter une eau agitée avant qu'elle n'engloutisse tout.",
   ],
@@ -1657,6 +1673,23 @@ const DEITY_LORE = {
     "Des traditions plus tardives l'associent aussi aux maux répandus sur le monde lorsque Pandore souleva le couvercle du vase qui lui avait été confié — la tromperie comptant, dans cette lecture, parmi les premières épreuves faites aux hommes.",
     "Elle a pour rivale Aletheia, la Vérité (voir la fiche « Aletheia ») : l'une dévoile ce que l'autre travestit, et aucune des deux ne l'emporte jamais tout à fait sur l'autre.",
     "Dans le Tarot, Apaté est la figure du 7 d'Épées, où une silhouette s'éloigne en emportant plusieurs lames, en laissant sciemment les autres derrière elle : une stratégie qui n'est pas un vol pur et simple, mais qui flirte sciemment avec la limite de l'honnêteté — exactement le territoire qu'Apaté ne quitte jamais.",
+  ],
+  "phobos": [
+    "Phobos personnifie la Peur qui saisit avant tout raisonnement — fils d'Arès et d'Aphrodite, jumeau de Deimos, la Terreur, avec qui il escorte son père au combat (voir la fiche « Palioxis » pour ce même cortège).",
+    "Homère le place, aux côtés de la tête de la Gorgone, sur le bouclier d'Agamemnon comme sur l'égide d'Athéna : son image seule, brandie face à l'ennemi, suffisait à faire vaciller des rangs entiers avant qu'une seule lame ne soit levée.",
+    "Les Spartiates lui vouaient un culte à part, non pour la bannir, mais pour l'apprivoiser : une peur reconnue et maîtrisée, croyaient-ils, forge une discipline plus sûre qu'une bravoure aveugle qui ignore le danger.",
+    "Dans le Tarot, Phobos est la figure du 8 d'Épées, où une silhouette entravée et les yeux bandés se tient debout, cernée d'épées qui laissent pourtant un passage : sa peur, comme la sienne, retient bien plus l'esprit que le corps.",
+  ],
+  "morphée": [
+    "Morphée est le dieu des songes, fils d'Hypnos, le Sommeil — il façonne dans le rêve des silhouettes humaines si parfaites qu'elles se confondent avec la réalité, message des dieux glissé dans le repos des mortels.",
+    "Ovide raconte comment Junon, voulant révéler à Alcyone la mort de son époux Céyx en mer, envoya Morphée prendre les traits exacts du disparu pour la lui annoncer en songe — une vérité que la déesse jugeait trop cruelle à dire éveillée, mais qu'il fallait pourtant transmettre.",
+    "Dans le Tarot, Morphée est la figure du 9 d'Épées, où un dormeur repose sous neuf lames suspendues dans la nuit : tout ce qui visite le sommeil n'est pas apaisant — parfois l'esprit doit d'abord porter, même endormi, ce qu'il ne peut pas encore affronter éveillé.",
+  ],
+  "thanatos": [
+    "Thanatos personnifie la mort paisible, sans violence ni souffrance — fils de Nyx comme Apaté (voir la fiche « Apaté »), et frère jumeau d'Hypnos, le Sommeil, tant les deux se ressemblent.",
+    "Sisyphe parvint un jour à l'enchaîner par ruse, empêchant plus personne de mourir sur terre — jusqu'à ce qu'Arès, furieux de voir la guerre perdre tout enjeu sans la mort pour la trancher, ne vienne le libérer de force.",
+    "Héraclès (voir la fiche « Héraclès ») le défia une autre fois corps à corps, pour arracher la reine Alceste des Enfers et la rendre à son époux — l'une des rares fois où la mort elle-même dut céder.",
+    "Dans le Tarot, Thanatos est la figure du 10 d'Épées, où une silhouette gît transpercée sous un ciel qui pourtant s'éclaircit à l'horizon : sa fin n'est jamais cruelle, seulement inévitable — et c'est cette même inévitabilité qui marque, dans la carte, le point le plus bas d'où il ne reste qu'à se relever.",
   ],
 };
 
