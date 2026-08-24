@@ -233,15 +233,15 @@ const CARD_LORE = {
 },
 "8 de Bâtons": {
   marseille:"Huit bâtons filent dans les airs, en plein vol, vers un but encore invisible : accélération soudaine, événements qui se précipitent après une période d'attente.",
-  myth:"Les flèches d'Apollon, dieu archer autant que solaire, atteignaient toujours leur cible avec une vitesse redoutable. Cette carte annonce ce même mouvement rapide, presque impossible à ralentir une fois lancé."
+  myth:"Borée, dieu du vent du Nord et le plus violent des quatre Anémoi, souffle avec une force capable de fracasser une flotte entière ou d'emporter en un instant ce qui se dresse sur son passage (voir la fiche « Borée »). Cette carte est ce même mouvement rapide, presque impossible à ralentir une fois lancé."
 },
 "9 de Bâtons": {
   marseille:"Un personnage blessé mais debout tient son dernier bâton, huit autres dressés derrière lui en rempart : résilience, vigilance maintenue malgré la fatigue accumulée.",
-  myth:"Héraclès, au seuil de son douzième et dernier travail, portait déjà les marques des onze précédents sans jamais renoncer. Cette carte est cette endurance presque épuisée mais qui refuse encore de céder."
+  myth:"Alké personnifie la vaillance martiale, cette fermeté qui tient la ligne dans l'épreuve sans jamais chercher l'éclat (voir la fiche « Alké »). Cette carte est cette endurance presque épuisée mais qui refuse encore de céder."
 },
 "10 de Bâtons": {
   marseille:"Un personnage courbé porte dix bâtons vers une maison au loin : charge lourde, responsabilités accumulées, but presque atteint mais au prix d'un fardeau conséquent.",
-  myth:"Atlas porte le poids du ciel sur ses épaules, une charge sans fin qu'aucun repos ne vient jamais alléger totalement. Cette carte questionne cette même charge : est-elle encore nécessaire à porter seul jusqu'au bout ?"
+  myth:"Kratos, personnification de la Puissance souveraine, est celui qui fait exécuter les ordres de Zeus jusqu'au bout, quel que soit le poids de la tâche (voir la fiche « Kratos »). Cette carte questionne cette même charge : est-elle encore nécessaire à porter seul jusqu'au bout ?"
 },
 "As de Coupes": {
   marseille:"Une main sort des nuages, offrant une coupe débordante d'où jaillissent cinq jets d'eau : émotion neuve et généreuse, cœur ouvert avant toute retenue.",
@@ -411,7 +411,8 @@ Object.assign(CARD_IMAGES, {
   "Cavalier d'Épées": "assets/card-epees-cavalier.jpg",
   "Reine d'Épées": "assets/card-epees-reine.jpg",
   "Roi d'Épées": "assets/card-epees-roi.jpg",
-  // Cartes numérales de Bâtons (1-7).
+  // Cartes numérales de Bâtons (1-10) — le jeu numéral complet de cette enseigne est
+  // désormais illustré.
   "As de Bâtons": "assets/card-batons-1.jpg",
   "2 de Bâtons": "assets/card-batons-2.jpg",
   "3 de Bâtons": "assets/card-batons-3.jpg",
@@ -419,6 +420,13 @@ Object.assign(CARD_IMAGES, {
   "5 de Bâtons": "assets/card-batons-5.jpg",
   "6 de Bâtons": "assets/card-batons-6.jpg",
   "7 de Bâtons": "assets/card-batons-7.jpg",
+  "8 de Bâtons": "assets/card-batons-8.jpg",
+  "9 de Bâtons": "assets/card-batons-9.jpg",
+  "10 de Bâtons": "assets/card-batons-10.jpg",
+  // Figures de cour de Bâtons — Valet (Éos) et Cavalier (Niké) : leur divinité était déjà
+  // connue via COURTS, seule l'illustration manquait.
+  "Valet de Bâtons": "assets/card-batons-valet.jpg",
+  "Cavalier de Bâtons": "assets/card-batons-cavalier.jpg",
 });
 
 // Cartes numérales dotées d'une figure mythologique propre (contrairement aux autres
@@ -445,6 +453,9 @@ const NUMBER_CARD_DEITY = {
   "5 de Bâtons": "zelos",
   "6 de Bâtons": "bia",
   "7 de Bâtons": "agon",
+  "8 de Bâtons": "borée",
+  "9 de Bâtons": "alké",
+  "10 de Bâtons": "kratos",
   "9 de Épées": "morphée",
   "10 de Épées": "thanatos",
 };
@@ -1292,6 +1303,9 @@ const DEITY_NOTES = {
   "zelos":"Personnification du Zèle et de l'émulation rivale, frère de Niké, compagnon permanent du trône de Zeus.",
   "bia":"Personnification de la Force brute qui exécute sans jamais discuter, sœur de Niké.",
   "agon":"Personnification de la Compétition codifiée, honoré à Olympie aux côtés des concours sportifs.",
+  "borée":"Dieu du vent du Nord, l'un des quatre Anémoi, fils d'Astréos et d'Éos — ravisseur de la princesse athénienne Orithye.",
+  "alké":"Personnification de la Vaillance martiale, la fermeté qui tient bon dans l'épreuve — figure mineure, peu documentée.",
+  "kratos":"Personnification de la Puissance souveraine, frère de Niké, de Bia et de Zelos, exécuteur des ordres de Zeus.",
 };
 
 // Textes mythologiques développés pour les figures listées ci-dessus (voir showDeityDetail() /
@@ -1365,7 +1379,7 @@ const DEITY_LORE = {
   ],
   "prométhée": [
     "Titan resté aux côtés de Zeus pendant la guerre contre les autres Titans, Prométhée façonna aussi, selon certains récits, les premiers hommes à partir d'argile.",
-    "Voyant l'humanité livrée au froid et à l'ignorance, il déroba le feu aux dieux et l'offrit aux mortels (voir la fiche « Feu ») — un don qui lui valut d'être traîné jusqu'à un rocher du Caucase par Bia et Kratos, la Force et la Puissance (voir la fiche « Bia »), sur ordre de Zeus, puis enchaîné là où un aigle venait chaque jour dévorer son foie, qui repoussait chaque nuit, jusqu'à ce que Chiron accepte de mourir à sa place pour le libérer (voir la fiche « Chiron »).",
+    "Voyant l'humanité livrée au froid et à l'ignorance, il déroba le feu aux dieux et l'offrit aux mortels (voir la fiche « Feu ») — un don qui lui valut d'être traîné jusqu'à un rocher du Caucase par Bia et Kratos, la Force et la Puissance (voir les fiches « Bia » et « Kratos »), sur ordre de Zeus, puis enchaîné là où un aigle venait chaque jour dévorer son foie, qui repoussait chaque nuit, jusqu'à ce que Chiron accepte de mourir à sa place pour le libérer (voir la fiche « Chiron »).",
     "Son nom reste attaché à tout affranchissement payé au prix fort — le savoir arraché plutôt que donné.",
   ],
   "hadès": [
@@ -1443,11 +1457,12 @@ const DEITY_LORE = {
     "Déesse de l'aurore, Éos ouvre chaque matin les portes du ciel pour annoncer le passage du char d'Hélios, son frère — ses doigts de rose colorent le ciel juste avant le lever du jour (voir la fiche « Aurore »).",
     "Éprise de plusieurs mortels, dont Tithonos, elle obtint pour lui l'immortalité mais oublia de demander aussi l'éternelle jeunesse : il vieillit sans jamais pouvoir mourir, jusqu'à se réduire, dit-on, à une simple voix.",
     "Elle aima aussi le chasseur Orion, qu'elle emporta à Délos pour vivre à ses côtés, avant qu'il ne devienne le compagnon de chasse d'Artémis (voir la fiche « Orion »).",
+    "Unie à Astréos, dieu des étoiles, elle mit aussi au monde les quatre vents, dont Borée, le vent du Nord (voir la fiche « Borée ») — une aurore qui n'ouvre pas seulement le ciel au soleil, mais engendre aussi les souffles qui le traversent.",
   ],
   "niké": [
     "Déesse ailée de la victoire, Niké accompagne indifféremment les vainqueurs, sans jamais prendre elle-même part au combat — elle couronne l'issue plutôt que de la déterminer.",
     "Fille du Titan Pallas et de Styx, elle se rangea aux côtés de Zeus dès la guerre contre les Titans, et resta depuis une fidèle compagne de son char, symbole d'un triomphe qui se mérite sans jamais se garantir d'avance.",
-    "Trois de ses frères et sœurs firent le même choix qu'elle et reçurent la même récompense : Kratos, la Puissance, Bia, la Force (voir la fiche « Bia »), et Zelos, le Zèle rival (voir la fiche « Zelos »), devinrent eux aussi des compagnons permanents du trône de Zeus.",
+    "Trois de ses frères et sœurs firent le même choix qu'elle et reçurent la même récompense : Kratos, la Puissance (voir la fiche « Kratos »), Bia, la Force (voir la fiche « Bia »), et Zelos, le Zèle rival (voir la fiche « Zelos »), devinrent eux aussi des compagnons permanents du trône de Zeus.",
   ],
   "hestia": [
     "Sœur aînée de Zeus, Hestia est la déesse du foyer et gardienne de la flamme sacrée qui brûle au centre de chaque maison comme de chaque cité.",
@@ -1744,14 +1759,31 @@ const DEITY_LORE = {
   ],
   "bia": [
     "Bia personnifie la Force brute — non la force qui combat pour elle-même, mais celle qui exécute sans jamais discuter ce qu'on lui ordonne.",
-    "Fille du Titan Pallas et de Styx, sœur de Niké, de Kratos et de Zelos (voir les fiches « Niké » et « Zelos »), elle rallia elle aussi Zeus pendant la guerre contre les Titans et fut récompensée d'une place permanente à ses côtés, jamais quittée depuis.",
-    "Elle et Kratos, la Puissance, sur ordre de Zeus, traînèrent un jour Prométhée jusqu'au rocher du Caucase où il fut enchaîné (voir la fiche « Prométhée ») — dans le récit qui la met en scène, Bia ne prononce jamais un mot : sa seule fonction est d'agir, jamais de justifier.",
+    "Fille du Titan Pallas et de Styx, sœur de Niké, de Kratos (voir les fiches « Niké » et « Kratos ») et de Zelos (voir la fiche « Zelos »), elle rallia elle aussi Zeus pendant la guerre contre les Titans et fut récompensée d'une place permanente à ses côtés, jamais quittée depuis.",
+    "Elle et Kratos, sur ordre de Zeus, traînèrent un jour Prométhée jusqu'au rocher du Caucase où il fut enchaîné (voir la fiche « Prométhée ») — dans le récit qui la met en scène, Bia ne prononce jamais un mot, contrairement à Kratos : sa seule fonction est d'agir, jamais de justifier.",
     "Dans le Tarot, Bia est la figure du 6 de Bâtons, où un vainqueur couronné de laurier avance acclamé par la foule : la place qu'elle occupe aux côtés de Zeus depuis la victoire sur les Titans est exactement cette reconnaissance méritée, gagnée par une loyauté jamais remise en question.",
   ],
   "agon": [
     "Agon personnifie la Compétition elle-même — non l'affrontement guerrier, mais l'épreuve codifiée où l'on se mesure aux autres selon des règles communes à tous.",
     "Le voyageur Pausanias décrit avoir vu, à Olympie, une statue lui étant consacrée, tenant les haltères des sauteurs — Agon présidait aussi bien les concours sportifs que les concours dramatiques donnés lors des grandes fêtes religieuses.",
     "Dans le Tarot, Agon est la figure du 7 de Bâtons, où un seul personnage, en position haute, tient tête à six autres levés vers lui : il est précisément ce terrain où il faut sans cesse défendre sa place face à qui veut la prendre, épreuve après épreuve.",
+  ],
+  "borée": [
+    "Borée est le dieu du vent du Nord, le plus violent des quatre Anémoi — ses frères Notos (le vent du Sud), Euros (le vent d'Est) et Zéphyr (voir la fiche « Zéphyr »), le vent d'Ouest, soufflent chacun avec une force bien moindre que la sienne.",
+    "Fils d'Astréos et d'Éos, l'Aurore (voir la fiche « Éos »), il s'éprit de la princesse athénienne Orithye et, après avoir essuyé un refus, l'enleva en pleine tempête pour l'emmener régner à ses côtés en Thrace — un rapt brutal que les Athéniens finirent par honorer comme une alliance : Borée devint ainsi, par ce mariage, un beau-frère de leur cité.",
+    "Lors des guerres médiques, les Athéniens, se souvenant de ce lien, adressèrent des prières à Borée pour qu'il vienne à leur secours contre la flotte perse — Hérodote raconte que ses vents se levèrent alors et fracassèrent une partie des navires ennemis au large de l'Eubée, un secours que la cité lui attribua par la suite comme un dû entre parents.",
+    "Dans le Tarot, Borée est la figure du 8 de Bâtons, où huit bâtons filent dans les airs à toute vitesse vers un but encore invisible : ce même souffle brutal et soudain, capable d'enlever une princesse comme de disperser une flotte entière, est précisément ce qui porte cette carte — un mouvement qu'aucune volonté ne semble plus pouvoir ralentir une fois qu'il s'est levé.",
+  ],
+  "alké": [
+    "Alké personnifie la Vaillance martiale — la fermeté qui tient la ligne dans l'épreuve, plus proche de l'endurance du combattant que de la fureur guerrière.",
+    "C'est une figure mineure, très peu documentée dans les sources qui nous restent : ni généalogie développée ni récit propre ne lui sont attachés, seulement son nom, invoqué comme une qualité que l'on souhaite à qui affronte une épreuve longue.",
+    "Dans le Tarot, Alké est la figure du 9 de Bâtons, où un personnage blessé mais debout tient son dernier bâton, huit autres dressés derrière lui en rempart : cette vaillance qui ne cède pas, même affaiblie, est exactement la sienne — une résistance qui tient bon non par éclat, mais par simple refus de céder.",
+  ],
+  "kratos": [
+    "Kratos personnifie la Puissance souveraine — non la force qui agit d'elle-même, comme sa sœur Bia (voir la fiche « Bia »), mais l'autorité qui commande et fait exécuter.",
+    "Fils du Titan Pallas et de Styx, frère de Niké, de Bia et de Zelos (voir les fiches « Niké », « Bia » et « Zelos »), il se rangea comme eux aux côtés de Zeus pendant la guerre contre les Titans et resta depuis un compagnon permanent de son trône, chargé d'en faire respecter les volontés.",
+    "Dans la pièce Prométhée enchaîné d'Eschyle, c'est lui qui ouvre la scène : sur ordre de Zeus, il escorte Héphaïstos jusqu'au rocher du Caucase et lui ordonne d'y enchaîner Prométhée, pendant que Bia, silencieuse à ses côtés, se contente d'exécuter (voir la fiche « Prométhée »). Seul parmi les quatre enfants de Styx à recevoir une réplique dans les textes qui nous restent, il incarne le pouvoir qui se justifie en parlant, là où Bia agit sans un mot.",
+    "Dans le Tarot, Kratos est la figure du 10 de Bâtons, où un personnage courbé porte à grand-peine dix bâtons vers une maison au loin : cette même puissance qui n'a de sens qu'en s'exerçant jusqu'au bout d'une charge, quel qu'en soit le poids, est précisément la sienne — la force devenue fardeau, mais jamais déposée avant le but atteint.",
   ],
 };
 
