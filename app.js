@@ -285,23 +285,23 @@ const CARD_LORE = {
 },
 "As de Épées": {
   marseille:"Une main tient une épée droite couronnée de laurier et de palme : idée claire, vérité qui perce, décision prise avec une netteté qui ne laisse pas de place au doute.",
-  myth:"La Pythie, à Delphes, prononçait ses oracles dans une clarté parfois brutale — une vérité qu'on ne pouvait ni négocier ni adoucir. Cet As porte cette même force tranchante : une pensée juste, mais qui exige d'être entendue telle quelle."
+  myth:"Aletheia, personnification de la Vérité, ne connaît pas de demi-mesure : son nom même signifie « ce qui échappe à l'oubli » (voir la fiche « Aletheia »). Cet As porte cette même force tranchante : une pensée juste, mais qui exige d'être entendue telle quelle."
 },
 "2 de Épées": {
   marseille:"Une figure aux yeux bandés tient deux épées croisées sur sa poitrine, dos à la mer : indécision assumée, équilibre précaire entre deux choix qu'on refuse encore de trancher.",
-  myth:"Thémis elle-même, avant de juger, se bandait parfois les yeux pour ne pas laisser l'apparence influencer la balance. Cette carte est ce moment suspendu où l'on refuse de choisir, le temps de voir plus clair."
+  myth:"Ananké, déesse primordiale de la Nécessité, enlace le temps lui-même depuis l'origine du monde — même les dieux s'inclinent devant ses décrets (voir la fiche « Ananké »). Cette carte est ce moment suspendu où l'on refuse encore de choisir, avant que la nécessité, tôt ou tard, ne tranche à sa place."
 },
 "3 de Épées": {
   marseille:"Trois épées transpercent un cœur rouge sous un ciel d'orage : douleur nette, vérité blessante mais nécessaire, rupture qui ne peut plus être évitée.",
-  myth:"Les flèches d'Éros ne visaient pas toujours l'amour partagé : certaines, dorées, faisaient naître un amour non réciproque, source d'une souffrance bien réelle. Cette carte est cette blessure précise, qu'il faut traverser plutôt que nier."
+  myth:"Éris, déesse de la Discorde, jeta parmi les invités des noces de Thétis une pomme d'or portant trois mots : « à la plus belle » — un geste minuscule qui déclencha la guerre de Troie (voir la fiche « Éris »). Cette carte est cette même blessure précise, une vérité jetée sans retour possible, qu'il faut traverser plutôt que nier."
 },
 "4 de Épées": {
   marseille:"Une figure allongée repose sur un tombeau, trois épées suspendues au mur et une sous elle : retrait nécessaire, repos de l'esprit après une période de tension.",
-  myth:"Endymion, plongé par Séléné dans un sommeil éternel pour rester jeune à jamais, avait cessé toute agitation. Cette carte invite à cette même pause volontaire : l'esprit a parfois besoin de silence pour se réparer."
+  myth:"Lethée, fleuve de l'Oubli, offre aux âmes épuisées le repos d'oublier un temps ce qui les a usées (voir la fiche « Lethée »). Cette carte invite à cette même pause volontaire : l'esprit a parfois besoin de silence pour se réparer."
 },
 "5 de Épées": {
   marseille:"Un personnage ramasse trois épées avec un sourire ambigu tandis que deux figures s'éloignent, tête baissée : victoire à coût élevé, conflit gagné mais qui laisse un goût amer.",
-  myth:"Bellérophon, après sa victoire sur la Chimère, laissa son orgueil grandissant l'éloigner peu à peu de ceux qui l'admiraient. Cette carte questionne le prix réel de certaines victoires — celles qui isolent plus qu'elles ne rassemblent."
+  myth:"Némésis, déesse de la rétribution, rétablit toujours l'équilibre lorsque l'orgueil dépasse sa juste mesure (voir la fiche « Némésis »). Cette carte questionne le prix réel de certaines victoires — celles qui isolent plus qu'elles ne rassemblent."
 },
 "6 de Épées": {
   marseille:"Un passeur conduit une barque chargée d'épées vers une rive plus calme, deux silhouettes assises à l'arrière : transition, éloignement volontaire d'une zone de trouble vers plus de sérénité.",
@@ -399,6 +399,28 @@ Object.assign(CARD_IMAGES, {
   "4 de Épées": "assets/card-epees-4.jpg",
   "5 de Épées": "assets/card-epees-5.jpg",
 });
+
+// Cartes numérales dotées d'une figure mythologique propre (contrairement aux autres
+// cartes numérales, qui partagent encore un simple mot générique entre les 4 enseignes —
+// voir NUMBER_KEYS) : la divinité associée prend la place de ce mot générique dans les
+// écrans de détail (voir cardDeityLabel() ci-dessous), exactement comme pour les majeurs
+// et les figures de cour. Pour l'instant limité aux 5 cartes d'Épées illustrées
+// (CARD_IMAGES ci-dessus) ; à étendre au fil des prochaines illustrations mineures.
+const NUMBER_CARD_DEITY = {
+  "As de Épées": "aletheia",
+  "2 de Épées": "ananké",
+  "3 de Épées": "éris",
+  "4 de Épées": "lethée",
+  "5 de Épées": "némésis",
+};
+// Nom affiché comme "divinité" d'une carte dans les écrans de détail : la figure propre
+// à la carte si elle existe (NUMBER_CARD_DEITY), sinon c[1] tel quel (le nom du dieu pour
+// un majeur/figure de cour, ou le mot générique du nombre pour une carte numérale pas
+// encore illustrée).
+function cardDeityLabel(c){
+  const id = NUMBER_CARD_DEITY[c[0]];
+  return id ? (id.charAt(0).toUpperCase() + id.slice(1)) : c[1];
+}
 
 const COURTS = {
 "Bâtons":[
@@ -1217,6 +1239,13 @@ const DEITY_NOTES = {
   "protée":"Dieu marin insaisissable, capable de changer sans cesse de forme.",
   "cyclopes":"Artisans géants à l'œil unique, forgerons associés à Héphaïstos dans les grandes œuvres divines.",
   "cybèle":"Déesse de la terre nourricière, souveraine d'une abondance sauvage.",
+
+  /* ----- Personnifications des cartes numérales illustrées d'Épées ----- */
+  "aletheia":"Personnification de la Vérité, dont le nom signifie littéralement « ce qui échappe à l'oubli ».",
+  "ananké":"Déesse primordiale de la Nécessité, à laquelle même les dieux ne peuvent se soustraire.",
+  "éris":"Déesse de la Discorde, dont la pomme d'or jetée aux noces de Thétis déclencha le jugement de Pâris.",
+  "lethée":"Fleuve des Enfers, personnification de l'Oubli — son eau efface jusqu'au souvenir d'avoir vécu.",
+  "némésis":"Déesse de la rétribution, qui rétablit l'équilibre chaque fois que la démesure dépasse sa juste limite.",
 };
 
 // Textes mythologiques développés pour les figures listées ci-dessus (voir showDeityDetail() /
@@ -1441,7 +1470,7 @@ const DEITY_LORE = {
   ],
   "narcisse": [
     "Jeune homme d'une beauté remarquable, Narcisse repoussait sans exception tous ceux qui l'aimaient, dont la nymphe Écho (voir la fiche « Écho »), inconsolable de son rejet.",
-    "Puni pour son indifférence, il aperçut un jour son propre reflet dans une source et en tomba éperdument amoureux, incapable de s'en détacher jusqu'à en mourir sur place — incapable de voir qu'aucun amour, pas même le sien, ne pouvait lui être rendu par une image.",
+    "Puni par Némésis (voir la fiche « Némésis ») pour son indifférence, il aperçut un jour son propre reflet dans une source et en tomba éperdument amoureux, incapable de s'en détacher jusqu'à en mourir sur place — incapable de voir qu'aucun amour, pas même le sien, ne pouvait lui être rendu par une image.",
   ],
   "écho": [
     "Nymphe bavarde, Écho fut punie par Héra, qui découvrit qu'elle la distrayait volontairement pour couvrir les infidélités de Zeus : elle perdit dès lors la capacité de parler la première, condamnée à ne répéter que les derniers mots d'autrui.",
@@ -1455,7 +1484,7 @@ const DEITY_LORE = {
   ],
   "thétis": [
     "Fille de Nérée (voir la fiche « Nérée »), Thétis est une Néréide capable de se métamorphoser à volonté — feu, eau, lion, serpent — pour échapper à qui cherche à la retenir. Zeus et Poséidon la convoitèrent tous deux, jusqu'à ce qu'une prophétie annonce que le fils de Thétis surpasserait son père : par prudence, les deux dieux renoncèrent et la marièrent à un simple mortel, Pélée.",
-    "Pélée ne put l'épouser qu'en la maintenant de force à travers toutes ses métamorphoses, sur les conseils de Chiron (voir la fiche « Chiron ») — une lutte que Thétis finit par accepter sans jamais renoncer à sa propre nature changeante. Leurs noces, auxquelles la déesse de la Discorde ne fut pas conviée, déclenchèrent l'épisode de la pomme d'or qui mènera plus tard au jugement de Pâris.",
+    "Pélée ne put l'épouser qu'en la maintenant de force à travers toutes ses métamorphoses, sur les conseils de Chiron (voir la fiche « Chiron ») — une lutte que Thétis finit par accepter sans jamais renoncer à sa propre nature changeante. Leurs noces, auxquelles Éris, déesse de la Discorde, ne fut pas conviée (voir la fiche « Éris »), déclenchèrent l'épisode de la pomme d'or qui mènera plus tard au jugement de Pâris.",
     "De cette union naquit Achille (voir la fiche « Achille »), qu'elle tenta de rendre invulnérable en le plongeant dans le Styx (voir la fiche « Rivière »), puis de soustraire à son destin en le déguisant en jeune fille à la cour du roi Lycomède — une ruse qu'Ulysse finit par déjouer. Jusqu'au bout, Thétis lutta avec une ténacité sans faille contre une prophétie qu'elle savait pourtant ne jamais pouvoir empêcher.",
   ],
   "pythie": [
@@ -1578,6 +1607,38 @@ const DEITY_LORE = {
   "cybèle": [
     "Déesse originaire d'Asie Mineure assimilée par les Grecs à leur propre panthéon, Cybèle personnifie la terre nourricière dans toute sa puissance sauvage, bien au-delà de la douceur cultivée qu'incarne Déméter.",
     "Son culte, marqué par une musique frénétique et des rites d'une intensité rare, traversa la Méditerranée jusqu'à Rome, où elle fut officiellement adoptée comme protectrice de la cité en des temps de crise.",
+  ],
+
+  /* ----- Personnifications des cartes numérales illustrées d'Épées (voir NUMBER_CARD_DEITY) ----- */
+  "aletheia": [
+    "Aletheia personnifie la Vérité elle-même. Les traditions varient sur son origine : fille de Zeus pour les uns, née de Chronos, le temps primordial, pour les autres — un lien qui a donné naissance à l'adage selon lequel le temps finit toujours par révéler ce qui a été caché.",
+    "Son nom grec, alètheia, signifie littéralement « ce qui n'est plus caché » — la négation de lèthè, l'oubli (voir la fiche « Lethée »). Les deux figures se répondent ainsi comme deux pôles opposés : l'une dévoile, l'autre efface.",
+    "Elle a pour rivale Apate, l'esprit de la tromperie échappé du vase de Pandore avec tous les maux du monde. Lassée de voir sa parole détournée et travestie par les hommes, Aletheia se serait retirée au fond d'un puits, loin de la surface où la vérité se déforme si facilement — origine de l'adage antique selon lequel « la vérité est au fond du puits ».",
+    "Dans le Tarot, Aletheia est la figure de l'As d'Épées, où une lame se dresse, nette et couronnée de laurier : la lecture traditionnelle de cette carte — une idée qui perce, une décision prise sans l'ombre d'un doute — est exactement ce que personnifie Aletheia, la vérité qui ne négocie jamais avec ce qui l'entoure.",
+  ],
+  "ananké": [
+    "Ananké personnifie la Nécessité — non pas un simple besoin, mais la contrainte absolue à laquelle rien, pas même les dieux, ne peut se soustraire.",
+    "Les récits orphiques la font naître aux tout premiers instants du monde, enlacée à Chronos, le temps primordial, autour de l'œuf cosmique dont naîtra l'univers entier : ensemble, ils mettent la création en mouvement selon un ordre qu'aucune volonté ne peut ensuite défaire.",
+    "De cette union naissent, selon certains récits, les Moires elles-mêmes, filant le fil de chaque destinée sur le fuseau que Platon décrit tournant sur les genoux d'Ananké — l'axe même autour duquel tourne le monde. Zeus lui-même, dit-on, s'incline devant ses décrets : la nécessité gouverne jusqu'au roi des dieux.",
+    "Dans le Tarot, Ananké est la figure du 2 d'Épées, où une silhouette aux yeux bandés retient deux épées croisées, refusant encore de trancher : cet équilibre suspendu ne dure jamais éternellement, chez elle moins que quiconque — la nécessité finit toujours par imposer un choix, qu'on y consente ou non.",
+  ],
+  "éris": [
+    "Éris personnifie la Discorde, sœur d'Arès — une puissance de rupture qui, une fois déclenchée, ne peut plus être désamorcée.",
+    "Non invitée aux noces de Thétis et Pélée (voir la fiche « Thétis »), par crainte qu'elle n'y sème le trouble, elle se présenta malgré tout et jeta parmi les déesses assemblées une pomme d'or portant une seule inscription : « à la plus belle ». Héra, Athéna et Aphrodite se la disputèrent aussitôt, jusqu'à ce que Zeus confie à Pâris le soin de trancher — un jugement qui déclenchera la guerre de Troie.",
+    "Hésiode distingue pourtant deux Éris bien différentes : l'une pousse au conflit destructeur, l'autre à une rivalité plus saine, celle qui incite le voisin paresseux à travailler autant que celui qui prospère à côté de lui. La discorde n'est donc pas toujours la même force — seule la première porte le nom que la légende a retenu.",
+    "Dans le Tarot, Éris est la figure du 3 d'Épées, où trois lames transpercent un cœur : sa pomme d'or n'était, elle aussi, qu'un seul mot bien plus tranchant qu'il n'y paraissait — une vérité minuscule, jetée sans préméditation, mais qui blesse aussitôt trois orgueils à la fois et ne laisse plus la possibilité de revenir en arrière.",
+  ],
+  "lethée": [
+    "Lethée est le fleuve de l'Oubli, l'un des cours d'eau qui traversent les Enfers — boire à ses eaux efface, dit-on, jusqu'au souvenir d'avoir vécu.",
+    "Les âmes des morts s'y désaltéraient traditionnellement avant de renaître, pour ne rien garder de leur existence précédente. Mais une tradition plus tardive, orphique, conseillait l'inverse à ses initiés : sur des tablettes d'or déposées dans leurs tombes, on leur enjoignait d'éviter la source de Lethée et de chercher plutôt celle de Mnémosyne, la Mémoire — pour rester, même dans la mort, fidèles à ce qu'ils avaient été.",
+    "Son nom même s'oppose à celui d'Aletheia, la Vérité (voir la fiche « Aletheia ») : alètheia signifie littéralement « ce qui échappe à Lethée » — l'un dévoile ce que l'autre recouvre, deux forces jumelles et contraires.",
+    "Dans le Tarot, Lethée est la figure du 4 d'Épées, où une silhouette repose, immobile, après une période de tension : son don n'est pas la perte, mais le répit — le silence nécessaire pour que l'esprit, un temps, cesse de se souvenir de ce qui l'épuisait.",
+  ],
+  "némésis": [
+    "Némésis personnifie l'indignation légitime et la rétribution qui rétablit l'équilibre chaque fois que la démesure — l'orgueil, la chance excessive, le mépris d'autrui — dépasse une limite qu'aucun mortel ne devrait franchir.",
+    "C'est elle, selon la tradition la plus répandue, qui punit Narcisse (voir la fiche « Narcisse ») pour avoir repoussé sans pitié tous ceux qui l'aimaient : elle le condamna à tomber amoureux de son propre reflet, un amour qu'il ne pourrait jamais obtenir en retour — la faute retournée contre celui qui l'avait commise.",
+    "On la représente ailée, tenant parfois une roue — celle de la fortune, qui n'épargne personne indéfiniment — ou un instrument de mesure, rappelant que rien ne doit dépasser sa juste proportion, le fameux « rien de trop » gravé au temple de Delphes.",
+    "Dans le Tarot, Némésis est la figure du 5 d'Épées, où une victoire se ramasse avec un sourire ambigu tandis que d'autres s'éloignent, tête baissée : elle rappelle que tout triomphe payé au prix de l'orgueil ou de l'excès finit, tôt ou tard, par se retourner contre celui qui l'a emporté.",
   ],
 };
 
@@ -3190,7 +3251,9 @@ function showDeityDetail(id, backTo = cardDetailReturnTo){
   const wasNew = markSeen("figures", id);
   preDetailScroll = window.scrollY;
   const name = id.charAt(0).toUpperCase()+id.slice(1);
-  const related = CARDS.filter(c => (c[4]==="major"||c[4]==="court") && (c[1]||"").toLowerCase()===id);
+  const related = CARDS.filter(c => (c[4]==="major"||c[4]==="court")
+    ? (c[1]||"").toLowerCase()===id
+    : NUMBER_CARD_DEITY[c[0]]===id); // cartes numérales dotées d'une figure propre (voir NUMBER_CARD_DEITY)
   const lore = DEITY_LORE[id];
   document.getElementById("screen").innerHTML = `<div class="detail">
     ${wasNew ? discoveryFX() : ""}
@@ -3750,18 +3813,19 @@ function showRetrospective(){
 function showDetail(c, backTo = cardDetailReturnTo){
   const suit = c[6], cls = c[4]==="major" ? "major" : (SUITS[suit]?.[0] || "major");
   const lore = CARD_LORE[c[0]];
+  const deityLabel = cardDeityLabel(c);
   const wasNew = markSeen("cards", c[0]);
   preDetailScroll = window.scrollY;
   document.getElementById("screen").innerHTML = `<div class="detail">
     ${wasNew ? discoveryFX() : ""}
     ${cardHTML(c,cls)}
     <h2>${escapeHTML(c[0])}</h2>
-    ${DEITY_NOTES[(c[1]||"").toLowerCase()] ? `<h3 class="clickable-deity" data-deity="${escapeHTML(c[1].toLowerCase())}">${escapeHTML(c[1])}</h3>` : `<h3>${escapeHTML(c[1])}</h3>`}
+    ${DEITY_NOTES[(deityLabel||"").toLowerCase()] ? `<h3 class="clickable-deity" data-deity="${escapeHTML(deityLabel.toLowerCase())}">${escapeHTML(deityLabel)}</h3>` : `<h3>${escapeHTML(deityLabel)}</h3>`}
     <p>${escapeHTML(c[3]||"")}</p>
     ${lore ? `
       <div class="section-title"><h3>Lecture traditionnelle</h3></div>
       <p class="lore-text">${escapeHTML(lore.marseille)}</p>
-      <div class="section-title"><h3>Éclairage mythologique — ${escapeHTML(c[1])}</h3></div>
+      <div class="section-title"><h3>Éclairage mythologique — ${escapeHTML(deityLabel)}</h3></div>
       <p class="lore-text">${escapeHTML(lore.myth)}</p>
     ` : ""}
     <div class="section-title"><h3>Symboles</h3></div>
