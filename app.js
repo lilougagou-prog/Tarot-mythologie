@@ -1,28 +1,28 @@
 /* ===================== DONNÉES : ARCANES MAJEURS (correspondances verrouillées) ===================== */
 
 const MAJORS = [
-["Le Mat","Dionysos","🍇","Liberté · instinct · départ · lâcher-prise","major","lierre · vigne · panthère · sac de voyage · bâton"],
-["I — Le Bateleur","Hermès","☿","Commencement · potentiel · habileté","major","caducée · bâton · coupe · épée · denier · table · sac de voyage"],
+["Le Mat","Dionysos","🍇","Liberté · instinct · départ · lâcher-prise","major","lierre · vigne · panthère · sac de voyage · bâton · couronne · dauphin · abeille · figue · raisin · noix"],
+["I — Le Bateleur","Hermès","☿","Commencement · potentiel · habileté","major","caducée · bâton · coupe · épée · denier · table · sac de voyage · lyre · air · crocus"],
 ["II — La Papesse","Métis","📖","Savoir caché · intuition · connaissance","major","voile · colonnes · livre · lune"],
-["III — L'Impératrice","Héra","🦚","Souveraineté · création · fécondité","major","paon · couronne · sceptre · grenade"],
-["IV — L'Empereur","Zeus","⚡","Autorité · structure · pouvoir","major","foudre · aigle · sceptre · trône"],
-["V — Le Pape","Chiron","🏹","Transmission · enseignement · initiation","major","bâton · disciples · blessure · sagesse"],
-["VI — L'Amoureux","Éros","🏹","Choix · désir · attraction","major","arc · flèche · deux chemins · coupe"],
-["VII — Le Chariot","Apollon","☀","Victoire · maîtrise · mouvement","major","char solaire · laurier · lyre · chevaux"],
+["III — L'Impératrice","Héra","🦚","Souveraineté · création · fécondité","major","paon · couronne · sceptre · grenade · lierre · crocus · pomme"],
+["IV — L'Empereur","Zeus","⚡","Autorité · structure · pouvoir","major","foudre · aigle · sceptre · trône · grotte · char solaire · balance · chaîne · corne d'abondance · lierre · crocus · chêne · taureau · cygne · étoiles · éclair"],
+["V — Le Pape","Chiron","🏹","Transmission · enseignement · initiation","major","bâton · disciples · blessure · sagesse · montagne · chaîne"],
+["VI — L'Amoureux","Éros","🏹","Choix · désir · attraction","major","arc · flèche · deux chemins · coupe · ailes · papillon · laurier"],
+["VII — Le Chariot","Apollon","☀","Victoire · maîtrise · mouvement","major","char solaire · laurier · lyre · chevaux · montagne · temple · arc · balance · flûte · serpent · dauphin · corbeau · cerf · flèche · couronne · cyprès"],
 ["VIII — La Justice","Thémis","⚖","Équilibre · vérité · décision","major","balance · épée · couronne · colonnes"],
-["IX — L'Hermite","Déméter","🌾","Quête · solitude · patience","major","épis · lanterne · chemin · blé"],
+["IX — L'Hermite","Déméter","🌾","Quête · solitude · patience","major","épis · lanterne · chemin · blé · torches · grenade · terre · pavot"],
 ["X — La Roue de Fortune","Tyché","☸","Cycles · destin · changement","major","roue · corne d'abondance · chute · sommet"],
-["XI — La Force","Héraclès","🦁","Maîtrise · courage · puissance intérieure","major","lion · peau de lion · massue · mains nues"],
-["XII — Le Pendu","Prométhée","🔥","Sacrifice · suspension · autre regard","major","chaînes · feu · rocher · suspension"],
-["XIII — L'Arcane sans nom","Hadès","☠","Transformation · fin · passage","major","faux · grenade · cyprès · monde souterrain"],
-["XIV — Tempérance","Iris","🌈","Équilibre · circulation · médiation","major","deux vases · ailes · arc-en-ciel · eau"],
-["XV — Le Diable","Pan","🐐","Instinct · désir · attachement","major","cornes · flûte · chaînes · vigne"],
-["XVI — La Maison-Dieu","Poséidon","🔱","Rupture · effondrement · libération","major","tour · trident · vagues · éclair"],
-["XVII — L'Étoile","Hécate","✦","Espoir · orientation · intuition","major","étoiles · torches · chiens · carrefour"],
+["XI — La Force","Héraclès","🦁","Maîtrise · courage · puissance intérieure","major","lion · peau de lion · massue · mains nues · chemin · forêt · coupe · chaîne · flèche · chien · taureau · terre · pomme"],
+["XII — Le Pendu","Prométhée","🔥","Sacrifice · suspension · autre regard","major","chaînes · feu · rocher · suspension · aigle · torche"],
+["XIII — L'Arcane sans nom","Hadès","☠","Transformation · fin · passage","major","faux · grenade · cyprès · monde souterrain · lyre · épis · blé"],
+["XIV — Tempérance","Iris","🌈","Équilibre · circulation · médiation","major","deux vases · ailes · arc-en-ciel · eau · air"],
+["XV — Le Diable","Pan","🐐","Instinct · désir · attachement","major","cornes · flûte · chaînes · vigne · forêt · lune"],
+["XVI — La Maison-Dieu","Poséidon","🔱","Rupture · effondrement · libération","major","tour · trident · vagues · éclair · mer · cheval · dauphin · olivier · eau · taureau"],
+["XVII — L'Étoile","Hécate","✦","Espoir · orientation · intuition","major","étoiles · torches · chiens · carrefour · clé · lanterne"],
 ["XVIII — La Lune","Séléné","☾","Inconscient · intuition · incertitude","major","lune · deux tours · chien · eau"],
-["XIX — Le Soleil","Hélios","☀","Clarté · joie · vitalité","major","soleil · char solaire · rayons · laurier"],
-["XX — Le Jugement","Minos","⚖","Révélation · appel · bilan","major","balance · trompette · âmes · lumière"],
-["XXI — Le Monde","Gaïa","🌿","Accomplissement · totalité · unité","major","mandorle · racines · monde vivant · quatre figures"]
+["XIX — Le Soleil","Hélios","☀","Clarté · joie · vitalité","major","soleil · char solaire · rayons · laurier · coupe · lune · aurore"],
+["XX — Le Jugement","Minos","⚖","Révélation · appel · bilan","major","balance · trompette · âmes · lumière · monde souterrain · labyrinthe · taureau"],
+["XXI — Le Monde","Gaïa","🌿","Accomplissement · totalité · unité","major","mandorle · racines · monde vivant · quatre figures · terre"]
 ];
 
 // Correspondances signe zodiacal -> arcane majeur, tradition ésotérique classique
@@ -534,6 +534,16 @@ const NUMBER_CARD_DEITY = {
   "9 de Épées": "morphée",
   "10 de Épées": "thanatos",
 };
+// Symboles propres à une carte numérale précise (une fois illustrée avec sa propre figure,
+// voir NUMBER_CARD_DEITY ci-dessus), utilisés par allCards() à la place de la formule
+// générique `${NUMBER_KEYS[n][1]} · ${SUITS[suit][3]}`, partagée par toutes les cartes du
+// même rang ou de la même enseigne. Sans cette table, impossible de relier par exemple
+// "Artémis" à la seule carte "2 de Bâtons" sans l'associer aussi à "2 de Coupes", "2 de
+// Épées" et "2 de Deniers" (même rang) ou à tout le reste des Bâtons (même enseigne).
+const NUMBER_CARD_SYMBOLS = {
+  "2 de Bâtons": "forêt · temple · arc · cerf · flèche",
+  "9 de Épées": "pavot",
+};
 // Nom affiché comme "divinité" d'une carte dans les écrans de détail : la figure propre
 // à la carte si elle existe (NUMBER_CARD_DEITY), sinon c[1] tel quel (le nom du dieu pour
 // un majeur/figure de cour, ou le mot générique du nombre pour une carte numérale pas
@@ -543,29 +553,34 @@ function cardDeityLabel(c){
   return id ? (id.charAt(0).toUpperCase() + id.slice(1)) : c[1];
 }
 
+// Le 5e champ (absent des lignes qui n'en ont pas encore un de vraiment établi) liste les
+// symboles de SYMBOL_LIBRARY (identifiants, pas les libellés) mythologiquement rattachés à
+// cette figure — utilisé par allCards()/cardsForSymbol() pour peupler "Cartes concernées"
+// sur la fiche de ces symboles, jusqu'ici toujours vide pour toute figure de cour (voir le
+// commentaire dans allCards()).
 const COURTS = {
 "Bâtons":[
-["Valet de Bâtons","Éos","🌅","Éveil · impulsion · potentiel"],
-["Cavalier de Bâtons","Niké","🏆","Élan · conquête · victoire"],
-["Reine de Bâtons","Hestia","🔥","Feu intérieur · confiance · stabilité"],
-["Roi de Bâtons","Héphaïstos","⚒","Création · maîtrise · transformation"]
+["Valet de Bâtons","Éos","🌅","Éveil · impulsion · potentiel","aurore · étoiles"],
+["Cavalier de Bâtons","Niké","🏆","Élan · conquête · victoire","ailes"],
+["Reine de Bâtons","Hestia","🔥","Feu intérieur · confiance · stabilité","feu"],
+["Roi de Bâtons","Héphaïstos","⚒","Création · maîtrise · transformation","sceptre · torche · soleil"]
 ],
 "Coupes":[
 ["Valet de Coupes","Himeros","💗","Désir naissant · sensibilité · attirance"],
 ["Cavalier de Coupes","Énée","⛵","Quête · voyage du cœur · engagement"],
-["Reine de Coupes","Aphrodite","🕊","Amour · beauté · désir · réceptivité"],
-["Roi de Coupes","Nérée","🌊","Profondeur · sagesse · vérité émotionnelle"]
+["Reine de Coupes","Aphrodite","🕊","Amour · beauté · désir · réceptivité","colombe · rose · myrte · pomme · miroir"],
+["Roi de Coupes","Nérée","🌊","Profondeur · sagesse · vérité émotionnelle","mer"]
 ],
 "Épées":[
-["Valet d'Épées","Zéphyr","🍃","Curiosité · rapidité · esprit vif"],
-["Cavalier d'Épées","Bellérophon","🐎","Action · courage · confrontation"],
-["Reine d'Épées","Athéna","🦉","Discernement · stratégie · intelligence"],
+["Valet d'Épées","Zéphyr","🍃","Curiosité · rapidité · esprit vif","air"],
+["Cavalier d'Épées","Bellérophon","🐎","Action · courage · confrontation","pégase"],
+["Reine d'Épées","Athéna","🦉","Discernement · stratégie · intelligence","chouette · araignée · olivier · olive · pomme · serpent · flûte · torche · corbeau"],
 ["Roi d'Épées","Éole","🌬","Autorité · contrôle · maîtrise des forces de l'air"]
 ],
 "Deniers":[
 ["Valet de Deniers","Chloris","🌸","Germination · potentiel · croissance"],
-["Cavalier de Deniers","Triptolème","🌾","Travail · transmission · agriculture"],
-["Reine de Deniers","Perséphone","🌺","Cycles · fertilité · renaissance"],
+["Cavalier de Deniers","Triptolème","🌾","Travail · transmission · agriculture","blé"],
+["Reine de Deniers","Perséphone","🌺","Cycles · fertilité · renaissance","monde souterrain · grenade · torches · torche · épis · blé · pavot · crocus · graine · terre"],
 ["Roi de Deniers","Ploutos","🪙","Abondance · richesse · prospérité"]
 ]
 };
@@ -966,7 +981,7 @@ const SYMBOL_LIBRARY = {
     "Elle est devenue un symbole de souveraineté, d'autorité, de victoire, d'accomplissement et de reconnaissance.",
     "La couronne est particulièrement associée à Héra et à Apollon — deux légitimités différentes, l'une de rang, l'autre de mérite.",
   ]},
-  "sceptre":{icon:"🔱",label:"Sceptre",category:"Objets mythologiques",desc:"Pouvoir stable, commandement exercé avec constance plutôt qu'imposé par la force.",links:["zeus","héra"],lore:[
+  "sceptre":{icon:"🔱",label:"Sceptre",category:"Objets mythologiques",desc:"Pouvoir stable, commandement exercé avec constance plutôt qu'imposé par la force.",links:["zeus","héra","héphaïstos"],lore:[
     "Le sceptre est le signe du pouvoir exercé par celui qui gouverne.",
     "Dans les récits homériques, Zeus tient le sceptre comme signe de sa souveraineté sur les dieux et les hommes. Le sceptre n'est donc pas seulement une arme : il représente l'autorité légitime et le droit de commander.",
     "Héra, reine de l'Olympe, porte elle aussi un sceptre — signe d'une autorité qui n'a besoin d'aucune démonstration de force pour s'imposer, à la différence de celle, plus spectaculaire, de Zeus (voir la fiche « Héra »).",
@@ -975,7 +990,7 @@ const SYMBOL_LIBRARY = {
     "Le sceptre est ainsi devenu un symbole de pouvoir, de commandement, d'autorité, de gouvernement et de responsabilité.",
     "Le sceptre est particulièrement associé à Zeus et à Héra, ainsi qu'aux figures souveraines en général.",
   ]},
-  "clé":{icon:"🗝",label:"Clé",category:"Objets mythologiques",desc:"Accès, connaissance réservée, passage qui ne s'ouvre qu'à qui sait où chercher.",links:[],lore:[
+  "clé":{icon:"🗝",label:"Clé",category:"Objets mythologiques",desc:"Accès, connaissance réservée, passage qui ne s'ouvre qu'à qui sait où chercher.",links:["hécate"],lore:[
     "La clé est littéralement ce qui permet de franchir une porte normalement fermée.",
     "Dans les traditions liées à Hécate, celle-ci est appelée « porteuse des clés » et Kleidouchos, « celle qui tient les clés ». Elle règne sur les carrefours, les seuils et les frontières entre différents espaces.",
     "La clé devient alors l'objet qui permet d'accéder à ce qui était caché.",
@@ -983,7 +998,7 @@ const SYMBOL_LIBRARY = {
     "Elle est devenue un symbole de passage, d'accès, de connaissance secrète, de pouvoir sur les seuils et d'ouverture vers un autre monde.",
     "La clé est particulièrement associée à Hécate.",
   ]},
-  "lanterne":{icon:"🏮",label:"Lanterne",category:"Objets mythologiques",desc:"Recherche, lumière intérieure portée dans l'obscurité plutôt que réponse immédiate.",links:["déméter"],lore:[
+  "lanterne":{icon:"🏮",label:"Lanterne",category:"Objets mythologiques",desc:"Recherche, lumière intérieure portée dans l'obscurité plutôt que réponse immédiate.",links:["déméter","hécate"],lore:[
     "La lanterne est plus tardive que la torche et ne possède pas, dans la mythologie grecque, un récit fondateur comparable au trident de Poséidon ou à la foudre de Zeus.",
     "Mais sa symbolique découle directement de l'idée ancienne de la lumière portée dans l'obscurité.",
     "Elle peut être reliée à Hécate et à sa fonction de guide nocturne : la déesse porte des torches lorsqu'elle accompagne Déméter dans sa recherche de Perséphone.",
@@ -991,7 +1006,7 @@ const SYMBOL_LIBRARY = {
     "L'anecdote la plus célèbre liée à une lanterne reste peut-être celle du philosophe Diogène de Sinope, qui aurait parcouru les rues d'Athènes en plein jour, une lanterne allumée à la main, en affirmant chercher « un homme » — un geste provocateur pour dénoncer, lanterne en plein soleil, combien l'honnêteté véritable restait introuvable même à la lumière du jour.",
     "Elle est devenue un symbole de recherche, de lumière intérieure, d'espoir, d'orientation et de découverte de ce qui était caché.",
   ]},
-  "torche":{icon:"🔦",label:"Torche",category:"Objets mythologiques",desc:"Illumination, connaissance transmise, guidance dans l'incertitude.",links:["hécate"],lore:[
+  "torche":{icon:"🔦",label:"Torche",category:"Objets mythologiques",desc:"Illumination, connaissance transmise, guidance dans l'incertitude.",links:["hécate","déméter","prométhée"],lore:[
     "Lorsque Perséphone disparaît, Déméter parcourt le monde à sa recherche pendant neuf jours. Hécate, qui a entendu les cris de Perséphone, rejoint ensuite Déméter avec des torches enflammées pour l'aider à découvrir ce qui s'est passé.",
     "La torche devient ainsi la lumière qui permet de traverser la nuit et de retrouver ce qui a été perdu.",
     "Hécate conserve ensuite cette fonction de déesse porteuse de torches, liée aux chemins nocturnes, aux seuils et au monde souterrain.",
@@ -1007,7 +1022,7 @@ const SYMBOL_LIBRARY = {
     "La flèche est ainsi devenue un symbole de direction, de volonté, d'action, de conséquence, de désir et d'atteinte d'un objectif.",
     "La flèche peut être associée à Artémis, Apollon et Éros selon le contexte.",
   ]},
-  "miroir":{icon:"🪞",label:"Miroir",category:"Objets mythologiques",desc:"Introspection, vérité renvoyée, perception de soi parfois inconfortable.",links:[],lore:[
+  "miroir":{icon:"🪞",label:"Miroir",category:"Objets mythologiques",desc:"Introspection, vérité renvoyée, perception de soi parfois inconfortable.",links:["aphrodite"],lore:[
     "Le miroir est naturellement associé à Aphrodite parce qu'il renvoie à la beauté et à la perception de son propre visage.",
     "Dans l'imaginaire mythologique, Aphrodite est la déesse dont la beauté peut provoquer le désir, la rivalité et même la guerre. Le miroir devient alors l'objet qui permet de contempler cette beauté mais aussi de prendre conscience de l'image que l'on renvoie aux autres.",
     "Il possède donc une double dimension : il montre ce qui est visible, mais il peut également révéler notre rapport à nous-mêmes.",
@@ -1084,7 +1099,7 @@ const SYMBOL_LIBRARY = {
     "Il est devenu un symbole de protection, de vigilance, d'instinct, de seuil et de passage entre les mondes.",
     "Le chien est particulièrement associé à Hécate.",
   ]},
-  "cheval":{icon:"🐎",label:"Cheval",category:"Animaux",desc:"Mouvement, liberté, puissance mise en marche.",links:[],lore:[
+  "cheval":{icon:"🐎",label:"Cheval",category:"Animaux",desc:"Mouvement, liberté, puissance mise en marche.",links:["poséidon"],lore:[
     "Le cheval est avant tout lié à Poséidon.",
     "Lorsque les dieux se disputèrent la protection d'Athènes, Poséidon fit apparaître un cheval dans certaines traditions du mythe. Il devint ensuite le dieu des chevaux autant que celui de la mer et des tremblements de terre.",
     "Le cheval représente une force difficile à contenir : il court, franchit les distances et transporte l'être humain au-delà de ses propres limites.",
@@ -1102,7 +1117,7 @@ const SYMBOL_LIBRARY = {
     "Pégase est ainsi devenu un symbole de l'inspiration, de l'imagination, de l'élévation, de la liberté et de la maîtrise d'une force exceptionnelle.",
     "Pégase est particulièrement associé à Bellérophon et, dans les traditions ultérieures, aux Muses.",
   ]},
-  "dauphin":{icon:"🐬",label:"Dauphin",category:"Animaux",desc:"Guidance, mer, protection pendant la traversée.",links:[],lore:[
+  "dauphin":{icon:"🐬",label:"Dauphin",category:"Animaux",desc:"Guidance, mer, protection pendant la traversée.",links:["poséidon","dionysos","apollon"],lore:[
     "Le dauphin appartient au monde de Poséidon et de la mer.",
     "Dans un célèbre récit, Poséidon cherchait Amphitrite, qui s'était enfuie. Un dauphin la retrouva et la conduisit auprès du dieu. Pour le remercier, Poséidon plaça ensuite le dauphin dans le ciel sous la forme de la constellation Delphinus.",
     "Le dauphin apparaît aussi dans plusieurs récits comme un animal qui vient au secours des hommes et les guide à travers la mer.",
@@ -1118,7 +1133,7 @@ const SYMBOL_LIBRARY = {
     "Elle est ainsi devenue un symbole de l'amour, de la tendresse, de la paix, de l'union et de la beauté.",
     "La colombe est particulièrement associée à Aphrodite.",
   ]},
-  "corbeau":{icon:"🐦‍⬛",label:"Corbeau",category:"Animaux",desc:"Présage, connaissance du monde invisible.",links:[],lore:[
+  "corbeau":{icon:"🐦‍⬛",label:"Corbeau",category:"Animaux",desc:"Présage, connaissance du monde invisible.",links:["apollon","athéna"],lore:[
     "Le corbeau est particulièrement lié à Apollon et à la divination.",
     "Dans un récit, Apollon envoie un corbeau chercher de l'eau pour accomplir un sacrifice. Mais l'oiseau s'attarde auprès d'un figuier, mange les figues et revient trop tard. Pour se justifier, il accuse un serpent d'avoir empêché sa mission.",
     "Apollon comprend le mensonge et punit le corbeau. Il aurait alors noirci son plumage et placé le corbeau, le serpent et la coupe dans le ciel sous forme de constellations.",
@@ -1144,7 +1159,7 @@ const SYMBOL_LIBRARY = {
     "Le papillon est donc devenu un symbole de transformation, d'âme, de renaissance, d'évolution et de passage vers un nouvel état.",
     "Le papillon est particulièrement associé à Psyché.",
   ]},
-  "cerf":{icon:"🦌",label:"Cerf",category:"Animaux",desc:"Nature, intuition, passage entre deux mondes.",links:[],lore:[
+  "cerf":{icon:"🦌",label:"Cerf",category:"Animaux",desc:"Nature, intuition, passage entre deux mondes.",links:["artémis","héraclès"],lore:[
     "Le cerf est profondément lié à Artémis, déesse de la chasse, des forêts et des animaux sauvages.",
     "Dans plusieurs récits, les cerfs sont placés sous sa protection. Le plus célèbre est celui du cerf de Cérynie, une bête extraordinaire aux bois d'or et aux sabots d'airain qu'Héraclès doit capturer lors de son troisième travail. Mais le cerf apparaît également dans les récits qui rappellent le pouvoir d'Artémis sur la nature sauvage.",
     "Le mythe d'Actéon montre d'ailleurs l'autre aspect de cette relation : le chasseur surprend Artémis alors qu'elle se baigne. Furieuse, la déesse le transforme en cerf et ses propres chiens le dévorent sans le reconnaître.",
@@ -1183,7 +1198,7 @@ const SYMBOL_LIBRARY = {
     "Le laurier est ainsi devenu un symbole de victoire, de gloire, d'accomplissement, de poésie, de prophétie et de reconnaissance.",
     "Le laurier est particulièrement associé à Apollon et à Daphné.",
   ]},
-  "olivier":{icon:"🫒",label:"Olivier",category:"Plantes",desc:"Paix, sagesse, prospérité durable.",links:[],lore:[
+  "olivier":{icon:"🫒",label:"Olivier",category:"Plantes",desc:"Paix, sagesse, prospérité durable.",links:["athéna","poséidon"],lore:[
     "L'olivier est lié à Athéna et à la naissance symbolique d'Athènes. Lorsque Poséidon et Athéna se disputèrent la protection de la cité, les deux divinités offrirent un présent aux habitants.",
     "Poséidon fit jaillir une source d'eau salée. Athéna planta quant à elle le premier olivier. Les habitants considérèrent ce cadeau comme plus précieux, car l'arbre pouvait leur donner de la nourriture, de l'huile, du bois et de la lumière.",
     "Athéna devint ainsi la protectrice de la cité, qui prit son nom : Athènes.",
@@ -1308,7 +1323,7 @@ const SYMBOL_LIBRARY = {
   ]},
 
   // Éléments
-  "feu":{icon:"🔥",label:"Feu",category:"Éléments",desc:"Flamme, étincelle, soleil, fumée : action, volonté, élan.",links:[],lore:[
+  "feu":{icon:"🔥",label:"Feu",category:"Éléments",desc:"Flamme, étincelle, soleil, fumée : action, volonté, élan.",links:["prométhée","hestia"],lore:[
     "Le feu occupe une place unique dans la mythologie grecque : c'est le seul élément que les dieux ont d'abord refusé aux hommes.",
     "Prométhée le déroba à l'Olympe, caché dans une tige de fenouil, pour l'offrir à l'humanité — un geste qui lui valut d'être enchaîné pour l'éternité (voir la fiche « Chaîne »). Le feu devint ainsi le premier outil véritablement humain, celui qui permit la technique, la cuisson, la métallurgie et la civilisation elle-même.",
     "Le philosophe Empédocle en fit plus tard l'une des quatre racines de toute matière, aux côtés de l'eau, de l'air et de la terre — une théorie qui a nourri toute la pensée grecque sur la nature du monde, bien après les mythes qui l'avaient d'abord racontée.",
@@ -1322,14 +1337,14 @@ const SYMBOL_LIBRARY = {
     "À Delphes, les pèlerins venus consulter l'oracle devaient d'abord se purifier dans les eaux de la source Castalie, au pied du mont Parnasse — un geste rituel qui rappelle qu'aucune parole divine ne pouvait être reçue sans être, au préalable, purifiée par l'eau.",
     "L'eau est devenue un symbole d'émotion, de relation et de ce qui circule sans jamais s'arrêter tout à fait.",
   ]},
-  "air":{icon:"🌬",label:"Air",category:"Éléments",desc:"Vent, souffle, plume, nuage : pensée, décision, clarté mentale.",links:[],lore:[
+  "air":{icon:"🌬",label:"Air",category:"Éléments",desc:"Vent, souffle, plume, nuage : pensée, décision, clarté mentale.",links:["hermès","iris","borée","zéphyr"],lore:[
     "L'air, dans la mythologie grecque, est le domaine où circulent les messages : c'est par les airs qu'Hermès porte ses nouvelles et qu'Iris tend son arc-en-ciel entre le ciel et la terre.",
     "C'est aussi le souffle (pneuma) que les Anciens associaient à la vie elle-même et, plus tard, à la pensée et à l'inspiration — respirer et penser relevaient d'un même principe invisible.",
     "Les quatre vents cardinaux, les Anémoi, personnifient directement cet air en mouvement : Borée au nord (voir la fiche « Borée »), Notos au sud, Euros à l'est et Zéphyr à l'ouest (voir la fiche « Zéphyr »), chacun soufflant avec un caractère bien distinct, du plus brutal au plus doux.",
     "Empédocle en fit l'une des quatre racines de toute matière, aux côtés du feu, de l'eau et de la terre — l'élément qu'on ne voit jamais directement, mais dont les effets se sentent partout.",
     "L'air est devenu un symbole de pensée, de décision et de clarté mentale — ce qui circule sans jamais se laisser saisir.",
   ]},
-  "terre":{icon:"🌿",label:"Terre",category:"Éléments",desc:"Racine, pierre, sol, montagne : matière, croissance, incarnation concrète.",links:[],lore:[
+  "terre":{icon:"🌿",label:"Terre",category:"Éléments",desc:"Racine, pierre, sol, montagne : matière, croissance, incarnation concrète.",links:["gaïa","déméter"],lore:[
     "La terre est, dans la mythologie grecque, une puissance primordiale : Gaïa, la Terre elle-même, engendre en premier le Ciel (Ouranos) et donne naissance à toutes les générations divines qui suivront, y compris les Titans et, à travers eux, les dieux de l'Olympe.",
     "Elle est aussi le domaine de Déméter, déesse des moissons, dont le chagrin après l'enlèvement de Perséphone rend la terre stérile chaque année, avant que son retour ne la fasse à nouveau produire.",
     "Le géant Antée, fils de Gaïa et de Poséidon, tirait toute sa force du contact avec sa mère la Terre : invincible tant qu'il restait au sol, il ne fut vaincu par Héraclès que lorsque celui-ci comprit qu'il fallait le soulever à bout de bras, le coupant ainsi de la source même de sa puissance, pour pouvoir enfin l'étouffer.",
@@ -1354,7 +1369,7 @@ const SYMBOL_LIBRARY = {
     "Elle est devenue un symbole d'inconscient, d'intuition, de cycles et d'incertitude qui n'empêche pas d'avancer.",
     "La lune est particulièrement associée à Séléné et à Métis.",
   ]},
-  "étoiles":{icon:"✦",label:"Étoile",category:"Astres & phénomènes",desc:"Orientation, espoir, inspiration retrouvée après l'épreuve.",links:["hécate","astéria"],lore:[
+  "étoiles":{icon:"✦",label:"Étoile",category:"Astres & phénomènes",desc:"Orientation, espoir, inspiration retrouvée après l'épreuve.",links:["hécate","astéria","éos"],lore:[
     "Les étoiles se rattachent à Hécate par sa mère, Astéria, titanide dont le nom signifie littéralement « étoilée ».",
     "Pour échapper aux avances de Zeus, Astéria se jeta dans la mer et fut changée en île — Délos, selon certaines traditions — après avoir été un temps assimilée aux étoiles filantes. Sa fille Hécate hérita de cette proximité avec le ciel nocturne et l'orientation qu'il offre à qui sait le lire.",
     "Contrairement au soleil qui révèle tout d'un coup, les étoiles n'éclairent que faiblement — mais elles suffisent à orienter celui qui a perdu son chemin dans l'obscurité.",
@@ -1362,7 +1377,7 @@ const SYMBOL_LIBRARY = {
     "Elles sont devenues un symbole d'orientation, d'espoir et d'inspiration retrouvée après l'épreuve.",
     "Les étoiles sont particulièrement associées à Hécate, par sa mère Astéria.",
   ]},
-  "aurore":{icon:"🌅",label:"Aurore",category:"Astres & phénomènes",desc:"Commencement, renaissance, ce qui redémarre après l'obscurité.",links:[],lore:[
+  "aurore":{icon:"🌅",label:"Aurore",category:"Astres & phénomènes",desc:"Commencement, renaissance, ce qui redémarre après l'obscurité.",links:["éos","hélios"],lore:[
     "L'aurore est le corps d'Éos, déesse aux doigts de rose qui ouvre chaque jour les portes du ciel pour annoncer le passage d'Hélios.",
     "Éos est aussi connue pour ses amours mortelles, comme Tithonos, à qui elle obtint l'immortalité sans penser à demander aussi l'éternelle jeunesse — un rappel que même un don des dieux peut se retourner si l'on ne pense pas à tout.",
     "Elle pleure aussi un fils tombé à la guerre de Troie, Memnon, roi des Éthiopiens tué par Achille : chaque matin, dit-on, la rosée qui couvre l'herbe n'est autre que les larmes qu'elle continue de verser sur lui, inlassablement, depuis sa mort.",
@@ -2037,15 +2052,27 @@ function typewriterHTML(paragraphs){
 function allCards(){
   const cards = MAJORS.map(x => [...x]);
   for(const [suit, rows] of Object.entries(COURTS)){
-    rows.forEach(x => cards.push([x[0],x[1],x[2],x[3],"court","",suit]));
+    // x[4] : symboles propres à cette figure de cour (voir COURTS ci-dessus), utilisés par
+    // cardsForSymbol() pour la peupler dans "Cartes concernées" — jusqu'ici toujours vide
+    // ("") faute de ce champ, ce qui empêchait TOUTE figure de cour d'apparaître dans
+    // n'importe quel symbole, quel qu'il soit.
+    rows.forEach(x => cards.push([x[0],x[1],x[2],x[3],"court",x[4]||"",suit]));
   }
   for(const [suit, meta] of Object.entries(SUITS)){
     for(let n=1;n<=10;n++){
       const k=NUMBER_KEYS[n];
+      const cardName = `${n===1?"As":n} de ${suit}`;
+      // NUMBER_CARD_SYMBOLS permet à une carte numérale précise (une fois illustrée avec sa
+      // propre figure mythologique, voir NUMBER_CARD_DEITY) d'avoir ses propres symboles
+      // plutôt que la formule générique ci-dessous, partagée par toutes les cartes du même
+      // rang ou de la même enseigne — sinon impossible, par construction, de relier par
+      // exemple "Artémis" à la seule carte "2 de Bâtons" sans l'associer aussi à "2 de
+      // Coupes", "2 de Épées" et "2 de Deniers", ou à tout le reste des Bâtons.
+      const symbols = NUMBER_CARD_SYMBOLS[cardName] || `${k[1]} · ${meta[3]}`;
       cards.push([
-        `${n===1?"As":n} de ${suit}`, k[0], meta[1],
+        cardName, k[0], meta[1],
         `${k[2]} · ${meta[2]}`, "number",
-        `${k[1]} · ${meta[3]}`, suit, n
+        symbols, suit, n
       ]);
     }
   }
