@@ -2837,7 +2837,15 @@ function strongestTransitAspect(transits, profile){
 }
 
 async function generateAIReading(question, cards, positions){
-  const timeout = new Promise((_,reject)=>setTimeout(()=>reject(new Error("timeout")), 15000));
+  // Le budget de temps grandit avec le nombre de cartes, exactement comme max_tokens côté
+  // serveur (voir api/reading.js) : une Croix celtique ou une Année à venir demande à l'IA
+  // de rédiger beaucoup plus de texte qu'un tirage à 1 ou 3 cartes, et prend donc
+  // mécaniquement plus longtemps à générer. Un plafond fixe de 15s (l'ancienne valeur)
+  // coupait la connexion avant que la réponse ait eu le temps d'arriver pour la plupart des
+  // tirages un peu grands, ce qui faisait basculer silencieusement vers la lecture hors-ligne
+  // bien plus souvent que nécessaire.
+  const timeoutMs = Math.min(45000, Math.max(20000, 10000 + cards.length * 3000));
+  const timeout = new Promise((_,reject)=>setTimeout(()=>reject(new Error("timeout")), timeoutMs));
   const profile = profileForReading();
   const history = journalTrendsForReading();
   const memory = cardMemory(cards, question);
@@ -2850,7 +2858,7 @@ async function generateAIReading(question, cards, positions){
       // Code manquant/incorrect : on l'efface pour qu'il soit redemandé au prochain tirage.
       localStorage.removeItem("delphesAccessCode");
     }
-    if(!r.ok) throw new Error("réponse backend invalide");
+    if(!r.ok) throw new Error(`réponse backend invalide (HTTP ${r.status})`);
     return r.json();
   });
 
@@ -2868,7 +2876,14 @@ function startAIReading(){
   const positions = spreadConf().positions.slice(0, chosen.length);
   generateAIReading(tirageState.question, chosen, positions)
     .then(result => { tirageState.aiReading = result; tirageState.aiStatus = "done"; saveTirageState(); render(); })
-    .catch(() => { tirageState.aiStatus = "error"; saveTirageState(); render(); }); // repli silencieux vers le template
+    .catch(err => {
+      // Le repli vers la lecture hors-ligne reste silencieux pour l'utilisateur (jamais
+      // bloqué), mais l'erreur réelle (timeout, HTTP xxx, JSON invalide...) est désormais
+      // journalisée dans la console — jusqu'ici elle disparaissait complètement, rendant
+      // impossible de distinguer un simple dépassement de délai d'une vraie panne backend.
+      console.warn("Lecture IA indisponible, repli hors-ligne :", err && err.message ? err.message : err);
+      tirageState.aiStatus = "error"; saveTirageState(); render();
+    });
 }
 
 /* ===================== VUES ===================== */
