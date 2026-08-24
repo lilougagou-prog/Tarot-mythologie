@@ -423,10 +423,13 @@ Object.assign(CARD_IMAGES, {
   "8 de Bâtons": "assets/card-batons-8.jpg",
   "9 de Bâtons": "assets/card-batons-9.jpg",
   "10 de Bâtons": "assets/card-batons-10.jpg",
-  // Figures de cour de Bâtons — Valet (Éos) et Cavalier (Niké) : leur divinité était déjà
-  // connue via COURTS, seule l'illustration manquait.
+  // Figures de cour de Bâtons — Valet (Éos), Cavalier (Niké), Reine (Hestia) et Roi
+  // (Héphaïstos) : leur divinité était déjà connue via COURTS, seule l'illustration
+  // manquait. Le jeu de cour de Bâtons est maintenant complet.
   "Valet de Bâtons": "assets/card-batons-valet.jpg",
   "Cavalier de Bâtons": "assets/card-batons-cavalier.jpg",
+  "Reine de Bâtons": "assets/card-batons-reine.jpg",
+  "Roi de Bâtons": "assets/card-batons-roi.jpg",
 });
 
 // Cartes numérales dotées d'une figure mythologique propre (contrairement aux autres
