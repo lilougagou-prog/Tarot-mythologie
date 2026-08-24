@@ -213,23 +213,23 @@ const CARD_LORE = {
 },
 "3 de Bâtons": {
   marseille:"Trois bâtons plantés en terre, un personnage regarde des navires s'éloigner vers l'horizon : entreprise lancée, expansion, résultats encore à venir mais déjà en mouvement.",
-  myth:"Jason, une fois l'Argo achevé, dut attendre que le vent se lève pour partir vers la Toison d'or — l'élan était prêt, restait à le laisser porter ses fruits au loin. Cette carte est cette attente active, tournée vers ce qui vient."
+  myth:"Arès, une fois la guerre déclarée, ne la négocie plus : l'élan brut qu'il personnifie n'attend que l'issue qu'il a lui-même déjà mise en mouvement (voir la fiche « Arès »). Cette carte est cette même attente active, tournée vers ce qui vient."
 },
 "4 de Bâtons": {
   marseille:"Quatre bâtons soutiennent une guirlande de fleurs, deux figures célèbrent devant : stabilité heureuse, fondations posées, moment de répit mérité après l'effort.",
-  myth:"Les fêtes en l'honneur d'Hestia et du foyer marquaient traditionnellement l'achèvement d'une maison — un seuil franchi, une base désormais sûre pour continuer à bâtir. Cette carte célèbre ce même palier stable."
+  myth:"Thalia, l'une des trois Charites, personnifie justement la fête et l'abondance qui n'ont besoin de rien justifier d'autre qu'elles-mêmes (voir la fiche « Thalia »). Cette carte célèbre ce même palier stable, un seuil franchi qu'il ne reste qu'à savourer."
 },
 "5 de Bâtons": {
   marseille:"Cinq personnages croisent leurs bâtons dans un désordre apparent : rivalité, tension d'énergies qui s'opposent sans qu'aucune ne prenne clairement le dessus.",
-  myth:"Les jeux du stade antique opposaient les athlètes dans une compétition rude mais codifiée — la friction n'y était pas destructrice, elle faisait partie du jeu. Cette carte invite à voir le conflit comme un frottement nécessaire, pas une catastrophe."
+  myth:"Zelos personnifie précisément cette ardeur rivale, frère de la Victoire elle-même mais jamais son garant (voir la fiche « Zelos »). Cette carte invite à voir le conflit comme un frottement nécessaire, pas une catastrophe."
 },
 "6 de Bâtons": {
   marseille:"Un cavalier couronné de laurier avance entouré de bâtons, acclamé par d'autres : victoire reconnue publiquement, effort enfin récompensé et validé par les autres.",
-  myth:"Le laurier couronnait les vainqueurs des jeux Pythiques, à Delphes même, en hommage à Apollon qui l'avait consacré après sa propre victoire sur le serpent Python. Cette carte est cette reconnaissance méritée, célébrée devant témoins."
+  myth:"Bia, la Force qui exécute sans jamais discuter, siège depuis la victoire sur les Titans à la place d'honneur que sa loyauté lui a value, jamais remise en question (voir la fiche « Bia »). Cette carte est cette même reconnaissance méritée, célébrée devant témoins."
 },
 "7 de Bâtons": {
   marseille:"Un personnage en position haute défend sa place avec un bâton contre six autres levés vers lui : résistance, position à défendre, courage face à une pression multiple.",
-  myth:"Achille, seul face à la coalition adverse sous les murs de Troie, continua de tenir sa position malgré le nombre. Cette carte est cette même ténacité — tenir bon, même sans certitude de l'issue."
+  myth:"Agon, personnification de la compétition codifiée, honoré à Olympie aux côtés des concours sportifs, est précisément ce terrain qu'il faut sans cesse redéfendre face à qui veut le prendre (voir la fiche « Agon »). Cette carte est cette même ténacité — tenir bon, même sans certitude de l'issue."
 },
 "8 de Bâtons": {
   marseille:"Huit bâtons filent dans les airs, en plein vol, vers un but encore invisible : accélération soudaine, événements qui se précipitent après une période d'attente.",
@@ -411,9 +411,14 @@ Object.assign(CARD_IMAGES, {
   "Cavalier d'Épées": "assets/card-epees-cavalier.jpg",
   "Reine d'Épées": "assets/card-epees-reine.jpg",
   "Roi d'Épées": "assets/card-epees-roi.jpg",
-  // Premières cartes numérales de Bâtons — début d'une deuxième enseigne illustrée.
+  // Cartes numérales de Bâtons (1-7).
   "As de Bâtons": "assets/card-batons-1.jpg",
   "2 de Bâtons": "assets/card-batons-2.jpg",
+  "3 de Bâtons": "assets/card-batons-3.jpg",
+  "4 de Bâtons": "assets/card-batons-4.jpg",
+  "5 de Bâtons": "assets/card-batons-5.jpg",
+  "6 de Bâtons": "assets/card-batons-6.jpg",
+  "7 de Bâtons": "assets/card-batons-7.jpg",
 });
 
 // Cartes numérales dotées d'une figure mythologique propre (contrairement aux autres
@@ -435,6 +440,11 @@ const NUMBER_CARD_DEITY = {
   "8 de Épées": "phobos",
   "As de Bâtons": "hormos",
   "2 de Bâtons": "artémis",
+  "3 de Bâtons": "arès",
+  "4 de Bâtons": "thalia",
+  "5 de Bâtons": "zelos",
+  "6 de Bâtons": "bia",
+  "7 de Bâtons": "agon",
   "9 de Épées": "morphée",
   "10 de Épées": "thanatos",
 };
@@ -1277,6 +1287,11 @@ const DEITY_NOTES = {
   "morphée":"Dieu des songes, fils d'Hypnos, capable de prendre dans le rêve la forme parfaite de n'importe quel mortel.",
   "thanatos":"Personnification de la mort paisible, frère jumeau d'Hypnos le Sommeil — inévitable, jamais cruelle.",
   "hormos":"Personnification de l'élan qui précède toute action, honoré à Athènes à côté de la Pitié.",
+  "arès":"Dieu de la guerre dans sa forme la plus brute, fils de Zeus et d'Héra, amant d'Aphrodite.",
+  "thalia":"L'une des trois Charites, personnifiant la fête, l'abondance et tout ce qui s'épanouit sans nécessité.",
+  "zelos":"Personnification du Zèle et de l'émulation rivale, frère de Niké, compagnon permanent du trône de Zeus.",
+  "bia":"Personnification de la Force brute qui exécute sans jamais discuter, sœur de Niké.",
+  "agon":"Personnification de la Compétition codifiée, honoré à Olympie aux côtés des concours sportifs.",
 };
 
 // Textes mythologiques développés pour les figures listées ci-dessus (voir showDeityDetail() /
@@ -1350,7 +1365,7 @@ const DEITY_LORE = {
   ],
   "prométhée": [
     "Titan resté aux côtés de Zeus pendant la guerre contre les autres Titans, Prométhée façonna aussi, selon certains récits, les premiers hommes à partir d'argile.",
-    "Voyant l'humanité livrée au froid et à l'ignorance, il déroba le feu aux dieux et l'offrit aux mortels (voir la fiche « Feu ») — un don qui lui valut d'être enchaîné à un rocher du Caucase, où un aigle venait chaque jour dévorer son foie, qui repoussait chaque nuit, jusqu'à ce que Chiron accepte de mourir à sa place pour le libérer (voir la fiche « Chiron »).",
+    "Voyant l'humanité livrée au froid et à l'ignorance, il déroba le feu aux dieux et l'offrit aux mortels (voir la fiche « Feu ») — un don qui lui valut d'être traîné jusqu'à un rocher du Caucase par Bia et Kratos, la Force et la Puissance (voir la fiche « Bia »), sur ordre de Zeus, puis enchaîné là où un aigle venait chaque jour dévorer son foie, qui repoussait chaque nuit, jusqu'à ce que Chiron accepte de mourir à sa place pour le libérer (voir la fiche « Chiron »).",
     "Son nom reste attaché à tout affranchissement payé au prix fort — le savoir arraché plutôt que donné.",
   ],
   "hadès": [
@@ -1411,7 +1426,7 @@ const DEITY_LORE = {
   "aphrodite": [
     "Déesse de l'amour et de la beauté, Aphrodite naquit, selon le récit le plus ancien, de l'écume de mer formée autour des membres tranchés d'Ouranos — un mythe plus ancien que la naissance de la plupart des autres Olympiens.",
     "Sa beauté suscite jalousies et rivalités jusque parmi les dieux : c'est elle qui remporte le jugement de Pâris en lui promettant l'amour de la plus belle femme du monde, Hélène — une promesse qui déclenchera la guerre de Troie.",
-    "Mariée par Zeus à Héphaïstos, le forgeron boiteux de l'Olympe, elle ne l'aima jamais vraiment : son cœur allait à Arès, dieu de la guerre. Hélios, qui voit tout depuis son char (voir la fiche « Hélios »), surprit leur liaison et la révéla à Héphaïstos, qui tendit à sa femme et son amant un filet d'or invisible et incassable, les piégeant nus devant tous les dieux assemblés, plus amusés que scandalisés. De cette union naquirent Harmonie (voir la fiche « Harmonie ») et, selon les récits les plus tardifs, Éros lui-même (voir la fiche « Éros »).",
+    "Mariée par Zeus à Héphaïstos, le forgeron boiteux de l'Olympe, elle ne l'aima jamais vraiment : son cœur allait à Arès, dieu de la guerre (voir la fiche « Arès »). Hélios, qui voit tout depuis son char (voir la fiche « Hélios »), surprit leur liaison et la révéla à Héphaïstos, qui tendit à sa femme et son amant un filet d'or invisible et incassable, les piégeant nus devant tous les dieux assemblés, plus amusés que scandalisés. De cette union naquirent Harmonie (voir la fiche « Harmonie ») et, selon les récits les plus tardifs, Éros lui-même (voir la fiche « Éros »).",
     "Elle aima aussi le jeune Adonis, né d'un arbre à myrrhe après une naissance elle-même née d'une faute funeste. Confié encore enfant à Perséphone pour être élevé en secret, il grandit si beau que les deux déesses se le disputèrent, jusqu'à ce que Zeus tranche : Adonis partagerait son temps entre l'une et l'autre. Il choisit de passer le plus clair de ses jours auprès d'Aphrodite — jusqu'à ce qu'un sanglier, lancé sur ses traces par la jalousie d'Arès selon certains récits, le blesse mortellement à la chasse. Accourue trop tard, Aphrodite se blessa elle-même à une épine en se précipitant vers lui ; là où leurs sangs mêlés touchèrent la terre, des anémones rouges jaillirent aussitôt.",
     "Éprise plus tard du prince troyen Anchise, elle se présenta à lui déguisée en simple mortelle et lui interdit, sous peine de la foudre de Zeus, de jamais révéler qui l'avait aimé. De leur union naquit Énée (voir la fiche « Énée ») — mais Anchise, un jour ivre, se vanta malgré tout de sa conquête divine, et la foudre promise s'abattit sur lui, l'estropiant pour le reste de sa vie.",
     "Dans le Tarot, Aphrodite est la Reine de Coupes, où l'amour se vit avec réceptivité plutôt qu'avec conquête : ses trois amours racontent pourtant trois visages bien différents de ce même domaine — le mariage de devoir avec Héphaïstos, la passion assumée avec Arès jusqu'au scandale, et l'amour tendre ou tragique avec Adonis et Anchise, où le désir se paie toujours d'un prix, qu'il s'agisse d'une fleur née du sang ou d'un secret trahi.",
@@ -1432,6 +1447,7 @@ const DEITY_LORE = {
   "niké": [
     "Déesse ailée de la victoire, Niké accompagne indifféremment les vainqueurs, sans jamais prendre elle-même part au combat — elle couronne l'issue plutôt que de la déterminer.",
     "Fille du Titan Pallas et de Styx, elle se rangea aux côtés de Zeus dès la guerre contre les Titans, et resta depuis une fidèle compagne de son char, symbole d'un triomphe qui se mérite sans jamais se garantir d'avance.",
+    "Trois de ses frères et sœurs firent le même choix qu'elle et reçurent la même récompense : Kratos, la Puissance, Bia, la Force (voir la fiche « Bia »), et Zelos, le Zèle rival (voir la fiche « Zelos »), devinrent eux aussi des compagnons permanents du trône de Zeus.",
   ],
   "hestia": [
     "Sœur aînée de Zeus, Hestia est la déesse du foyer et gardienne de la flamme sacrée qui brûle au centre de chaque maison comme de chaque cité.",
@@ -1612,13 +1628,13 @@ const DEITY_LORE = {
   ],
   "cadmos": [
     "Fils du roi Agénor de Phénicie et frère d'Europe — enlevée par Zeus changé en taureau —, Cadmos partit à la recherche de sa sœur sans jamais la retrouver. L'oracle de Delphes (voir la fiche « Temple ») lui conseilla d'abandonner cette quête et de suivre à la place une vache marquée d'un croissant de lune jusqu'à ce qu'elle s'arrête d'elle-même : à cet endroit précis, il devrait fonder une ville.",
-    "La vache s'arrêta sur le site de la future Thèbes. Pour un sacrifice, Cadmos envoya ses compagnons chercher de l'eau à une source voisine, gardée par un dragon consacré à Arès, qui les tua tous. Cadmos vainquit à son tour le dragon puis, sur les conseils d'Athéna, sema ses dents dans le sol : des guerriers tout armés en surgirent aussitôt et s'entretuèrent jusqu'à ce qu'il n'en reste que cinq, devenus les ancêtres des plus grandes familles de Thèbes.",
+    "La vache s'arrêta sur le site de la future Thèbes. Pour un sacrifice, Cadmos envoya ses compagnons chercher de l'eau à une source voisine, gardée par un dragon consacré à Arès (voir la fiche « Arès »), qui les tua tous. Cadmos vainquit à son tour le dragon puis, sur les conseils d'Athéna, sema ses dents dans le sol : des guerriers tout armés en surgirent aussitôt et s'entretuèrent jusqu'à ce qu'il n'en reste que cinq, devenus les ancêtres des plus grandes familles de Thèbes.",
     "Pour avoir tué un être consacré à Arès, Cadmos dut servir le dieu pendant huit années. Sa peine achevée, il fut réconcilié avec lui et reçut pour épouse Harmonie, fille d'Arès et d'Aphrodite (voir la fiche « Harmonie ») — des noces où tous les dieux de l'Olympe vinrent en personne, chose presque jamais accordée à des mortels.",
     "Devenus vieux, Cadmos et Harmonie furent changés ensemble en serpents et menés vers les Champs Élysées plutôt que vers une fin funeste — une métamorphose vécue comme une grâce plutôt qu'une punition, pour avoir traversé côte à côte tant d'épreuves. La tradition grecque attribue aussi à Cadmos l'introduction de l'alphabet en Grèce.",
     "Cadmos est particulièrement associé à Harmonie.",
   ],
   "harmonie": [
-    "Fille d'Arès, dieu de la guerre, et d'Aphrodite (voir la fiche « Aphrodite »), Harmonie naît de l'union la plus improbable qui soit — la guerre et l'amour — et en personnifie pourtant l'issue la plus apaisée : la concorde qui succède au conflit.",
+    "Fille d'Arès (voir la fiche « Arès »), dieu de la guerre, et d'Aphrodite (voir la fiche « Aphrodite »), Harmonie naît de l'union la plus improbable qui soit — la guerre et l'amour — et en personnifie pourtant l'issue la plus apaisée : la concorde qui succède au conflit.",
     "Son mariage avec Cadmos, fondateur de Thèbes (voir la fiche « Cadmos »), fut célébré en présence de tous les dieux de l'Olympe, venus lui offrir des présents — dont un collier forgé par Héphaïstos, d'une beauté si rare qu'il resta légendaire pour les générations suivantes.",
     "Devenue vieille aux côtés de Cadmos, elle fut changée avec lui en serpent et rejoignit les Champs Élysées — refusant, jusque dans la métamorphose, de se séparer de celui qu'elle avait épousé.",
     "Harmonie est particulièrement associée à Cadmos.",
@@ -1686,7 +1702,7 @@ const DEITY_LORE = {
     "Dans le Tarot, Apaté est la figure du 7 d'Épées, où une silhouette s'éloigne en emportant plusieurs lames, en laissant sciemment les autres derrière elle : une stratégie qui n'est pas un vol pur et simple, mais qui flirte sciemment avec la limite de l'honnêteté — exactement le territoire qu'Apaté ne quitte jamais.",
   ],
   "phobos": [
-    "Phobos personnifie la Peur qui saisit avant tout raisonnement — fils d'Arès et d'Aphrodite, jumeau de Deimos, la Terreur, avec qui il escorte son père au combat (voir la fiche « Palioxis » pour ce même cortège).",
+    "Phobos personnifie la Peur qui saisit avant tout raisonnement — fils d'Arès (voir la fiche « Arès ») et d'Aphrodite, jumeau de Deimos, la Terreur, avec qui il escorte son père au combat (voir la fiche « Palioxis » pour ce même cortège).",
     "Homère le place, aux côtés de la tête de la Gorgone, sur le bouclier d'Agamemnon comme sur l'égide d'Athéna : son image seule, brandie face à l'ennemi, suffisait à faire vaciller des rangs entiers avant qu'une seule lame ne soit levée.",
     "Les Spartiates lui vouaient un culte à part, non pour la bannir, mais pour l'apprivoiser : une peur reconnue et maîtrisée, croyaient-ils, forge une discipline plus sûre qu'une bravoure aveugle qui ignore le danger.",
     "Dans le Tarot, Phobos est la figure du 8 d'Épées, où une silhouette entravée et les yeux bandés se tient debout, cernée d'épées qui laissent pourtant un passage : sa peur, comme la sienne, retient bien plus l'esprit que le corps.",
@@ -1707,6 +1723,35 @@ const DEITY_LORE = {
     "Les Athéniens lui vouaient un autel, tout près de celui dédié à Éléos, la Pitié, comme s'il fallait honorer côte à côte la force qui pousse à agir et la retenue qui sait, parfois, la tempérer.",
     "Figure mineure et peu documentée, Hormos n'a jamais eu de mythe développé qui lui soit propre — comme si l'élan qu'il personnifie ne s'attardait jamais assez longtemps sur un seul récit pour s'y fixer.",
     "Dans le Tarot, Hormos est la figure de l'As de Bâtons, où une main surgit des nuages tenant un bâton encore en bourgeon : une énergie brute et sans direction encore choisie, mais qui ne demande déjà plus qu'à s'exprimer.",
+  ],
+  "arès": [
+    "Fils de Zeus et d'Héra (voir les fiches « Zeus » et « Héra »), Arès personnifie la guerre dans sa forme la plus brute — la violence du combat lui-même, plutôt que la stratégie qui l'encadre. Même ses propres parents le tenaient à distance : Zeus le qualifie, dans l'Iliade, du plus détestable de tous ses enfants.",
+    "Son opposée naturelle est Athéna (voir la fiche « Athéna »), déesse d'une guerre pensée et disciplinée : les deux s'affrontent directement sur le champ de bataille de Troie, où Athéna prend systématiquement le dessus sur lui.",
+    "Deux géants jumeaux, Otos et Éphialtès, parvinrent un jour à le capturer et à l'enfermer treize mois durant dans une jarre de bronze — une humiliation dont seul Hermès (voir la fiche « Hermès ») réussit à le délivrer. Même le dieu de la guerre, apprit-on ce jour-là, pouvait être réduit à l'impuissance.",
+    "Son amour pour Aphrodite (voir la fiche « Aphrodite »), mariée à Héphaïstos, leur valut d'être surpris nus dans un filet d'or tissé par l'époux trompé — mais leur union donna aussi naissance à Harmonie (voir la fiche « Harmonie ») et aux jumeaux Phobos et Deimos (voir la fiche « Phobos »), qui l'escortent au combat.",
+    "Dans le Tarot, Arès est la figure du 3 de Bâtons, où l'on regarde déjà au loin ce qu'une décision engagée va produire : chez lui, une fois la guerre déclarée, plus rien ne l'arrête ni ne se négocie — l'élan brut, sans retour possible, jusqu'à ce que l'issue se révèle d'elle-même.",
+  ],
+  "thalia": [
+    "Thalia, dont le nom signifie « celle qui fleurit », est l'une des trois Charites — les déesses de la grâce et de la joie que la tradition ne représente jamais seules, toujours dansant ensemble (voir la fiche « Charites »).",
+    "Parmi ses deux sœurs, elle personnifie plus particulièrement la fête, l'abondance et tout ce qui s'épanouit sans nécessité — les banquets, la parure, la beauté qui n'a besoin de rien justifier d'autre qu'elle-même.",
+    "Une autre figure du même nom existe dans la mythologie grecque, l'une des neuf Muses, protectrice de la comédie et de la poésie pastorale : les deux Thalia restent distinctes, même si leur nom commun — et leur joie partagée — les rapproche.",
+    "Dans le Tarot, Thalia est la figure du 4 de Bâtons, où des guirlandes de fleurs relient quatre bâtons au-dessus d'une fête déjà commencée : la stabilité heureuse et le répit mérité après l'effort sont exactement son domaine.",
+  ],
+  "zelos": [
+    "Zelos personnifie le Zèle et l'émulation rivale — l'ardeur qui pousse à se mesurer aux autres, jusqu'à la compétition la plus âpre.",
+    "Fils du Titan Pallas et de Styx, comme Niké, la Victoire (voir la fiche « Niké »), il se rangea avec ses frères et sœurs aux côtés de Zeus pendant la guerre contre les Titans, et resta depuis un compagnon permanent de son trône, en récompense de cette fidélité.",
+    "Dans le Tarot, Zelos est la figure du 5 de Bâtons, où cinq personnages croisent leurs bâtons dans un désordre où personne ne prend clairement le dessus : cette énergie de rivalité brute, ni destructrice ni pacifique, est précisément la sienne — la friction de vouloir dépasser l'autre, sans qu'aucune règle n'ait encore tranché qui l'emporte.",
+  ],
+  "bia": [
+    "Bia personnifie la Force brute — non la force qui combat pour elle-même, mais celle qui exécute sans jamais discuter ce qu'on lui ordonne.",
+    "Fille du Titan Pallas et de Styx, sœur de Niké, de Kratos et de Zelos (voir les fiches « Niké » et « Zelos »), elle rallia elle aussi Zeus pendant la guerre contre les Titans et fut récompensée d'une place permanente à ses côtés, jamais quittée depuis.",
+    "Elle et Kratos, la Puissance, sur ordre de Zeus, traînèrent un jour Prométhée jusqu'au rocher du Caucase où il fut enchaîné (voir la fiche « Prométhée ») — dans le récit qui la met en scène, Bia ne prononce jamais un mot : sa seule fonction est d'agir, jamais de justifier.",
+    "Dans le Tarot, Bia est la figure du 6 de Bâtons, où un vainqueur couronné de laurier avance acclamé par la foule : la place qu'elle occupe aux côtés de Zeus depuis la victoire sur les Titans est exactement cette reconnaissance méritée, gagnée par une loyauté jamais remise en question.",
+  ],
+  "agon": [
+    "Agon personnifie la Compétition elle-même — non l'affrontement guerrier, mais l'épreuve codifiée où l'on se mesure aux autres selon des règles communes à tous.",
+    "Le voyageur Pausanias décrit avoir vu, à Olympie, une statue lui étant consacrée, tenant les haltères des sauteurs — Agon présidait aussi bien les concours sportifs que les concours dramatiques donnés lors des grandes fêtes religieuses.",
+    "Dans le Tarot, Agon est la figure du 7 de Bâtons, où un seul personnage, en position haute, tient tête à six autres levés vers lui : il est précisément ce terrain où il faut sans cesse défendre sa place face à qui veut la prendre, épreuve après épreuve.",
   ],
 };
 
