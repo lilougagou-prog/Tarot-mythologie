@@ -205,11 +205,11 @@ const CARD_LORE = {
 /* ----- Cartes numérales (40) — l'éclairage mythologique varie librement au fil des nombres ----- */
 "As de Bâtons": {
   marseille:"L'As de Bâtons est une main qui surgit des nuages, tenant un bâton en bourgeon : énergie brute encore intacte, désir d'agir qui ne demande qu'à s'exprimer.",
-  myth:"C'est l'étincelle que Prométhée déroba aux dieux pour l'offrir aux hommes — un feu premier, avant toute maîtrise, porteur d'un potentiel immense et encore dangereux. Cet As est ce don initial, à apprivoiser plutôt qu'à redouter."
+  myth:"Hormos personnifie l'élan qui précède toute action, avant même qu'un but précis ne soit choisi — honoré à Athènes aux côtés de la Pitié, comme s'il fallait tempérer une force aussi brute (voir la fiche « Hormos »). Cet As est ce don initial, à apprivoiser plutôt qu'à redouter."
 },
 "2 de Bâtons": {
   marseille:"Un personnage tient le globe d'une main et un bâton de l'autre, regardant au loin depuis ses remparts : premier choix de direction, projet qui hésite encore entre deux voies.",
-  myth:"Héraclès, à la croisée des chemins, dut choisir entre la voie facile du plaisir et celle, plus rude, de la vertu — un choix qui façonna toute sa légende. Cette carte pose la même question : quelle direction donner à une énergie qui ne demande qu'à partir ?"
+  myth:"Artémis, encore enfant, choisit elle-même son domaine et son mode de vie plutôt que d'attendre qu'on les lui impose — l'arc, les montagnes sauvages, l'indépendance (voir la fiche « Artémis »). Cette carte pose la même question : quelle direction donner à une énergie qui ne demande qu'à partir ?"
 },
 "3 de Bâtons": {
   marseille:"Trois bâtons plantés en terre, un personnage regarde des navires s'éloigner vers l'horizon : entreprise lancée, expansion, résultats encore à venir mais déjà en mouvement.",
@@ -404,17 +404,23 @@ Object.assign(CARD_IMAGES, {
   "8 de Épées": "assets/card-epees-8.jpg",
   "9 de Épées": "assets/card-epees-9.jpg",
   "10 de Épées": "assets/card-epees-10.jpg",
-  // Figures de cour d'Épées — leur divinité (Zéphyr, Bellérophon…) était déjà connue via
-  // COURTS, seule l'illustration manquait.
+  // Figures de cour d'Épées — leur divinité (Zéphyr, Bellérophon, Athéna, Éole) était déjà
+  // connue via COURTS, seule l'illustration manquait. Le jeu de cour d'Épées est
+  // maintenant complet.
   "Valet d'Épées": "assets/card-epees-valet.jpg",
   "Cavalier d'Épées": "assets/card-epees-cavalier.jpg",
+  "Reine d'Épées": "assets/card-epees-reine.jpg",
+  "Roi d'Épées": "assets/card-epees-roi.jpg",
+  // Premières cartes numérales de Bâtons — début d'une deuxième enseigne illustrée.
+  "As de Bâtons": "assets/card-batons-1.jpg",
+  "2 de Bâtons": "assets/card-batons-2.jpg",
 });
 
 // Cartes numérales dotées d'une figure mythologique propre (contrairement aux autres
 // cartes numérales, qui partagent encore un simple mot générique entre les 4 enseignes —
 // voir NUMBER_KEYS) : la divinité associée prend la place de ce mot générique dans les
 // écrans de détail (voir cardDeityLabel() ci-dessous), exactement comme pour les majeurs
-// et les figures de cour. Pour l'instant limité aux cartes d'Épées illustrées
+// et les figures de cour. Pour l'instant limité aux cartes numérales illustrées
 // (CARD_IMAGES ci-dessus) ; à étendre au fil des prochaines illustrations mineures. Les
 // figures de cour n'ont pas besoin d'entrée ici : COURTS leur attribue déjà une divinité
 // propre nativement (c[1]), contrairement aux cartes numérales.
@@ -427,6 +433,8 @@ const NUMBER_CARD_DEITY = {
   "6 de Épées": "palioxis",
   "7 de Épées": "apaté",
   "8 de Épées": "phobos",
+  "As de Bâtons": "hormos",
+  "2 de Bâtons": "artémis",
   "9 de Épées": "morphée",
   "10 de Épées": "thanatos",
 };
@@ -1268,6 +1276,7 @@ const DEITY_NOTES = {
   "phobos":"Personnification de la Peur, fils d'Arès et d'Aphrodite, jumeau de Deimos — il escorte les guerriers avant le combat.",
   "morphée":"Dieu des songes, fils d'Hypnos, capable de prendre dans le rêve la forme parfaite de n'importe quel mortel.",
   "thanatos":"Personnification de la mort paisible, frère jumeau d'Hypnos le Sommeil — inévitable, jamais cruelle.",
+  "hormos":"Personnification de l'élan qui précède toute action, honoré à Athènes à côté de la Pitié.",
 };
 
 // Textes mythologiques développés pour les figures listées ci-dessus (voir showDeityDetail() /
@@ -1543,10 +1552,12 @@ const DEITY_LORE = {
   ],
   "artémis": [
     "Sœur jumelle d'Apollon, Artémis naquit la première et, dit-on, aida elle-même sa mère Léto (voir la fiche « Léto ») à accoucher de son frère peu après — elle devint ainsi protectrice des accouchements autant que déesse de la chasse.",
+    "Encore enfant, assise sur les genoux de Zeus, elle choisit elle-même la voie qu'elle voulait suivre plutôt que d'attendre qu'on la lui impose : un arc et des flèches, une meute de chiennes, les montagnes sauvages pour domaine, et la promesse de n'avoir jamais à se marier — tout ce qu'il fallait pour ne dépendre de personne.",
     "Farouchement attachée à sa virginité et à son intimité, elle règne sur les forêts sauvages (voir la fiche « Forêt ») et punit sans hésiter quiconque, comme Actéon (voir la fiche « Actéon »), s'aventure à la surprendre.",
     "Elle fit pourtant une exception pour le chasseur Orion, devenu son compagnon de chasse le plus proche — jusqu'à ce que la jalousie de son frère mette fin à cette amitié (voir la fiche « Orion »).",
     "Sa colère peut se muer en pitié tout aussi soudainement : sur le point de laisser sacrifier Iphigénie à Aulis, elle la sauva au dernier instant en substituant une biche sur l'autel (voir la fiche « Iphigénie »).",
     "La chasseresse Atalante, élevée à l'écart des hommes comme elle, partage avec elle ce même mode de vie farouche et indépendant (voir la fiche « Atalante »).",
+    "Dans le Tarot, Artémis est la figure du 2 de Bâtons, où l'on tient déjà les deux bâtons d'un premier territoire conquis, le regard tourné vers ce qui reste à choisir : c'est exactement le geste de son enfance, quand elle a fixé elle-même la direction de toute son existence avant que quiconque d'autre n'ait pu la choisir à sa place.",
   ],
   "orion": [
     "Orion est un chasseur géant, réputé pour sa beauté autant que pour son habileté à la chasse — au point qu'Éos, déesse de l'aurore, tomba amoureuse de lui et l'emporta à Délos pour vivre à ses côtés (voir la fiche « Éos »).",
@@ -1690,6 +1701,12 @@ const DEITY_LORE = {
     "Sisyphe parvint un jour à l'enchaîner par ruse, empêchant plus personne de mourir sur terre — jusqu'à ce qu'Arès, furieux de voir la guerre perdre tout enjeu sans la mort pour la trancher, ne vienne le libérer de force.",
     "Héraclès (voir la fiche « Héraclès ») le défia une autre fois corps à corps, pour arracher la reine Alceste des Enfers et la rendre à son époux — l'une des rares fois où la mort elle-même dut céder.",
     "Dans le Tarot, Thanatos est la figure du 10 d'Épées, où une silhouette gît transpercée sous un ciel qui pourtant s'éclaircit à l'horizon : sa fin n'est jamais cruelle, seulement inévitable — et c'est cette même inévitabilité qui marque, dans la carte, le point le plus bas d'où il ne reste qu'à se relever.",
+  ],
+  "hormos": [
+    "Hormos personnifie l'élan qui précède toute action — l'impulsion brute, avant même qu'un but précis ne soit choisi.",
+    "Les Athéniens lui vouaient un autel, tout près de celui dédié à Éléos, la Pitié, comme s'il fallait honorer côte à côte la force qui pousse à agir et la retenue qui sait, parfois, la tempérer.",
+    "Figure mineure et peu documentée, Hormos n'a jamais eu de mythe développé qui lui soit propre — comme si l'élan qu'il personnifie ne s'attardait jamais assez longtemps sur un seul récit pour s'y fixer.",
+    "Dans le Tarot, Hormos est la figure de l'As de Bâtons, où une main surgit des nuages tenant un bâton encore en bourgeon : une énergie brute et sans direction encore choisie, mais qui ne demande déjà plus qu'à s'exprimer.",
   ],
 };
 
