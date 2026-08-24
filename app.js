@@ -79,6 +79,44 @@ function decanCardFor(sign, degreeInSign){
   return cards[idx];
 }
 
+// Signe zodiacal -> animal symbolique (catégorie "Animaux" de SYMBOL_LIBRARY), pour
+// l'Animal représentatif (voir representativeAnimal() plus bas). Un animal par signe,
+// choisi en priorité pour son lien mythologique déjà écrit dans la fiche du symbole
+// lui-même (ex. Cancer/Apollon -> corbeau, dont la fiche raconte justement l'épisode
+// d'Apollon) ; à défaut de mythe déjà établi pour ce signe précis, un lien thématique ou
+// iconographique plus large (ex. Sagittaire, traditionnellement représenté en centaure,
+// mi-homme mi-cheval -> cheval). Deux animaux (Pégase, Araignée) ne sont rattachés à aucun
+// signe : ils ne peuvent surgir que via DOMAIN_ANIMAL ci-dessous, sur la base des questions
+// posées plutôt que de la naissance.
+const SIGN_ANIMAL = {
+  "Bélier":"aigle",       // lié à Zeus, dieu du majeur du signe (voir la fiche « Aigle »)
+  "Taureau":"taureau",    // le signe est littéralement cet animal, lui-même lié à Zeus/Poséidon/Minos
+  "Gémeaux":"papillon",   // lié à Psyché, épouse d'Éros — dieu du majeur du signe (l'Amoureux)
+  "Cancer":"corbeau",     // lié à Apollon, dieu du majeur du signe (le Chariot)
+  "Lion":"cerf",          // le cerf de Cérynie, 3e travail d'Héraclès — dieu du majeur du signe (la Force)
+  "Vierge":"abeille",     // travail patient et récolte organisée — écho thématique à Déméter, dieu du majeur (l'Hermite)
+  "Balance":"colombe",    // paix et harmonie retrouvées — écho thématique à Thémis, dieu du majeur (la Justice)
+  "Scorpion":"serpent",   // lié aux puissances chthoniennes et au monde souterrain — dieu du majeur du signe (Hadès)
+  "Sagittaire":"cheval",  // le Sagittaire, traditionnellement un centaure, mi-homme mi-cheval
+  "Capricorne":"dauphin", // le Capricorne, traditionnellement une chèvre-poisson — la moitié aquatique
+  "Verseau":"chien",      // lié à Hécate, dieu du majeur du signe (l'Étoile)
+  "Poissons":"cygne",     // grâce et clair de lune sur l'eau — écho thématique à Séléné, dieu du majeur (la Lune)
+};
+
+// Domaine de question dominant du Journal (voir QUESTION_DOMAINS/detectDomain() plus bas)
+// -> animal symbolique, pour affiner l'Animal représentatif avec ce qui est vécu plutôt que
+// seulement ce qui est écrit dans le thème natal. Certains recoupent volontairement
+// SIGN_ANIMAL (ex. Colombe pour l'amour, déjà liée à Aphrodite dans sa fiche) : quand les
+// deux signaux tombent sur le même animal, c'est un renforcement, pas un conflit.
+const DOMAIN_ANIMAL = {
+  "un lien affectif":"colombe",                    // lié à Aphrodite (voir la fiche « Colombe »)
+  "ta vie professionnelle":"abeille",               // travail, organisation, ruche
+  "une question matérielle":"araignée",             // habileté patiente qui construit ce qu'elle tisse (voir la fiche « Araignée »)
+  "ton équilibre personnel":"serpent",              // guérison, lié à Asclépios (voir la fiche « Serpent »)
+  "ta vie personnelle et familiale":"cygne",         // Léda et la naissance de ses enfants (voir la fiche « Cygne »)
+  "une décision à prendre":"pégase",                // élévation après un choix assumé, lié à Bellérophon (voir la fiche « Pégase »)
+};
+
 // Fiches enrichies : lecture Tarot de Marseille + éclairage mythologique — pour la carte du jour et le détail des arcanes.
 const CARD_LORE = {
 "Le Mat": {
@@ -2387,6 +2425,59 @@ function journalTrends(){
   return { totalReadings: journal.length, topCard, topDomain };
 }
 
+// Nombre minimum de tirages enregistrés avant que l'Animal représentatif (ci-dessous) ne se
+// calcule. Volontairement plus élevé que JOURNAL_TRENDS_MIN_ENTRIES (3, pour une simple
+// tendance affichée dans le Journal) : cette fonctionnalité prétend refléter un vrai
+// comportement récurrent, pas une coïncidence sur quelques tirages.
+const REPRESENTATIVE_ANIMAL_MIN_READINGS = 10;
+
+// Fonctionnalité premium (voir showProfilResults()/renderProfilResults()) : simple
+// interrupteur local, propre à cet appareil — un place-tenant pour un futur vrai système de
+// compte/abonnement, qui n'existe pas aujourd'hui (l'app reste 100% locale, voir le
+// README). À remplacer par une vraie vérification d'abonnement le jour où ce système
+// existera ; ne pas construire de logique métier qui suppose que ce flag reflète un
+// paiement réel.
+function isPremiumEnabled(){ return localStorage.getItem("delphesPremium") === "1"; }
+function setPremiumEnabled(on){ localStorage.setItem("delphesPremium", on ? "1" : "0"); }
+
+// Détermine l'Animal représentatif : le signe solaire du thème natal indique un premier
+// animal (SIGN_ANIMAL), affiné par le domaine de question le plus fréquent du Journal
+// (DOMAIN_ANIMAL, via journalTrends().topDomain) une fois qu'assez de tirages ont été
+// enregistrés pour que ce domaine soit un vrai motif plutôt qu'une coïncidence. Fonctionnalité
+// premium (voir isPremiumEnabled()) : renvoie toujours { locked: true, ... } tant qu'elle
+// n'est pas activée ou que le seuil de tirages n'est pas atteint, pour que l'écran puisse
+// afficher un aperçu (« encore N tirages ») plutôt que rien.
+function representativeAnimal(saved){
+  const premium = isPremiumEnabled();
+  const readingsCount = journal.length;
+  const unlocked = premium && readingsCount >= REPRESENTATIVE_ANIMAL_MIN_READINGS;
+  if(!unlocked) return { locked: true, premium, readingsCount, readingsNeeded: REPRESENTATIVE_ANIMAL_MIN_READINGS };
+
+  const sunSign = saved?.astral?.bodies?.sun?.sign;
+  const astralAnimalId = sunSign ? SIGN_ANIMAL[sunSign] : null;
+  // journal.length >= REPRESENTATIVE_ANIMAL_MIN_READINGS (10) >= JOURNAL_TRENDS_MIN_ENTRIES
+  // (3), donc journalTrends() ne peut jamais être null ici pour manque de tirages.
+  const trends = journalTrends();
+  const domainAnimalId = (trends && trends.topDomain) ? DOMAIN_ANIMAL[trends.topDomain.label] : null;
+
+  // Le domaine de question, plus récent et plus "vécu", prime quand il tranche ; le thème
+  // astral (fixe depuis la naissance) sert de repli tant qu'aucun sujet ne se dégage
+  // clairement des tirages enregistrés.
+  const animalId = domainAnimalId || astralAnimalId;
+  if(!animalId) return { locked: false, animal: null }; // débloqué mais rien à afficher pour l'instant (ni profil astral, ni domaine net)
+
+  const symbol = SYMBOL_LIBRARY[animalId];
+  const matched = !!(astralAnimalId && domainAnimalId && astralAnimalId === domainAnimalId);
+  // Explication toujours locale/déterministe (pas d'appel IA pour cette fonctionnalité,
+  // volontairement plus légère que la divinité tutélaire).
+  let source;
+  if(matched) source = "ton thème astral et tes questions les plus fréquentes se rejoignent sur cet animal";
+  else if(domainAnimalId) source = `surtout tes questions les plus fréquentes (${trends.topDomain.label})`;
+  else source = "ton thème astral, en attendant qu'un sujet se dégage plus nettement de tes tirages";
+
+  return { locked: false, animal: { id: animalId, label: symbol.label, icon: symbol.icon, desc: symbol.desc, matched, source } };
+}
+
 // Résumé minimal des tendances du Journal, prêt à envoyer à /api/reading — null si pas
 // (encore) de tendance dégagée (dans ce cas la lecture se comporte exactement comme avant).
 function journalTrendsForReading(){
@@ -3841,7 +3932,9 @@ function showProfilAstral(){
     requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
   document.getElementById("profilEdit").onclick = ()=> showProfilEditForm();
-  bindChips(); // rend cliquable la divinité tutélaire (data-deity)
+  bindChips(); // rend cliquable la divinité tutélaire (data-deity) et l'Animal représentatif (data-symbol)
+  const premiumToggle = document.getElementById("premiumToggle");
+  if(premiumToggle) premiumToggle.onchange = ()=>{ setPremiumEnabled(premiumToggle.checked); showProfilAstral(); };
   ensurePortrait();
   ensureAstralText();
 }
@@ -3957,6 +4050,7 @@ function renderProfilResults(saved){
   const aspectText = asp => (astralText?.aspects && typeof astralText.aspects[aspectKey(asp)] === "string" ? astralText.aspects[aspectKey(asp)] : natalAspectSentence(asp)) || "";
   const nameNumberText = (typeof astralText?.nameNumber === "string" ? astralText.nameNumber : numMeaning?.[2]) || "";
   const tutelaryReasonText = (typeof astralText?.tutelaryReason === "string" ? astralText.tutelaryReason : tutelaryReasonFallback(deity)) || "La figure la plus présente dans ton thème natal.";
+  const ra = representativeAnimal(saved);
 
   return `<div class="detail">
     <div class="section-title"><h3>Profil astral</h3></div>
@@ -3976,6 +4070,38 @@ function renderProfilResults(saved){
       </div>
     </div>
     <p class="note" style="text-align:center;margin-top:6px">${escapeHTML(tutelaryReasonText)} Touche pour en savoir plus.</p>` : ""}
+
+    <div class="section-title centered" style="margin-top:24px"><h3>Ton animal représentatif</h3></div>
+    ${ra.locked ? `
+    <div class="symbol-list">
+      <div class="symbol" style="text-align:center">
+        <div style="font-size:32px">🔒</div>
+        <b>Fonctionnalité premium</b>
+        <br><small>${ra.premium
+          ? `Se révèle après ${ra.readingsNeeded} tirages enregistrés dans ton Journal (${ra.readingsCount}/${ra.readingsNeeded} pour l'instant).`
+          : `Combine ton thème astral et tes questions les plus fréquentes, une fois ${ra.readingsNeeded} tirages enregistrés dans ton Journal.`}</small>
+      </div>
+    </div>
+    <p class="note" style="text-align:center;margin-top:6px">
+      <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer">
+        <input id="premiumToggle" type="checkbox" style="width:auto" ${ra.premium?"checked":""}>
+        Mode premium (aperçu local — aucun vrai paiement)
+      </label>
+    </p>` : (ra.animal ? `
+    <div class="symbol-list">
+      <div class="symbol clickable" data-symbol="${escapeHTML(ra.animal.id)}" style="text-align:center">
+        <div style="font-size:32px">${escapeHTML(ra.animal.icon||"✦")}</div>
+        <b>${escapeHTML(ra.animal.label)}</b>
+        ${ra.animal.desc ? `<br><small>${escapeHTML(ra.animal.desc)}</small>` : ""}
+      </div>
+    </div>
+    <p class="note" style="text-align:center;margin-top:6px">D'après ${escapeHTML(ra.animal.source)}. Touche pour en savoir plus.</p>
+    <p class="note" style="text-align:center;margin-top:2px;opacity:.6">
+      <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:12px">
+        <input id="premiumToggle" type="checkbox" style="width:auto" checked>
+        Désactiver le mode premium
+      </label>
+    </p>` : `<p class="note" style="text-align:center">Enregistre ton profil astral pour le révéler.</p>`)}
 
     ${numMeaning ? `<div class="symbol-list" style="margin-top:14px">
       <div class="symbol"><b>Nombre du prénom : ${saved.nameNumber} — ${escapeHTML(numMeaning[0])}</b><br>${escapeHTML(nameNumberText)}</div>
