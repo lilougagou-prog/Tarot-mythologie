@@ -2467,6 +2467,62 @@ const REPRESENTATIVE_ANIMAL_MIN_READINGS = 10;
 function isPremiumEnabled(){ return localStorage.getItem("delphesPremium") === "1"; }
 function setPremiumEnabled(on){ localStorage.setItem("delphesPremium", on ? "1" : "0"); }
 
+// Découpage gratuit/premium défini avec l'utilisateur en vue d'une publication App Store
+// (voir aussi le README) : gratuit = 1 tirage général par jour, la carte du jour, un
+// échantillon réduit de la bibliothèque (5 symboles, 4 figures mythologiques, 2 arcanes
+// majeurs, les 4 Rois de figures de cour — aucune carte numérale), le Journal et ses
+// statistiques en entier, le Profil astral sans aucune explication écrite (ni divinité
+// tutélaire, ni Animal représentatif). Premium = tout le reste. Comme pour
+// isPremiumEnabled() ci-dessus, ce n'est qu'un découpage appliqué au flag local — seule
+// isPremiumEnabled() aura besoin de changer le jour où un vrai système d'achat existera.
+const FREE_MAJORS = new Set(["Le Mat", "I — Le Bateleur"]);
+const FREE_COURTS = new Set(["Roi de Bâtons", "Roi de Coupes", "Roi d'Épées", "Roi de Deniers"]);
+const FREE_SYMBOLS = new Set(["abeille", "aigle", "ailes", "air", "araignée"]); // 5 premiers par ordre alphabétique de la Bibliothèque symbolique
+const FREE_FIGURES = new Set(["achille", "actéon", "agon", "aletheia"]); // 4 premières par ordre alphabétique de Figures mythologiques
+const FREE_SPREAD_TYPES = new Set(["general"]);
+
+// L'éclairage mythologique d'une carte (majeur/figure de cour) est gratuit seulement pour
+// le petit échantillon ci-dessus ; les cartes numérales en sont toutes exclues (aucune
+// exception dans ce découpage, même les cartes déjà illustrées avec leur propre figure).
+function isCardMythFree(c){
+  if(c[4]==="major") return FREE_MAJORS.has(c[0]);
+  if(c[4]==="court") return FREE_COURTS.has(c[0]);
+  return false;
+}
+function isSymbolLoreFree(id){ return FREE_SYMBOLS.has(id); }
+function isFigureLoreFree(id){ return FREE_FIGURES.has(id); }
+function isSpreadTypeFree(key){ return FREE_SPREAD_TYPES.has(key); }
+
+// Un seul tirage général gratuit par jour civil (heure locale) sans le mode premium — clé
+// dédiée en localStorage, comparée à la date du jour à chaque appel (donc remise à zéro
+// automatiquement au changement de date, sans tâche de fond à programmer).
+function hasUsedFreeGeneralReadingToday(){
+  return localStorage.getItem("delphesFreeGeneralDate") === new Date().toDateString();
+}
+function markFreeGeneralReadingUsed(){
+  localStorage.setItem("delphesFreeGeneralDate", new Date().toDateString());
+}
+// Peut-on lancer un NOUVEAU tirage de ce type maintenant (mode premium, sinon type gratuit
+// et pas déjà utilisé aujourd'hui) ? Ne s'applique qu'au lancement d'un tirage — continuer
+// ou consulter un tirage déjà en cours n'est jamais concerné.
+function canStartSpread(key){
+  if(isPremiumEnabled()) return true;
+  if(!isSpreadTypeFree(key)) return false;
+  return !hasUsedFreeGeneralReadingToday();
+}
+
+// Bloc "verrouillé" réutilisé partout où une explication est premium — même esprit visuel
+// que l'ancien bloc dédié de l'Animal représentatif (désormais généralisé ici).
+function premiumLockHTML(message){
+  return `<div class="symbol-list" style="margin-top:14px">
+    <div class="symbol" style="text-align:center">
+      <div style="font-size:32px">🔒</div>
+      <b>Fonctionnalité premium</b>
+      <br><small>${escapeHTML(message)}</small>
+    </div>
+  </div>`;
+}
+
 // Détermine l'Animal représentatif : le signe solaire du thème natal indique un premier
 // animal (SIGN_ANIMAL), affiné par le domaine de question le plus fréquent du Journal
 // (DOMAIN_ANIMAL, via journalTrends().topDomain) une fois qu'assez de tirages ont été
@@ -3253,8 +3309,12 @@ function home(){
   const links = profileMajorLinks();
   const resonates = !!(links && links.some(l => l.card[0] === day[0]));
   ensureTransits();
-  ensurePortrait();
-  ensureAstralText();
+  // Portrait et textes d'interprétation IA : contenu premium (voir renderProfilResults) —
+  // ne pas préchauffer le cache pour un profil gratuit qui ne les affichera jamais.
+  if(isPremiumEnabled()){
+    ensurePortrait();
+    ensureAstralText();
+  }
   const cachedTransits = getCachedTransits();
   ensureRitual(day, cachedTransits);
   const ritual = getCachedRitual();
@@ -3295,9 +3355,11 @@ function tirage(){
     <div class="grid" style="margin-top:10px">
       ${Object.values(SPREADS).map(s=>{
         const displayCount = s.key === "annee" ? remainingMonthsPositions().length : s.count;
-        return `<div class="tile" data-spread="${s.key}">
-        <strong>${s.glyph} ${escapeHTML(s.name)}</strong>
+        const locked = !canStartSpread(s.key);
+        return `<div class="tile${locked?" locked":""}" data-spread="${s.key}">
+        <strong>${s.glyph} ${escapeHTML(s.name)}${locked?" 🔒":""}</strong>
         <span>${escapeHTML(s.description)} (${displayCount} carte${displayCount>1?"s":""})</span>
+        ${locked ? `<span class="note" style="display:block;margin-top:4px">${isSpreadTypeFree(s.key) ? "Ton tirage général gratuit du jour est déjà utilisé — reviens demain, ou passe en premium." : "Fonctionnalité premium — active-la depuis l'onglet Profil."}</span>` : ""}
       </div>`;
       }).join("")}
     </div>`;
@@ -3642,8 +3704,11 @@ function showSymbolDetail(id, backTo = cardDetailReturnTo){
     <h2>${escapeHTML(s.label)}</h2>
     <p class="symbol-cat-big">${escapeHTML(s.category)}</p>
     <p>${escapeHTML(s.desc)}</p>
-    ${s.lore && s.lore.length ? `<div class="section-title"><h3>Aux origines du symbole</h3></div>
-      ${s.lore.map(p=>`<p class="lore-text">${escapeHTML(p)}</p>`).join("")}` : ""}
+    ${s.lore && s.lore.length ? (
+      (isPremiumEnabled() || isSymbolLoreFree(id))
+        ? `<div class="section-title"><h3>Aux origines du symbole</h3></div>${s.lore.map(p=>`<p class="lore-text">${escapeHTML(p)}</p>`).join("")}`
+        : `<div class="section-title"><h3>Aux origines du symbole</h3></div>${premiumLockHTML("Le texte mythologique détaillé de ce symbole fait partie du contenu premium.")}`
+    ) : ""}
     ${linkedDeities.length ? `<div class="section-title"><h3>Figures liées</h3></div>
       <div class="symbol-list">${linkedDeities.map(d=>`<div class="symbol clickable" data-deity="${escapeHTML(d)}"><b>${escapeHTML(d[0].toUpperCase()+d.slice(1))}</b><br><small>${escapeHTML(DEITY_NOTES[d])}</small></div>`).join("")}</div>` : ""}
     ${related.length ? `<div class="section-title"><h3>Cartes concernées</h3></div>
@@ -3708,8 +3773,11 @@ function showDeityDetail(id, backTo = cardDetailReturnTo){
     <h2>${escapeHTML(name)}</h2>
     <p class="symbol-cat-big">Figure mythologique</p>
     <p>${escapeHTML(note)}</p>
-    ${lore && lore.length ? `<div class="section-title"><h3>Le mythe</h3></div>
-      ${lore.map(p=>`<p class="lore-text">${escapeHTML(p)}</p>`).join("")}` : ""}
+    ${lore && lore.length ? (
+      (isPremiumEnabled() || isFigureLoreFree(id))
+        ? `<div class="section-title"><h3>Le mythe</h3></div>${lore.map(p=>`<p class="lore-text">${escapeHTML(p)}</p>`).join("")}`
+        : `<div class="section-title"><h3>Le mythe</h3></div>${premiumLockHTML("Le mythe complet de cette figure fait partie du contenu premium.")}`
+    ) : ""}
     ${related.length ? `<div class="section-title"><h3>Carte${related.length>1?"s":""} associée${related.length>1?"s":""}</h3></div>
       <div class="card-grid">${related.map(c=>cardHTML(c, c[4]==="major"?"major":(SUITS[c[6]]?.[0]||"major"))).join("")}</div>` : ""}
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
@@ -3962,8 +4030,13 @@ function showProfilAstral(){
   bindChips(); // rend cliquable la divinité tutélaire (data-deity) et l'Animal représentatif (data-symbol)
   const premiumToggle = document.getElementById("premiumToggle");
   if(premiumToggle) premiumToggle.onchange = ()=>{ setPremiumEnabled(premiumToggle.checked); showProfilAstral(); };
-  ensurePortrait();
-  ensureAstralText();
+  // Le portrait et les textes d'interprétation IA font partie du contenu premium (voir
+  // renderProfilResults) : inutile de déclencher ces appels — et leur coût — pour un
+  // profil qui ne les affichera pas.
+  if(isPremiumEnabled()){
+    ensurePortrait();
+    ensureAstralText();
+  }
 }
 
 // Formulaire de saisie/modification. `saved` (s'il existe) préremplit les champs ; le
@@ -4070,7 +4143,11 @@ function renderProfilResults(saved){
   const deity = tutelaryDeity(saved);
   // Texte de chaque case : la phrase générée par IA si elle est déjà en cache (astralText),
   // sinon la phrase toute faite habituelle (natalPlanetSentence() etc.) le temps que la
-  // génération se termine ou si elle échoue — jamais de case vide.
+  // génération se termine ou si elle échoue — jamais de case vide. Toutes ces phrases
+  // (planetText/ascendantText/aspectText/nameNumberText/portrait/summary) sont des
+  // "explications" au sens du découpage premium défini avec l'utilisateur : les données
+  // brutes du thème (signes, degrés, maisons) restent visibles gratuitement, mais leur
+  // interprétation écrite est réservée au premium — voir `premiumOn` plus bas.
   const planetText = (key, body) => (astralText?.planets && typeof astralText.planets[key] === "string" ? astralText.planets[key] : natalPlanetSentence(key, body)) || "";
   const ascendantText = a.ascendant ? ((typeof astralText?.ascendant === "string" ? astralText.ascendant : natalAscendantSentence(a.ascendant)) || "") : "";
   const aspectKey = asp => `${asp.bodies[0]}_${asp.type}_${asp.bodies[1]}`;
@@ -4078,17 +4155,28 @@ function renderProfilResults(saved){
   const nameNumberText = (typeof astralText?.nameNumber === "string" ? astralText.nameNumber : numMeaning?.[2]) || "";
   const tutelaryReasonText = (typeof astralText?.tutelaryReason === "string" ? astralText.tutelaryReason : tutelaryReasonFallback(deity)) || "La figure la plus présente dans ton thème natal.";
   const ra = representativeAnimal(saved);
+  const premiumOn = isPremiumEnabled();
+  const expl = text => premiumOn ? `<br>${escapeHTML(text)}` : ""; // n'affiche la phrase d'interprétation que si le mode premium est actif
 
   return `<div class="detail">
     <div class="section-title"><h3>Profil astral</h3></div>
     <p class="question-recall">« ${escapeHTML(saved.firstName)} »</p>
 
-    ${portrait
-      ? portrait.split(/\n\s*\n/).map(p=>`<p class="lore-text" style="margin-top:10px">${escapeHTML(p.trim())}</p>`).join("")
-      : (summary ? `<p class="lore-text" style="margin-top:10px">${escapeHTML(summary)}</p>` : "")}
+    <p class="note" style="text-align:center;margin-top:10px">
+      <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer">
+        <input id="premiumToggle" type="checkbox" style="width:auto" ${premiumOn?"checked":""}>
+        Mode premium (aperçu local — aucun vrai paiement)
+      </label>
+    </p>
 
-    ${deity ? `
+    ${premiumOn
+      ? (portrait
+          ? portrait.split(/\n\s*\n/).map(p=>`<p class="lore-text" style="margin-top:10px">${escapeHTML(p.trim())}</p>`).join("")
+          : (summary ? `<p class="lore-text" style="margin-top:10px">${escapeHTML(summary)}</p>` : ""))
+      : premiumLockHTML("Le portrait de personnalité et le résumé de ton thème font partie du contenu premium.")}
+
     <div class="section-title centered" style="margin-top:24px"><h3>Ta divinité tutélaire</h3></div>
+    ${premiumOn ? (deity ? `
     <div class="symbol-list">
       <div class="symbol clickable" data-deity="${escapeHTML(deity.deityKey)}" style="text-align:center">
         <div style="font-size:32px">${escapeHTML(deity.card[2]||"✦")}</div>
@@ -4096,25 +4184,14 @@ function renderProfilResults(saved){
         ${deity.note ? `<br><small>${escapeHTML(deity.note)}</small>` : ""}
       </div>
     </div>
-    <p class="note" style="text-align:center;margin-top:6px">${escapeHTML(tutelaryReasonText)} Touche pour en savoir plus.</p>` : ""}
+    <p class="note" style="text-align:center;margin-top:6px">${escapeHTML(tutelaryReasonText)} Touche pour en savoir plus.</p>` : `<p class="note" style="text-align:center">Pas encore assez d'éléments dans ton thème pour la calculer.</p>`)
+      : premiumLockHTML("La divinité tutélaire calculée à partir de ton thème fait partie du contenu premium.")}
 
     <div class="section-title centered" style="margin-top:24px"><h3>Ton animal représentatif</h3></div>
-    ${ra.locked ? `
-    <div class="symbol-list">
-      <div class="symbol" style="text-align:center">
-        <div style="font-size:32px">🔒</div>
-        <b>Fonctionnalité premium</b>
-        <br><small>${ra.premium
-          ? `Se révèle après ${ra.readingsNeeded} tirages enregistrés dans ton Journal (${ra.readingsCount}/${ra.readingsNeeded} pour l'instant).`
-          : `Combine ton thème astral et tes questions les plus fréquentes, une fois ${ra.readingsNeeded} tirages enregistrés dans ton Journal.`}</small>
-      </div>
-    </div>
-    <p class="note" style="text-align:center;margin-top:6px">
-      <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer">
-        <input id="premiumToggle" type="checkbox" style="width:auto" ${ra.premium?"checked":""}>
-        Mode premium (aperçu local — aucun vrai paiement)
-      </label>
-    </p>` : (ra.animal ? `
+    ${ra.locked ? premiumLockHTML(ra.premium
+        ? `Se révèle après ${ra.readingsNeeded} tirages enregistrés dans ton Journal (${ra.readingsCount}/${ra.readingsNeeded} pour l'instant).`
+        : `Combine ton thème astral et tes questions les plus fréquentes, une fois ${ra.readingsNeeded} tirages enregistrés dans ton Journal — active le mode premium ci-dessus.`)
+      : (ra.animal ? `
     <div class="symbol-list">
       <div class="symbol clickable" data-symbol="${escapeHTML(ra.animal.id)}" style="text-align:center">
         <div style="font-size:32px">${escapeHTML(ra.animal.icon||"✦")}</div>
@@ -4122,34 +4199,28 @@ function renderProfilResults(saved){
         ${ra.animal.desc ? `<br><small>${escapeHTML(ra.animal.desc)}</small>` : ""}
       </div>
     </div>
-    <p class="note" style="text-align:center;margin-top:6px">D'après ${escapeHTML(ra.animal.source)}. Touche pour en savoir plus.</p>
-    <p class="note" style="text-align:center;margin-top:2px;opacity:.6">
-      <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:12px">
-        <input id="premiumToggle" type="checkbox" style="width:auto" checked>
-        Désactiver le mode premium
-      </label>
-    </p>` : `<p class="note" style="text-align:center">Enregistre ton profil astral pour le révéler.</p>`)}
+    <p class="note" style="text-align:center;margin-top:6px">D'après ${escapeHTML(ra.animal.source)}. Touche pour en savoir plus.</p>` : `<p class="note" style="text-align:center">Enregistre ton profil astral pour le révéler.</p>`)}
 
     ${numMeaning ? `<div class="symbol-list" style="margin-top:14px">
-      <div class="symbol"><b>Nombre du prénom : ${saved.nameNumber} — ${escapeHTML(numMeaning[0])}</b><br>${escapeHTML(nameNumberText)}</div>
+      <div class="symbol"><b>Nombre du prénom : ${saved.nameNumber} — ${escapeHTML(numMeaning[0])}</b>${expl(nameNumberText)}</div>
     </div>` : ""}
 
     ${(pyMeaning || pmMeaning) ? `
     <div class="section-title centered" style="margin-top:24px"><h3>Numérologie du temps</h3></div>
     <p class="note" style="text-align:center">Contrairement au nombre du prénom (fixe), ceux-ci évoluent avec le temps.</p>
     <div class="symbol-list" style="margin-top:14px">
-      ${pyMeaning ? `<div class="symbol"><b>Année personnelle ${py} — ${escapeHTML(pyMeaning[0])}</b><br>${escapeHTML(pyMeaning[2])}</div>` : ""}
-      ${pmMeaning ? `<div class="symbol"><b>Mois personnel ${pm} — ${escapeHTML(pmMeaning[0])}</b><br>${escapeHTML(pmMeaning[2])}</div>` : ""}
+      ${pyMeaning ? `<div class="symbol"><b>Année personnelle ${py} — ${escapeHTML(pyMeaning[0])}</b>${expl(pyMeaning[2])}</div>` : ""}
+      ${pmMeaning ? `<div class="symbol"><b>Mois personnel ${pm} — ${escapeHTML(pmMeaning[0])}</b>${expl(pmMeaning[2])}</div>` : ""}
     </div>` : ""}
 
     <div class="section-title centered" style="margin-top:24px"><h3>Thème natal</h3></div>
     <p class="note" style="text-align:center">${escapeHTML(saved.birthPlace)} · ${escapeHTML(dateLabel)}${saved.timeUnknown ? " · heure inconnue" : (saved.birthTime ? " · " + escapeHTML(saved.birthTime) : "")}</p>
 
     <div class="symbol-list" style="margin-top:14px">
-      <div class="symbol"><b>☉ Soleil en ${escapeHTML(a.sunSign)}</b><br>${escapeHTML(planetText("sun", a.bodies.sun))}</div>
-      <div class="symbol"><b>☽ Lune en ${escapeHTML(a.moonSign)}</b><br>${escapeHTML(planetText("moon", a.bodies.moon))}</div>
+      <div class="symbol"><b>☉ Soleil en ${escapeHTML(a.sunSign)}</b>${expl(planetText("sun", a.bodies.sun))}</div>
+      <div class="symbol"><b>☽ Lune en ${escapeHTML(a.moonSign)}</b>${expl(planetText("moon", a.bodies.moon))}</div>
       ${a.ascendant
-        ? `<div class="symbol"><b>Ascendant ${escapeHTML(a.ascendant.sign)}</b><br>${escapeHTML(ascendantText)}</div>`
+        ? `<div class="symbol"><b>Ascendant ${escapeHTML(a.ascendant.sign)}</b>${expl(ascendantText)}</div>`
         : `<div class="symbol"><b>Ascendant</b><br><small>Heure de naissance inconnue — l'ascendant et les maisons ne peuvent pas être calculés avec certitude.</small></div>`}
     </div>
 
@@ -4160,14 +4231,14 @@ function renderProfilResults(saved){
       ${PLANET_ORDER.map(k=>{
         const b = a.bodies[k];
         if(!b) return "";
-        return `<div class="symbol"><b>${PLANET_LABELS[k]} en ${escapeHTML(b.sign)}</b> — ${b.degreeInSign}°${b.house?` · maison ${b.house}`:""}${b.retrograde?" · rétrograde":""}<br>${escapeHTML(planetText(k, b))}</div>`;
+        return `<div class="symbol"><b>${PLANET_LABELS[k]} en ${escapeHTML(b.sign)}</b> — ${b.degreeInSign}°${b.house?` · maison ${b.house}`:""}${b.retrograde?" · rétrograde":""}${expl(planetText(k, b))}</div>`;
       }).join("")}
     </div>
 
     ${a.aspects && a.aspects.length ? `
     <div class="section-title"><h3>Aspects</h3></div>
     <div class="symbol-list">
-      ${a.aspects.map(asp=>`<div class="symbol"><b>${PLANET_LABELS[asp.bodies[0]]} ${asp.type} ${PLANET_LABELS[asp.bodies[1]]}</b><br>${escapeHTML(aspectText(asp))}<br><small>orbe ${asp.orb}°</small></div>`).join("")}
+      ${a.aspects.map(asp=>`<div class="symbol"><b>${PLANET_LABELS[asp.bodies[0]]} ${asp.type} ${PLANET_LABELS[asp.bodies[1]]}</b>${expl(aspectText(asp))}<br><small>orbe ${asp.orb}°</small></div>`).join("")}
     </div>` : ""}
 
     <button class="secondary" id="profilEdit" style="margin-top:20px">Modifier mes informations</button>
@@ -4337,8 +4408,13 @@ function showDetail(c, backTo = cardDetailReturnTo){
     ${lore ? `
       <div class="section-title"><h3>Lecture traditionnelle</h3></div>
       <p class="lore-text">${escapeHTML(lore.marseille)}</p>
-      <div class="section-title"><h3>Éclairage mythologique — ${escapeHTML(deityLabel)}</h3></div>
-      <p class="lore-text">${escapeHTML(lore.myth)}</p>
+      ${(isPremiumEnabled() || isCardMythFree(c)) ? `
+        <div class="section-title"><h3>Éclairage mythologique — ${escapeHTML(deityLabel)}</h3></div>
+        <p class="lore-text">${escapeHTML(lore.myth)}</p>
+      ` : `
+        <div class="section-title"><h3>Éclairage mythologique</h3></div>
+        ${premiumLockHTML("L'éclairage mythologique de cette carte fait partie du contenu premium.")}
+      `}
     ` : ""}
     <div class="section-title"><h3>Symboles</h3></div>
     ${symbolChips(c[5])}
@@ -4465,6 +4541,12 @@ function bind(){
   document.querySelectorAll("[data-spread]").forEach(el=>{
     el.onclick = ()=>{
       const key = el.dataset.spread;
+      if(!canStartSpread(key)){
+        alert(isSpreadTypeFree(key)
+          ? "Ton tirage général gratuit du jour est déjà utilisé — reviens demain, ou active le mode premium depuis l'onglet Profil."
+          : "Ce tirage fait partie du contenu premium — active-le depuis l'onglet Profil.");
+        return;
+      }
       if(key === "annee"){
         // Pas de question à écrire pour ce tirage : on saute directement à la pioche,
         // avec une question par défaut (utilisée pour la lecture, jamais affichée à saisir).
@@ -4483,8 +4565,16 @@ function bind(){
   if(question && draw){
     question.addEventListener("input", ()=>{ tirageState.question=question.value; saveTirageState(); draw.disabled=!question.value.trim(); });
     draw.onclick = ()=>{
+      // Re-vérifié ici en plus du clic sur la tuile de sélection : depuis cet écran
+      // (question déjà saisie), on peut tirer plusieurs fois de suite sans repasser par la
+      // sélection de tirage — c'est ce second tirage général du jour qu'il faut bloquer.
+      if(!canStartSpread(tirageState.spreadType)){
+        alert("Ton tirage général gratuit du jour est déjà utilisé — reviens demain, ou active le mode premium depuis l'onglet Profil.");
+        return;
+      }
       const poolSize = spreadConf().poolSize;
       tirageState = { question: tirageState.question, spreadType: tirageState.spreadType, spread: shuffledDeck().slice(0,poolSize), picks: [], notes:"", saved:false, savedIndex:null, aiReading:null, aiStatus:"idle" };
+      if(tirageState.spreadType === "general" && !isPremiumEnabled()) markFreeGeneralReadingUsed();
       saveTirageState(); render();
     };
   }
