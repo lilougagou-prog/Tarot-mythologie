@@ -2464,7 +2464,13 @@ const REPRESENTATIVE_ANIMAL_MIN_READINGS = 10;
 // README). À remplacer par une vraie vérification d'abonnement le jour où ce système
 // existera ; ne pas construire de logique métier qui suppose que ce flag reflète un
 // paiement réel.
-function isPremiumEnabled(){ return localStorage.getItem("delphesPremium") === "1"; }
+// Défaut "premium activé" tant qu'aucun vrai système de paiement n'existe (voir README,
+// section « Découpage gratuit / premium ») : les personnes qui testent déjà l'app ne
+// doivent voir AUCUNE régression ni avoir la moindre manip à faire quand ce découpage a
+// été introduit — seul un choix explicite ("0", via la case à cocher du Profil astral)
+// bascule sur l'expérience gratuite. Le jour du vrai lancement payant (App Store), ce
+// défaut sera inversé pour que le mode gratuit redevienne l'état de repli normal.
+function isPremiumEnabled(){ return localStorage.getItem("delphesPremium") !== "0"; }
 function setPremiumEnabled(on){ localStorage.setItem("delphesPremium", on ? "1" : "0"); }
 
 // Découpage gratuit/premium défini avec l'utilisateur en vue d'une publication App Store
