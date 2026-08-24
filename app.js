@@ -45,6 +45,40 @@ const ZODIAC_MAJOR_LINKS = {
   "Poissons":"XVIII — La Lune",
 };
 
+// Correspondances signe zodiacal + décan (tranche de 10°) -> carte numérale (2 à 10),
+// tradition des "decanates" du Golden Dawn popularisée par le Thoth Tarot de Crowley —
+// même famille ésotérique que ZODIAC_MAJOR_LINKS ci-dessus, mais à l'échelle du degré
+// plutôt que du signe entier. Chaque enseigne correspond à une triplicité élémentaire
+// (Bâtons/Feu : Bélier-Lion-Sagittaire ; Coupes/Eau : Cancer-Scorpion-Poissons ;
+// Épées/Air : Balance-Verseau-Gémeaux ; Deniers/Terre : Capricorne-Taureau-Vierge), et
+// dans chacune, le 1er signe de la triplicité porte les cartes 2-3-4, le 2e les 5-6-7, le
+// 3e les 8-9-10. Sert à affiner tutelaryDeity() (ci-dessous) au-delà des 12 divinités des
+// arcanes majeurs : si la carte numérale du décan a déjà sa propre figure mythologique
+// (NUMBER_CARD_DEITY), le calcul vote pour elle plutôt que pour le dieu du majeur entier.
+const DECAN_MINOR_CARDS = {
+  "Bélier":     ["2 de Bâtons","3 de Bâtons","4 de Bâtons"],
+  "Lion":       ["5 de Bâtons","6 de Bâtons","7 de Bâtons"],
+  "Sagittaire": ["8 de Bâtons","9 de Bâtons","10 de Bâtons"],
+  "Cancer":     ["2 de Coupes","3 de Coupes","4 de Coupes"],
+  "Scorpion":   ["5 de Coupes","6 de Coupes","7 de Coupes"],
+  "Poissons":   ["8 de Coupes","9 de Coupes","10 de Coupes"],
+  "Balance":    ["2 de Épées","3 de Épées","4 de Épées"],
+  "Verseau":    ["5 de Épées","6 de Épées","7 de Épées"],
+  "Gémeaux":    ["8 de Épées","9 de Épées","10 de Épées"],
+  "Capricorne": ["2 de Deniers","3 de Deniers","4 de Deniers"],
+  "Taureau":    ["5 de Deniers","6 de Deniers","7 de Deniers"],
+  "Vierge":     ["8 de Deniers","9 de Deniers","10 de Deniers"],
+};
+// Retourne la carte numérale du décan exact d'un signe (0°-10° = 1er décan, etc.) ou null
+// si le signe n'est pas reconnu. degreeInSign vient directement du calcul astral déjà fait
+// par /api/astral (voir profileForAstralText()) — aucun nouveau calcul astronomique ici.
+function decanCardFor(sign, degreeInSign){
+  const cards = DECAN_MINOR_CARDS[sign];
+  if(!cards) return null;
+  const idx = Math.min(2, Math.max(0, Math.floor((degreeInSign ?? 0) / 10)));
+  return cards[idx];
+}
+
 // Fiches enrichies : lecture Tarot de Marseille + éclairage mythologique — pour la carte du jour et le détail des arcanes.
 const CARD_LORE = {
 "Le Mat": {
@@ -2322,7 +2356,7 @@ function profileForAstralText(saved){
     tutelaryDeity: deity ? {
       name: deity.deityName,
       note: deity.note,
-      contributors: (deity.contributors||[]).map(c=>({ label: c.label, sign: c.sign })),
+      contributors: (deity.contributors||[]).map(c=>({ label: c.label, sign: c.sign, cardName: c.cardName || null, precise: !!c.precise })),
     } : null,
   };
 }
@@ -2607,7 +2641,18 @@ let astralTextFetchInFlight = false;
 function ensureAstralText(){
   const p = getProfile();
   if(!p || !p.astral) return;
-  if(getCachedAstralText()) return;
+  const cached = getCachedAstralText();
+  const liveDeity = tutelaryDeity(p);
+  const liveDeityKey = liveDeity ? liveDeity.deityKey : null;
+  // Le texte en cache ne reste valable que si la divinité tutélaire recalculée EN DIRECT
+  // est toujours la même que celle pour laquelle il a été rédigé (tutelaryDeityKey, stocké
+  // au moment de la génération ci-dessous) — tutelaryDeity() n'est jamais lui-même mis en
+  // cache. Ça couvre deux cas : les profils enregistrés avant l'ajout des décans (cache
+  // sans ce champ, donc automatiquement regénéré une fois), et, plus tard, l'illustration
+  // de Coupes/Deniers qui rendra le calcul encore plus précis pour d'autres personnes —
+  // sans ce garde-fou, le paragraphe IA en cache continuerait de justifier une divinité
+  // différente de celle réellement affichée.
+  if(cached && cached.tutelaryDeityKey === liveDeityKey) return;
   if(astralTextFetchInFlight) return;
   const code = localStorage.getItem("delphesAccessCode");
   if(code === null) return;
@@ -2618,7 +2663,7 @@ function ensureAstralText(){
     .then(text=>{
       const fresh = getProfile();
       if(!fresh) return;
-      fresh.astralText = text;
+      fresh.astralText = { ...text, tutelaryDeityKey: liveDeityKey };
       saveProfileData(fresh);
       if(cardDetailReturnTo === showProfilAstral) showProfilAstral();
     })
@@ -3698,39 +3743,65 @@ function natalSummaryParagraph(saved){
 const TUTELARY_WEIGHTS = { sun:4, moon:3, mercury:2, venus:2, mars:2, jupiter:1, saturn:1 };
 
 // Détermine la figure mythologique la plus représentée dans le thème natal : chaque corps
-// pesé "vote", via ZODIAC_MAJOR_LINKS (déjà utilisé pour l'horoscope et Apprendre), pour la
-// divinité associée à son signe. Les planètes proches du Soleil (Mercure, Vénus) tombent
-// souvent dans le même signe ou un signe voisin — les votes ne sont donc pas juste "celui du
-// Soleil gagne toujours", même si le Soleil reste le plus lourd en cas d'égalité.
+// pesé "vote" pour une divinité, à la précision maximale que l'illustration du jeu permet
+// à ce jour :
+// 1. D'abord le décan exact du signe (10°, voir DECAN_MINOR_CARDS) : s'il pointe vers une
+//    carte numérale qui a déjà sa propre figure mythologique (NUMBER_CARD_DEITY — Épées et
+//    Bâtons pour l'instant), le vote va à cette figure précise plutôt qu'au dieu du majeur
+//    entier. C'est ce qui permet de sortir des 12 divinités des majeurs et de puiser dans
+//    l'ensemble de la bibliothèque (~70 figures) au fur et à mesure que les enseignes sont
+//    illustrées.
+// 2. Sinon (Coupes/Deniers, pas encore illustrées, ou signe hors décan reconnu), repli sur
+//    le dieu du majeur associé au signe entier via ZODIAC_MAJOR_LINKS — exactement le
+//    comportement d'avant cette fonctionnalité.
+// Les planètes proches du Soleil (Mercure, Vénus) tombent souvent dans le même signe ou un
+// signe voisin — les votes ne sont donc pas juste "celui du Soleil gagne toujours", même si
+// le Soleil reste le plus lourd en cas d'égalité.
 // `contributors` (les corps qui ont voté pour la divinité gagnante, du plus lourd au plus
-// léger) sert à expliquer CE choix — voir tutelaryReason dans profileForAstralText() et
-// showTutelaryReason() ci-dessous.
+// léger, avec la carte de décan quand le vote était précis) sert à expliquer CE choix — voir
+// tutelaryReason dans profileForAstralText() et showTutelaryReason() ci-dessous.
 function tutelaryDeity(saved){
   const a = saved?.astral;
   if(!a || !a.bodies) return null;
 
   const scores = {}; // clé divinité (minuscules) -> score cumulé
   const order = [];  // ordre de rencontre, pour départager les égalités (Soleil d'abord)
-  const contributorsByDeity = {}; // clé divinité -> [{label, sign, weight}, ...]
-  const vote = (sign, weight, label) => {
-    const cardName = sign && ZODIAC_MAJOR_LINKS[sign];
-    const card = cardName && MAJORS.find(c=>c[0]===cardName);
-    if(!card) return;
-    const deityKey = card[1].toLowerCase();
+  const contributorsByDeity = {}; // clé divinité -> [{label, sign, weight, cardName, precise}, ...]
+  const vote = (sign, degreeInSign, weight, label) => {
+    if(!sign) return;
+    const decanCard = decanCardFor(sign, degreeInSign);
+    const preciseKey = decanCard && NUMBER_CARD_DEITY[decanCard];
+    let deityKey, precise;
+    if(preciseKey){
+      deityKey = preciseKey; precise = true;
+    } else {
+      const majorName = ZODIAC_MAJOR_LINKS[sign];
+      const majorCard = majorName && MAJORS.find(c=>c[0]===majorName);
+      if(!majorCard) return;
+      deityKey = majorCard[1].toLowerCase(); precise = false;
+    }
     if(!(deityKey in scores)){ order.push(deityKey); contributorsByDeity[deityKey] = []; }
     scores[deityKey] = (scores[deityKey]||0) + weight;
-    contributorsByDeity[deityKey].push({ label, sign, weight });
+    contributorsByDeity[deityKey].push({ label, sign, weight, cardName: precise ? decanCard : null, precise });
   };
-  Object.entries(TUTELARY_WEIGHTS).forEach(([key,weight])=> vote(a.bodies[key]?.sign, weight, (PLANET_LABELS[key]||key).replace(/^[☉☽]\s*/,"")));
-  if(a.ascendant?.sign) vote(a.ascendant.sign, 3, "Ascendant");
+  Object.entries(TUTELARY_WEIGHTS).forEach(([key,weight])=>{
+    const b = a.bodies[key];
+    vote(b?.sign, b?.degreeInSign, weight, (PLANET_LABELS[key]||key).replace(/^[☉☽]\s*/,""));
+  });
+  if(a.ascendant?.sign) vote(a.ascendant.sign, a.ascendant.degreeInSign, 3, "Ascendant");
 
   if(!order.length) return null;
   const maxScore = Math.max(...Object.values(scores));
   const winnerKey = order.find(k => scores[k] === maxScore); // premier rencontré = priorité au Soleil
-  const card = MAJORS.find(c=>c[1].toLowerCase()===winnerKey);
+  // La carte associée à la divinité gagnante peut désormais être un arcane majeur (dieu
+  // "large", cas encore le plus fréquent) ou une carte numérale précise via un décan —
+  // même logique de recherche que showDeityDetail()/cardsForSymbol() pour cette
+  // bibliothèque à deux niveaux.
+  const card = CARDS.find(c => (c[4]==="major"||c[4]==="court") ? (c[1]||"").toLowerCase()===winnerKey : NUMBER_CARD_DEITY[c[0]]===winnerKey);
   if(!card) return null;
+  const deityName = winnerKey.charAt(0).toUpperCase() + winnerKey.slice(1);
   const contributors = (contributorsByDeity[winnerKey]||[]).sort((x,y)=>y.weight-x.weight);
-  return { deityKey: winnerKey, deityName: card[1], card, note: DEITY_NOTES[winnerKey] || null, contributors };
+  return { deityKey: winnerKey, deityName, card, note: DEITY_NOTES[winnerKey] || null, contributors };
 }
 
 // Explication de secours (déterministe, sans IA) tant que le texte généré par
@@ -3739,7 +3810,11 @@ function tutelaryDeity(saved){
 // score, pas une vraie phrase mythologique (c'est le rôle du texte IA une fois prêt).
 function tutelaryReasonFallback(deity){
   if(!deity || !deity.contributors || !deity.contributors.length) return null;
-  const top = deity.contributors.slice(0,3).map(c=>`${c.label} en ${c.sign}`);
+  // Quand le vote était précis (décan -> carte numérale, voir tutelaryDeity()), on nomme
+  // aussi la carte pour que même cette explication de secours, sans IA, laisse deviner
+  // d'où vient la précision — pas juste "Soleil en Sagittaire" comme avant, mais de quel
+  // tiers du signe (et donc de quelle carte) il s'agit.
+  const top = deity.contributors.slice(0,3).map(c=>c.precise && c.cardName ? `${c.label} en ${c.sign} (${c.cardName})` : `${c.label} en ${c.sign}`);
   const list = top.length > 1 ? `${top.slice(0,-1).join(", ")} et ${top[top.length-1]}` : top[0];
   return `Ce choix s'appuie surtout sur ${list} — les placements qui pèsent le plus dans ton thème.`;
 }
