@@ -4337,7 +4337,6 @@ function renderRelationForm(existing){
         <option value="f" ${r.gender==="f"?"selected":""}>Féminin</option>
         <option value="m" ${r.gender==="m"?"selected":""}>Masculin</option>
       </select>
-      <small style="display:block;margin-top:6px;opacity:.7">Sert uniquement à accorder correctement le texte de comparaison généré par IA — laisse sur « Préfère ne pas préciser » pour des formulations neutres.</small>
     </div>
     <div class="draw-notes">
       <p class="suit-h4" style="margin:0 0 6px">Date de naissance</p>
@@ -4899,7 +4898,6 @@ function renderProfilForm(prefill){
         <option value="f" ${p.gender==="f"?"selected":""}>Féminin</option>
         <option value="m" ${p.gender==="m"?"selected":""}>Masculin</option>
       </select>
-      <small style="display:block;margin-top:6px;opacity:.7">Sert uniquement à accorder correctement les textes générés par IA (portrait, explications) — laisse sur « Préfère ne pas préciser » pour des formulations neutres.</small>
     </div>
     <div class="draw-notes">
       <p class="suit-h4" style="margin:0 0 6px">Date de naissance</p>
@@ -5057,7 +5055,7 @@ function renderProfilResults(saved){
     </div>` : ""}
 
     <div class="section-title centered" style="margin-top:24px"><h3>Thème natal</h3></div>
-    <p class="note" style="text-align:center">${escapeHTML(saved.birthPlace)} · ${escapeHTML(dateLabel)}${saved.timeUnknown ? " · heure inconnue" : (saved.birthTime ? " · " + escapeHTML(saved.birthTime) : "")}</p>
+    <p class="note" style="text-align:center">${escapeHTML(a.resolvedPlace || saved.birthPlace)} · ${escapeHTML(dateLabel)}${saved.timeUnknown ? " · heure inconnue" : (saved.birthTime ? " · " + escapeHTML(saved.birthTime) : "")}</p>
 
     <div class="symbol-list" style="margin-top:14px">
       <div class="symbol"><b>☉ Soleil en ${escapeHTML(a.sunSign)}</b>${expl(planetText("sun", a.bodies.sun))}</div>
