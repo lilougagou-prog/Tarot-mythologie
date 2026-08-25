@@ -130,6 +130,7 @@ ${lines.join("\n")}
 ${genderHint}
 
 Pour CHACUN des éléments ci-dessus, rédige une phrase personnalisée en français, à la deuxième personne ("tu", "ton", "ta"), qui explique ce que cette position signifie concrètement pour cette personne — jamais une formule générique interchangeable d'une personne à l'autre. Règles strictes :
+- EXACTITUDE AVANT TOUT : les données ci-dessus sont la SEULE source de vérité. La phrase que tu écris pour une clé donnée (ex. "moon") doit parler UNIQUEMENT du signe listé pour cette clé précise — ne mélange jamais le signe d'une planète avec celui d'une autre (le signe de la Lune n'est jamais celui du Soleil, et inversement). N'invente jamais un signe ou un placement qui n'est pas dans les données ci-dessus.
 - Chaque planète et l'ascendant : 1 seule phrase, formulation propre à cette planète précise et à ce signe précis (pas un gabarit répété d'une planète à l'autre).
 - Chaque aspect : 1 seule phrase qui explique la dynamique entre les deux planètes de façon concrète, sans jamais utiliser les mots "aspect", "orbe", "conjonction", "trigone", "carré", "opposition" ou "sextile" — traduis-les en dynamique vécue (tension, alliance naturelle, occasion, frottement à observer…).
 - Nombre du prénom : 1 à 2 phrases qui relient ce nombre à un trait de personnalité concret.

@@ -108,18 +108,32 @@ module.exports = async function handler(req, res) {
   const yourGenderNote = genderNote(you, comparison.yourGender === "f" || comparison.yourGender === "m" ? comparison.yourGender : null, true);
   const theirGenderNote = genderNote(them, comparison.theirGender === "f" || comparison.theirGender === "m" ? comparison.theirGender : null, false);
 
-  const lines = [];
+  // Un bloc PAR PERSONNE (plutôt qu'une ligne par planète mélangeant les deux prénoms) :
+  // plus explicite pour l'IA que "Soleil : Sophie en X, Léa en Y" sur une même ligne, qui
+  // s'est révélé source de confusion en pratique — un retour direct d'utilisatrice a signalé
+  // un texte affirmant "il a une Lune en Poissons" pour un fils dont la Lune était en Cancer
+  // (c'est son Soleil qui était en Poissons) alors que les données envoyées étaient
+  // correctes : l'IA avait interverti deux placements en rédigeant. Regrouper par personne
+  // réduit ce risque en donnant à l'IA un seul repère mental par bloc de faits.
   const ys = comparison.yourSigns || {}, ts = comparison.theirSigns || {};
-  if (ys.sun && ts.sun) lines.push(`Soleil : ${you} en ${ys.sun}, ${them} en ${ts.sun}`);
-  if (ys.moon && ts.moon) lines.push(`Lune : ${you} en ${ys.moon}, ${them} en ${ts.moon}`);
-  if (ys.ascendant && ts.ascendant) lines.push(`Ascendant : ${you} ${ys.ascendant}, ${them} ${ts.ascendant}`);
+  const personBlock = (label, signs) => {
+    const rows = [];
+    if (signs.sun) rows.push(`- Soleil en ${signs.sun}`);
+    if (signs.moon) rows.push(`- Lune en ${signs.moon}`);
+    if (signs.ascendant) rows.push(`- Ascendant ${signs.ascendant}`);
+    return rows.length ? `Thème de ${label} :\n${rows.join("\n")}` : "";
+  };
+  const yourBlock = personBlock(you, ys);
+  const theirBlock = personBlock(them, ts);
+
+  const crossLines = [];
   if (comparison.element && typeof comparison.element === "object") {
     const el = comparison.element;
     const kindLabel = el.kind === "resonance" ? "même élément" : el.kind === "complement" ? "éléments complémentaires" : "éléments en tension";
-    lines.push(`Élément dominant : ${el.a} (${you}) / ${el.b} (${them}) — ${kindLabel}`);
+    crossLines.push(`Élément dominant : ${el.a} (${you}) / ${el.b} (${them}) — ${kindLabel}`);
   }
   if (typeof comparison.sharedDeity === "string" && comparison.sharedDeity) {
-    lines.push(`Divinité tutélaire commune : ${comparison.sharedDeity}`);
+    crossLines.push(`Divinité tutélaire commune : ${comparison.sharedDeity}`);
   }
   const pointsLine = (list) => Array.isArray(list)
     ? list
@@ -129,22 +143,26 @@ module.exports = async function handler(req, res) {
     : "";
   const commonLine = pointsLine(comparison.commonPoints);
   const tenseLine = pointsLine(comparison.tensePoints);
-  if (commonLine) lines.push(`Points communs relevés : ${commonLine}`);
-  if (tenseLine) lines.push(`Tensions potentielles relevées : ${tenseLine}`);
+  if (commonLine) crossLines.push(`Points communs relevés : ${commonLine}`);
+  if (tenseLine) crossLines.push(`Tensions potentielles relevées : ${tenseLine}`);
 
-  if (!lines.length) {
+  if (!yourBlock && !theirBlock && !crossLines.length) {
     res.status(400).json({ error: "Requête invalide : comparison ne contient aucune donnée exploitable." });
     return;
   }
 
-  const prompt = `Tu es un astrologue et tarologue chaleureux, direct et humain. Voici une comparaison déjà calculée entre le thème de ${you} et celui de ${them} :
-${lines.join("\n")}
+  const dataBlock = [yourBlock, theirBlock, ...crossLines].filter(Boolean).join("\n\n");
+
+  const prompt = `Tu es un astrologue et tarologue chaleureux, direct et humain. Voici une comparaison déjà calculée entre le thème de ${you} et celui de ${them} — ces données sont la SEULE source de vérité, ne les modifie jamais et ne les mélange jamais entre les deux personnes :
+
+${dataBlock}
 
 Cette comparaison concerne ${toneHint}
 ${yourGenderNote}
 ${theirGenderNote}
 
 Rédige un texte en français, à la deuxième personne pour ${you} ("tu", "ton", "ta" — ${you} est la personne qui lit) et en nommant ${them} par son prénom, en 2 à 3 paragraphes fluides qui tissent ensemble ces éléments en une lecture cohérente de la relation — un texte suivi, pas une liste, pas un paragraphe par élément. Règles strictes :
+- EXACTITUDE AVANT TOUT : chaque fois que tu mentionnes un signe ou une planète, vérifie qu'il correspond EXACTEMENT à la personne concernée dans les données ci-dessus (le Soleil de ${you} n'est jamais celui de ${them}, et inversement — ni pour le Soleil, ni pour la Lune, ni pour l'Ascendant). N'invente jamais un placement qui n'est pas listé. En cas de doute sur un détail précis, reste plus général plutôt que de risquer une erreur factuelle.
 - Ton chaleureux, direct, humain — jamais mécanique, jamais de formule toute faite du type "comme le montre la comparaison" ou "en résumé".
 - N'utilise jamais de jargon technique non expliqué (n'écris jamais les mots "aspect", "orbe", "conjonction", "trigone", "carré", "opposition", "sextile", "élément") : traduis chaque élément en dynamique relationnelle concrète, en langage courant.
 - Ne liste pas mécaniquement chaque élément un par un : entrelace-les pour raconter une dynamique à deux, pas une fiche technique.
