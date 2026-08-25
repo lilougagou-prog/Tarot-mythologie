@@ -3134,14 +3134,53 @@ for(const [sign, cards] of Object.entries(DECAN_MINOR_CARDS)){
   SIGN_ELEMENT[sign] = SUITS[suit][2].split(" · ")[0]; // "Feu · action · volonté" -> "Feu"
 }
 
+// Choisit une variante de phrase de façon stable à partir d'une chaîne "seed" (ex. les deux
+// signes concernés) : la même paire retombe toujours sur la même formulation (pas de
+// scintillement au ré-affichage d'une même comparaison), mais des paires différentes
+// tombent souvent sur des formulations différentes — pour qu'une lecture répétée de la
+// fonctionnalité ne sonne pas comme un même gabarit recopié pour tout le monde. Hash
+// djb2 : simple, rapide, suffisant ici (pas besoin de résistance aux collisions).
+function stableVariant(list, seed){
+  let h = 5381;
+  for(let i=0;i<seed.length;i++) h = ((h*33) ^ seed.charCodeAt(i)) >>> 0;
+  return list[h % list.length];
+}
+
 // Dynamique classique entre deux éléments : même élément = résonance, éléments
 // complémentaires (Feu/Air, Terre/Eau) = équilibre naturel, éléments opposés = tension à
 // apprivoiser plutôt qu'un problème en soi — jamais présentée comme une incompatibilité.
-function elementDynamic(elA, elB){
-  if(elA === elB) return { kind:"resonance", text:`Vous partagez le même élément (${elA}) : une vraie proximité de rythme et d'instinct.` };
+// Plusieurs variantes par cas (voir stableVariant() ci-dessus), sélectionnées sur la paire
+// de signes exacte plutôt que sur la seule paire d'éléments (12×12 combinaisons possibles,
+// pas seulement 4×4) : deux couples "Feu + Air" différents ont de bonnes chances de ne pas
+// lire exactement la même phrase.
+const ELEMENT_DYNAMIC_VARIANTS = {
+  resonance: [
+    el => `Vous partagez le même élément (${el}) : une vraie proximité de rythme et d'instinct — vous vous comprenez souvent sans avoir besoin de tout expliquer.`,
+    el => `Même élément (${el}) des deux côtés : vous réagissez souvent de façon similaire face aux mêmes situations, ce qui peut aussi bien vous rapprocher que renforcer les mêmes travers.`,
+    el => `${el} des deux côtés : un terrain commun fort, une manière de fonctionner qui se reconnaît d'instinct — pour le meilleur comme pour ce qu'il faudra parfois corriger ensemble.`,
+    el => `Vous êtes tous les deux du même élément (${el}) : les mêmes réflexes, la même énergie de fond — rarement besoin de traduire ce que l'autre ressent.`,
+  ],
+  complement: [
+    (elA,elB) => `${elA} et ${elB} se nourrissent naturellement l'un l'autre — un bon équilibre, tant que chacun garde sa place.`,
+    (elA,elB) => `${elA} et ${elB} forment un duo classique qui fonctionne bien : l'un apporte souvent ce que l'autre n'a pas spontanément, sans opposition frontale.`,
+    (elA,elB) => `Entre ${elA} et ${elB}, la différence est plutôt un moteur qu'un obstacle — chacun peut apporter à l'autre ce qui lui manque naturellement.`,
+    (elA,elB) => `${elA} et ${elB} se complètent bien : deux façons différentes d'avancer, qui s'articulent plus qu'elles ne se heurtent.`,
+  ],
+  tension: [
+    (elA,elB) => `${elA} et ${elB} avancent à des rythmes différents — une vraie richesse si elle est reconnue, une source de friction sinon.`,
+    (elA,elB) => `${elA} et ${elB} n'ont pas spontanément le même tempo : ce qui semble évident pour l'un peut demander un vrai effort de traduction pour l'autre.`,
+    (elA,elB) => `Entre ${elA} et ${elB}, les réflexes de base diffèrent — pas une incompatibilité, mais un ajustement conscient à faire régulièrement.`,
+    (elA,elB) => `${elA} et ${elB} ne réagissent pas de la même façon aux mêmes situations : une différence à apprivoiser plutôt qu'à combler.`,
+  ],
+};
+function elementDynamic(elA, elB, seed){
+  const key = seed || `${elA}-${elB}`;
+  if(elA === elB){
+    return { kind:"resonance", text: stableVariant(ELEMENT_DYNAMIC_VARIANTS.resonance, key)(elA) };
+  }
   const complementary = new Set(["Feu-Air","Air-Feu","Terre-Eau","Eau-Terre"]);
-  if(complementary.has(`${elA}-${elB}`)) return { kind:"complement", text:`${elA} et ${elB} se nourrissent naturellement l'un l'autre — un bon équilibre, tant que chacun garde sa place.` };
-  return { kind:"tension", text:`${elA} et ${elB} avancent à des rythmes différents — une vraie richesse si elle est reconnue, une source de friction sinon.` };
+  const kind = complementary.has(`${elA}-${elB}`) ? "complement" : "tension";
+  return { kind, text: stableVariant(ELEMENT_DYNAMIC_VARIANTS[kind], key)(elA, elB) };
 }
 
 // Points de comparaison entre deux thèmes (Soleil/Lune/Ascendant de chacun), avec les mêmes
@@ -3150,6 +3189,12 @@ function elementDynamic(elA, elB){
 // (strongestTransitAspect()) ; ici, un troisième usage du même mécanisme, appliqué ENTRE
 // deux personnes.
 const SYNASTRY_POINT_LABELS = { sun:"Soleil", moon:"Lune", ascendant:"Ascendant" };
+// Formulations possessives correctes (accord grammatical du point, pas de la personne) pour
+// le côté "toi" ("Ton Soleil", mais "Ta Lune") et un groupe nominal sans pronom pour le côté
+// "proche" ("la Lune de Léa" plutôt que "sa Lune" ou "sa/son Lune/Soleil", qui suppose un
+// genre) — voir SYNASTRY_ASPECT_VARIANTS ci-dessous.
+const SYNASTRY_POINT_YOUR = { sun:"Ton Soleil", moon:"Ta Lune", ascendant:"Ton Ascendant" };
+const SYNASTRY_POINT_ARTICLE = { sun:"le Soleil", moon:"la Lune", ascendant:"l'Ascendant" };
 function synastryPoints(profile){
   const pts = [];
   const b = profile?.astral?.bodies;
@@ -3160,24 +3205,54 @@ function synastryPoints(profile){
 }
 const SYNASTRY_HARMONIOUS = new Set(["conjonction","trigone","sextile"]);
 // Vocabulaire dédié à la comparaison à deux (distinct de ASPECT_ACTION_PHRASES, qui décrit
-// une planète agissant sur une autre AU SEIN d'un même thème) : ici les deux points
-// appartiennent à deux personnes différentes, la formulation doit rester symétrique.
-const SYNASTRY_ASPECT_TEXT = {
-  conjonction: "se superposent presque exactement — une proximité immédiate",
-  trigone: "s'accordent sans effort",
-  sextile: "s'ouvrent naturellement une occasion l'un pour l'autre",
-  carré: "se mettent mutuellement sous tension",
-  opposition: "se tirent dans des directions opposées, à équilibrer plutôt qu'à trancher",
+// une planète agissant sur une autre AU SEIN d'un même thème) : plusieurs variantes par
+// type d'aspect (voir stableVariant()), chacune prenant les deux groupes nominaux déjà
+// accordés (voir SYNASTRY_POINT_YOUR/SYNASTRY_POINT_ARTICLE) plutôt qu'un pronom genré.
+const SYNASTRY_ASPECT_VARIANTS = {
+  conjonction: [
+    (your,their) => `${your} et ${their} se superposent presque exactement : une proximité immédiate, qui peut autant renforcer que confondre les deux plans.`,
+    (your,their) => `${your} rencontre presque directement ${their} — vous touchez souvent au même point sans même vous concerter.`,
+    (your,their) => `${your} et ${their} sont si proches qu'ils se répondent presque automatiquement, sans détour.`,
+  ],
+  trigone: [
+    (your,their) => `${your} et ${their} s'accordent sans effort : ce terrain-là circule facilement entre vous, presque naturellement.`,
+    (your,their) => `Entre ${your} et ${their}, le courant passe tout seul — un point d'appui simple à retrouver, quel que soit le sujet.`,
+    (your,their) => `${your} et ${their} se soutiennent d'instinct, sans qu'il y ait besoin d'y travailler particulièrement.`,
+  ],
+  sextile: [
+    (your,their) => `${your} ouvre une vraie occasion du côté de ${their}, à condition de la saisir plutôt que de la laisser passer.`,
+    (your,their) => `${your} et ${their} s'entendent bien dès que l'un des deux fait le premier pas.`,
+    (your,their) => `Entre ${your} et ${their}, la porte est ouverte — encore faut-il penser à la franchir.`,
+  ],
+  carré: [
+    (your,their) => `${your} met ${their} sous tension — une friction réelle, mais aussi ce qui pousse souvent à avancer plutôt qu'à stagner.`,
+    (your,their) => `${your} et ${their} ne parlent pas spontanément la même langue : un vrai point de friction à apprivoiser plutôt qu'à ignorer.`,
+    (your,their) => `${your} bouscule ${their} — inconfortable sur le moment, mais rarement stérile si vous en reparlez calmement.`,
+  ],
+  opposition: [
+    (your,their) => `${your} et ${their} se tirent dans des directions opposées — à équilibrer consciemment plutôt qu'à trancher d'un côté.`,
+    (your,their) => `${your} fait presque face à ${their} : deux besoins réels, rarement satisfaits en même temps sans un effort d'ajustement.`,
+    (your,their) => `${your} et ${their} tirent chacun à leur façon — un vrai jeu d'équilibre, pas un rapport de force à gagner.`,
+  ],
 };
-function synastryAspects(profileA, profileB){
+// `theirName` : prénom du proche (profileB), utilisé pour composer "la Lune de Léa" côté
+// proche — laissé optionnel pour rester compatible avec un appel sans nom disponible
+// (auquel cas la phrase reste correcte mais un peu plus neutre, "sa Lune" étant évité de
+// toute façon, voir plus haut).
+function synastryAspects(profileA, profileB, theirName){
   const ptsA = synastryPoints(profileA), ptsB = synastryPoints(profileB);
+  const name = theirName || "l'autre thème";
   const hits = [];
   ptsA.forEach(pa=>{
     ptsB.forEach(pb=>{
       if(pa.longitude == null || pb.longitude == null) return;
       const aspect = findAspect(pa.longitude, pb.longitude);
       if(!aspect) return;
-      hits.push({ a:pa, b:pb, aspect, harmonious: SYNASTRY_HARMONIOUS.has(aspect.type) });
+      const variants = SYNASTRY_ASPECT_VARIANTS[aspect.type];
+      const your = SYNASTRY_POINT_YOUR[pa.key];
+      const their = `${SYNASTRY_POINT_ARTICLE[pb.key]} de ${name}`;
+      const sentence = variants ? stableVariant(variants, `${pa.key}-${pb.key}-${aspect.type}-${pa.sign}-${pb.sign}`)(your, their) : "";
+      hits.push({ a:pa, b:pb, aspect, harmonious: SYNASTRY_HARMONIOUS.has(aspect.type), sentence });
     });
   });
   hits.sort((x,y)=>x.aspect.orb - y.aspect.orb); // l'aspect le plus exact d'abord
@@ -3191,10 +3266,13 @@ function compareProfiles(profileA, profileB){
   if(!profileA?.astral || !profileB?.astral) return null;
   const sunA = profileA.astral.bodies?.sun?.sign, sunB = profileB.astral.bodies?.sun?.sign;
   const element = (sunA && sunB && SIGN_ELEMENT[sunA] && SIGN_ELEMENT[sunB])
-    ? { a:SIGN_ELEMENT[sunA], b:SIGN_ELEMENT[sunB], ...elementDynamic(SIGN_ELEMENT[sunA], SIGN_ELEMENT[sunB]) }
+    // Seed sur la paire de SIGNES (12×12), pas la seule paire d'éléments (4×4) : deux
+    // couples qui partagent le même élément n'atterrissent pas forcément sur la même
+    // variante de phrase (voir elementDynamic()/stableVariant()).
+    ? { a:SIGN_ELEMENT[sunA], b:SIGN_ELEMENT[sunB], ...elementDynamic(SIGN_ELEMENT[sunA], SIGN_ELEMENT[sunB], `${sunA}-${sunB}`) }
     : null;
 
-  const aspects = synastryAspects(profileA, profileB);
+  const aspects = synastryAspects(profileA, profileB, profileB.firstName);
   const common = aspects.filter(h=>h.harmonious).slice(0,4);
   const tense = aspects.filter(h=>!h.harmonious).slice(0,4);
 
@@ -3999,7 +4077,10 @@ function renderRelations(){
         <div class="clickable" data-relation="${escapeHTML(r.id)}">
           <b>${escapeHTML(r.firstName)}</b><br><small>${escapeHTML(RELATION_TYPES[r.relationType]||"Autre")}${r.astral?.bodies?.sun?.sign ? " · "+escapeHTML(r.astral.bodies.sun.sign) : ""}</small>
         </div>
-        <button class="ghost delete-relation" data-delete-relation="${escapeHTML(r.id)}" style="margin-top:8px;font-size:12px;padding:4px 10px">Supprimer</button>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="ghost edit-relation" data-edit-relation="${escapeHTML(r.id)}" style="font-size:12px;padding:4px 10px">Modifier</button>
+          <button class="ghost delete-relation" data-delete-relation="${escapeHTML(r.id)}" style="font-size:12px;padding:4px 10px">Supprimer</button>
+        </div>
       </div>`).join("")}
     </div>` : `<p class="note" style="text-align:center;margin-top:14px">Aucun proche enregistré pour l'instant.</p>`}
     <button class="primary" id="addRelation" style="margin-top:20px">+ Ajouter un proche</button>
@@ -4016,8 +4097,12 @@ function bindRelationsList(){
   document.querySelectorAll("[data-relation]").forEach(el=>{
     el.onclick = ()=> showComparison(el.dataset.relation);
   });
-  // Boutons "Supprimer" : éléments frères (pas descendants) des blocs cliquables ci-dessus,
-  // donc pas besoin de stopPropagation — cliquer dessus ne déclenche jamais showComparison().
+  // Boutons "Modifier"/"Supprimer" : éléments frères (pas descendants) des blocs cliquables
+  // ci-dessus, donc pas besoin de stopPropagation — cliquer dessus ne déclenche jamais
+  // showComparison().
+  document.querySelectorAll("[data-edit-relation]").forEach(el=>{
+    el.onclick = ()=> showRelationForm(el.dataset.editRelation);
+  });
   document.querySelectorAll("[data-delete-relation]").forEach(el=>{
     el.onclick = ()=>{
       deleteRelation(el.dataset.deleteRelation);
@@ -4135,6 +4220,9 @@ function showComparison(relationId){
   // N'existe que dans la branche "pas encore de profil propre" de renderComparison().
   const profilEditBtn = document.getElementById("profilEdit");
   if(profilEditBtn) profilEditBtn.onclick = ()=> showProfilEditForm();
+  // N'existe que dans la branche "comparaison normale" (proche + profil propre présents).
+  const editRelationBtn = document.getElementById("editRelationFromComparison");
+  if(editRelationBtn) editRelationBtn.onclick = ()=> showRelationForm(relationId);
   cardDetailReturnTo = () => showComparison(relationId);
   bindChips();
 }
@@ -4162,6 +4250,7 @@ function renderComparison(primary, relation){
   return `<div class="detail">
     <div class="section-title"><h3>Toi & ${escapeHTML(relation.firstName)}</h3></div>
     <p class="question-recall">« ${escapeHTML(relLabel)} »</p>
+    <p style="text-align:center;margin-top:6px"><button class="ghost" id="editRelationFromComparison" style="font-size:12px;padding:4px 10px">✎ Modifier ses informations</button></p>
 
     <p class="note" style="text-align:center;margin-top:10px">
       <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer">
@@ -4197,13 +4286,13 @@ function renderComparison(primary, relation){
     ${cmp.common.length ? `
     <div class="section-title centered" style="margin-top:24px"><h3>Vos points communs</h3></div>
     <div class="symbol-list" style="margin-top:10px">
-      ${cmp.common.map(h=>`<div class="symbol"><b>${escapeHTML(SYNASTRY_POINT_LABELS[h.a.key])} (${escapeHTML(h.a.sign)}) ↔ ${escapeHTML(SYNASTRY_POINT_LABELS[h.b.key])} (${escapeHTML(h.b.sign)})</b><br><small>${escapeHTML(h.aspect.type)} — ${escapeHTML(SYNASTRY_ASPECT_TEXT[h.aspect.type]||"")}</small></div>`).join("")}
+      ${cmp.common.map(h=>`<div class="symbol"><b>${escapeHTML(SYNASTRY_POINT_LABELS[h.a.key])} (${escapeHTML(h.a.sign)}) ↔ ${escapeHTML(SYNASTRY_POINT_LABELS[h.b.key])} (${escapeHTML(h.b.sign)})</b><br><small>${escapeHTML(h.aspect.type)} — ${escapeHTML(h.sentence)}</small></div>`).join("")}
     </div>` : ""}
 
     ${cmp.tense.length ? `
     <div class="section-title centered" style="margin-top:24px"><h3>Vos points de tension potentiels</h3></div>
     <div class="symbol-list" style="margin-top:10px">
-      ${cmp.tense.map(h=>`<div class="symbol"><b>${escapeHTML(SYNASTRY_POINT_LABELS[h.a.key])} (${escapeHTML(h.a.sign)}) ↔ ${escapeHTML(SYNASTRY_POINT_LABELS[h.b.key])} (${escapeHTML(h.b.sign)})</b><br><small>${escapeHTML(h.aspect.type)} — ${escapeHTML(SYNASTRY_ASPECT_TEXT[h.aspect.type]||"")}</small></div>`).join("")}
+      ${cmp.tense.map(h=>`<div class="symbol"><b>${escapeHTML(SYNASTRY_POINT_LABELS[h.a.key])} (${escapeHTML(h.a.sign)}) ↔ ${escapeHTML(SYNASTRY_POINT_LABELS[h.b.key])} (${escapeHTML(h.b.sign)})</b><br><small>${escapeHTML(h.aspect.type)} — ${escapeHTML(h.sentence)}</small></div>`).join("")}
     </div>` : ""}
 
     ${(!cmp.common.length && !cmp.tense.length) ? `<p class="note" style="text-align:center;margin-top:14px">Pas d'aspect marqué entre vos deux thèmes — ni proximité forte, ni tension particulière.</p>` : ""}
