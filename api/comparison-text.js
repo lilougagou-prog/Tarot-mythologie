@@ -5,7 +5,7 @@
 // au-dessus d'une comparaison déjà complète sans lui — voir renderComparison() dans app.js.
 //
 // Reçoit en POST : { comparison: {
-//   yourFirstName, theirFirstName, relationType,
+//   yourFirstName, yourGender?, theirFirstName, theirGender?, relationType,
 //   yourSigns: {sun,moon,ascendant}, theirSigns: {sun,moon,ascendant},
 //   element: {a, b, kind} | null,      // kind: "resonance" | "complement" | "tension"
 //   sharedDeity: string | null,
@@ -13,6 +13,9 @@
 // } }
 //   - Résumé minimal (voir profileForComparisonText() dans app.js), jamais les deux thèmes
 //     complets — même logique de sobriété que le "profile" envoyé à /api/portrait.
+//   - yourGender/theirGender : "f" | "m" | absent/null (préfère ne pas préciser) chacun,
+//     indépendamment — pour accorder correctement le texte ; sans eux, formulation
+//     volontairement neutre (voir genderNote() plus bas).
 // Renvoie : { text: string } — 2-3 paragraphes séparés par un retour à la ligne double.
 //
 // Généré une seule fois par proche et mis en cache côté client (relation.comparisonText
@@ -40,6 +43,26 @@ const RELATION_TONE_HINT = {
   "Ami·e": "une amitié : jamais de vocabulaire de couple.",
   "Autre": "un lien proche dont la nature exacte n'est pas précisée : reste neutre, sans présumer qu'il s'agit d'un couple.",
 };
+
+// Indication de genre par personne, indépendante l'une de l'autre (l'un peut être connu et
+// l'autre non). `asYou` : cette personne est celle adressée en "tu" (accord d'adjectif) ;
+// sinon elle est nommée par son prénom (le pronom "il"/"elle" devient possible si le genre
+// est connu, sinon toujours évité — voir prompt principal).
+function genderNote(name, gender, asYou) {
+  if (gender === "f") {
+    return asYou
+      ? `${name} est de genre féminin : accorde tous les adjectifs et participes qui la/le concernent au féminin (ex. "tu es née", "tu es à l'aise").`
+      : `${name} est de genre féminin : tu peux utiliser "elle" pour parler d'${name} si besoin, et accorder les adjectifs/participes qui la concernent au féminin.`;
+  }
+  if (gender === "m") {
+    return asYou
+      ? `${name} est de genre masculin : accorde tous les adjectifs et participes qui le concernent au masculin (ex. "tu es né", "tu es à l'aise").`
+      : `${name} est de genre masculin : tu peux utiliser "il" pour parler de ${name} si besoin, et accorder les adjectifs/participes qui le concernent au masculin.`;
+  }
+  return asYou
+    ? `Le genre de ${name} n'est pas précisé : évite tout accord de genre explicite le concernant.`
+    : `Le genre de ${name} n'est pas précisé : n'utilise jamais de pronom genré ("il"/"elle"/"sa"/"son") pour en parler — répète son prénom ou utilise des tournures neutres.`;
+}
 
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
@@ -82,6 +105,8 @@ module.exports = async function handler(req, res) {
   const them = comparison.theirFirstName.trim();
   const relationType = typeof comparison.relationType === "string" && comparison.relationType ? comparison.relationType : "Autre";
   const toneHint = RELATION_TONE_HINT[relationType] || RELATION_TONE_HINT["Autre"];
+  const yourGenderNote = genderNote(you, comparison.yourGender === "f" || comparison.yourGender === "m" ? comparison.yourGender : null, true);
+  const theirGenderNote = genderNote(them, comparison.theirGender === "f" || comparison.theirGender === "m" ? comparison.theirGender : null, false);
 
   const lines = [];
   const ys = comparison.yourSigns || {}, ts = comparison.theirSigns || {};
@@ -116,8 +141,10 @@ module.exports = async function handler(req, res) {
 ${lines.join("\n")}
 
 Cette comparaison concerne ${toneHint}
+${yourGenderNote}
+${theirGenderNote}
 
-Rédige un texte en français, à la deuxième personne pour ${you} ("tu", "ton", "ta" — ${you} est la personne qui lit) et en nommant ${them} par son prénom (jamais de pronom genré "il"/"elle"/"sa"/"son" pour parler de ${them} : répète son prénom ou utilise des tournures neutres), en 2 à 3 paragraphes fluides qui tissent ensemble ces éléments en une lecture cohérente de la relation — un texte suivi, pas une liste, pas un paragraphe par élément. Règles strictes :
+Rédige un texte en français, à la deuxième personne pour ${you} ("tu", "ton", "ta" — ${you} est la personne qui lit) et en nommant ${them} par son prénom, en 2 à 3 paragraphes fluides qui tissent ensemble ces éléments en une lecture cohérente de la relation — un texte suivi, pas une liste, pas un paragraphe par élément. Règles strictes :
 - Ton chaleureux, direct, humain — jamais mécanique, jamais de formule toute faite du type "comme le montre la comparaison" ou "en résumé".
 - N'utilise jamais de jargon technique non expliqué (n'écris jamais les mots "aspect", "orbe", "conjonction", "trigone", "carré", "opposition", "sextile", "élément") : traduis chaque élément en dynamique relationnelle concrète, en langage courant.
 - Ne liste pas mécaniquement chaque élément un par un : entrelace-les pour raconter une dynamique à deux, pas une fiche technique.

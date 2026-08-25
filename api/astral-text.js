@@ -3,10 +3,12 @@
 // une phrase personnalisée générée par IA, et explique pourquoi la divinité tutélaire du
 // thème a été choisie.
 //
-// Reçoit en POST : { profile: { firstName, nameNumber?, nameNumberMeaning?,
+// Reçoit en POST : { profile: { firstName, gender?, nameNumber?, nameNumberMeaning?,
 //   ascendantSign?, planets: [{key, label, sign, house?, retrograde?}, ...],
 //   aspects: [{key, type, a, b}, ...], tutelaryDeity?: { name, note?,
 //   contributors: [{label, sign, cardName?, precise?}, ...] } } }
+//   - gender: "f" | "m" | absent/null (préfère ne pas préciser) — pour accorder
+//     correctement les phrases générées ; sans lui, formulation volontairement neutre.
 //   - Résumé agrégé uniquement (voir profileForAstralText() dans app.js) — jamais le thème
 //     natal complet (degrés exacts, etc.), même logique de sobriété que /api/portrait.
 //   - `planets`/`aspects` peuvent être vides mais `profile` doit contenir au moins une
@@ -115,8 +117,17 @@ module.exports = async function handler(req, res) {
 
   const firstName = profile.firstName.trim();
 
+  // Accord de genre explicite si connu (voir renderProfilForm() dans app.js — champ
+  // optionnel, "Préfère ne pas préciser" par défaut).
+  const genderHint = profile.gender === "f"
+    ? "Cette personne est de genre féminin : accorde tous les adjectifs et participes qui la concernent au féminin (ex. \"tu es née\", \"tu es concentrée\")."
+    : profile.gender === "m"
+    ? "Cette personne est de genre masculin : accorde tous les adjectifs et participes qui la concernent au masculin (ex. \"tu es né\", \"tu es concentré\")."
+    : "Le genre de cette personne n'est pas précisé : formule tes phrases de façon à éviter tout accord de genre explicite.";
+
   const prompt = `Tu es un astrologue chaleureux, direct et humain. Voici le thème de ${firstName} :
 ${lines.join("\n")}
+${genderHint}
 
 Pour CHACUN des éléments ci-dessus, rédige une phrase personnalisée en français, à la deuxième personne ("tu", "ton", "ta"), qui explique ce que cette position signifie concrètement pour cette personne — jamais une formule générique interchangeable d'une personne à l'autre. Règles strictes :
 - Chaque planète et l'ascendant : 1 seule phrase, formulation propre à cette planète précise et à ce signe précis (pas un gabarit répété d'une planète à l'autre).
