@@ -2650,6 +2650,26 @@ function journalStats(entries){
     .map(k=>({ key:k, name:SPREADS[k].name, glyph:SPREADS[k].glyph, count:spreadCounts[k] }))
     .sort((a,b)=>b.count-a.count);
 
+  // Affinités mythologiques : quelles divinités et quels symboles reviennent le plus
+  // souvent dans les cartes tirées — un profil qui se construit et s'affine à mesure que le
+  // Journal grossit, contrairement à la divinité tutélaire ou l'Animal représentatif
+  // (calculés une fois pour toutes à partir du thème astral). Indépendant de
+  // domainDistribution ci-dessus (qui regarde les QUESTIONS posées, pas les cartes tirées).
+  const deityCounts = {}, symbolCounts = {};
+  entries.forEach(j=>{
+    (j.cards||[]).forEach(name=>{
+      const card = CARDS.find(c=>c[0]===name);
+      if(!card) return;
+      const deityId = (cardDeityLabel(card)||"").toLowerCase();
+      if(DEITY_NOTES[deityId]) deityCounts[deityId] = (deityCounts[deityId]||0) + 1;
+      (card[5]||"").split("·").map(s=>s.trim()).filter(Boolean).forEach(symId=>{
+        if(SYMBOL_LIBRARY[symId]) symbolCounts[symId] = (symbolCounts[symId]||0) + 1;
+      });
+    });
+  });
+  const deityAffinities = Object.entries(deityCounts).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([id,count])=>({id,count}));
+  const symbolAffinities = Object.entries(symbolCounts).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([id,count])=>({id,count}));
+
   const { streak, bestStreak } = getStreakState();
 
   return {
@@ -2662,6 +2682,7 @@ function journalStats(entries){
     neverDrawnCount: Math.max(0, CARDS.length - drawnNames.size),
     domainDistribution,
     spreadDistribution,
+    deityAffinities, symbolAffinities,
     streak, bestStreak,
   };
 }
@@ -4349,7 +4370,17 @@ function statsView(){
   <div class="section-title centered" style="margin-top:28px"><h3>Types de tirage utilisés</h3></div>
   <div class="symbol-list">
     ${s.spreadDistribution.map(sp=>`<div class="symbol"><b>${sp.glyph} ${escapeHTML(sp.name)}</b> — ${sp.count} fois</div>`).join("")}
-  </div>` : ""}`;
+  </div>` : ""}
+
+  ${(s.deityAffinities.length || s.symbolAffinities.length) ? `
+  <div class="section-title centered" style="margin-top:28px"><h3>Tes affinités mythologiques</h3></div>
+  <p class="note" style="text-align:center">Les figures et symboles qui reviennent le plus dans les cartes que tu tires — se construit et s'affine à mesure que ton Journal grossit.</p>
+  ${s.deityAffinities.length ? `<div class="symbol-list" style="margin-top:14px">
+    ${s.deityAffinities.map(d=>`<div class="symbol clickable" data-deity="${escapeHTML(d.id)}"><b>${escapeHTML(d.id.charAt(0).toUpperCase()+d.id.slice(1))}</b><br><small>${d.count} carte${d.count>1?"s":""} liée${d.count>1?"s":""} tirée${d.count>1?"s":""}</small></div>`).join("")}
+  </div>` : ""}
+  ${s.symbolAffinities.length ? `<div class="symbol-list" style="margin-top:10px">
+    ${s.symbolAffinities.map(sy=>{ const sym = SYMBOL_LIBRARY[sy.id]; return `<div class="symbol clickable" data-symbol="${escapeHTML(sy.id)}"><b>${sym.icon} ${escapeHTML(sym.label)}</b><br><small>${sy.count} fois</small></div>`; }).join("")}
+  </div>` : ""}` : ""}`;
 }
 
 function showStats(){
@@ -4370,6 +4401,7 @@ function showStats(){
     requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
   cardDetailReturnTo = showStats;
+  bindChips(); // rend cliquables les affinités mythologiques (data-deity/data-symbol)
 }
 
 function retrospectiveView(){
