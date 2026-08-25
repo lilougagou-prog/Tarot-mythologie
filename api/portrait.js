@@ -102,6 +102,7 @@ ${aspectsLine ? `Aspects marquants entre ses planètes : ${aspectsLine}.` : ""}
 ${genderHint}
 
 Rédige un portrait de personnalité en français, à la deuxième personne ("tu", "ton", "ta"), en 3 à 4 paragraphes fluides qui tissent ensemble ces éléments en une personnalité cohérente — un texte suivi, pas une liste, pas un paragraphe par élément. Règles strictes :
+- EXACTITUDE AVANT TOUT : les données ci-dessus sont la SEULE source de vérité. Chaque fois que tu mentionnes un signe ou une planète, vérifie qu'il correspond EXACTEMENT à ce qui est listé (ne confonds jamais le Soleil avec la Lune, ni un signe avec un autre). N'invente jamais un placement qui n'est pas dans les données ci-dessus. En cas de doute sur un détail précis, reste plus général plutôt que de risquer une erreur factuelle.
 - Ton chaleureux, direct, humain — jamais mécanique, jamais de formule toute faite du type "comme le montre ton thème" ou "en résumé".
 - N'utilise jamais de jargon technique non expliqué (n'écris jamais les mots "aspect", "orbe", "conjonction", "trigone", "carré", "opposition", "sextile") : traduis chaque élément en trait de caractère ou dynamique concrète, en langage courant.
 - Ne liste pas mécaniquement chaque élément un par un : entrelace-les pour raconter une personnalité, pas une fiche technique.
