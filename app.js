@@ -3082,6 +3082,134 @@ function strongestTransitAspect(transits, profile){
   return { body: TRANSIT_LABELS[h.transitBody], action: ASPECT_ACTION_PHRASES[h.aspect.type], natal: h.natal.label };
 }
 
+/* ===================== COMPARAISON DE THÈMES (proches) ===================== */
+// Fonctionnalité premium (voir isPremiumEnabled()) : compare le thème enregistré à celui
+// d'un "proche" (partenaire, enfant, parent, ami·e...) enregistré séparément dans
+// delphesRelations. C'est le même principe que la synastrie en astrologie traditionnelle
+// (croiser deux thèmes plutôt qu'en lire un seul), généralisé à toute relation plutôt que
+// réservé au couple — à la demande explicite de l'utilisatrice, pour pouvoir aussi comparer
+// avec un enfant, un parent, un·e ami·e.
+
+// Catégories de proches — volontairement neutres dans leur formulation (pas de vocabulaire
+// propre au couple) : la même comparaison sert aussi bien un parent qui regarde son enfant
+// qu'un couple ou une fratrie.
+const RELATION_TYPES = {
+  partenaire: "Partenaire",
+  enfant: "Enfant",
+  parent: "Parent",
+  fratrie: "Frère / Sœur",
+  ami: "Ami·e",
+  autre: "Autre",
+};
+
+function getRelations(){
+  try{
+    const list = JSON.parse(localStorage.getItem("delphesRelations") || "[]");
+    return Array.isArray(list) ? list : [];
+  }catch{ return []; }
+}
+function saveRelations(list){ localStorage.setItem("delphesRelations", JSON.stringify(list)); }
+function getRelation(id){ return getRelations().find(r => r.id === id) || null; }
+// Ajoute (sans id) ou met à jour (id déjà présent) un proche ; renvoie l'id final.
+function upsertRelation(rel){
+  const list = getRelations();
+  const idx = rel.id ? list.findIndex(r => r.id === rel.id) : -1;
+  if(idx === -1){
+    rel.id = rel.id || `rel_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
+    list.push(rel);
+  } else {
+    list[idx] = rel;
+  }
+  saveRelations(list);
+  return rel.id;
+}
+function deleteRelation(id){ saveRelations(getRelations().filter(r => r.id !== id)); }
+
+// Élément (Feu/Eau/Air/Terre) de chaque signe : pas une nouvelle classification, juste la
+// lecture inverse de la triplicité déjà établie par DECAN_MINOR_CARDS ci-dessus (même
+// enseigne = même élément, voir son commentaire).
+const SIGN_ELEMENT = {};
+for(const [sign, cards] of Object.entries(DECAN_MINOR_CARDS)){
+  const suit = cards[0].split(" de ")[1]; // "2 de Bâtons" -> "Bâtons"
+  SIGN_ELEMENT[sign] = SUITS[suit][2].split(" · ")[0]; // "Feu · action · volonté" -> "Feu"
+}
+
+// Dynamique classique entre deux éléments : même élément = résonance, éléments
+// complémentaires (Feu/Air, Terre/Eau) = équilibre naturel, éléments opposés = tension à
+// apprivoiser plutôt qu'un problème en soi — jamais présentée comme une incompatibilité.
+function elementDynamic(elA, elB){
+  if(elA === elB) return { kind:"resonance", text:`Vous partagez le même élément (${elA}) : une vraie proximité de rythme et d'instinct.` };
+  const complementary = new Set(["Feu-Air","Air-Feu","Terre-Eau","Eau-Terre"]);
+  if(complementary.has(`${elA}-${elB}`)) return { kind:"complement", text:`${elA} et ${elB} se nourrissent naturellement l'un l'autre — un bon équilibre, tant que chacun garde sa place.` };
+  return { kind:"tension", text:`${elA} et ${elB} avancent à des rythmes différents — une vraie richesse si elle est reconnue, une source de friction sinon.` };
+}
+
+// Points de comparaison entre deux thèmes (Soleil/Lune/Ascendant de chacun), avec les mêmes
+// types d'aspect et les mêmes orbes que CLIENT_ASPECTS/findAspect() ci-dessus — jusqu'ici
+// utilisés au sein d'un seul thème (natal) ou entre transits du jour et thème natal
+// (strongestTransitAspect()) ; ici, un troisième usage du même mécanisme, appliqué ENTRE
+// deux personnes.
+const SYNASTRY_POINT_LABELS = { sun:"Soleil", moon:"Lune", ascendant:"Ascendant" };
+function synastryPoints(profile){
+  const pts = [];
+  const b = profile?.astral?.bodies;
+  if(b?.sun) pts.push({ key:"sun", sign:b.sun.sign, longitude:b.sun.longitude });
+  if(b?.moon) pts.push({ key:"moon", sign:b.moon.sign, longitude:b.moon.longitude });
+  if(profile?.astral?.ascendant) pts.push({ key:"ascendant", sign:profile.astral.ascendant.sign, longitude:profile.astral.ascendant.longitude });
+  return pts;
+}
+const SYNASTRY_HARMONIOUS = new Set(["conjonction","trigone","sextile"]);
+// Vocabulaire dédié à la comparaison à deux (distinct de ASPECT_ACTION_PHRASES, qui décrit
+// une planète agissant sur une autre AU SEIN d'un même thème) : ici les deux points
+// appartiennent à deux personnes différentes, la formulation doit rester symétrique.
+const SYNASTRY_ASPECT_TEXT = {
+  conjonction: "se superposent presque exactement — une proximité immédiate",
+  trigone: "s'accordent sans effort",
+  sextile: "s'ouvrent naturellement une occasion l'un pour l'autre",
+  carré: "se mettent mutuellement sous tension",
+  opposition: "se tirent dans des directions opposées, à équilibrer plutôt qu'à trancher",
+};
+function synastryAspects(profileA, profileB){
+  const ptsA = synastryPoints(profileA), ptsB = synastryPoints(profileB);
+  const hits = [];
+  ptsA.forEach(pa=>{
+    ptsB.forEach(pb=>{
+      if(pa.longitude == null || pb.longitude == null) return;
+      const aspect = findAspect(pa.longitude, pb.longitude);
+      if(!aspect) return;
+      hits.push({ a:pa, b:pb, aspect, harmonious: SYNASTRY_HARMONIOUS.has(aspect.type) });
+    });
+  });
+  hits.sort((x,y)=>x.aspect.orb - y.aspect.orb); // l'aspect le plus exact d'abord
+  return hits;
+}
+
+// Fonction principale, pure et testable : compare deux thèmes (au format `saved`/profil
+// astral, voir getProfile()) et renvoie une structure de données — pas de HTML ici, voir
+// renderComparison() plus bas pour l'affichage. null si l'un des deux thèmes est incomplet.
+function compareProfiles(profileA, profileB){
+  if(!profileA?.astral || !profileB?.astral) return null;
+  const sunA = profileA.astral.bodies?.sun?.sign, sunB = profileB.astral.bodies?.sun?.sign;
+  const element = (sunA && sunB && SIGN_ELEMENT[sunA] && SIGN_ELEMENT[sunB])
+    ? { a:SIGN_ELEMENT[sunA], b:SIGN_ELEMENT[sunB], ...elementDynamic(SIGN_ELEMENT[sunA], SIGN_ELEMENT[sunB]) }
+    : null;
+
+  const aspects = synastryAspects(profileA, profileB);
+  const common = aspects.filter(h=>h.harmonious).slice(0,4);
+  const tense = aspects.filter(h=>!h.harmonious).slice(0,4);
+
+  const deityA = tutelaryDeity(profileA), deityB = tutelaryDeity(profileB);
+  const sharedDeity = (deityA && deityB && deityA.deityKey === deityB.deityKey) ? deityA : null;
+
+  return {
+    signs: {
+      a: { sun:sunA, moon:profileA.astral.bodies?.moon?.sign, ascendant:profileA.astral.ascendant?.sign },
+      b: { sun:sunB, moon:profileB.astral.bodies?.moon?.sign, ascendant:profileB.astral.ascendant?.sign },
+    },
+    element, common, tense, deityA, deityB, sharedDeity,
+  };
+}
+
 async function generateAIReading(question, cards, positions){
   // Le budget de temps grandit avec le nombre de cartes, exactement comme max_tokens côté
   // serveur (voir api/reading.js) : une Croix celtique ou une Année à venir demande à l'IA
@@ -3838,6 +3966,7 @@ function profil(){
     <div class="tile" data-profil-go="astral"><strong>☉ Profil astral</strong><span>Ton thème natal complet, calculé à partir de ta date, heure et lieu de naissance.</span></div>
     <div class="tile" data-profil-go="journal"><strong>☽ Journal</strong><span>${journal.length} tirage${journal.length>1?"s":""} enregistré${journal.length>1?"s":""}.</span></div>
     <div class="tile" data-profil-go="stats"><strong>📊 Statistiques</strong><span>Tes tendances : cartes, thèmes, série de jours.</span></div>
+    <div class="tile" data-profil-go="relations"><strong>🤝 Mes proches</strong><span>Compare ton thème à celui d'un partenaire, d'un enfant, d'un parent…</span></div>
     ${retrospectiveReady ? `<div class="tile" data-go-retrospective="1"><strong>🎂 Ta rétrospective de l'année</strong><span>Un an de tirages, résumé pour toi.</span></div>` : ""}
   </div>
   ${links ? `
@@ -3846,6 +3975,242 @@ function profil(){
     <p class="suit-h4" style="text-align:center;margin-bottom:6px">${escapeHTML(l.labels.join(" & "))} en ${escapeHTML(l.sign)}</p>
     ${cardHTML(l.card,"major")}
   </div>`).join("")}</div>` : ""}`;
+}
+
+/* ===================== ÉCRANS "MES PROCHES" ===================== */
+// Gestion des proches (liste, ajout/modification, suppression) : toujours gratuite — c'est
+// de la simple gestion de données, pas une interprétation. Seul l'écran de comparaison lui-
+// même (renderComparison() plus bas) est premium.
+function showRelations(){
+  preDetailScroll = window.scrollY;
+  document.getElementById("screen").innerHTML = renderRelations();
+  triggerScreenAnim("detail");
+  window.scrollTo(0,0);
+  bindRelationsList();
+  cardDetailReturnTo = showRelations;
+}
+function renderRelations(){
+  const relations = getRelations();
+  return `<div class="detail">
+    <div class="section-title"><h3>Mes proches</h3></div>
+    <p class="note">Compare ton thème à celui d'un proche — partenaire, enfant, parent, ami·e... Son thème reste uniquement sur cet appareil, comme le tien : le serveur ne fait que le calcul, sans rien conserver.</p>
+    ${relations.length ? `<div class="symbol-list" style="margin-top:14px">
+      ${relations.map(r=>`<div class="symbol">
+        <div class="clickable" data-relation="${escapeHTML(r.id)}">
+          <b>${escapeHTML(r.firstName)}</b><br><small>${escapeHTML(RELATION_TYPES[r.relationType]||"Autre")}${r.astral?.bodies?.sun?.sign ? " · "+escapeHTML(r.astral.bodies.sun.sign) : ""}</small>
+        </div>
+        <button class="ghost delete-relation" data-delete-relation="${escapeHTML(r.id)}" style="margin-top:8px;font-size:12px;padding:4px 10px">Supprimer</button>
+      </div>`).join("")}
+    </div>` : `<p class="note" style="text-align:center;margin-top:14px">Aucun proche enregistré pour l'instant.</p>`}
+    <button class="primary" id="addRelation" style="margin-top:20px">+ Ajouter un proche</button>
+    <button class="ghost" id="detailBack" style="margin-top:10px">← Retour</button>
+  </div>`;
+}
+function bindRelationsList(){
+  document.getElementById("addRelation").onclick = ()=> showRelationForm();
+  document.getElementById("detailBack").onclick = ()=>{
+    const scrollTarget = preDetailScroll;
+    render();
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
+  };
+  document.querySelectorAll("[data-relation]").forEach(el=>{
+    el.onclick = ()=> showComparison(el.dataset.relation);
+  });
+  // Boutons "Supprimer" : éléments frères (pas descendants) des blocs cliquables ci-dessus,
+  // donc pas besoin de stopPropagation — cliquer dessus ne déclenche jamais showComparison().
+  document.querySelectorAll("[data-delete-relation]").forEach(el=>{
+    el.onclick = ()=>{
+      deleteRelation(el.dataset.deleteRelation);
+      showRelations();
+    };
+  });
+}
+
+function showRelationForm(existingId){
+  preDetailScroll = window.scrollY;
+  const existing = existingId ? getRelation(existingId) : null;
+  document.getElementById("screen").innerHTML = renderRelationForm(existing);
+  triggerScreenAnim("detail");
+  window.scrollTo(0,0);
+  bindRelationForm(existing);
+}
+function renderRelationForm(existing){
+  const r = existing || {};
+  const options = Object.entries(RELATION_TYPES).map(([k,label])=>`<option value="${k}" ${r.relationType===k?"selected":""}>${escapeHTML(label)}</option>`).join("");
+  return `<div class="detail">
+    <div class="section-title"><h3>${existing ? "Modifier ce proche" : "Ajouter un proche"}</h3></div>
+    <p class="note">Renseigne son prénom, sa date, heure et lieu de naissance pour calculer son thème complet.</p>
+    <div class="draw-notes">
+      <p class="suit-h4" style="margin:0 0 6px">Prénom</p>
+      <input id="relationFirstName" placeholder="Son prénom" value="${escapeHTML(r.firstName||"")}">
+    </div>
+    <div class="draw-notes">
+      <p class="suit-h4" style="margin:0 0 6px">Lien avec toi</p>
+      <select id="relationType">${options}</select>
+    </div>
+    <div class="draw-notes">
+      <p class="suit-h4" style="margin:0 0 6px">Date de naissance</p>
+      <input id="relationDate" type="date" value="${escapeHTML(r.birthDate||"")}">
+    </div>
+    <div class="draw-notes">
+      <p class="suit-h4" style="margin:0 0 6px">Heure de naissance</p>
+      <input id="relationTime" type="time" value="${escapeHTML(r.birthTime||"")}" ${r.timeUnknown?"disabled":""}>
+      <label style="display:flex;align-items:center;gap:8px;font-size:14px;margin-top:8px;opacity:.8">
+        <input id="relationTimeUnknown" type="checkbox" style="width:auto" ${r.timeUnknown?"checked":""}>
+        Heure de naissance inconnue
+      </label>
+    </div>
+    <div class="draw-notes">
+      <p class="suit-h4" style="margin:0 0 6px">Lieu de naissance</p>
+      <input id="relationPlace" placeholder="ex. Lyon, France" value="${escapeHTML(r.birthPlace||"")}">
+    </div>
+    <p class="note" id="relationFormError" style="display:none;color:var(--terracotta)"></p>
+    <div id="relationFormLoading" style="display:none"></div>
+    <button class="primary" id="relationSubmit">${existing ? "Mettre à jour" : "Calculer son thème"}</button>
+    <button class="ghost" id="relationFormCancel">Annuler</button>
+  </div>`;
+}
+function bindRelationForm(existing){
+  const timeInput = document.getElementById("relationTime");
+  const unknownCheckbox = document.getElementById("relationTimeUnknown");
+  unknownCheckbox.addEventListener("change", ()=>{
+    timeInput.disabled = unknownCheckbox.checked;
+    if(unknownCheckbox.checked) timeInput.value = "";
+  });
+  document.getElementById("relationFormCancel").onclick = ()=> showRelations();
+  document.getElementById("relationSubmit").onclick = async ()=>{
+    const firstName = document.getElementById("relationFirstName").value.trim();
+    const relationType = document.getElementById("relationType").value;
+    const birthDate = document.getElementById("relationDate").value;
+    const timeUnknown = unknownCheckbox.checked;
+    const birthTime = timeUnknown ? "" : document.getElementById("relationTime").value;
+    const birthPlace = document.getElementById("relationPlace").value.trim();
+    const errorEl = document.getElementById("relationFormError");
+    errorEl.style.display = "none";
+
+    if(!firstName || !birthDate || !birthPlace || (!timeUnknown && !birthTime)){
+      errorEl.textContent = "Merci de remplir tous les champs (ou de cocher « heure inconnue »).";
+      errorEl.style.display = "block";
+      return;
+    }
+
+    const submitBtn = document.getElementById("relationSubmit");
+    submitBtn.disabled = true;
+    const loadingEl = document.getElementById("relationFormLoading");
+    loadingEl.innerHTML = `<div class="ai-loading-magic small">${starLoaderHTML("sm")}</div>`;
+    loadingEl.style.display = "block";
+
+    try{
+      const astral = await fetchAstralProfile({ date: birthDate, time: timeUnknown ? null : birthTime, place: birthPlace });
+      upsertRelation({ id: existing?.id, firstName, relationType, birthDate, birthTime: timeUnknown ? null : birthTime, timeUnknown, birthPlace, astral });
+      showRelations();
+    } catch(err){
+      errorEl.textContent = err.message || "Impossible de calculer son thème pour le moment.";
+      errorEl.style.display = "block";
+      submitBtn.disabled = false;
+      loadingEl.style.display = "none";
+    }
+  };
+}
+
+// Écran de comparaison à proprement parler — seule partie premium de "Mes proches" (voir
+// isPremiumEnabled()) : la gestion des proches ci-dessus reste gratuite, mais interpréter
+// les deux thèmes l'un par rapport à l'autre est le genre de contenu réservé au premium
+// dans le reste de l'app (voir renderProfilResults()).
+function showComparison(relationId){
+  preDetailScroll = window.scrollY;
+  const relation = getRelation(relationId);
+  const primary = getProfile();
+  document.getElementById("screen").innerHTML = renderComparison(primary, relation);
+  triggerScreenAnim("detail");
+  window.scrollTo(0,0);
+  const backBtn = document.getElementById("detailBack");
+  if(backBtn) backBtn.onclick = ()=>{
+    const scrollTarget = preDetailScroll;
+    showRelations();
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
+  };
+  const premiumToggle = document.getElementById("premiumToggle");
+  if(premiumToggle) premiumToggle.onchange = ()=>{ setPremiumEnabled(premiumToggle.checked); showComparison(relationId); };
+  // N'existe que dans la branche "pas encore de profil propre" de renderComparison().
+  const profilEditBtn = document.getElementById("profilEdit");
+  if(profilEditBtn) profilEditBtn.onclick = ()=> showProfilEditForm();
+  cardDetailReturnTo = () => showComparison(relationId);
+  bindChips();
+}
+function renderComparison(primary, relation){
+  if(!relation){
+    return `<div class="detail">
+      <div class="section-title"><h3>Comparaison</h3></div>
+      <p class="note" style="text-align:center">Ce proche n'existe plus.</p>
+      <button class="ghost" id="detailBack" style="margin-top:20px">← Retour</button>
+    </div>`;
+  }
+  if(!primary || !primary.astral){
+    return `<div class="detail">
+      <div class="section-title"><h3>Comparaison avec ${escapeHTML(relation.firstName)}</h3></div>
+      <p class="note" style="text-align:center">Renseigne d'abord ton propre profil astral pour pouvoir comparer les deux thèmes.</p>
+      <button class="secondary" id="profilEdit" style="margin-top:14px">Renseigner mon profil</button>
+      <button class="ghost" id="detailBack" style="margin-top:10px">← Retour</button>
+    </div>`;
+  }
+
+  const premiumOn = isPremiumEnabled();
+  const cmp = compareProfiles(primary, relation);
+  const relLabel = RELATION_TYPES[relation.relationType] || "Autre";
+
+  return `<div class="detail">
+    <div class="section-title"><h3>Toi & ${escapeHTML(relation.firstName)}</h3></div>
+    <p class="question-recall">« ${escapeHTML(relLabel)} »</p>
+
+    <p class="note" style="text-align:center;margin-top:10px">
+      <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer">
+        <input id="premiumToggle" type="checkbox" style="width:auto" ${premiumOn?"checked":""}>
+        Mode premium (aperçu local — aucun vrai paiement)
+      </label>
+    </p>
+
+    <div class="symbol-list" style="margin-top:14px;grid-template-columns:1fr 1fr">
+      <div class="symbol" style="text-align:center"><b>Toi</b><br>☉ ${escapeHTML(cmp.signs.a.sun||"—")}<br>☽ ${escapeHTML(cmp.signs.a.moon||"—")}${cmp.signs.a.ascendant?`<br>Asc. ${escapeHTML(cmp.signs.a.ascendant)}`:""}</div>
+      <div class="symbol" style="text-align:center"><b>${escapeHTML(relation.firstName)}</b><br>☉ ${escapeHTML(cmp.signs.b.sun||"—")}<br>☽ ${escapeHTML(cmp.signs.b.moon||"—")}${cmp.signs.b.ascendant?`<br>Asc. ${escapeHTML(cmp.signs.b.ascendant)}`:""}</div>
+    </div>
+
+    ${premiumOn ? `
+    ${cmp.element ? `
+    <div class="section-title centered" style="margin-top:24px"><h3>Élément dominant</h3></div>
+    <p class="note" style="text-align:center">${escapeHTML(cmp.element.a)} (toi) ${cmp.element.a===cmp.element.b ? "" : `· ${escapeHTML(cmp.element.b)} (${escapeHTML(relation.firstName)})`}</p>
+    <div class="symbol-list" style="margin-top:10px">
+      <div class="symbol" style="text-align:center">${escapeHTML(cmp.element.text)}</div>
+    </div>` : ""}
+
+    ${cmp.sharedDeity ? `
+    <div class="section-title centered" style="margin-top:24px"><h3>Une divinité tutélaire commune</h3></div>
+    <div class="symbol-list" style="margin-top:10px">
+      <div class="symbol clickable" data-deity="${escapeHTML(cmp.sharedDeity.deityKey)}" style="text-align:center">
+        <div style="font-size:32px">${escapeHTML(cmp.sharedDeity.card[2]||"✦")}</div>
+        <b>${escapeHTML(cmp.sharedDeity.deityName)}</b>
+        ${cmp.sharedDeity.note ? `<br><small>${escapeHTML(cmp.sharedDeity.note)}</small>` : ""}
+      </div>
+    </div>
+    <p class="note" style="text-align:center;margin-top:6px">Vous êtes tous les deux placés sous cette figure — un vrai terrain commun.</p>` : ""}
+
+    ${cmp.common.length ? `
+    <div class="section-title centered" style="margin-top:24px"><h3>Vos points communs</h3></div>
+    <div class="symbol-list" style="margin-top:10px">
+      ${cmp.common.map(h=>`<div class="symbol"><b>${escapeHTML(SYNASTRY_POINT_LABELS[h.a.key])} (${escapeHTML(h.a.sign)}) ↔ ${escapeHTML(SYNASTRY_POINT_LABELS[h.b.key])} (${escapeHTML(h.b.sign)})</b><br><small>${escapeHTML(h.aspect.type)} — ${escapeHTML(SYNASTRY_ASPECT_TEXT[h.aspect.type]||"")}</small></div>`).join("")}
+    </div>` : ""}
+
+    ${cmp.tense.length ? `
+    <div class="section-title centered" style="margin-top:24px"><h3>Vos points de tension potentiels</h3></div>
+    <div class="symbol-list" style="margin-top:10px">
+      ${cmp.tense.map(h=>`<div class="symbol"><b>${escapeHTML(SYNASTRY_POINT_LABELS[h.a.key])} (${escapeHTML(h.a.sign)}) ↔ ${escapeHTML(SYNASTRY_POINT_LABELS[h.b.key])} (${escapeHTML(h.b.sign)})</b><br><small>${escapeHTML(h.aspect.type)} — ${escapeHTML(SYNASTRY_ASPECT_TEXT[h.aspect.type]||"")}</small></div>`).join("")}
+    </div>` : ""}
+
+    ${(!cmp.common.length && !cmp.tense.length) ? `<p class="note" style="text-align:center;margin-top:14px">Pas d'aspect marqué entre vos deux thèmes — ni proximité forte, ni tension particulière.</p>` : ""}
+    ` : premiumLockHTML("La comparaison détaillée (élément dominant, points communs, tensions potentielles, divinité tutélaire commune) fait partie du contenu premium.")}
+
+    <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
+  </div>`;
 }
 
 const PLANET_LABELS = {
@@ -4568,6 +4933,7 @@ function bind(){
       if(key==="astral") showProfilAstral();
       else if(key==="journal") showJournal();
       else if(key==="stats") showStats();
+      else if(key==="relations") showRelations();
     };
   });
   document.getElementById("homeBtn").onclick=()=>setRoute("home");
