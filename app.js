@@ -317,23 +317,23 @@ const CARD_LORE = {
 },
 "As de Coupes": {
   marseille:"Une main sort des nuages, offrant une coupe débordante d'où jaillissent cinq jets d'eau : émotion neuve et généreuse, cœur ouvert avant toute retenue.",
-  myth:"La source de Castalie, au pied du mont Parnasse à Delphes, offrait à qui s'y abreuvait une inspiration purifiée, presque sacrée. Cet As est cette même eau vive, promesse d'un sentiment encore intact."
+  myth:"Philotès, personnification de l'affection et du désir partagé (voir la fiche « Philotès »), incarne cet élan qui donne sans calcul ni condition. Cet As est ce même premier don, avant même de savoir ce qu'il en coûtera."
 },
 "2 de Coupes": {
   marseille:"Deux figures échangent leurs coupes face à face, un caducée ailé entre elles : union, réciprocité, lien affectif qui se noue à parts égales.",
-  myth:"Éros et Psyché, après bien des épreuves, finirent unis dans une réciprocité que ni les dieux ni les obstacles n'avaient réussi à empêcher. Cette carte célèbre cet échange équilibré, où chacun donne autant qu'il reçoit."
+  myth:"Harmonie et Cadmos, fondateur de Thèbes, furent unis lors de noces où tous les dieux de l'Olympe vinrent en personne (voir les fiches « Harmonie » et « Cadmos »). Cette carte célèbre cet échange équilibré, où chacun donne autant qu'il reçoit."
 },
 "3 de Coupes": {
   marseille:"Trois figures lèvent leur coupe ensemble, en cercle, entourées de fruits : joie partagée, célébration collective, abondance émotionnelle vécue à plusieurs.",
-  myth:"Les Charites, déesses de la grâce et de la joie, dansaient toujours ensemble, jamais seules — leur bonheur n'existait que partagé. Cette carte est cette même allégresse qui a besoin d'être vécue à plusieurs pour prendre tout son sens."
+  myth:"Euphrosyne, l'une des trois Charites, personnifie la joie qui ne se vit jamais seule (voir la fiche « Euphrosyne »). Cette carte est cette même allégresse qui a besoin d'être vécue à plusieurs pour prendre tout son sens."
 },
 "4 de Coupes": {
   marseille:"Un personnage assis sous un arbre regarde trois coupes sans réaction, une quatrième lui est tendue depuis un nuage : lassitude, indifférence face à une opportunité pourtant offerte.",
-  myth:"Narcisse, absorbé par son propre reflet, ne vit jamais l'amour d'Écho pourtant sincèrement tendu vers lui. Cette carte avertit de ce même risque : trop tourné vers l'intérieur, on peut laisser passer ce qui mériterait un regard."
+  myth:"Hypnos, dieu du Sommeil (voir la fiche « Hypnos »), veille sur ce même assoupissement où plus rien, pas même une offrande tendue, ne parvient à percer. Cette carte avertit de ce même risque : trop enfermé dans son propre repos, on peut laisser passer ce qui mériterait un regard."
 },
 "5 de Coupes": {
   marseille:"Un personnage en deuil contemple trois coupes renversées, sans voir les deux qui restent debout derrière lui : regret, attention entièrement fixée sur la perte plutôt que sur ce qui subsiste.",
-  myth:"Déméter, pleurant Perséphone disparue, refusa longtemps de voir qu'elle pourrait un jour la retrouver. Cette carte rappelle cette même leçon : le chagrin est légitime, mais il ne doit pas aveugler sur ce qui reste encore possible."
+  myth:"Orphée, en se retournant vers Eurydice un instant trop tôt au sortir des Enfers, la perdit une seconde fois, cette fois pour toujours (voir la fiche « Orphée »). Cette carte rappelle cette même leçon : le chagrin est légitime, mais il ne doit pas aveugler sur ce qui reste encore possible."
 },
 "6 de Coupes": {
   marseille:"Deux enfants échangent des coupes fleuries dans un jardin paisible : nostalgie douce, souvenir d'enfance, tendresse simple retrouvée sans calcul.",
@@ -502,6 +502,14 @@ Object.assign(CARD_IMAGES, {
   "Cavalier de Bâtons": "assets/card-batons-cavalier.jpg",
   "Reine de Bâtons": "assets/card-batons-reine.jpg",
   "Roi de Bâtons": "assets/card-batons-roi.jpg",
+  // Cartes numérales de Coupes (1-5) — début de l'illustration de cette enseigne, jusqu'ici
+  // au glyphe emoji/pips. Le reste (6-10, figures de cour) suivra au fil des prochains
+  // lots ; les 5 restantes retombent encore sur le repli générique.
+  "As de Coupes": "assets/card-coupes-1.jpg",
+  "2 de Coupes": "assets/card-coupes-2.jpg",
+  "3 de Coupes": "assets/card-coupes-3.jpg",
+  "4 de Coupes": "assets/card-coupes-4.jpg",
+  "5 de Coupes": "assets/card-coupes-5.jpg",
 });
 
 // Cartes numérales dotées d'une figure mythologique propre (contrairement aux autres
@@ -533,6 +541,11 @@ const NUMBER_CARD_DEITY = {
   "10 de Bâtons": "kratos",
   "9 de Épées": "morphée",
   "10 de Épées": "thanatos",
+  "As de Coupes": "philotès",
+  "2 de Coupes": "harmonie",
+  "3 de Coupes": "euphrosyne",
+  "4 de Coupes": "hypnos",
+  "5 de Coupes": "orphée",
 };
 // Symboles propres à une carte numérale précise (une fois illustrée avec sa propre figure,
 // voir NUMBER_CARD_DEITY ci-dessus), utilisés par allCards() à la place de la formule
@@ -543,6 +556,10 @@ const NUMBER_CARD_DEITY = {
 const NUMBER_CARD_SYMBOLS = {
   "2 de Bâtons": "forêt · temple · arc · cerf · flèche",
   "9 de Épées": "pavot",
+  "As de Coupes": "colombe · eau",
+  "2 de Coupes": "caducée",
+  "4 de Coupes": "pavot",
+  "5 de Coupes": "lyre · monde souterrain",
 };
 // Nom affiché comme "divinité" d'une carte dans les écrans de détail : la figure propre
 // à la carte si elle existe (NUMBER_CARD_DEITY), sinon c[1] tel quel (le nom du dieu pour
@@ -783,13 +800,14 @@ const SYMBOL_LIBRARY = {
     "Le temple d'Artémis à Éphèse comptait, lui, parmi les Sept Merveilles du monde antique : reconstruit plusieurs fois après avoir été détruit, notamment par un incendie volontaire resté tristement célèbre, il attirait des pèlerins de toute l'Asie Mineure — preuve qu'un temple, une fois consacré, peut renaître de ses propres cendres aussi souvent qu'il le faut.",
     "Le temple est devenu un symbole de savoir sacré, d'initiation et de seuil entre le monde profane et ce qui le dépasse.",
   ]},
-  "monde souterrain":{icon:"⚱",label:"Enfer / monde souterrain",category:"Lieux & passages",desc:"Transformation profonde, mort symbolique, vérité qui ne peut plus rester cachée.",links:["hadès","perséphone"],lore:[
+  "monde souterrain":{icon:"⚱",label:"Enfer / monde souterrain",category:"Lieux & passages",desc:"Transformation profonde, mort symbolique, vérité qui ne peut plus rester cachée.",links:["hadès","perséphone","orphée"],lore:[
     "Le monde souterrain est le royaume d'Hadès, frère de Zeus et de Poséidon, qui en hérita lors du partage du cosmos entre les trois dieux.",
     "Perséphone y règne à ses côtés une partie de l'année, après avoir été enlevée par Hadès et liée aux Enfers pour avoir mangé quelques grains de grenade (voir la fiche « Grenade »). Son passage entre les deux mondes rythme les saisons.",
     "Contrairement à une idée reçue, ce monde souterrain n'est pas un lieu de punition pour tous : c'est avant tout le domaine de ce qui a été transformé, de ce qui ne peut plus revenir en arrière — un passage plus qu'un châtiment.",
     "Trois juges y président le sort de chaque âme : Minos (voir la fiche « Minos »), Rhadamanthe et Éaque, tous trois anciens rois mortels choisis pour leur réputation de justice absolue de leur vivant — preuve que même aux Enfers, le jugement reste une affaire humaine avant d'être divine.",
+    "Rares sont les vivants qui y sont descendus puis en sont ressortis : Orphée fut de ceux-là, sa lyre à la main, venu réclamer Eurydice à Hadès et Perséphone eux-mêmes (voir la fiche « Orphée ») — la preuve que ce royaume peut, à de très rares exceptions, entendre une supplique vivante.",
     "Il est devenu un symbole de transformation profonde, de mort symbolique et de vérité qui ne peut plus rester cachée une fois qu'on y est descendu.",
-    "Le monde souterrain est particulièrement associé à Hadès et à Perséphone.",
+    "Le monde souterrain est particulièrement associé à Hadès et à Perséphone — et, par sa propre descente, à Orphée.",
   ]},
   "labyrinthe":{icon:"🌀",label:"Labyrinthe",category:"Lieux & passages",desc:"Épreuve complexe, chemin qui s'égare avant de se retrouver — à condition d'avoir un fil à suivre.",links:["minos","ariane"],lore:[
     "Le labyrinthe fut construit en Crète par l'architecte Dédale, sur l'ordre du roi Minos (voir la fiche « Minos »), pour y enfermer le Minotaure : une créature à tête de taureau et corps d'homme, née de l'union contre nature de la reine Pasiphaé et d'un taureau envoyé par Poséidon.",
@@ -800,7 +818,7 @@ const SYMBOL_LIBRARY = {
   ]},
 
   // Mythologie — attributs et divinités
-  "caducée":{icon:"⚕",label:"Caducée",category:"Mythologie",desc:"Attribut d'Hermès : médiation, circulation, communication entre des mondes séparés.",links:["hermès"],lore:[
+  "caducée":{icon:"⚕",label:"Caducée",category:"Mythologie",desc:"Attribut d'Hermès : médiation, circulation, communication entre des mondes séparés.",links:["hermès","cadmos","harmonie"],lore:[
     "Le caducée est le bâton d'Hermès, reconnaissable à ses deux serpents entrelacés et à ses ailes.",
     "Hermès est le messager des dieux. Il circule constamment entre les différents mondes : Olympe, monde humain et monde souterrain.",
     "Son bâton correspond donc parfaitement à sa fonction : il accompagne celui qui franchit les frontières et transporte les messages d'un monde à l'autre.",
@@ -842,13 +860,13 @@ const SYMBOL_LIBRARY = {
     "Il est devenu un symbole de puissance, de maîtrise des forces naturelles, de mer, de profondeur et de force indomptable.",
     "Le trident est particulièrement associé à Poséidon.",
   ]},
-  "lyre":{icon:"🎵",label:"Lyre",category:"Mythologie",desc:"Attribut d'Apollon : harmonie, vérité transmise par la beauté plutôt qu'imposée.",links:["apollon"],lore:[
+  "lyre":{icon:"🎵",label:"Lyre",category:"Mythologie",desc:"Attribut d'Apollon : harmonie, vérité transmise par la beauté plutôt qu'imposée.",links:["apollon","orphée"],lore:[
     "La lyre est l'instrument d'Apollon, dieu de la musique, de la poésie et de la lumière — mais elle ne fut pas inventée par lui.",
     "Selon le mythe, c'est Hermès, encore enfant, qui façonna la première lyre à partir d'une carapace de tortue et de cordes tendues, avant de l'offrir à Apollon en échange du troupeau de bœufs qu'il lui avait dérobé. L'instrument de la beauté naît ainsi d'un geste de ruse réparé par un cadeau.",
     "Entre les mains d'Apollon, la lyre devient l'instrument d'une vérité qui persuade par l'harmonie plutôt que par la force — à l'opposé de l'arc, autre attribut du dieu, qui frappe à distance.",
     "C'est aussi une lyre, offerte par Apollon lui-même, qu'Orphée emporta jusqu'aux Enfers pour tenter de ramener son épouse Eurydice parmi les vivants : son chant, dit-on, faisait taire jusqu'aux tourments des damnés et adoucissait le cœur inflexible d'Hadès — la preuve que cet instrument peut atteindre ce que ni la force ni la prière ordinaire ne peuvent obtenir.",
     "La lyre est devenue un symbole d'harmonie, d'inspiration et de vérité transmise par la beauté plutôt qu'imposée.",
-    "La lyre est particulièrement associée à Apollon.",
+    "La lyre est particulièrement associée à Apollon — et, dans le Tarot, à Orphée.",
   ]},
   "arc":{icon:"🏹",label:"Arc",category:"Mythologie",desc:"Attribut d'Artémis la chasseresse — et, dans le Tarot, d'Éros : intention, concentration, désir qui vise juste sans toujours consulter la raison.",links:["artémis","éros"],lore:[
     "L'arc est l'instrument du chasseur : il permet d'atteindre sa cible à distance.",
@@ -1255,13 +1273,13 @@ const SYMBOL_LIBRARY = {
     "Homère précise que ce fruit était si doux que quiconque y goûtait perdait aussitôt tout désir de rentrer chez soi et tout souvenir du chemin du retour — les compagnons d'Ulysse qui en mangèrent durent être ramenés de force, en pleurs, jusqu'aux navires.",
     "Il peut ainsi représenter émergence, purification, renaissance, oubli et transformation.",
   ]},
-  "pavot":{icon:"🌺",label:"Pavot",category:"Plantes",desc:"Sommeil, oubli, rêve — ce qui apaise mais peut aussi endormir la vigilance.",links:[],lore:[
+  "pavot":{icon:"🌺",label:"Pavot",category:"Plantes",desc:"Sommeil, oubli, rêve — ce qui apaise mais peut aussi endormir la vigilance.",links:["hypnos","morphée"],lore:[
     "Le pavot est lié à plusieurs divinités, notamment Déméter et Perséphone, et à l'univers du sommeil et de l'oubli.",
     "Ses propriétés soporifiques étaient connues dans l'Antiquité. La fleur pouvait donc symboliser le sommeil, l'apaisement et l'oubli.",
     "Dans le contexte du mythe de Déméter et de Perséphone, le pavot est également associé à la fertilité et aux mystères liés à la terre. Il peut ainsi relier le sommeil de l'être humain au repos de la nature avant son réveil.",
     "Le pavot est aussi l'attribut d'Hypnos, dieu du Sommeil, et de son fils Morphée (voir la fiche « Morphée »), qu'on représente parfois une tige de pavot à la main ou une couronne de ces mêmes fleurs sur la tête — un lien si étroit entre la plante et le sommeil qu'il a traversé les siècles jusque dans le vocabulaire médical de l'opium et de la morphine.",
     "Le pavot est devenu un symbole de sommeil, d'oubli, de rêve, d'apaisement et de passage entre deux états.",
-    "Le pavot peut être particulièrement associé à Déméter et Perséphone.",
+    "Le pavot peut être particulièrement associé à Déméter et Perséphone — et, par son usage le plus direct, à Hypnos et à son fils Morphée.",
   ]},
   "crocus":{icon:"🌼",label:"Fleur de crocus",category:"Plantes",desc:"Renouveau, printemps, transformation qui recommence.",links:[],lore:[
     "Le crocus est lié à une histoire de transformation particulièrement tragique.",
@@ -1517,6 +1535,10 @@ const DEITY_NOTES = {
   "borée":"Dieu du vent du Nord, l'un des quatre Anémoi, fils d'Astréos et d'Éos — ravisseur de la princesse athénienne Orithye.",
   "alké":"Personnification de la Vaillance martiale, la fermeté qui tient bon dans l'épreuve — figure mineure, peu documentée.",
   "kratos":"Personnification de la Puissance souveraine, frère de Niké, de Bia et de Zelos, exécuteur des ordres de Zeus.",
+  "philotès":"Personnification de l'affection, de l'amitié et du désir partagé, fille de la Nuit — sœur d'Éris, d'Apaté et de Némésis, mais tournée vers ce qui unit plutôt que ce qui sépare.",
+  "euphrosyne":"L'une des trois Charites, personnifiant la joie et la gaieté partagée — jamais représentée seule.",
+  "hypnos":"Dieu du Sommeil, frère jumeau de Thanatos et père de Morphée — un pouvoir assez redoutable pour tromper Zeus lui-même.",
+  "orphée":"Musicien légendaire dont le chant charmait bêtes, arbres et jusqu'aux Enfers — descendu chercher son épouse Eurydice, il la perdit une seconde fois.",
 };
 
 // Textes mythologiques développés pour les figures listées ci-dessus (voir showDeityDetail() /
@@ -1864,6 +1886,7 @@ const DEITY_LORE = {
     "Son mariage avec Cadmos, fondateur de Thèbes (voir la fiche « Cadmos »), fut célébré en présence de tous les dieux de l'Olympe, venus lui offrir des présents — dont un collier forgé par Héphaïstos, d'une beauté si rare qu'il resta légendaire pour les générations suivantes.",
     "Devenue vieille aux côtés de Cadmos, elle fut changée avec lui en serpent et rejoignit les Champs Élysées — refusant, jusque dans la métamorphose, de se séparer de celui qu'elle avait épousé.",
     "Harmonie est particulièrement associée à Cadmos.",
+    "Dans le Tarot, Harmonie est la figure du 2 de Coupes, où deux personnages échangent leurs coupes face à face, un caducée ailé suspendu entre eux (voir la fiche « Caducée ») — ses deux serpents entrelacés font écho, par un rapprochement plus tardif, à ce même couple changé en serpents à la fin de sa vie : cette carte célèbre l'union à parts égales, où chacun donne autant qu'il reçoit.",
   ],
   "atalante": [
     "Abandonnée à sa naissance par un père qui espérait un fils, Atalante fut allaitée par une ourse puis recueillie par des chasseurs — une enfance sauvage qui en fit une coureuse et une archère hors pair, proche par son mode de vie de la déesse Artémis (voir la fiche « Artémis »).",
@@ -1995,6 +2018,30 @@ const DEITY_LORE = {
     "Fils du Titan Pallas et de Styx, frère de Niké, de Bia et de Zelos (voir les fiches « Niké », « Bia » et « Zelos »), il se rangea comme eux aux côtés de Zeus pendant la guerre contre les Titans et resta depuis un compagnon permanent de son trône, chargé d'en faire respecter les volontés.",
     "Dans la pièce Prométhée enchaîné d'Eschyle, c'est lui qui ouvre la scène : sur ordre de Zeus, il escorte Héphaïstos jusqu'au rocher du Caucase et lui ordonne d'y enchaîner Prométhée, pendant que Bia, silencieuse à ses côtés, se contente d'exécuter (voir la fiche « Prométhée »). Seul parmi les quatre enfants de Styx à recevoir une réplique dans les textes qui nous restent, il incarne le pouvoir qui se justifie en parlant, là où Bia agit sans un mot.",
     "Dans le Tarot, Kratos est la figure du 10 de Bâtons, où un personnage courbé porte à grand-peine dix bâtons vers une maison au loin : cette même puissance qui n'a de sens qu'en s'exerçant jusqu'au bout d'une charge, quel qu'en soit le poids, est précisément la sienne — la force devenue fardeau, mais jamais déposée avant le but atteint.",
+  ],
+  "philotès": [
+    "Philotès personnifie l'affection, l'amitié et le désir partagé — la force qui rapproche. Hésiode en fait une fille de la Nuit, née sans père, aux côtés de sœurs bien plus sombres : Apaté la Tromperie, Némésis la Rétribution et Éris la Discorde (voir les fiches « Apaté », « Némésis » et « Éris ») — une même origine nocturne, mais un tempérament qui prend le chemin inverse du leur.",
+    "Le philosophe Empédocle en fait l'une des deux grandes forces qui gouvernent l'univers : Philotès unit les éléments là où Éris, sa sœur, les sépare — l'amour et la discorde alternant sans fin pour façonner puis défaire le monde. Il va jusqu'à l'identifier à Aphrodite elle-même, sous son nom archaïque de Kypris.",
+    "Un détail rare mais frappant lui est attaché : Empédocle la dit blessée et offensée par les sacrifices d'animaux, dont elle réclamerait l'abstention en son honneur — une divinité de l'union qui refuse jusqu'à la violence faite pour la célébrer.",
+    "Dans le Tarot, Philotès est la figure de l'As de Coupes, où une main tendue depuis les nuages offre une coupe débordante d'eau vive : ce premier élan qui donne sans calcul ni condition, avant même de savoir ce qu'il en coûtera, est exactement ce qu'elle personnifie.",
+  ],
+  "euphrosyne": [
+    "Euphrosyne, dont le nom signifie « joie » ou « bonne humeur », est l'une des trois Charites — les déesses de la grâce que la tradition ne représente jamais seules, toujours dansant ensemble aux côtés d'Aglaé et de Thalie (voir les fiches « Charites » et « Thalia »).",
+    "Selon Hésiode, elle est fille de Zeus et de l'Océanide Eurynomé, même si les sources antiques varient sur le nombre exact et la généalogie des Charites. Compagnes d'Aphrodite et des Muses, les trois sœurs président aux fêtes et aux banquets de l'Olympe — tout ce qui rend la vie belle sans nécessité.",
+    "Parmi ses sœurs, elle personnifie plus particulièrement la joie elle-même — non l'abondance ou la fête que représente Thalia (voir la fiche « Thalia »), mais l'allégresse qui ne naît que du partage, le plaisir simple d'être ensemble.",
+    "Dans le Tarot, Euphrosyne est la figure du 3 de Coupes, où trois femmes lèvent leurs coupes ensemble vers le ciel : cette joie-là ne se vit jamais seule — inutile de la chercher dans la solitude, elle n'existe qu'à plusieurs.",
+  ],
+  "hypnos": [
+    "Hypnos personnifie le Sommeil, fils de la Nuit — frère jumeau de Thanatos, la Mort paisible (voir la fiche « Thanatos »), avec qui il partage une ressemblance si troublante que les Anciens les disaient inséparables, l'un menant doucement là où l'autre mène pour toujours.",
+    "Il habite, dit-on, une grotte silencieuse aux confins du monde, là où naît le fleuve Lethée, l'Oubli (voir la fiche « Lethée »), et où se rencontrent le jour et la nuit : des pavots poussent à son entrée, et c'est là qu'il engendra Morphée, le dieu des songes, capable de prendre en rêve les traits de n'importe quel mortel (voir la fiche « Morphée »).",
+    "Dans l'Iliade, Héra le convainc d'endormir Zeus lui-même le temps de favoriser les Grecs sur le champ de bataille de Troie — l'un des rares récits où même le maître de l'Olympe cède à un pouvoir plus discret que le sien. Une autre tradition le dit épris du berger Endymion (voir la fiche « Endymion »), à qui il laissa les yeux entrouverts durant son sommeil éternel, pour ne jamais cesser de le contempler.",
+    "Dans le Tarot, Hypnos est la figure du 4 de Coupes, où un dormeur assis sous un arbre reste indifférent aux coupes qui l'entourent, jusqu'à ce qu'une main lui tende depuis un nuage une quatrième offrande qu'il ne voit pas non plus : son sommeil n'est jamais malveillant, mais il peut, comme ici, faire manquer ce qui est pourtant offert.",
+  ],
+  "orphée": [
+    "Orphée fut le plus grand musicien jamais né, fils du roi thrace Œagre et de la Muse Calliope — certaines traditions le disent plutôt fils d'Apollon lui-même, qui lui offrit une lyre d'or et lui enseigna à en jouer (voir la fiche « Lyre »). Son chant, dit-on, charmait aussi bien les bêtes sauvages que les arbres et les rochers, qui se déplaçaient pour venir l'entendre.",
+    "Le jour de son mariage avec la nymphe Eurydice, celle-ci fut mordue par un serpent en fuyant un satyr et mourut sur le coup — la joie des noces basculant en un instant dans le deuil.",
+    "Fou de chagrin, Orphée descendit aux Enfers avec sa seule lyre : son chant adoucit le cœur inflexible d'Hadès et de Perséphone (voir les fiches « Hadès » et « Perséphone »), qui consentirent à lui rendre Eurydice, à une condition — marcher devant elle sans se retourner avant d'avoir atteint la lumière du jour. Presque arrivé, incapable de résister au doute, il se retourna un instant trop tôt : elle disparut une seconde fois, cette fois pour toujours.",
+    "Dans le Tarot, Orphée est la figure du 5 de Coupes, où une silhouette en deuil contemple trois coupes renversées sans voir les deux qui tiennent encore debout derrière elle : son regard, comme le sien vers Eurydice au sortir des Enfers, se fixe sur la perte au moment précis où il ne fallait plus se retourner.",
   ],
 };
 
