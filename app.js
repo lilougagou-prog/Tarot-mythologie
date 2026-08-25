@@ -3183,24 +3183,29 @@ function elementDynamic(elA, elB, seed){
   return { kind, text: stableVariant(ELEMENT_DYNAMIC_VARIANTS[kind], key)(elA, elB) };
 }
 
-// Points de comparaison entre deux thèmes (Soleil/Lune/Ascendant de chacun), avec les mêmes
-// types d'aspect et les mêmes orbes que CLIENT_ASPECTS/findAspect() ci-dessus — jusqu'ici
-// utilisés au sein d'un seul thème (natal) ou entre transits du jour et thème natal
-// (strongestTransitAspect()) ; ici, un troisième usage du même mécanisme, appliqué ENTRE
-// deux personnes.
-const SYNASTRY_POINT_LABELS = { sun:"Soleil", moon:"Lune", ascendant:"Ascendant" };
+// Points de comparaison entre deux thèmes (Soleil/Lune/Ascendant/Vénus/Mars de chacun),
+// avec les mêmes types d'aspect et les mêmes orbes que CLIENT_ASPECTS/findAspect()
+// ci-dessus — jusqu'ici utilisés au sein d'un seul thème (natal) ou entre transits du jour
+// et thème natal (strongestTransitAspect()) ; ici, un troisième usage du même mécanisme,
+// appliqué ENTRE deux personnes. Vénus (affinités, valeurs) et Mars (énergie, façon d'agir)
+// complètent Soleil/Lune/Ascendant pour une comparaison plus fine, au-delà de l'identité et
+// des émotions de base — retour direct d'utilisatrice ("tu ferais quoi pour pousser encore
+// cette fonction ?").
+const SYNASTRY_POINT_LABELS = { sun:"Soleil", moon:"Lune", ascendant:"Ascendant", venus:"Vénus", mars:"Mars" };
 // Formulations possessives correctes (accord grammatical du point, pas de la personne) pour
 // le côté "toi" ("Ton Soleil", mais "Ta Lune") et un groupe nominal sans pronom pour le côté
 // "proche" ("la Lune de Léa" plutôt que "sa Lune" ou "sa/son Lune/Soleil", qui suppose un
 // genre) — voir SYNASTRY_ASPECT_VARIANTS ci-dessous.
-const SYNASTRY_POINT_YOUR = { sun:"Ton Soleil", moon:"Ta Lune", ascendant:"Ton Ascendant" };
-const SYNASTRY_POINT_ARTICLE = { sun:"le Soleil", moon:"la Lune", ascendant:"l'Ascendant" };
+const SYNASTRY_POINT_YOUR = { sun:"Ton Soleil", moon:"Ta Lune", ascendant:"Ton Ascendant", venus:"Ta Vénus", mars:"Ton Mars" };
+const SYNASTRY_POINT_ARTICLE = { sun:"le Soleil", moon:"la Lune", ascendant:"l'Ascendant", venus:"la Vénus", mars:"le Mars" };
 function synastryPoints(profile){
   const pts = [];
   const b = profile?.astral?.bodies;
   if(b?.sun) pts.push({ key:"sun", sign:b.sun.sign, longitude:b.sun.longitude });
   if(b?.moon) pts.push({ key:"moon", sign:b.moon.sign, longitude:b.moon.longitude });
   if(profile?.astral?.ascendant) pts.push({ key:"ascendant", sign:profile.astral.ascendant.sign, longitude:profile.astral.ascendant.longitude });
+  if(b?.venus) pts.push({ key:"venus", sign:b.venus.sign, longitude:b.venus.longitude });
+  if(b?.mars) pts.push({ key:"mars", sign:b.mars.sign, longitude:b.mars.longitude });
   return pts;
 }
 const SYNASTRY_HARMONIOUS = new Set(["conjonction","trigone","sextile"]);
@@ -3273,8 +3278,11 @@ function compareProfiles(profileA, profileB){
     : null;
 
   const aspects = synastryAspects(profileA, profileB, profileB.firstName);
-  const common = aspects.filter(h=>h.harmonious).slice(0,4);
-  const tense = aspects.filter(h=>!h.harmonious).slice(0,4);
+  // Plafond relevé à 5 (au lieu de 4) depuis l'ajout de Vénus/Mars : plus de points comparés
+  // (5×5 au lieu de 3×3), donc un peu plus de place pour les faire tous remonter sans pour
+  // autant afficher toute la grille.
+  const common = aspects.filter(h=>h.harmonious).slice(0,5);
+  const tense = aspects.filter(h=>!h.harmonious).slice(0,5);
 
   const deityA = tutelaryDeity(profileA), deityB = tutelaryDeity(profileB);
   const sharedDeity = (deityA && deityB && deityA.deityKey === deityB.deityKey) ? deityA : null;
@@ -3286,6 +3294,110 @@ function compareProfiles(profileA, profileB){
     },
     element, common, tense, deityA, deityB, sharedDeity,
   };
+}
+
+/* ===== TEXTE ENRICHI PAR IA POUR LA COMPARAISON (optionnel, premium) ===== */
+// Contrairement au reste de compareProfiles() (déterministe, gratuit une fois le mode
+// premium activé), ce paragraphe est rédigé par l'IA — un texte suivi qui tisse les
+// résultats déjà calculés localement (élément, aspects, divinité commune) en une lecture
+// fluide, adaptée au type de relation plutôt qu'un texte générique valable pour tout le
+// monde. Purement optionnel : la comparaison reste entièrement fonctionnelle sans lui (voir
+// renderComparison()), il vient simplement s'ajouter au-dessus — retour direct
+// d'utilisatrice ("tu ferais quoi pour pousser encore cette fonction ?").
+
+// Résumé minimal envoyé à /api/comparison-text : jamais les thèmes complets, seulement les
+// signes essentiels et les points déjà calculés par compareProfiles() — même principe de
+// sobriété que profileForPortrait().
+function profileForComparisonText(primary, relation){
+  const cmp = compareProfiles(primary, relation);
+  if(!cmp) return null;
+  return {
+    yourFirstName: primary.firstName,
+    theirFirstName: relation.firstName,
+    relationType: RELATION_TYPES[relation.relationType] || "Autre",
+    yourSigns: cmp.signs.a,
+    theirSigns: cmp.signs.b,
+    element: cmp.element ? { a: cmp.element.a, b: cmp.element.b, kind: cmp.element.kind } : null,
+    sharedDeity: cmp.sharedDeity ? cmp.sharedDeity.deityName : null,
+    commonPoints: cmp.common.map(h => ({ your: SYNASTRY_POINT_LABELS[h.a.key], their: SYNASTRY_POINT_LABELS[h.b.key], type: h.aspect.type })),
+    tensePoints: cmp.tense.map(h => ({ your: SYNASTRY_POINT_LABELS[h.a.key], their: SYNASTRY_POINT_LABELS[h.b.key], type: h.aspect.type })),
+  };
+}
+
+// Empreinte des données de naissance des deux thèmes concernés : si l'une des deux change
+// (profil propre modifié, ou informations du proche modifiées), le texte en cache ne
+// correspond plus à ce qui est réellement affiché — même logique de garde-fou que
+// astralText.tutelaryDeityKey (voir ensureAstralText()), pour ne jamais laisser un texte
+// périmé contredire silencieusement les données actuelles.
+function comparisonFingerprint(primary, relation){
+  return [primary.birthDate, primary.birthTime||"", primary.timeUnknown?1:0, relation.birthDate, relation.birthTime||"", relation.timeUnknown?1:0].join("|");
+}
+function getCachedComparisonText(primary, relation){
+  const cached = relation?.comparisonText;
+  if(cached && typeof cached === "object" && cached.fingerprint === comparisonFingerprint(primary, relation)) return cached.text;
+  return null;
+}
+async function fetchComparisonText(payload, code){
+  const r = await fetch("/api/comparison-text", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-App-Access-Code": code },
+    body: JSON.stringify({ comparison: payload })
+  });
+  if(r.status === 401) localStorage.removeItem("delphesAccessCode");
+  if(!r.ok) throw new Error("texte de comparaison indisponible");
+  const data = await r.json();
+  return data.text;
+}
+let comparisonTextFetchInFlight = {}; // clé : id du proche — plusieurs comparaisons distinctes peuvent être en vol
+// Id du proche actuellement affiché par showComparison(), pour savoir si un re-rendu est
+// nécessaire une fois le texte reçu en arrière-plan — même motif que cardDetailReturnTo
+// pour les autres écrans, décliné pour ce fetch asynchrone précis.
+let currentComparisonRelationId = null;
+// Mêmes garde-fous de discrétion qu'ensurePortrait() : jamais de prompt de code d'accès
+// déclenché depuis un simple affichage de la comparaison, échec silencieux (le texte
+// enrichi n'apparaît simplement pas, le reste de la comparaison reste intact), un seul
+// appel réseau par proche tant qu'aucun texte n'est en cache pour lui.
+function ensureComparisonText(primary, relation){
+  if(!primary?.astral || !relation?.astral) return;
+  if(getCachedComparisonText(primary, relation)) return;
+  if(comparisonTextFetchInFlight[relation.id]) return;
+  const code = localStorage.getItem("delphesAccessCode");
+  if(code === null) return;
+  const payload = profileForComparisonText(primary, relation);
+  if(!payload) return;
+  comparisonTextFetchInFlight[relation.id] = true;
+  fetchComparisonText(payload, code)
+    .then(text=>{
+      const fresh = getRelation(relation.id);
+      if(!fresh) return;
+      fresh.comparisonText = { text, fingerprint: comparisonFingerprint(primary, fresh) };
+      upsertRelation(fresh);
+      if(currentComparisonRelationId === relation.id) showComparison(relation.id);
+    })
+    .catch(()=>{ /* échec silencieux : le texte enrichi n'apparaît simplement pas */ })
+    .finally(()=>{ delete comparisonTextFetchInFlight[relation.id]; });
+}
+
+/* ===== COMPARAISON DE GROUPE (3 personnes ou plus) ===== */
+// Étend la comparaison à deux (compareProfiles()) à un groupe entier — typiquement toi et
+// plusieurs proches à la fois, pour une vue d'ensemble de la dynamique familiale plutôt
+// qu'une série de comparaisons isolées à ouvrir une par une. Retour direct d'utilisatrice
+// ("peut-on pousser à la famille ?").
+//
+// `people`: [{ id, firstName, astral }, ...], au moins 2 — calcule compareProfiles() pour
+// CHAQUE paire possible au sein du groupe (pas seulement toi vis-à-vis de chacun), avec
+// C(n,2) paires pour n personnes. Volontairement pas de nouvelle fonction de "dynamique de
+// groupe" globale : la famille n'est pas UNE compatibilité, mais un réseau de relations à
+// deux qui s'additionnent — plus honnête que de tenter de les résumer en un seul verdict.
+function compareGroup(people){
+  const pairs = [];
+  for(let i=0;i<people.length;i++){
+    for(let j=i+1;j<people.length;j++){
+      const cmp = compareProfiles(people[i], people[j]);
+      if(cmp) pairs.push({ a:people[i], b:people[j], cmp });
+    }
+  }
+  return pairs;
 }
 
 async function generateAIReading(question, cards, positions){
@@ -4084,6 +4196,7 @@ function renderRelations(){
       </div>`).join("")}
     </div>` : `<p class="note" style="text-align:center;margin-top:14px">Aucun proche enregistré pour l'instant.</p>`}
     <button class="primary" id="addRelation" style="margin-top:20px">+ Ajouter un proche</button>
+    ${relations.length >= 2 ? `<button class="secondary" id="compareGroupBtn" style="margin-top:10px">👪 Comparer plusieurs proches</button>` : ""}
     <button class="ghost" id="detailBack" style="margin-top:10px">← Retour</button>
   </div>`;
 }
@@ -4094,6 +4207,9 @@ function bindRelationsList(){
     render();
     requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
+  // N'existe que si au moins 2 proches sont enregistrés (voir renderRelations()).
+  const groupBtn = document.getElementById("compareGroupBtn");
+  if(groupBtn) groupBtn.onclick = ()=> showGroupSelect();
   document.querySelectorAll("[data-relation]").forEach(el=>{
     el.onclick = ()=> showComparison(el.dataset.relation);
   });
@@ -4204,11 +4320,16 @@ function bindRelationForm(existing){
 // dans le reste de l'app (voir renderProfilResults()).
 function showComparison(relationId){
   preDetailScroll = window.scrollY;
+  currentComparisonRelationId = relationId;
   const relation = getRelation(relationId);
   const primary = getProfile();
   document.getElementById("screen").innerHTML = renderComparison(primary, relation);
   triggerScreenAnim("detail");
   window.scrollTo(0,0);
+  // Le texte enrichi par IA est un bonus premium au-dessus d'une comparaison déjà complète
+  // sans lui (voir renderComparison()) : inutile de le déclencher pour un profil gratuit qui
+  // ne verra de toute façon pas la section premium.
+  if(relation && primary && isPremiumEnabled()) ensureComparisonText(primary, relation);
   const backBtn = document.getElementById("detailBack");
   if(backBtn) backBtn.onclick = ()=>{
     const scrollTarget = preDetailScroll;
@@ -4264,6 +4385,10 @@ function renderComparison(primary, relation){
       <div class="symbol" style="text-align:center"><b>${escapeHTML(relation.firstName)}</b><br>☉ ${escapeHTML(cmp.signs.b.sun||"—")}<br>☽ ${escapeHTML(cmp.signs.b.moon||"—")}${cmp.signs.b.ascendant?`<br>Asc. ${escapeHTML(cmp.signs.b.ascendant)}`:""}</div>
     </div>
 
+    ${(()=>{ const text = premiumOn ? getCachedComparisonText(primary, relation) : null; return text
+      ? text.split(/\n\s*\n/).map(p=>`<p class="lore-text" style="margin-top:14px">${escapeHTML(p.trim())}</p>`).join("")
+      : ""; })()}
+
     ${premiumOn ? `
     ${cmp.element ? `
     <div class="section-title centered" style="margin-top:24px"><h3>Élément dominant</h3></div>
@@ -4297,6 +4422,142 @@ function renderComparison(primary, relation){
 
     ${(!cmp.common.length && !cmp.tense.length) ? `<p class="note" style="text-align:center;margin-top:14px">Pas d'aspect marqué entre vos deux thèmes — ni proximité forte, ni tension particulière.</p>` : ""}
     ` : premiumLockHTML("La comparaison détaillée (élément dominant, points communs, tensions potentielles, divinité tutélaire commune) fait partie du contenu premium.")}
+
+    <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
+  </div>`;
+}
+
+/* ===== ÉCRANS "COMPARAISON DE GROUPE" ===== */
+// Sélection de plusieurs proches (au moins 2) à comparer entre eux et avec toi — voir
+// compareGroup() plus haut. Gestion (sélection) toujours gratuite, même logique que la
+// liste des proches ; seule la dynamique de groupe elle-même est premium (voir
+// renderGroupComparison()).
+function showGroupSelect(){
+  preDetailScroll = window.scrollY;
+  document.getElementById("screen").innerHTML = renderGroupSelect();
+  triggerScreenAnim("detail");
+  window.scrollTo(0,0);
+  bindGroupSelect();
+  cardDetailReturnTo = showGroupSelect;
+}
+function renderGroupSelect(){
+  const relations = getRelations();
+  return `<div class="detail">
+    <div class="section-title"><h3>Comparer plusieurs proches</h3></div>
+    <p class="note">Choisis au moins 2 proches — la dynamique de groupe compare chaque paire entre elles, toi comprise (partenaire + enfant, les deux enfants entre eux, etc.).</p>
+    <div class="symbol-list" style="margin-top:14px">
+      ${relations.map(r=>`<label class="symbol" style="display:flex;align-items:center;gap:10px;cursor:pointer">
+        <input type="checkbox" class="group-select-checkbox" data-group-select="${escapeHTML(r.id)}" style="width:auto">
+        <span><b>${escapeHTML(r.firstName)}</b><br><small>${escapeHTML(RELATION_TYPES[r.relationType]||"Autre")}</small></span>
+      </label>`).join("")}
+    </div>
+    <p class="note" id="groupSelectCount" style="text-align:center;margin-top:10px">0 proche sélectionné</p>
+    <button class="primary" id="groupSelectSubmit" style="margin-top:10px" disabled>Voir la dynamique du groupe</button>
+    <button class="ghost" id="detailBack" style="margin-top:10px">← Retour</button>
+  </div>`;
+}
+function bindGroupSelect(){
+  const checkboxes = Array.from(document.querySelectorAll(".group-select-checkbox"));
+  const countEl = document.getElementById("groupSelectCount");
+  const submitBtn = document.getElementById("groupSelectSubmit");
+  const updateCount = ()=>{
+    const checked = checkboxes.filter(c=>c.checked);
+    countEl.textContent = `${checked.length} proche${checked.length>1?"s":""} sélectionné${checked.length>1?"s":""}`;
+    submitBtn.disabled = checked.length < 2;
+  };
+  checkboxes.forEach(c=> c.addEventListener("change", updateCount));
+  updateCount();
+  submitBtn.onclick = ()=>{
+    const ids = checkboxes.filter(c=>c.checked).map(c=>c.dataset.groupSelect);
+    showGroupComparison(ids);
+  };
+  document.getElementById("detailBack").onclick = ()=>{
+    const scrollTarget = preDetailScroll;
+    showRelations();
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
+  };
+}
+
+function showGroupComparison(selectedIds){
+  preDetailScroll = window.scrollY;
+  document.getElementById("screen").innerHTML = renderGroupComparison(selectedIds);
+  triggerScreenAnim("detail");
+  window.scrollTo(0,0);
+  const backBtn = document.getElementById("detailBack");
+  if(backBtn) backBtn.onclick = ()=>{
+    const scrollTarget = preDetailScroll;
+    showRelations();
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
+  };
+  const premiumToggle = document.getElementById("premiumToggle");
+  if(premiumToggle) premiumToggle.onchange = ()=>{ setPremiumEnabled(premiumToggle.checked); showGroupComparison(selectedIds); };
+  // N'existe que dans la branche "pas encore de profil propre".
+  const profilEditBtn = document.getElementById("profilEdit");
+  if(profilEditBtn) profilEditBtn.onclick = ()=> showProfilEditForm();
+  cardDetailReturnTo = () => showGroupComparison(selectedIds);
+  bindChips();
+}
+function renderGroupComparison(selectedIds){
+  const primary = getProfile();
+  if(!primary || !primary.astral){
+    return `<div class="detail">
+      <div class="section-title"><h3>Dynamique du groupe</h3></div>
+      <p class="note" style="text-align:center">Renseigne d'abord ton propre profil astral pour pouvoir comparer.</p>
+      <button class="secondary" id="profilEdit" style="margin-top:14px">Renseigner mon profil</button>
+      <button class="ghost" id="detailBack" style="margin-top:10px">← Retour</button>
+    </div>`;
+  }
+  const relations = (selectedIds||[]).map(id=>getRelation(id)).filter(Boolean);
+  if(relations.length < 2){
+    return `<div class="detail">
+      <div class="section-title"><h3>Dynamique du groupe</h3></div>
+      <p class="note" style="text-align:center">Il faut au moins 2 proches pour une comparaison de groupe.</p>
+      <button class="ghost" id="detailBack" style="margin-top:20px">← Retour</button>
+    </div>`;
+  }
+
+  const premiumOn = isPremiumEnabled();
+  // "Toi" toujours en tête : chaque proche est comparé à toi ET aux autres proches
+  // sélectionnés (voir compareGroup()) — label affiché distinct du prénom réel pour toi.
+  const people = [
+    { id:"__primary__", firstName: primary.firstName, astral: primary.astral, label:"Toi" },
+    ...relations.map(r=>({ id:r.id, firstName:r.firstName, astral:r.astral, label:r.firstName })),
+  ];
+  const names = people.map(p=>p.label).join(", ");
+
+  return `<div class="detail">
+    <div class="section-title"><h3>Dynamique du groupe</h3></div>
+    <p class="question-recall">« ${escapeHTML(names)} »</p>
+
+    <p class="note" style="text-align:center;margin-top:10px">
+      <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer">
+        <input id="premiumToggle" type="checkbox" style="width:auto" ${premiumOn?"checked":""}>
+        Mode premium (aperçu local — aucun vrai paiement)
+      </label>
+    </p>
+
+    ${premiumOn ? (()=>{
+      const pairs = compareGroup(people);
+      if(!pairs.length) return `<p class="note" style="text-align:center;margin-top:14px">Pas assez de données pour comparer ce groupe.</p>`;
+      // Vue volontairement condensée (pas la comparaison détaillée à deux, voir
+      // renderComparison()) : pour chaque paire, l'élément dominant (déjà formulé de façon
+      // neutre, "vous", jamais "toi"/"ton" — valable pour n'importe quelle paire, y compris
+      // deux proches entre eux) et l'aspect le plus exact, présenté factuellement (pas la
+      // phrase personnalisée de synastryAspects(), écrite pour s'adresser à TOI
+      // spécifiquement et donc incorrecte pour une paire qui ne t'inclut pas).
+      return `<div class="symbol-list" style="margin-top:14px">
+        ${pairs.map(({a,b,cmp})=>{
+          const topHit = [...cmp.common, ...cmp.tense].sort((x,y)=>x.aspect.orb-y.aspect.orb)[0];
+          const topKind = topHit ? (topHit.harmonious ? "point commun" : "tension potentielle") : null;
+          return `<div class="symbol">
+            <b>${escapeHTML(a.label)} & ${escapeHTML(b.label)}</b>
+            ${cmp.element ? `<br><small>${escapeHTML(cmp.element.text)}</small>` : ""}
+            ${cmp.sharedDeity ? `<br><small>✦ Divinité tutélaire commune : ${escapeHTML(cmp.sharedDeity.deityName)}</small>` : ""}
+            ${topHit ? `<br><small>${escapeHTML(SYNASTRY_POINT_LABELS[topHit.a.key])} (${escapeHTML(topHit.a.sign)}) ↔ ${escapeHTML(SYNASTRY_POINT_LABELS[topHit.b.key])} (${escapeHTML(topHit.b.sign)}) — ${escapeHTML(topKind)} (${escapeHTML(topHit.aspect.type)})</small>` : ""}
+          </div>`;
+        }).join("")}
+      </div>`;
+    })() : premiumLockHTML("La dynamique de groupe (élément dominant, divinités communes, point fort par paire) fait partie du contenu premium.")}
 
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
