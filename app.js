@@ -502,8 +502,8 @@ Object.assign(CARD_IMAGES, {
   "Cavalier de Bâtons": "assets/card-batons-cavalier.jpg",
   "Reine de Bâtons": "assets/card-batons-reine.jpg",
   "Roi de Bâtons": "assets/card-batons-roi.jpg",
-  // Cartes numérales de Coupes (1-10) — l'enseigne est désormais complète, seules les 4
-  // figures de cour restent en repli générique.
+  // Cartes numérales de Coupes (1-10) et désormais ses 4 figures de cour — l'enseigne de
+  // Coupes est intégralement illustrée, comme Épées et Bâtons avant elle.
   "As de Coupes": "assets/card-coupes-1.jpg",
   "2 de Coupes": "assets/card-coupes-2.jpg",
   "3 de Coupes": "assets/card-coupes-3.jpg",
@@ -514,6 +514,10 @@ Object.assign(CARD_IMAGES, {
   "8 de Coupes": "assets/card-coupes-8.jpg",
   "9 de Coupes": "assets/card-coupes-9.jpg",
   "10 de Coupes": "assets/card-coupes-10.jpg",
+  "Valet de Coupes": "assets/card-coupes-valet.jpg",
+  "Cavalier de Coupes": "assets/card-coupes-cavalier.jpg",
+  "Reine de Coupes": "assets/card-coupes-reine.jpg",
+  "Roi de Coupes": "assets/card-coupes-roi.jpg",
 });
 
 // Cartes numérales dotées d'une figure mythologique propre (contrairement aux autres
@@ -1693,6 +1697,7 @@ const DEITY_LORE = {
   "nérée": [
     "Surnommé le « Vieillard de la mer », Nérée est un dieu marin plus ancien que Poséidon, réputé pour sa sagesse, sa bienveillance et son don de prophétie, contrairement à d'autres divinités marines plus tumultueuses.",
     "Père de cinquante Néréides dont Thétis (voir la fiche « Thétis »), mère d'Achille, il incarne un versant plus paisible de la mer (voir la fiche « Mer ») — la sagesse plutôt que la tempête.",
+    "Dans le Tarot, Nérée est le Roi de Coupes, stable sur une mer agitée sans jamais s'y laisser submerger : sa sagesse ne s'impose pas, elle se révèle à qui sait la retenir — exactement la maîtrise émotionnelle que ce Roi a acquise à force d'avoir traversé bien des marées.",
   ],
   "bellérophon": [
     "Héros grec, Bellérophon parvint à dompter Pégase, le cheval ailé né du sang de la Gorgone Méduse, grâce à un mors d'or offert par Athéna en songe.",
@@ -1722,6 +1727,7 @@ const DEITY_LORE = {
   "himeros": [
     "Dieu ailé du désir soudain, Himeros accompagne Éros et Aphrodite dans leur cortège, incarnant cette part du désir qui surgit sans prévenir, avant même que la raison n'ait le temps d'intervenir.",
     "Moins connu qu'Éros, il en partage le même registre — le désir irrésistible — mais dans sa forme la plus immédiate : l'élan plutôt que la flèche qui vise.",
+    "Dans le Tarot, Himeros est le Valet de Coupes, celui qui contemple sa coupe avec un étonnement encore neuf : ce même émoi qui saisit avant qu'on ait pu le nommer, sincère mais trop récent pour se savoir encore où il mène.",
   ],
   "énée": [
     "Fils d'Aphrodite et du mortel Anchise (voir la fiche « Aphrodite »), Énée combattit du côté troyen pendant la guerre de Troie, protégé à plusieurs reprises par sa mère au cœur des combats.",
