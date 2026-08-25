@@ -337,23 +337,23 @@ const CARD_LORE = {
 },
 "6 de Coupes": {
   marseille:"Deux enfants échangent des coupes fleuries dans un jardin paisible : nostalgie douce, souvenir d'enfance, tendresse simple retrouvée sans calcul.",
-  myth:"Perséphone, enfant, cueillait des fleurs dans les prairies avant que le monde souterrain ne l'appelle — un souvenir d'innocence auquel elle resta toujours attachée. Cette carte ravive ce même attachement à une douceur passée."
+  myth:"Ariane offrit à Thésée son fil sans rien exiger en retour, sinon la confiance qu'il revienne (voir la fiche « Ariane »). Cette carte est ce même geste : une tendresse donnée sans calcul, avec la simplicité d'un souvenir d'enfance."
 },
 "7 de Coupes": {
   marseille:"Sept coupes flottent dans les nuages, chacune contenant une image différente — trésor, serpent, couronne : choix multiples, illusions à démêler avant de décider vraiment.",
-  myth:"Circé offrait à ses visiteurs des breuvages aux apparences trompeuses, séduisants mais rarement ce qu'ils semblaient être. Cette carte invite à la même vigilance : toutes les promesses ne se valent pas, il faut regarder au-delà du reflet."
+  myth:"Circé offrait à ses visiteurs des breuvages aux apparences trompeuses, séduisants mais rarement ce qu'ils semblaient être (voir la fiche « Circé »). Cette carte invite à la même vigilance : toutes les promesses ne se valent pas, il faut regarder au-delà du reflet."
 },
 "8 de Coupes": {
   marseille:"Un personnage s'éloigne de nuit, laissant huit coupes soigneusement empilées derrière lui : départ volontaire, quête de sens qui prime sur ce qui a déjà été construit.",
-  myth:"Perséphone elle-même quitte chaque année le monde d'en haut pour redescendre — un départ qui n'est ni fuite ni échec, mais nécessité intérieure. Cette carte est ce même choix de partir vers autre chose, même en laissant de l'acquis derrière soi."
+  myth:"Ulysse, après une année entière passée sur l'île de Circé (voir les fiches « Ulysse » et « Circé »), choisit de reprendre la mer vers Ithaque plutôt que de s'installer dans un confort déjà acquis. Cette carte est ce même choix de partir vers autre chose, même en laissant de l'acquis derrière soi."
 },
 "9 de Coupes": {
   marseille:"Un personnage satisfait est assis, bras croisés, devant neuf coupes alignées en arc : contentement, désirs comblés, bien-être qui n'a plus besoin de rien démontrer.",
-  myth:"Dans les Champs Élysées, les âmes bienheureuses jouissaient d'un repos paisible, sans manque ni attente. Cette carte est ce même sentiment d'accomplissement affectif, tranquille et suffisant."
+  myth:"Hébé versait aux dieux de l'Olympe le nectar et l'ambroisie, la boisson même de l'immortalité (voir la fiche « Hébé »). Cette carte est ce même sentiment d'accomplissement, tranquille et suffisant, qui n'attend plus rien d'ailleurs."
 },
 "10 de Coupes": {
   marseille:"Une famille réunie lève les bras vers un arc-en-ciel de dix coupes au-dessus d'elle : bonheur familial accompli, harmonie durable, joie qui se transmet au-delà de soi.",
-  myth:"Iris, messagère arc-en-ciel entre les mondes, relie le ciel et la terre d'une lumière qui ne se referme jamais tout à fait sur elle-même. Cette carte est ce bonheur qui rayonne et se partage, plutôt que de rester enfermé."
+  myth:"Hyménée, dieu du mariage qu'on invoquait à voix haute à chaque noce pour qu'elle ne tourne jamais au malheur (voir la fiche « Hyménée »), préside à cette même joie qui se transmet des mariés jusqu'aux enfants qui dansent déjà sous le même arc. Cette carte est ce bonheur qui rayonne et se partage, plutôt que de rester enfermé."
 },
 "As de Épées": {
   marseille:"Une main tient une épée droite couronnée de laurier et de palme : idée claire, vérité qui perce, décision prise avec une netteté qui ne laisse pas de place au doute.",
@@ -502,14 +502,18 @@ Object.assign(CARD_IMAGES, {
   "Cavalier de Bâtons": "assets/card-batons-cavalier.jpg",
   "Reine de Bâtons": "assets/card-batons-reine.jpg",
   "Roi de Bâtons": "assets/card-batons-roi.jpg",
-  // Cartes numérales de Coupes (1-5) — début de l'illustration de cette enseigne, jusqu'ici
-  // au glyphe emoji/pips. Le reste (6-10, figures de cour) suivra au fil des prochains
-  // lots ; les 5 restantes retombent encore sur le repli générique.
+  // Cartes numérales de Coupes (1-10) — l'enseigne est désormais complète, seules les 4
+  // figures de cour restent en repli générique.
   "As de Coupes": "assets/card-coupes-1.jpg",
   "2 de Coupes": "assets/card-coupes-2.jpg",
   "3 de Coupes": "assets/card-coupes-3.jpg",
   "4 de Coupes": "assets/card-coupes-4.jpg",
   "5 de Coupes": "assets/card-coupes-5.jpg",
+  "6 de Coupes": "assets/card-coupes-6.jpg",
+  "7 de Coupes": "assets/card-coupes-7.jpg",
+  "8 de Coupes": "assets/card-coupes-8.jpg",
+  "9 de Coupes": "assets/card-coupes-9.jpg",
+  "10 de Coupes": "assets/card-coupes-10.jpg",
 });
 
 // Cartes numérales dotées d'une figure mythologique propre (contrairement aux autres
@@ -546,6 +550,11 @@ const NUMBER_CARD_DEITY = {
   "3 de Coupes": "euphrosyne",
   "4 de Coupes": "hypnos",
   "5 de Coupes": "orphée",
+  "6 de Coupes": "ariane",
+  "7 de Coupes": "circé",
+  "8 de Coupes": "ulysse",
+  "9 de Coupes": "hébé",
+  "10 de Coupes": "hyménée",
 };
 // Symboles propres à une carte numérale précise (une fois illustrée avec sa propre figure,
 // voir NUMBER_CARD_DEITY ci-dessus), utilisés par allCards() à la place de la formule
@@ -560,6 +569,8 @@ const NUMBER_CARD_SYMBOLS = {
   "2 de Coupes": "caducée",
   "4 de Coupes": "pavot",
   "5 de Coupes": "lyre · monde souterrain",
+  "8 de Coupes": "mer",
+  "10 de Coupes": "torches",
 };
 // Nom affiché comme "divinité" d'une carte dans les écrans de détail : la figure propre
 // à la carte si elle existe (NUMBER_CARD_DEITY), sinon c[1] tel quel (le nom du dieu pour
@@ -778,13 +789,13 @@ const SYMBOL_LIBRARY = {
     "C'est aussi dans une forêt, celle du mont Érymanthe, qu'Héraclès dut traquer le sanglier monstrueux qui ravageait la région lors de son quatrième travail — une poursuite qui l'entraîna loin des sentiers connus, dans la neige et les broussailles, avant qu'il ne parvienne à capturer la bête vivante.",
     "Elle est devenue un symbole d'inconnu, d'instinct, de risque de s'égarer avant de retrouver son chemin — et de nature qui échappe à tout contrôle.",
   ]},
-  "mer":{icon:"🌊",label:"Mer",category:"Lieux & passages",desc:"Inconscient, immensité, départ vers un ailleurs incertain.",links:["poséidon","nérée"],lore:[
+  "mer":{icon:"🌊",label:"Mer",category:"Lieux & passages",desc:"Inconscient, immensité, départ vers un ailleurs incertain.",links:["poséidon","nérée","ulysse"],lore:[
     "La mer appartient avant tout à Poséidon, dieu des océans et des tremblements de terre, dont l'humeur changeante pouvait aussi bien porter les navires que les briser.",
     "Elle abrite aussi des figures plus anciennes et plus paisibles, comme Nérée, le « Vieillard de la mer », doué de sagesse et de don de prophétie, père des cinquante Néréides.",
     "La mer réunit ainsi deux visages : la puissance instable de Poséidon et la sagesse discrète de Nérée — la même immensité peut engloutir ou révéler.",
     "Elle abrite aussi des dangers d'une tout autre nature : les Sirènes, dont le chant était si envoûtant qu'aucun marin ne pouvait y résister sans se jeter par-dessus bord, guettaient les navires près de leur île. Ulysse n'y échappa qu'en se faisant attacher au mât pendant que ses compagnons, les oreilles bouchées de cire, ramaient sans rien entendre.",
     "Elle est devenue un symbole d'inconscient, d'immensité, de départ vers un ailleurs incertain et de puissance qu'on ne maîtrise jamais complètement.",
-    "La mer est particulièrement associée à Poséidon et à Nérée.",
+    "La mer est particulièrement associée à Poséidon et à Nérée — et, dans le Tarot, à Ulysse.",
   ]},
   "rivière":{icon:"🏞",label:"Rivière",category:"Lieux & passages",desc:"Passage, changement continu, ce qui circule sans jamais s'arrêter.",links:[],lore:[
     "Les fleuves occupent une place à part dans la mythologie grecque : ce sont des divinités à part entière, et certains d'entre eux marquent la frontière entre le monde des vivants et celui des morts.",
@@ -876,13 +887,13 @@ const SYMBOL_LIBRARY = {
     "L'arc est devenu un symbole de volonté, d'intention, de concentration, de maîtrise de soi et de désir dirigé vers un objectif.",
     "L'arc est particulièrement associé à Artémis, mais également à Apollon — et, dans le Tarot, à Éros : trois façons différentes de viser juste.",
   ]},
-  "torches":{icon:"🔥",label:"Torches",category:"Mythologie",desc:"Attribut d'Hécate : illumination, guidance dans l'obscurité sans jamais imposer le chemin.",links:["hécate"],lore:[
+  "torches":{icon:"🔥",label:"Torches",category:"Mythologie",desc:"Attribut d'Hécate : illumination, guidance dans l'obscurité sans jamais imposer le chemin.",links:["hécate","hyménée"],lore:[
     "Lorsque Perséphone disparaît, Déméter parcourt le monde à sa recherche pendant neuf jours. Hécate, qui a entendu les cris de Perséphone, rejoint ensuite Déméter avec des torches enflammées pour l'aider à découvrir ce qui s'est passé.",
     "La torche devient ainsi la lumière qui permet de traverser la nuit et de retrouver ce qui a été perdu.",
     "Hécate conserve ensuite cette fonction de déesse porteuse de torches, liée aux chemins nocturnes, aux seuils et au monde souterrain.",
     "Les torches accompagnent aussi un tout autre passage : lors des mariages grecs, un cortège nocturne conduisait la mariée jusqu'à la maison de son époux à la lueur de flambeaux, sous la protection d'Hyménée, dieu du mariage — la même lumière qui aide à chercher ce qui est perdu sert alors à célébrer ce qui vient de commencer.",
     "Les torches sont donc devenues un symbole de lumière, de connaissance, de révélation, de guidance et de recherche de la vérité.",
-    "Les torches sont particulièrement associées à Hécate et, dans le mythe de Perséphone, à Déméter.",
+    "Les torches sont particulièrement associées à Hécate et, dans le mythe de Perséphone, à Déméter — et, lors des noces, à Hyménée.",
   ]},
   "lion":{icon:"🦁",label:"Lion",category:"Mythologie",desc:"Lié à Héraclès : courage, force domptée sans violence gratuite.",links:["héraclès"],lore:[
     "Le lion est lié à Héraclès à travers son premier grand exploit : le lion de Némée.",
@@ -1539,6 +1550,7 @@ const DEITY_NOTES = {
   "euphrosyne":"L'une des trois Charites, personnifiant la joie et la gaieté partagée — jamais représentée seule.",
   "hypnos":"Dieu du Sommeil, frère jumeau de Thanatos et père de Morphée — un pouvoir assez redoutable pour tromper Zeus lui-même.",
   "orphée":"Musicien légendaire dont le chant charmait bêtes, arbres et jusqu'aux Enfers — descendu chercher son épouse Eurydice, il la perdit une seconde fois.",
+  "hyménée":"Dieu du mariage, fils d'Apollon et d'une Muse selon la tradition la plus répandue — les Grecs l'invoquaient à voix haute à chaque noce, persuadés qu'une fête sans lui tournerait au malheur.",
 };
 
 // Textes mythologiques développés pour les figures listées ci-dessus (voir showDeityDetail() /
@@ -1776,6 +1788,7 @@ const DEITY_LORE = {
     "Ulysse, protégé par une plante magique offerte par Hermès, résista à son sortilège et la contraignit à rendre à ses hommes leur forme humaine. Il resta ensuite une année entière sur son île, dont naquit un fils, Télégonos — qui, des années plus tard et sans le reconnaître, tuera son propre père, achevant malgré lui une prophétie qui pesait sur Ulysse depuis son retour à Ithaque.",
     "Sa magie ne sert pas qu'à punir les intrus : par jalousie, elle change aussi la nymphe Scylla en monstre. Éprise du dieu marin Glaucos, lui-même épris de Scylla, Circé empoisonne la source où celle-ci se baigne — la nymphe en ressort affublée d'une ceinture de têtes de chiens hurlants, condamnée à hanter pour toujours un détroit périlleux, face au tourbillon de Charybde (voir la fiche « Mer »).",
     "Elle inflige un sort semblable à Picus, roi du Latium déjà marié à la nymphe Canens : le voyant refuser ses avances par fidélité, elle le change en pic — l'oiseau porte encore aujourd'hui son nom latin, picus. Deux amours contrariés, deux métamorphoses : la magie de Circé transforme aussi souvent qu'elle punit.",
+    "Dans le Tarot, Circé est la figure du 7 de Coupes, où sept coupes flottent dans les nuages, chacune montrant une image différente — trésor, serpent, couronne : ces reflets multiples et trompeurs sont exactement ce que promettent ses breuvages, séduisants mais rarement ce qu'ils semblent être.",
   ],
   "thétis": [
     "Fille de Nérée (voir la fiche « Nérée »), Thétis est une Néréide capable de se métamorphoser à volonté — feu, eau, lion, serpent — pour échapper à qui cherche à la retenir. Zeus et Poséidon la convoitèrent tous deux, jusqu'à ce qu'une prophétie annonce que le fils de Thétis surpasserait son père : par prudence, les deux dieux renoncèrent et la marièrent à un simple mortel, Pélée.",
@@ -1797,6 +1810,7 @@ const DEITY_LORE = {
   "ulysse": [
     "Roi d'Ithaque réputé pour sa ruse plus que pour sa force — une ruse qu'on dit héritée de son grand-père maternel Autolycos, fils d'Hermès et voleur incomparable (voir la fiche « Hermès ») —, Ulysse conçut le stratagème du cheval de bois qui permit enfin aux Grecs de s'emparer de Troie après dix années de siège infructueux.",
     "Son retour chez lui prit dix années supplémentaires, semées d'épreuves — le Cyclope Polyphème, les sirènes, Circé, Charybde et Scylla — durant lesquelles son intelligence lui permit chaque fois d'échapper à des périls que la seule force n'aurait pas surmontés.",
+    "Dans le Tarot, Ulysse est la figure du 8 de Coupes, où un personnage s'éloigne de nuit, laissant des coupes soigneusement empilées derrière lui : après une année entière passée sur l'île de Circé (voir la fiche « Circé »), c'est bien lui qui choisit de reprendre la mer vers Ithaque plutôt que de s'installer dans un confort déjà acquis.",
   ],
   "andromède": [
     "Princesse éthiopienne, Andromède fut enchaînée à un rocher au bord de la mer en offrande expiatoire à un monstre marin, envoyé par Poséidon pour punir sa mère Cassiopée de s'être vantée d'une beauté supérieure à celle des Néréides.",
@@ -1840,7 +1854,9 @@ const DEITY_LORE = {
     "Fille de Minos, roi de Crète (voir la fiche « Minos »), et de Pasiphaé, Ariane tomba amoureuse de Thésée le jour où il arriva parmi les jeunes gens envoyés en tribut au Minotaure, enfermé au cœur du Labyrinthe.",
     "Pour lui permettre d'en ressortir vivant après avoir affronté le monstre, elle lui confia une pelote de fil à dérouler en avançant — le fameux « fil d'Ariane », resté depuis l'expression même de ce qui permet de retrouver son chemin dans ce qui semblait inextricable.",
     "Thésée l'emmena avec lui en fuyant la Crète, mais l'abandonna endormie sur l'île de Naxos. C'est là que Dionysos la trouva, en tomba amoureux et l'épousa, lui offrant l'immortalité et une couronne d'or que l'on retrouve, dit-on, parmi les étoiles sous la forme d'une constellation (voir la fiche « Dionysos »).",
+    "Une tradition tardive veut que ce mariage n'ait pas été sans conséquence pour tout le monde : le jeune dieu Hyménée, invité à chanter pour l'occasion avec une voix aussi belle que celle de son père Apollon, l'y aurait perdue (voir la fiche « Hyménée ») — la plus heureuse des fêtes coûtant cher à quelqu'un d'autre.",
     "Ariane est particulièrement associée à Dionysos.",
+    "Dans le Tarot, Ariane est la figure du 6 de Coupes, où deux enfants échangent des coupes fleuries dans un jardin paisible : son fil, offert à Thésée sans rien exiger en retour, est ce même geste simple et généreux, une tendresse qui donne avant même de calculer.",
   ],
   "sémélé": [
     "Fille de Cadmos, roi de Thèbes (voir la fiche « Cadmos »), Sémélé fut aimée de Zeus — une liaison qui attira aussitôt la jalousie d'Héra, toujours prompte à se venger d'une rivale mortelle.",
@@ -1852,6 +1868,7 @@ const DEITY_LORE = {
     "Fille de Zeus et d'Héra, Hébé personnifie la jeunesse éternelle qui règne sur l'Olympe. C'est elle qui, avant d'être remplacée par le jeune Ganymède, servait le nectar et l'ambroisie aux dieux lors de leurs banquets — la boisson même de l'immortalité.",
     "Lorsque Héraclès mourut de ses souffrances et fut accueilli parmi les dieux en récompense de ses travaux (voir la fiche « Héraclès »), c'est Hébé qui devint son épouse sur l'Olympe — un mariage qui scella sa victoire finale sur la mortalité elle-même.",
     "Hébé est particulièrement associée à Héraclès.",
+    "Dans le Tarot, Hébé est la figure du 9 de Coupes, où un personnage comblé se tient devant neuf coupes alignées, sans plus rien à démontrer : elle est justement celle qui verse aux dieux le nectar et l'ambroisie, la boisson même d'un contentement qui n'attend plus rien d'ailleurs.",
   ],
   "ilithyie": [
     "Fille de Zeus et d'Héra, Ilithyie préside aux accouchements : c'est elle qui, dit-on, permet à l'enfant de venir au monde — ou qui, si elle le choisit, peut retenir une naissance presque indéfiniment.",
@@ -2039,9 +2056,16 @@ const DEITY_LORE = {
   ],
   "orphée": [
     "Orphée fut le plus grand musicien jamais né, fils du roi thrace Œagre et de la Muse Calliope — certaines traditions le disent plutôt fils d'Apollon lui-même, qui lui offrit une lyre d'or et lui enseigna à en jouer (voir la fiche « Lyre »). Son chant, dit-on, charmait aussi bien les bêtes sauvages que les arbres et les rochers, qui se déplaçaient pour venir l'entendre.",
-    "Le jour de son mariage avec la nymphe Eurydice, celle-ci fut mordue par un serpent en fuyant un satyr et mourut sur le coup — la joie des noces basculant en un instant dans le deuil.",
+    "Le jour de son mariage avec la nymphe Eurydice — cérémonie que le dieu Hyménée lui-même présida, sa torche ne cessant de fumer sans jamais prendre flamme, mauvais présage resté sans réponse (voir la fiche « Hyménée ») —, celle-ci fut mordue par un serpent en fuyant un satyr et mourut sur le coup : la joie des noces basculant en un instant dans le deuil.",
     "Fou de chagrin, Orphée descendit aux Enfers avec sa seule lyre : son chant adoucit le cœur inflexible d'Hadès et de Perséphone (voir les fiches « Hadès » et « Perséphone »), qui consentirent à lui rendre Eurydice, à une condition — marcher devant elle sans se retourner avant d'avoir atteint la lumière du jour. Presque arrivé, incapable de résister au doute, il se retourna un instant trop tôt : elle disparut une seconde fois, cette fois pour toujours.",
     "Dans le Tarot, Orphée est la figure du 5 de Coupes, où une silhouette en deuil contemple trois coupes renversées sans voir les deux qui tiennent encore debout derrière elle : son regard, comme le sien vers Eurydice au sortir des Enfers, se fixe sur la perte au moment précis où il ne fallait plus se retourner.",
+  ],
+  "hyménée": [
+    "Hyménée personnifie le chant et le rite du mariage. La tradition la plus répandue en fait le fils d'Apollon et d'une Muse — Clio, Calliope, Uranie ou Terpsichore selon les versions —, même si d'autres récits le disent plutôt fils de Dionysos, ou de Dionysos et d'Aphrodite. On le représente jeune, une couronne de fleurs sur la tête et une torche allumée à la main, celle-là même qui éclaire le cortège nocturne menant la mariée jusqu'à son nouvel époux (voir la fiche « Torches »).",
+    "Les Grecs croyaient sa présence indispensable à toute noce : sans lui, le mariage était voué au malheur — on l'invoquait donc à voix haute pendant la cérémonie, dans un chant qui portait justement son nom, l'hyménée, entonné tout au long du cortège menant l'épousée à sa nouvelle maison.",
+    "Sa présence, pourtant, ne garantit pas toujours un présage favorable. Ovide raconte qu'appelé aux noces d'Orphée et Eurydice, Hyménée s'y rendit bien, mais sans prononcer les paroles rituelles ni afficher son visage joyeux : sa torche ne fit que fumer sans jamais vouloir prendre, quels que soient les efforts pour l'agiter — un présage qui, dans les faits, se révéla en dessous de la vérité (voir la fiche « Orphée »).",
+    "Une tradition plus tardive veut aussi qu'il ait perdu, aux noces de Dionysos et d'Ariane sur l'île de Naxos, une voix pourtant réputée aussi belle que celle de son père Apollon (voir la fiche « Ariane ») — comme si présider aux noces des autres avait, plus d'une fois, un prix pour lui-même.",
+    "Dans le Tarot, Hyménée est la figure du 10 de Coupes, où une famille réunie lève les bras vers un arc-en-ciel de dix coupes : cette carte est la fête qu'il préside dans ce qu'elle a de plus réussi, cette joie qui se transmet des mariés jusqu'aux enfants qui dansent déjà sous le même arc.",
   ],
 };
 
