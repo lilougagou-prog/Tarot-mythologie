@@ -1,12 +1,14 @@
 // Backend serverless (Vercel) — génère un portrait de personnalité rédigé (texte suivi,
 // pas une liste) à partir d'un résumé du thème natal, via l'API Anthropic.
 //
-// Reçoit en POST : { profile: { firstName, sunSign, moonSign, ascendantSign?,
+// Reçoit en POST : { profile: { firstName, gender?, sunSign, moonSign, ascendantSign?,
 //   nameNumber?, nameNumberMeaning?, personalYear?, personalYearMeaning?,
 //   tutelaryDeity?, topAspects?: [{type, a, b}, ...] } }
 //   - Résumé minimal du thème (voir profileForPortrait() dans app.js), jamais le thème
 //     natal complet (maisons, degrés exacts, etc.) — même logique de sobriété que le
 //     "profile" envoyé à /api/reading.
+//   - gender: "f" | "m" | absent/null (préfère ne pas préciser) — pour accorder
+//     correctement le portrait ; sans lui, formulation volontairement neutre.
 // Renvoie : { portrait: string } — 3-4 paragraphes séparés par un retour à la ligne
 // double, prêts à être affichés tels quels (voir renderProfilResults() dans app.js).
 //
@@ -85,9 +87,19 @@ module.exports = async function handler(req, res) {
     return;
   }
 
+  // Accord de genre explicite si connu (voir renderProfilForm() dans app.js — champ
+  // optionnel, "Préfère ne pas préciser" par défaut) : sans lui, l'IA doit deviner ou
+  // rester dans le flou, ce qui produit soit un mauvais accord soit un texte trop plat.
+  const genderHint = profile.gender === "f"
+    ? "Cette personne est de genre féminin : accorde tous les adjectifs et participes qui la concernent au féminin (ex. \"tu es née\", \"tu es passionnée\")."
+    : profile.gender === "m"
+    ? "Cette personne est de genre masculin : accorde tous les adjectifs et participes qui la concernent au masculin (ex. \"tu es né\", \"tu es passionné\")."
+    : "Le genre de cette personne n'est pas précisé : formule tes phrases de façon à éviter tout accord de genre explicite (par exemple \"tu ressens\" plutôt que \"tu es ravi/ravie\", ou d'autres tournures neutres).";
+
   const prompt = `Tu es un astrologue et tarologue chaleureux, direct et humain. Voici un résumé du thème de ${profile.firstName.trim()} :
 ${lines.join("\n")}
 ${aspectsLine ? `Aspects marquants entre ses planètes : ${aspectsLine}.` : ""}
+${genderHint}
 
 Rédige un portrait de personnalité en français, à la deuxième personne ("tu", "ton", "ta"), en 3 à 4 paragraphes fluides qui tissent ensemble ces éléments en une personnalité cohérente — un texte suivi, pas une liste, pas un paragraphe par élément. Règles strictes :
 - Ton chaleureux, direct, humain — jamais mécanique, jamais de formule toute faite du type "comme le montre ton thème" ou "en résumé".

@@ -2365,6 +2365,7 @@ function profileForPortrait(saved){
     }));
   return {
     firstName: saved.firstName,
+    gender: saved.gender || null, // "f" | "m" | null (préfère ne pas préciser) — pour accorder correctement le texte généré
     sunSign: a.sunSign || null,
     moonSign: a.moonSign || null,
     ascendantSign: a.ascendant?.sign || null,
@@ -2413,6 +2414,7 @@ function profileForAstralText(saved){
     }));
   return {
     firstName: saved.firstName,
+    gender: saved.gender || null, // "f" | "m" | null (préfère ne pas préciser) — pour accorder correctement le texte généré
     nameNumber: saved.nameNumber,
     nameNumberMeaning: numMeaning ? numMeaning[0] : null,
     ascendantSign: a.ascendant?.sign || null,
@@ -3313,7 +3315,9 @@ function profileForComparisonText(primary, relation){
   if(!cmp) return null;
   return {
     yourFirstName: primary.firstName,
+    yourGender: primary.gender || null, // "f" | "m" | null (préfère ne pas préciser)
     theirFirstName: relation.firstName,
+    theirGender: relation.gender || null,
     relationType: RELATION_TYPES[relation.relationType] || "Autre",
     yourSigns: cmp.signs.a,
     theirSigns: cmp.signs.b,
@@ -3324,13 +3328,13 @@ function profileForComparisonText(primary, relation){
   };
 }
 
-// Empreinte des données de naissance des deux thèmes concernés : si l'une des deux change
-// (profil propre modifié, ou informations du proche modifiées), le texte en cache ne
-// correspond plus à ce qui est réellement affiché — même logique de garde-fou que
-// astralText.tutelaryDeityKey (voir ensureAstralText()), pour ne jamais laisser un texte
-// périmé contredire silencieusement les données actuelles.
+// Empreinte des données de naissance ET du genre des deux thèmes concernés : si l'une de
+// ces valeurs change (profil propre modifié, ou informations du proche modifiées), le texte
+// en cache ne correspond plus à ce qui est réellement affiché — même logique de garde-fou
+// que astralText.tutelaryDeityKey (voir ensureAstralText()), pour ne jamais laisser un texte
+// périmé (mal genré, notamment) contredire silencieusement les données actuelles.
 function comparisonFingerprint(primary, relation){
-  return [primary.birthDate, primary.birthTime||"", primary.timeUnknown?1:0, relation.birthDate, relation.birthTime||"", relation.timeUnknown?1:0].join("|");
+  return [primary.birthDate, primary.birthTime||"", primary.timeUnknown?1:0, primary.gender||"", relation.birthDate, relation.birthTime||"", relation.timeUnknown?1:0, relation.gender||""].join("|");
 }
 function getCachedComparisonText(primary, relation){
   const cached = relation?.comparisonText;
@@ -4250,6 +4254,15 @@ function renderRelationForm(existing){
       <select id="relationType">${options}</select>
     </div>
     <div class="draw-notes">
+      <p class="suit-h4" style="margin:0 0 6px">Genre</p>
+      <select id="relationGender">
+        <option value="" ${!r.gender?"selected":""}>Préfère ne pas préciser</option>
+        <option value="f" ${r.gender==="f"?"selected":""}>Féminin</option>
+        <option value="m" ${r.gender==="m"?"selected":""}>Masculin</option>
+      </select>
+      <small style="display:block;margin-top:6px;opacity:.7">Sert uniquement à accorder correctement le texte de comparaison généré par IA — laisse sur « Préfère ne pas préciser » pour des formulations neutres.</small>
+    </div>
+    <div class="draw-notes">
       <p class="suit-h4" style="margin:0 0 6px">Date de naissance</p>
       <input id="relationDate" type="date" value="${escapeHTML(r.birthDate||"")}">
     </div>
@@ -4281,6 +4294,7 @@ function bindRelationForm(existing){
   document.getElementById("relationFormCancel").onclick = ()=> showRelations();
   document.getElementById("relationSubmit").onclick = async ()=>{
     const firstName = document.getElementById("relationFirstName").value.trim();
+    const gender = document.getElementById("relationGender").value || null; // "f" | "m" | null (préfère ne pas préciser)
     const relationType = document.getElementById("relationType").value;
     const birthDate = document.getElementById("relationDate").value;
     const timeUnknown = unknownCheckbox.checked;
@@ -4303,7 +4317,7 @@ function bindRelationForm(existing){
 
     try{
       const astral = await fetchAstralProfile({ date: birthDate, time: timeUnknown ? null : birthTime, place: birthPlace });
-      upsertRelation({ id: existing?.id, firstName, relationType, birthDate, birthTime: timeUnknown ? null : birthTime, timeUnknown, birthPlace, astral });
+      upsertRelation({ id: existing?.id, firstName, gender, relationType, birthDate, birthTime: timeUnknown ? null : birthTime, timeUnknown, birthPlace, astral });
       showRelations();
     } catch(err){
       errorEl.textContent = err.message || "Impossible de calculer son thème pour le moment.";
@@ -4802,6 +4816,15 @@ function renderProfilForm(prefill){
       <input id="profilFirstName" placeholder="Ton prénom" value="${escapeHTML(p.firstName||"")}">
     </div>
     <div class="draw-notes">
+      <p class="suit-h4" style="margin:0 0 6px">Genre</p>
+      <select id="profilGender">
+        <option value="" ${!p.gender?"selected":""}>Préfère ne pas préciser</option>
+        <option value="f" ${p.gender==="f"?"selected":""}>Féminin</option>
+        <option value="m" ${p.gender==="m"?"selected":""}>Masculin</option>
+      </select>
+      <small style="display:block;margin-top:6px;opacity:.7">Sert uniquement à accorder correctement les textes générés par IA (portrait, explications) — laisse sur « Préfère ne pas préciser » pour des formulations neutres.</small>
+    </div>
+    <div class="draw-notes">
       <p class="suit-h4" style="margin:0 0 6px">Date de naissance</p>
       <input id="profilDate" type="date" value="${escapeHTML(p.birthDate||"")}">
     </div>
@@ -4838,6 +4861,7 @@ function bindProfilForm(saved){
 
   document.getElementById("profilSubmit").onclick = async ()=>{
     const firstName = document.getElementById("profilFirstName").value.trim();
+    const gender = document.getElementById("profilGender").value || null; // "f" | "m" | null (préfère ne pas préciser)
     const birthDate = document.getElementById("profilDate").value;
     const timeUnknown = unknownCheckbox.checked;
     const birthTime = timeUnknown ? "" : document.getElementById("profilTime").value;
@@ -4860,7 +4884,7 @@ function bindProfilForm(saved){
     try{
       const astral = await fetchAstralProfile({ date: birthDate, time: timeUnknown ? null : birthTime, place: birthPlace });
       const nameNumber = nameNumerology(firstName);
-      saveProfileData({ firstName, nameNumber, birthDate, birthTime: timeUnknown ? null : birthTime, timeUnknown, birthPlace, astral });
+      saveProfileData({ firstName, gender, nameNumber, birthDate, birthTime: timeUnknown ? null : birthTime, timeUnknown, birthPlace, astral });
       showProfilAstral();
     } catch(err){
       errorEl.textContent = err.message || "Impossible de calculer le profil pour le moment.";
