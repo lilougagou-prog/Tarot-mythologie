@@ -4244,12 +4244,14 @@ function showDeityDetail(id, backTo = cardDetailReturnTo){
 function profil(){
   const links = profileMajorLinks();
   ensureRetrospective();
-  // Le texte qui explique CE lien (pas juste le grille de cartes brute) est de
-  // l'interprétation écrite : même découpage gratuit/premium que le reste du Profil astral
-  // (voir renderProfilResults()) — on ne déclenche l'appel IA que pour un profil premium.
+  // Le texte qui explique CE lien (pourquoi ces cartes précisément, ce qu'elles disent de
+  // la personne) est de l'interprétation écrite : même découpage gratuit/premium que le
+  // reste du Profil astral (voir renderProfilResults()/premiumLockHTML()) — la grille de
+  // cartes elle-même (donnée brute : quel signe pointe vers quelle carte) reste gratuite,
+  // seule l'explication est verrouillée.
   const premiumOn = isPremiumEnabled();
   if(links && premiumOn) ensureAstralText();
-  const majorLinksText = premiumOn ? (getCachedAstralText()?.majorLinksText || null) : null;
+  const majorLinksText = premiumOn ? (getCachedAstralText()?.majorLinksText || majorLinksTextFallback(links) || null) : null;
   const retrospective = getCachedRetrospective();
   const retrospectiveReady = retrospective && retrospective.year === new Date().getFullYear();
   return `<section class="hero">
@@ -4266,8 +4268,9 @@ function profil(){
   </div>
   ${links ? `
   <div class="section-title centered"><h3>Arcanes majeurs liés à ton profil astral</h3></div>
-  <p class="note" style="text-align:center">Soleil, Lune et Ascendant sont chacun rattachés à un arcane majeur (correspondance signe → carte, tradition ésotérique classique) — quand plusieurs tombent sur la même carte, elle n'apparaît qu'une fois ci-dessous.</p>
-  ${majorLinksText ? `<p class="lore-text" style="margin-top:10px">${escapeHTML(majorLinksText)}</p>` : ""}
+  ${premiumOn
+    ? (majorLinksText ? `<p class="lore-text" style="margin-top:10px">${escapeHTML(majorLinksText)}</p>` : "")
+    : premiumLockHTML("Pourquoi ces cartes précisément — et ce qu'elles disent de toi — fait partie du contenu premium.")}
   <div class="card-grid" style="margin-top:14px">${links.map(l=>`<div>
     <p class="suit-h4" style="text-align:center;margin-bottom:6px">${escapeHTML(l.labels.join(" & "))} en ${escapeHTML(l.sign)}</p>
     ${cardHTML(l.card,"major")}
@@ -4866,6 +4869,20 @@ function tutelaryReasonFallback(deity){
   const top = deity.contributors.slice(0,3).map(c=>c.precise && c.cardName ? `${c.label} en ${c.sign} (${c.cardName})` : `${c.label} en ${c.sign}`);
   const list = top.length > 1 ? `${top.slice(0,-1).join(", ")} et ${top[top.length-1]}` : top[0];
   return `Ce choix s'appuie surtout sur ${list} — les placements qui pèsent le plus dans ton thème.`;
+}
+
+// Même principe que tutelaryReasonFallback() ci-dessus, pour les arcanes majeurs liés au
+// thème (voir profil()) : tant que majorLinksText (IA) n'est pas encore en cache, cette
+// phrase de secours locale nomme quand même chaque carte, le signe qui la relie et son
+// dieu/mots-clés — pas une vraie explication mythologique tissée, mais jamais un simple
+// énoncé mécanique ("correspondance signe -> carte") qui ne dirait rien de la personne.
+function majorLinksTextFallback(links){
+  if(!links || !links.length) return null;
+  const sentences = links.map(l=>{
+    const labelPart = l.labels.length > 1 ? `${l.labels.slice(0,-1).join(", ")} et ${l.labels[l.labels.length-1]}` : l.labels[0];
+    return `${labelPart} en ${l.sign} te relie à « ${l.card[0]} » (${l.card[1]} — ${l.card[3]})`;
+  });
+  return `${sentences.join(" ; ")}.`;
 }
 
 // Écran Profil astral : affiche le résultat s'il existe déjà, sinon le formulaire de
