@@ -6,7 +6,8 @@
 // Reçoit en POST : { profile: { firstName, gender?, nameNumber?, nameNumberMeaning?,
 //   ascendantSign?, planets: [{key, label, sign, house?, retrograde?}, ...],
 //   aspects: [{key, type, a, b}, ...], tutelaryDeity?: { name, note?,
-//   contributors: [{label, sign, cardName?, precise?}, ...] } } }
+//   contributors: [{label, sign, cardName?, precise?}, ...] },
+//   majorLinks?: [{labels: string[], sign, cardName, deityName, keywords}, ...] } }
 //   - gender: "f" | "m" | absent/null (préfère ne pas préciser) — pour accorder
 //     correctement les phrases générées ; sans lui, formulation volontairement neutre.
 //   - Résumé agrégé uniquement (voir profileForAstralText() dans app.js) — jamais le thème
@@ -17,8 +18,12 @@
 //     a été déterminée via le décan exact (10°) du signe plutôt que le signe entier (voir
 //     DECAN_MINOR_CARDS/tutelaryDeity() dans app.js) — donne à l'IA de quoi ancrer son
 //     explication sur une carte précise plutôt que sur le signe seul, quand c'est possible.
+//   - `majorLinks` : les arcanes majeurs liés au thème via Soleil/Lune/Ascendant (voir
+//     majorLinksFor()/ZODIAC_MAJOR_LINKS dans app.js — correspondance signe entier -> majeur,
+//     fixe, jamais calculée par l'IA). Chaque entrée donne déjà le dieu et les mots-clés de
+//     la carte pour que l'IA n'ait jamais à deviner un sens de carte.
 // Renvoie : { text: { nameNumber?: string, ascendant?: string, planets: {clé: string},
-//   aspects: {clé: string}, tutelaryReason?: string } }
+//   aspects: {clé: string}, tutelaryReason?: string, majorLinksText?: string } }
 //
 // Généré une seule fois et mis en cache côté client (profile.astralText dans
 // localStorage), régénéré si la divinité tutélaire recalculée change (voir
@@ -72,10 +77,13 @@ module.exports = async function handler(req, res) {
   const deity = profile.tutelaryDeity && typeof profile.tutelaryDeity === "object" && typeof profile.tutelaryDeity.name === "string"
     ? profile.tutelaryDeity
     : null;
+  const majorLinks = Array.isArray(profile.majorLinks)
+    ? profile.majorLinks.filter((l) => l && Array.isArray(l.labels) && l.labels.length && typeof l.sign === "string" && typeof l.cardName === "string" && typeof l.deityName === "string")
+    : [];
   const hasNameNumber = Number.isFinite(profile.nameNumber);
   const hasAscendant = typeof profile.ascendantSign === "string" && profile.ascendantSign;
 
-  if (!planets.length && !aspects.length && !hasNameNumber && !hasAscendant && !deity) {
+  if (!planets.length && !aspects.length && !hasNameNumber && !hasAscendant && !deity && !majorLinks.length) {
     res.status(400).json({ error: "Requête invalide : profile ne contient aucune donnée exploitable." });
     return;
   }
@@ -114,6 +122,12 @@ module.exports = async function handler(req, res) {
     lines.push(`Figure mythologique déjà déterminée par calcul comme la plus présente dans ce thème (ne remets jamais ce choix en cause) : ${deity.name}${deity.note ? ` — ${deity.note}` : ""}`);
     if (contributors) lines.push(`Placements qui ont le plus contribué à ce choix : ${contributors}`);
   }
+  if (majorLinks.length) {
+    lines.push("Arcanes majeurs déjà liés à ce thème par calcul (ne remets jamais ce choix en cause, n'en évoque aucun autre) :");
+    majorLinks.forEach((l) => {
+      lines.push(`- ${l.labels.join(" et ")} en ${l.sign} -> "${l.cardName}", dieu/déesse ${l.deityName} (mots-clés : ${l.keywords})`);
+    });
+  }
 
   const firstName = profile.firstName.trim();
 
@@ -135,16 +149,17 @@ Pour CHACUN des éléments ci-dessus, rédige une phrase personnalisée en fran�
 - Chaque aspect : 1 seule phrase qui explique la dynamique entre les deux planètes de façon concrète, sans jamais utiliser les mots "aspect", "orbe", "conjonction", "trigone", "carré", "opposition" ou "sextile" — traduis-les en dynamique vécue (tension, alliance naturelle, occasion, frottement à observer…).
 - Nombre du prénom : 1 à 2 phrases qui relient ce nombre à un trait de personnalité concret.
 ${deity ? `- tutelaryReason : 2 à 3 phrases qui expliquent pourquoi CETTE figure mythologique précise résonne avec CE thème, en t'appuyant sur les placements qui ont le plus contribué au choix et sur ce que cette figure représente mythologiquement. Si un placement précise un "décan de la carte X" entre parenthèses, tu peux t'appuyer dessus pour ancrer l'explication sur cette carte précise plutôt que sur le signe seul — mais ne mentionne jamais le mot "décan" lui-même, ni "carte", ni le nom technique de la carte : reformule toujours en langage naturel, comme une simple facette du thème. N'explique jamais le calcul (poids, score) lui-même, seulement le sens. Ne remets jamais en cause le choix de la figure : explique-le, ne le questionne pas.` : ""}
+${majorLinks.length ? `- majorLinksText : 2 à 4 phrases, UN SEUL texte regroupant TOUS les arcanes majeurs listés ci-dessus (jamais un texte par carte) qui explique pourquoi CES cartes précises, et uniquement celles-ci, sont liées à ce thème — en t'appuyant sur le signe qui les relie (Soleil/Lune/Ascendant) et sur le dieu/mots-clés donnés pour chacune. N'invente jamais une autre carte que celles listées. Nomme chaque carte par son nom entre guillemets français (ex. « Le Mat ») au moins une fois. Ne mentionne jamais le mot "arcane", "majeur" ou "correspondance ésotérique" : reste dans une langue naturelle, comme si tu racontais un lien de personnalité, pas un système de calcul.` : ""}
 - Jamais de "maison X" mentionnée sans dire ce qu'elle signifie en langage courant si tu la mentionnes.
 - Ton chaleureux, direct, humain — jamais mécanique, jamais de formule toute faite du type "cela montre que".
 
 Réponds UNIQUEMENT avec un objet JSON valide, sans texte autour, sans balises markdown, exactement sous cette forme (les clés de "planets" et "aspects" doivent être EXACTEMENT les clés entre guillemets données ci-dessus, pas les labels) :
-{"nameNumber":${hasNameNumber ? '"..."' : "null"},"ascendant":${hasAscendant ? '"..."' : "null"},"planets":{${planets.map((p) => `"${p.key}":"..."`).join(",")}},"aspects":{${aspects.map((a) => `"${a.key}":"..."`).join(",")}},"tutelaryReason":${deity ? '"..."' : "null"}}`;
+{"nameNumber":${hasNameNumber ? '"..."' : "null"},"ascendant":${hasAscendant ? '"..."' : "null"},"planets":{${planets.map((p) => `"${p.key}":"..."`).join(",")}},"aspects":{${aspects.map((a) => `"${a.key}":"..."`).join(",")}},"tutelaryReason":${deity ? '"..."' : "null"},"majorLinksText":${majorLinks.length ? '"..."' : "null"}}`;
 
   try {
     const message = await anthropic.messages.create({
       model: "claude-sonnet-4-6",
-      max_tokens: 2200,
+      max_tokens: 2400,
       messages: [{ role: "user", content: prompt }],
     });
 
@@ -182,6 +197,7 @@ Réponds UNIQUEMENT avec un objet JSON valide, sans texte autour, sans balises m
         planets: cleanPlanets,
         aspects: cleanAspects,
         tutelaryReason: typeof parsed.tutelaryReason === "string" && parsed.tutelaryReason.trim() ? parsed.tutelaryReason.trim() : null,
+        majorLinksText: typeof parsed.majorLinksText === "string" && parsed.majorLinksText.trim() ? parsed.majorLinksText.trim() : null,
       },
     });
   } catch (err) {
