@@ -2489,6 +2489,11 @@ function profileForAstralText(saved){
       a: (PLANET_LABELS[asp.bodies[0]]||"").replace(/^[☉☽]\s*/,""),
       b: (PLANET_LABELS[asp.bodies[1]]||"").replace(/^[☉☽]\s*/,""),
     }));
+  // Arcanes majeurs liés au thème (Soleil/Lune/Ascendant, voir majorLinksFor()) — envoyés
+  // avec le nom de leur dieu et leurs mots-clés (déjà connus localement, jamais à deviner
+  // par l'IA) pour que majorLinksText ci-dessous puisse s'appuyer dessus sans inventer de
+  // sens de carte. Voir la section "Arcanes majeurs liés à ton profil astral" dans profil().
+  const majorLinks = majorLinksFor(a);
   return {
     firstName: saved.firstName,
     gender: saved.gender || null, // "f" | "m" | null (préfère ne pas préciser) — pour accorder correctement le texte généré
@@ -2502,6 +2507,7 @@ function profileForAstralText(saved){
       note: deity.note,
       contributors: (deity.contributors||[]).map(c=>({ label: c.label, sign: c.sign, cardName: c.cardName || null, precise: !!c.precise })),
     } : null,
+    majorLinks: majorLinks ? majorLinks.map(l=>({ labels: l.labels, sign: l.sign, cardName: l.card[0], deityName: l.card[1], keywords: l.card[3] })) : null,
   };
 }
 
@@ -2946,6 +2952,10 @@ function ensureAstralText(){
       fresh.astralText = { ...text, tutelaryDeityKey: liveDeityKey };
       saveProfileData(fresh);
       if(cardDetailReturnTo === showProfilAstral) showProfilAstral();
+      // majorLinksText (voir profil()) s'affiche sur l'onglet Profil lui-même, pas sur un
+      // écran "detail" couvert par cardDetailReturnTo — re-render explicite si c'est
+      // l'onglet actif au moment où le texte arrive.
+      if(route === "profil") render();
     })
     .catch(()=>{ /* échec silencieux : les phrases génériques restent affichées */ })
     .finally(()=>{ astralTextFetchInFlight = false; });
@@ -3931,16 +3941,17 @@ function learningProgress(){
   return { percent, totalCards, totalFigures, totalSymbols, cardsSeen, figuresSeen, symbolsSeen };
 }
 
-// Relie le profil astral enregistré aux arcanes majeurs (via ZODIAC_MAJOR_LINKS), pour
-// mettre en avant "tes" cartes dans Apprendre. Regroupe Soleil/Lune/Ascendant qui
-// tomberaient sur la même carte plutôt que de l'afficher en double.
-function profileMajorLinks(){
-  const p = getProfile();
-  if(!p || !p.astral) return null;
+// Relie un thème astral (sunSign/moonSign/ascendant.sign) aux arcanes majeurs via
+// ZODIAC_MAJOR_LINKS. Regroupe Soleil/Lune/Ascendant qui tomberaient sur la même carte
+// plutôt que de l'afficher en double. Factorisé hors de profileMajorLinks() ci-dessous pour
+// être réutilisable par profileForAstralText() (qui reçoit un `saved` explicite, sans
+// repasser par getProfile() — voir le commentaire sur cette fonction).
+function majorLinksFor(astral){
+  if(!astral) return null;
   const items = [];
-  if(p.astral.sunSign) items.push({ label:"Soleil", sign:p.astral.sunSign });
-  if(p.astral.moonSign) items.push({ label:"Lune", sign:p.astral.moonSign });
-  if(p.astral.ascendant && p.astral.ascendant.sign) items.push({ label:"Ascendant", sign:p.astral.ascendant.sign });
+  if(astral.sunSign) items.push({ label:"Soleil", sign:astral.sunSign });
+  if(astral.moonSign) items.push({ label:"Lune", sign:astral.moonSign });
+  if(astral.ascendant && astral.ascendant.sign) items.push({ label:"Ascendant", sign:astral.ascendant.sign });
 
   const byCard = {};
   items.forEach(it=>{
@@ -3951,6 +3962,13 @@ function profileMajorLinks(){
   });
   const result = Object.values(byCard);
   return result.length ? result : null;
+}
+// Relie le profil astral ENREGISTRÉ aux arcanes majeurs, pour mettre en avant "tes" cartes
+// dans l'onglet Profil et dans Apprendre (voir majorLinksFor() ci-dessus pour la logique).
+function profileMajorLinks(){
+  const p = getProfile();
+  if(!p || !p.astral) return null;
+  return majorLinksFor(p.astral);
 }
 
 function apprendre(){
@@ -4226,6 +4244,12 @@ function showDeityDetail(id, backTo = cardDetailReturnTo){
 function profil(){
   const links = profileMajorLinks();
   ensureRetrospective();
+  // Le texte qui explique CE lien (pas juste le grille de cartes brute) est de
+  // l'interprétation écrite : même découpage gratuit/premium que le reste du Profil astral
+  // (voir renderProfilResults()) — on ne déclenche l'appel IA que pour un profil premium.
+  const premiumOn = isPremiumEnabled();
+  if(links && premiumOn) ensureAstralText();
+  const majorLinksText = premiumOn ? (getCachedAstralText()?.majorLinksText || null) : null;
   const retrospective = getCachedRetrospective();
   const retrospectiveReady = retrospective && retrospective.year === new Date().getFullYear();
   return `<section class="hero">
@@ -4242,7 +4266,9 @@ function profil(){
   </div>
   ${links ? `
   <div class="section-title centered"><h3>Arcanes majeurs liés à ton profil astral</h3></div>
-  <div class="card-grid">${links.map(l=>`<div>
+  <p class="note" style="text-align:center">Soleil, Lune et Ascendant sont chacun rattachés à un arcane majeur (correspondance signe → carte, tradition ésotérique classique) — quand plusieurs tombent sur la même carte, elle n'apparaît qu'une fois ci-dessous.</p>
+  ${majorLinksText ? `<p class="lore-text" style="margin-top:10px">${escapeHTML(majorLinksText)}</p>` : ""}
+  <div class="card-grid" style="margin-top:14px">${links.map(l=>`<div>
     <p class="suit-h4" style="text-align:center;margin-bottom:6px">${escapeHTML(l.labels.join(" & "))} en ${escapeHTML(l.sign)}</p>
     ${cardHTML(l.card,"major")}
   </div>`).join("")}</div>` : ""}`;
@@ -4457,6 +4483,11 @@ function renderComparison(primary, relation){
   const premiumOn = isPremiumEnabled();
   const cmp = compareProfiles(primary, relation);
   const relLabel = RELATION_TYPES[relation.relationType] || "Autre";
+  // Lieu RÉSOLU par le géocodage (ex. "Lyon, Rhône-Alpes, France") plutôt que le texte brut
+  // tapé dans le formulaire — même correctif que renderProfilResults(), pour pouvoir
+  // repérer une homonymie mal désambiguïsée sur le thème d'un proche aussi, pas seulement
+  // sur le sien. Repli sur le texte tapé si le thème a été calculé avant ce correctif.
+  const resolvedPlaceOf = p => p?.astral?.resolvedPlace || p?.birthPlace || "";
 
   return `<div class="detail">
     <div class="section-title"><h3>Toi & ${escapeHTML(relation.firstName)}</h3></div>
@@ -4471,8 +4502,8 @@ function renderComparison(primary, relation){
     </p>
 
     <div class="symbol-list" style="margin-top:14px;grid-template-columns:1fr 1fr">
-      <div class="symbol" style="text-align:center"><b>Toi</b><br>☉ ${escapeHTML(cmp.signs.a.sun||"—")}<br>☽ ${escapeHTML(cmp.signs.a.moon||"—")}${cmp.signs.a.ascendant?`<br>Asc. ${escapeHTML(cmp.signs.a.ascendant)}`:""}</div>
-      <div class="symbol" style="text-align:center"><b>${escapeHTML(relation.firstName)}</b><br>☉ ${escapeHTML(cmp.signs.b.sun||"—")}<br>☽ ${escapeHTML(cmp.signs.b.moon||"—")}${cmp.signs.b.ascendant?`<br>Asc. ${escapeHTML(cmp.signs.b.ascendant)}`:""}</div>
+      <div class="symbol" style="text-align:center"><b>Toi</b>${resolvedPlaceOf(primary)?`<br><small style="opacity:.7">${escapeHTML(resolvedPlaceOf(primary))}</small>`:""}<br>☉ ${escapeHTML(cmp.signs.a.sun||"—")}<br>☽ ${escapeHTML(cmp.signs.a.moon||"—")}${cmp.signs.a.ascendant?`<br>Asc. ${escapeHTML(cmp.signs.a.ascendant)}`:""}</div>
+      <div class="symbol" style="text-align:center"><b>${escapeHTML(relation.firstName)}</b>${resolvedPlaceOf(relation)?`<br><small style="opacity:.7">${escapeHTML(resolvedPlaceOf(relation))}</small>`:""}<br>☉ ${escapeHTML(cmp.signs.b.sun||"—")}<br>☽ ${escapeHTML(cmp.signs.b.moon||"—")}${cmp.signs.b.ascendant?`<br>Asc. ${escapeHTML(cmp.signs.b.ascendant)}`:""}</div>
     </div>
 
     ${(()=>{ const text = premiumOn ? getCachedComparisonText(primary, relation) : null; return text
