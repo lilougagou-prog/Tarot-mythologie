@@ -4,9 +4,15 @@
 // ou éléments marquants du récit et propose un sens concret — jamais une prédiction
 // littérale de l'avenir, seulement un reflet symbolique.
 //
-// Reçoit en POST : { dreamText: string }
+// Reçoit en POST : { dreamText: string, profile?: { occupation?, loveStatus?,
+//   hasChildren?: true|false, interests? } }
 //   - dreamText : récit libre du rêve, tel que tapé (non vide, max MAX_DREAM_LENGTH
 //     caractères).
+//   - profile (optionnel, voir profileForDream() dans app.js) : le métier notamment change
+//     beaucoup le sens plausible d'un rêve — retour direct d'utilisatrice ("le métier a une
+//     grande importance pour l'interprétation des rêves"). Tous les champs sont
+//     individuellement optionnels ; profile absent au complet ne change rien au
+//     comportement, l'interprétation reste identique à avant cette fonctionnalité.
 // Renvoie : { analysis: string } — 2 à 4 paragraphes séparés par un retour à la ligne
 // double, prêts à être affichés tels quels (voir renderDreamForm() dans app.js).
 //
@@ -41,7 +47,7 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  const { dreamText } = req.body || {};
+  const { dreamText, profile } = req.body || {};
 
   if (
     typeof dreamText !== "string" ||
@@ -60,12 +66,29 @@ module.exports = async function handler(req, res) {
     return;
   }
 
+  // Contexte de vie optionnel (voir profileForDream()/lifeContextFor() dans app.js) : le
+  // métier notamment change beaucoup le sens plausible d'un rêve (un rêve de chute ou de
+  // retard n'évoque pas la même chose selon qu'on est étudiant·e ou en poste à
+  // responsabilités) — retour direct d'utilisatrice.
+  let lifeContextBlock = "";
+  if (profile && typeof profile === "object") {
+    const parts = [];
+    if (typeof profile.occupation === "string" && profile.occupation) parts.push(`métier : ${profile.occupation}`);
+    if (typeof profile.loveStatus === "string" && profile.loveStatus) parts.push(`situation amoureuse : ${profile.loveStatus}`);
+    if (profile.hasChildren === true) parts.push("a des enfants");
+    else if (profile.hasChildren === false) parts.push("n'a pas d'enfants");
+    if (typeof profile.interests === "string" && profile.interests) parts.push(`centres d'intérêt : ${profile.interests}`);
+    if (parts.length) {
+      lifeContextBlock = `\nContexte de vie de cette personne (${parts.join(", ")}) : tu peux t'en servir pour ancrer ton interprétation dans sa vie réelle si c'est pertinent — jamais de façon appuyée ni systématique, et jamais au détriment du récit lui-même, qui reste la seule vraie source.\n`;
+    }
+  }
+
   const prompt = `Tu es un interprète de rêves inspiré de la tradition grecque antique de l'onirocritique — dans la lignée d'Artémidore de Daldis, auteur au IIe siècle après J.-C. de l'Onirocriticon, le traité d'interprétation des rêves le plus complet de l'Antiquité. Voici le récit d'un rêve, tel que raconté :
 
 """
 ${dreamText.trim()}
 """
-
+${lifeContextBlock}
 Rédige une interprétation en français, en 2 à 4 paragraphes fluides — un texte suivi, pas une liste à puces. Règles strictes :
 - Identifie 2 à 4 éléments ou symboles marquants du récit et donne à chacun un sens concret, ancré dans ce que cet élément évoque traditionnellement (eau, chute, poursuite, maison, animal, un proche...), jamais un sens générique interchangeable d'un rêve à l'autre.
 - Conclus par une synthèse qui relie ces éléments à un état intérieur, une préoccupation ou une émotion actuelle plausible.

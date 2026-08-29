@@ -3,7 +3,8 @@
 //
 // Reçoit en POST : { profile: { firstName, gender?, sunSign, moonSign, ascendantSign?,
 //   nameNumber?, nameNumberMeaning?, personalYear?, personalYearMeaning?,
-//   tutelaryDeity?, topAspects?: [{type, a, b}, ...] } }
+//   tutelaryDeity?, topAspects?: [{type, a, b}, ...],
+//   lifeContext?: { occupation?, loveStatus?, hasChildren?: true|false, interests? } } }
 //   - Résumé minimal du thème (voir profileForPortrait() dans app.js), jamais le thème
 //     natal complet (maisons, degrés exacts, etc.) — même logique de sobriété que le
 //     "profile" envoyé à /api/reading.
@@ -82,6 +83,21 @@ module.exports = async function handler(req, res) {
         .join(", ")
     : "";
 
+  // Contexte de vie optionnel (métier, situation amoureuse, enfants, centres d'intérêt) —
+  // retour direct d'utilisatrice : donne au portrait de quoi parler d'une vie réelle plutôt
+  // que de rester uniquement sur le thème astral abstrait.
+  let lifeContextLine = "";
+  if (profile.lifeContext && typeof profile.lifeContext === "object") {
+    const lc = profile.lifeContext;
+    const lcParts = [];
+    if (typeof lc.occupation === "string" && lc.occupation) lcParts.push(`métier : ${lc.occupation}`);
+    if (typeof lc.loveStatus === "string" && lc.loveStatus) lcParts.push(`situation amoureuse : ${lc.loveStatus}`);
+    if (lc.hasChildren === true) lcParts.push("a des enfants");
+    else if (lc.hasChildren === false) lcParts.push("n'a pas d'enfants");
+    if (typeof lc.interests === "string" && lc.interests) lcParts.push(`centres d'intérêt : ${lc.interests}`);
+    if (lcParts.length) lifeContextLine = `Contexte de vie : ${lcParts.join(", ")}.`;
+  }
+
   if (!lines.length) {
     res.status(400).json({ error: "Requête invalide : profile ne contient aucune donnée exploitable." });
     return;
@@ -99,6 +115,7 @@ module.exports = async function handler(req, res) {
   const prompt = `Tu es un astrologue et tarologue chaleureux, direct et humain. Voici un résumé du thème de ${profile.firstName.trim()} :
 ${lines.join("\n")}
 ${aspectsLine ? `Aspects marquants entre ses planètes : ${aspectsLine}.` : ""}
+${lifeContextLine}
 ${genderHint}
 
 Rédige un portrait de personnalité en français, à la deuxième personne ("tu", "ton", "ta"), en 3 à 4 paragraphes fluides qui tissent ensemble ces éléments en une personnalité cohérente — un texte suivi, pas une liste, pas un paragraphe par élément. Règles strictes :
@@ -106,6 +123,7 @@ Rédige un portrait de personnalité en français, à la deuxième personne ("tu
 - Ton chaleureux, direct, humain — jamais mécanique, jamais de formule toute faite du type "comme le montre ton thème" ou "en résumé".
 - N'utilise jamais de jargon technique non expliqué (n'écris jamais les mots "aspect", "orbe", "conjonction", "trigone", "carré", "opposition", "sextile") : traduis chaque élément en trait de caractère ou dynamique concrète, en langage courant.
 - Ne liste pas mécaniquement chaque élément un par un : entrelace-les pour raconter une personnalité, pas une fiche technique.
+- Si un contexte de vie est donné (métier, situation amoureuse, enfants, centres d'intérêt), tisse-le avec le thème astral pour ancrer le portrait dans une vie réelle plutôt que de rester purement abstrait — sans jamais le lister à part ni le résumer platement ("tu es marié·e et tu aimes la lecture").
 - Ne commence jamais par "Cher/Chère" ni par le prénom en première ligne comme un en-tête de lettre.
 
 Réponds UNIQUEMENT avec un objet JSON valide, sans texte autour, sans balises markdown, exactement sous cette forme :
