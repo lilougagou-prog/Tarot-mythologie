@@ -2088,6 +2088,15 @@ let tirageState = JSON.parse(localStorage.getItem("arcanes-tirage-state") || "nu
 if(tirageState.spread && !tirageState.spreadType) tirageState.spreadType = "general";
 function saveTirageState(){ localStorage.setItem("arcanes-tirage-state", JSON.stringify(tirageState)); }
 
+// Journal des rêves (onglet Rêves) — même principe de persistance que journal/tirageState
+// ci-dessus, entièrement séparé du Journal des tirages (voir la section "RÊVES" plus bas).
+let dreams = JSON.parse(localStorage.getItem("delphesDreams") || "[]");
+let dreamState = JSON.parse(localStorage.getItem("delphesDreamState") || "null") || {
+  text: "", analysis: null, saved: false, savedId: null, aiStatus: "idle"
+};
+function saveDreamState(){ localStorage.setItem("delphesDreamState", JSON.stringify(dreamState)); }
+function saveDreams(){ localStorage.setItem("delphesDreams", JSON.stringify(dreams)); }
+
 /* ===================== UTILITAIRES ===================== */
 
 function escapeHTML(value){
@@ -3564,11 +3573,11 @@ function render(){
   document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.toggle("active", b.dataset.route===route));
   const back = document.getElementById("backBtn");
   if(back) back.hidden = route === "home";
-  title.textContent = {home:"Tarot de Delphes", tirage:"Tirage", apprendre:"Apprendre", symboles:"Symboles", profil:"Profil"}[route] || "Tarot de Delphes";
+  title.textContent = {home:"Tarot de Delphes", tirage:"Tirage", apprendre:"Apprendre", reves:"Rêves", profil:"Profil"}[route] || "Tarot de Delphes";
   if(route==="home") screen.innerHTML = home();
   if(route==="tirage") screen.innerHTML = tirage();
   if(route==="apprendre") screen.innerHTML = apprendre();
-  if(route==="symboles") screen.innerHTML = symboles();
+  if(route==="reves") screen.innerHTML = reves();
   if(route==="profil") screen.innerHTML = profil();
   triggerScreenAnim();
   bind();
@@ -3773,7 +3782,7 @@ function home(){
   <div class="grid" style="margin-top:30px">
     <div class="tile" data-go="tirage"><strong>✦ Tirer les cartes</strong><span>Choisis toi-même trois cartes dans le jeu.</span></div>
     <div class="tile" data-go="apprendre"><strong>◈ Apprendre</strong><span>Un parcours progressif sur les 78 cartes.</span></div>
-    <div class="tile" data-go="symboles"><strong>✧ Symboles</strong><span>Chaque symbole est relié aux autres.</span></div>
+    <div class="tile" data-go="reves"><strong>☾ Rêves</strong><span>Note un rêve, fais-le interpréter à la manière des devins grecs.</span></div>
     <div class="tile" data-go="profil"><strong>☉ Profil</strong><span>Ton profil astral et tes tirages passés.</span></div>
   </div>`;
 }
@@ -3983,6 +3992,7 @@ function apprendre(){
     <div class="tile" data-learn="cour">${illusHTML("assets/learn-cour.jpg","cour")}<strong>Figures de cour</strong><span>16 figures, réparties en 4 enseignes.</span></div>
     <div class="tile" data-learn="numerales">${illusHTML("assets/learn-numerales.jpg","numerales")}<strong>Cartes numérales</strong><span>40 cartes, de l'As au Dix.</span></div>
     <div class="tile" data-learn="figures">${illusHTML("assets/learn-figures.jpg","figures")}<strong>Figures mythologiques</strong><span>Les ${Object.keys(DEITY_NOTES).length} divinités et héros du jeu.</span></div>
+    <div class="tile" data-learn="symboles"><strong>✧ Bibliothèque symbolique</strong><span>Tous les symboles et les nombres, reliés aux cartes et aux figures.</span></div>
   </div>`;
 }
 
@@ -4058,10 +4068,10 @@ function showLearnSuit(kind, suit){
 function showLearnFigures(){
   preDetailScroll = window.scrollY;
   const entries = Object.entries(DEITY_NOTES).sort((a,b)=>a[0].localeCompare(b[0],"fr"));
-  // Recherche en direct, même mécanisme que symboles() (#symbolSearch/[data-search]) mais
-  // avec son propre id : cet écran ne passe pas par render()/bind(), qui ne câble que
-  // #symbolSearch — un id dédié, câblé ici même, reste cohérent avec le reste de l'écran
-  // qui gère déjà son propre bindChips() plutôt que de dépendre de bind().
+  // Recherche en direct, même mécanisme que showSymbolsLibrary() (#symbolSearch/[data-search])
+  // mais avec son propre id : cet écran ne passe pas par render()/bind() — un id dédié,
+  // câblé ici même, reste cohérent avec le reste de l'écran qui gère déjà son propre
+  // bindChips() plutôt que de dépendre de bind().
   document.getElementById("screen").innerHTML = `<div class="detail">
     <div class="section-title"><h3>Figures mythologiques</h3></div>
     <p class="note">${entries.length} figures citées dans le jeu — certaines ont leur propre carte, d'autres n'apparaissent que dans une lecture.</p>
@@ -4092,7 +4102,13 @@ function showLearnFigures(){
   bindChips();
 }
 
-function symboles(){
+// Écran "detail" (accessible depuis la tuile "Bibliothèque symbolique" de l'onglet
+// Apprendre — anciennement son propre onglet de premier niveau "Symboles", fusionné ici
+// pour libérer une place dans la barre de navigation, voir reves()/showDreamHome()) — même
+// motif que showLearnFigures() : recherche en direct sur son propre id dédié, cette fonction
+// gère son propre binding plutôt que de dépendre de bind()/#symbolSearch.
+function showSymbolsLibrary(){
+  preDetailScroll = window.scrollY;
   // Un seul répertoire, trié par ordre alphabétique — plus de catégories : symboles et
   // nombres mélangés, triés sur leur libellé affiché (locale française, accents compris).
   const items = [
@@ -4103,14 +4119,34 @@ function symboles(){
     }))
   ].sort((a,b)=>a.sort.localeCompare(b.sort,"fr"));
 
-  return `<section class="hero">
-    ${constellationHTML()}
-    <div class="hero-emblem">✦</div>
-    <h2>Bibliothèque symbolique</h2>
-    <p>Chaque symbole est relié aux cartes et aux figures mythologiques qui l'utilisent.</p>
+  document.getElementById("screen").innerHTML = `<div class="detail">
+    <div class="section-title"><h3>Bibliothèque symbolique</h3></div>
+    <p class="note">Chaque symbole est relié aux cartes et aux figures mythologiques qui l'utilisent.</p>
     <div class="search"><input id="symbolSearch" placeholder="Rechercher un symbole…"></div>
-  </section>
-  <div class="symbol-list" style="margin-top:20px">${items.map(i=>i.html).join("")}</div>`;
+    <div class="symbol-list" style="margin-top:14px">${items.map(i=>i.html).join("")}</div>
+    <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
+  </div>`;
+  triggerScreenAnim("detail");
+  window.scrollTo(0,0);
+  document.getElementById("detailBack").onclick = ()=>{
+    // Capturé avant l'appel : render() (ou tout écran qu'il affiche) peut lui-même
+    // réécrire preDetailScroll pour SES propres besoins avant qu'on ait pu le relire —
+    // exactement le même risque de corruption que cardDetailReturnTo (voir le commentaire
+    // au-dessus de showSymbolDetail()), pour la même raison : une seule variable globale
+    // mutable, réutilisée par tous les écrans "detail".
+    const scrollTarget = preDetailScroll;
+    render();
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
+  };
+  // Pour qu'un symbole cliqué dans cette liste revienne bien ici plutôt que de sauter au
+  // menu Apprendre (même logique que showLearnFigures() etc.).
+  cardDetailReturnTo = () => showSymbolsLibrary();
+  const search = document.getElementById("symbolSearch");
+  search.addEventListener("input", ()=>{
+    const q = search.value.toLowerCase().trim();
+    document.querySelectorAll("#screen [data-search]").forEach(el=>{ el.hidden = q && !el.dataset.search.includes(q); });
+  });
+  bindChips();
 }
 
 function symbolCard(id, s){
@@ -4305,6 +4341,199 @@ function showMajorLinks(){
   };
   cardDetailReturnTo = showMajorLinks;
   bindCards();
+}
+
+/* ===================== ONGLET RÊVES (onirocritique grecque, IA) ===================== */
+// Dans la Grèce antique, l'onirocritique — l'art de décrypter les rêves — était une vraie
+// pratique divinatoire : Artémidore de Daldis en a laissé, au IIe siècle après J.-C., le
+// traité le plus complet de l'Antiquité, l'Onirocriticon. Cette section s'en inspire : on
+// raconte un rêve en texte libre (voir renderDreamForm()), l'IA en propose une
+// interprétation (jamais une prédiction littérale de l'avenir, voir api/dream.js), et on
+// peut la conserver dans un journal des rêves entièrement local (voir dreamJournalView()) —
+// même logique de confidentialité que le Journal des tirages, mais une archive séparée.
+//
+// Anciennement l'onglet "Symboles" de premier niveau, fusionné dans Apprendre (voir
+// showSymbolsLibrary()) pour libérer cette place dans la barre de navigation.
+//
+// Découpage gratuit/premium : noter, modifier et conserver un rêve reste gratuit (ce n'est
+// que de la donnée, comme la gestion des proches) ; seule l'interprétation IA elle-même est
+// réservée au premium, comme le reste de l'interprétation écrite de l'appli.
+function reves(){
+  return `<section class="hero">
+    <div class="hero-emblem">☾</div>
+    <h2>Rêves</h2>
+    <p>Dans la Grèce antique, on lisait aussi l'avenir dans les rêves — <span class="clickable-deity" data-deity="morphée">Morphée</span> en façonnait les images, et des devins comme Artémidore de Daldis les décryptaient au réveil. Raconte ce dont tu te souviens.</p>
+  </section>
+  <div class="grid" style="margin-top:20px">
+    <div class="tile" data-reves-go="new"><strong>✍️ Noter un rêve</strong><span>${dreamState.text.trim() ? "Reprends ton brouillon en cours." : "Raconte ce dont tu te souviens, seul(e) ou pour une interprétation."}</span></div>
+    <div class="tile" data-reves-go="journal"><strong>📖 Journal des rêves</strong><span>${dreams.length} rêve${dreams.length>1?"s":""} enregistré${dreams.length>1?"s":""}.</span></div>
+  </div>`;
+}
+
+async function generateDreamAnalysis(dreamText){
+  const r = await fetch("/api/dream", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-App-Access-Code": getAccessCode() },
+    body: JSON.stringify({ dreamText })
+  });
+  if(r.status === 401) localStorage.removeItem("delphesAccessCode");
+  const data = await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(data.error || "Impossible d'interpréter ce rêve pour le moment.");
+  if(typeof data.analysis !== "string" || !data.analysis.trim()) throw new Error("Réponse IA incomplète");
+  return data.analysis;
+}
+
+// Contrairement à startAIReading() (tirage), cet appel n'est jamais déclenché
+// automatiquement : un rêve doit d'abord être écrit puis soumis explicitement (bouton
+// "Interpréter"), pas relancé à chaque frappe.
+function startDreamAnalysis(){
+  if(dreamState.aiStatus === "loading") return;
+  if(!dreamState.text.trim()) return;
+  dreamState.aiStatus = "loading";
+  saveDreamState();
+  showDreamForm();
+  generateDreamAnalysis(dreamState.text.trim())
+    .then(analysis => {
+      dreamState.analysis = analysis; dreamState.aiStatus = "done";
+      saveDreamState();
+      // Si ce rêve est déjà enregistré (mise à jour plutôt que première interprétation),
+      // répercute l'analyse dans l'entrée du journal directement.
+      if(dreamState.saved && dreamState.savedId != null){
+        const entry = dreams.find(d=>d.id===dreamState.savedId);
+        if(entry){ entry.analysis = analysis; saveDreams(); }
+      }
+      showDreamForm();
+    })
+    .catch(err => {
+      console.error("Erreur /api/dream:", err.message);
+      dreamState.aiStatus = "error"; saveDreamState(); showDreamForm();
+    });
+}
+
+function renderDreamForm(){
+  const { text, analysis, saved, aiStatus } = dreamState;
+  const premiumOn = isPremiumEnabled();
+  const loading = aiStatus === "loading";
+  return `<div class="section-title"><h3>Noter un rêve</h3></div>
+  <p class="note">Raconte ce dont tu te souviens, avec le plus de détails possible — lieux, personnages, émotions ressenties. Ton récit reste privé sur cet appareil ; il n'est envoyé que si tu demandes une interprétation.</p>
+  <div class="draw-notes" style="margin-top:14px">
+    <textarea id="dreamText" rows="8" placeholder="Cette nuit, j'ai rêvé que…" style="width:100%;resize:vertical;font:inherit">${escapeHTML(text)}</textarea>
+  </div>
+  ${loading ? `<div class="ai-loading-magic" style="margin-top:14px">${starLoaderHTML("lg")}<p class="ai-loading-text">Le rêve se laisse déchiffrer…</p></div>` : ""}
+  ${analysis ? `<div class="section-title" style="margin-top:24px"><h3>Interprétation</h3></div>
+    ${analysis.split(/\n\s*\n/).map(p=>`<p class="lore-text" style="margin-top:10px">${escapeHTML(p.trim())}</p>`).join("")}` : ""}
+  ${aiStatus==="error" ? `<p class="note" style="color:var(--terracotta);margin-top:10px">L'interprétation n'a pas pu être générée. Réessaie dans un instant.</p>` : ""}
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+    <button class="primary" id="saveDream">${saved ? "Mettre à jour" : "Enregistrer dans mon journal"}</button>
+    ${premiumOn ? `<button class="secondary" id="analyzeDream" ${loading?"disabled":""}>${analysis ? "Réinterpréter" : "Interpréter ce rêve"}</button>` : ""}
+    <button class="ghost" id="clearDream">Effacer</button>
+  </div>
+  ${!premiumOn ? premiumLockHTML("L'interprétation IA du rêve, à la manière d'Artémidore de Daldis, fait partie du contenu premium — noter et conserver tes rêves reste gratuit.") : ""}`;
+}
+function showDreamForm(){
+  preDetailScroll = window.scrollY;
+  document.getElementById("screen").innerHTML = `<div class="detail">${renderDreamForm()}
+    <button class="ghost" id="detailBack" style="margin-top:20px">← Retour</button>
+  </div>`;
+  triggerScreenAnim("detail");
+  window.scrollTo(0,0);
+  document.getElementById("detailBack").onclick = ()=>{
+    const scrollTarget = preDetailScroll;
+    render();
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
+  };
+  cardDetailReturnTo = showDreamForm;
+  bindDreamForm();
+}
+function bindDreamForm(){
+  const textEl = document.getElementById("dreamText");
+  const saveBtn = document.getElementById("saveDream");
+  const analyzeBtn = document.getElementById("analyzeDream");
+  const clearBtn = document.getElementById("clearDream");
+  saveBtn.disabled = !dreamState.text.trim();
+  textEl.addEventListener("input", ()=>{
+    dreamState.text = textEl.value; saveDreamState();
+    saveBtn.disabled = !textEl.value.trim();
+  });
+  saveBtn.onclick = ()=>{
+    // Préserve la date d'origine sur une mise à jour (plutôt que de la rafraîchir à chaque
+    // modification) — même logique que le "Modifier" d'un proche, voir upsertRelation().
+    const existing = dreamState.savedId ? dreams.find(d=>d.id===dreamState.savedId) : null;
+    const entry = {
+      id: existing ? existing.id : String(Date.now()),
+      date: existing ? existing.date : new Date().toLocaleString("fr-FR"),
+      text: dreamState.text.trim(),
+      analysis: dreamState.analysis,
+    };
+    const idx = dreams.findIndex(d=>d.id===entry.id);
+    if(idx >= 0) dreams[idx] = entry; else dreams.unshift(entry);
+    saveDreams();
+    dreamState.saved = true; dreamState.savedId = entry.id; saveDreamState();
+    alert("Rêve enregistré dans ton journal.");
+    showDreamForm();
+  };
+  if(analyzeBtn) analyzeBtn.onclick = ()=> startDreamAnalysis();
+  clearBtn.onclick = ()=>{
+    dreamState = { text:"", analysis:null, saved:false, savedId:null, aiStatus:"idle" };
+    saveDreamState();
+    showDreamForm();
+  };
+}
+
+function dreamJournalView(){
+  if(!dreams.length) return `<div class="empty"><h2>Ton journal des rêves est vide.</h2><p>Il reste privé et local sur cet appareil.</p></div>`;
+  const premiumOn = isPremiumEnabled();
+  return `<section class="hero"><span class="pill">${dreams.length} rêve(s)</span><h2>Journal des rêves</h2></section>
+  ${dreams.map((d,i)=>`<article class="tile journal-entry" style="margin-bottom:12px">
+    <strong>${escapeHTML(d.date)}</strong>
+    <p>${escapeHTML(d.text.length>140 ? d.text.slice(0,140).trim()+"…" : d.text)}</p>
+    ${d.analysis
+      ? (premiumOn
+          ? `<details class="why"><summary>Revoir l'interprétation</summary>${d.analysis.split(/\n\s*\n/).map(p=>`<p>${escapeHTML(p.trim())}</p>`).join("")}</details>`
+          : `<p class="note">🔒 Interprétation déjà générée — active le mode premium pour la revoir.</p>`)
+      : `<p class="note">Pas encore interprété.</p>`}
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="ghost edit-dream" data-index="${i}">Modifier</button>
+      <button class="ghost delete-dream" data-index="${i}">Supprimer</button>
+    </div>
+  </article>`).join("")}`;
+}
+function showDreamJournal(){
+  preDetailScroll = window.scrollY;
+  document.getElementById("screen").innerHTML = `<div class="detail">${dreamJournalView()}
+    <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
+  </div>`;
+  triggerScreenAnim("detail");
+  window.scrollTo(0,0);
+  document.getElementById("detailBack").onclick = ()=>{
+    const scrollTarget = preDetailScroll;
+    render();
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
+  };
+  cardDetailReturnTo = showDreamJournal;
+  document.querySelectorAll(".edit-dream").forEach(b=>{
+    b.onclick = ()=>{
+      const i = Number(b.dataset.index);
+      const d = dreams[i];
+      dreamState = { text: d.text, analysis: d.analysis, saved:true, savedId:d.id, aiStatus:"idle" };
+      saveDreamState();
+      showDreamForm();
+    };
+  });
+  document.querySelectorAll(".delete-dream").forEach(b=>{
+    b.onclick = ()=>{
+      const i = Number(b.dataset.index);
+      const removedId = dreams[i].id;
+      dreams.splice(i,1);
+      saveDreams();
+      // Le brouillon en cours pointait peut-être vers l'entrée qu'on vient de supprimer.
+      if(dreamState.savedId === removedId){
+        dreamState = { text:"", analysis:null, saved:false, savedId:null, aiStatus:"idle" };
+        saveDreamState();
+      }
+      showDreamJournal();
+    };
+  });
 }
 
 /* ===================== ÉCRANS "MES PROCHES" ===================== */
@@ -5452,6 +5681,7 @@ function bind(){
       else if(key==="cour") showLearnCategory("cour");
       else if(key==="numerales") showLearnCategory("numerales");
       else if(key==="figures") showLearnFigures();
+      else if(key==="symboles") showSymbolsLibrary();
     };
   });
   document.querySelectorAll("[data-profil-go]").forEach(el=>{
@@ -5462,6 +5692,13 @@ function bind(){
       else if(key==="stats") showStats();
       else if(key==="relations") showRelations();
       else if(key==="majeurs") showMajorLinks();
+    };
+  });
+  document.querySelectorAll("[data-reves-go]").forEach(el=>{
+    el.onclick = ()=>{
+      const key = el.dataset.revesGo;
+      if(key==="new") showDreamForm();
+      else if(key==="journal") showDreamJournal();
     };
   });
   document.getElementById("homeBtn").onclick=()=>setRoute("home");
@@ -5545,12 +5782,8 @@ function bind(){
   if(clearDraw) clearDraw.onclick = ()=>{ tirageState = {question:"",spreadType:null,spread:null,picks:[],notes:"",saved:false,savedIndex:null,aiReading:null,aiStatus:"idle"}; saveTirageState(); render(); };
   // .delete-entry est maintenant lié directement dans showJournal() (le Journal n'est
   // plus une route de premier niveau, voir l'onglet Profil).
-
-  const search = document.getElementById("symbolSearch");
-  if(search) search.addEventListener("input", ()=>{
-    const q = search.value.toLowerCase().trim();
-    document.querySelectorAll("[data-search]").forEach(el=>{ el.hidden = q && !el.dataset.search.includes(q); });
-  });
+  // #symbolSearch : idem, câblé directement dans showSymbolsLibrary() (Symboles n'est plus
+  // non plus une route de premier niveau, voir l'onglet Apprendre).
 
   bindCards(); bindChips(); bindDeck();
 
