@@ -2409,6 +2409,33 @@ function seenCount(bucket){
   catch{ return 0; }
 }
 
+// Libellés humains des codes stockés pour "Situation amoureuse" (voir renderProfilForm()) —
+// utilisés pour composer lifeContextFor() ci-dessous, jamais affichés tels quels ailleurs.
+const LOVE_STATUS_LABELS = {
+  celibataire: "célibataire",
+  en_couple: "en couple",
+  marie: "marié·e ou pacsé·e",
+  divorce: "divorcé·e ou séparé·e",
+  veuf: "veuf ou veuve",
+};
+
+// Contexte de vie optionnel (métier, situation amoureuse, enfants, centres d'intérêt) —
+// retour direct d'utilisatrice : "le métier a une grande importance pour l'interprétation
+// des rêves, et pour les tirages tarot aussi". Tous les champs sont individuellement
+// optionnels ("Préfère ne pas préciser" par défaut, voir renderProfilForm()) ; renvoie null
+// si absolument rien n'est renseigné, pour ne rien ajouter au prompt dans ce cas. Factorisé
+// ici pour être réutilisé par profileForReading()/profileForPortrait() ci-dessous et par le
+// résumé envoyé à /api/dream (voir profileForDream()).
+function lifeContextFor(saved){
+  if(!saved) return null;
+  const occupation = typeof saved.occupation === "string" && saved.occupation ? saved.occupation : null;
+  const loveStatus = saved.loveStatus && LOVE_STATUS_LABELS[saved.loveStatus] ? LOVE_STATUS_LABELS[saved.loveStatus] : null;
+  const hasChildren = saved.hasChildren === "oui" ? true : saved.hasChildren === "non" ? false : null;
+  const interests = typeof saved.interests === "string" && saved.interests ? saved.interests : null;
+  if(!occupation && !loveStatus && hasChildren===null && !interests) return null;
+  return { occupation, loveStatus, hasChildren, interests };
+}
+
 // Résumé minimal du profil enregistré, prêt à envoyer à /api/reading — null si aucun
 // profil n'est enregistré (dans ce cas la lecture se comporte exactement comme avant).
 function profileForReading(){
@@ -2426,6 +2453,7 @@ function profileForReading(){
     ascendantSign: p.astral?.ascendant?.sign || null,
     personalYear: py,
     personalYearMeaning: pyMeaning ? pyMeaning[0] : null,
+    lifeContext: lifeContextFor(p),
   };
 }
 
@@ -2461,6 +2489,7 @@ function profileForPortrait(saved){
     personalYearMeaning: pyMeaning ? pyMeaning[0] : null,
     tutelaryDeity: deity ? deity.deityName : null,
     topAspects,
+    lifeContext: lifeContextFor(saved),
   };
 }
 
@@ -4315,7 +4344,7 @@ function renderMajorLinks(){
   const majorLinksText = premiumOn ? (getCachedAstralText()?.majorLinksText || majorLinksTextFallback(links) || null) : null;
   return `<div class="section-title"><h3>Arcanes majeurs liés à ton profil astral</h3></div>
   ${premiumOn
-    ? (majorLinksText ? `<p class="lore-text" style="margin-top:10px">${escapeHTML(majorLinksText)}</p>` : "")
+    ? (majorLinksText ? majorLinksText.split(/\n\s*\n/).map(p=>`<p class="lore-text" style="margin-top:10px">${escapeHTML(p.trim())}</p>`).join("") : "")
     : premiumLockHTML("Pourquoi ces cartes précisément — et ce qu'elles disent de toi — fait partie du contenu premium.")}
   <div class="card-grid" style="margin-top:14px">${links.map(l=>`<div>
     <p class="suit-h4" style="text-align:center;margin-bottom:6px">${escapeHTML(l.labels.join(" & "))} en ${escapeHTML(l.sign)}</p>
@@ -4358,8 +4387,29 @@ function showMajorLinks(){
 // Découpage gratuit/premium : noter, modifier et conserver un rêve reste gratuit (ce n'est
 // que de la donnée, comme la gestion des proches) ; seule l'interprétation IA elle-même est
 // réservée au premium, comme le reste de l'interprétation écrite de l'appli.
+// Illustration de l'onglet Rêves : réutilise l'animation ken-burns déjà posée sur les
+// vignettes (zoom/pan lent sur l'image, voir styles.css) pour donner une impression de
+// nuages qui dérivent, et la classe .star déjà utilisée par starLoaderHTML() (scintillement
+// twinkle) pour quelques étoiles scintillantes par-dessus — positions/délais fixes mais
+// variés, purement décoratif, respecte prefers-reduced-motion comme le reste de l'app.
+function revesHeroHTML(){
+  const stars = [
+    {left:12,top:12,delay:.2,dur:2.6},
+    {left:80,top:9,delay:1.1,dur:2.1},
+    {left:56,top:24,delay:.6,dur:2.8},
+    {left:88,top:36,delay:1.6,dur:2.3},
+    {left:20,top:48,delay:.9,dur:2.5},
+    {left:68,top:58,delay:1.9,dur:2.2},
+    {left:38,top:6,delay:.4,dur:2.4},
+  ];
+  return `<div class="reves-hero">
+    <img class="reves-hero-img" src="assets/reves-hero.jpg" alt="">
+    ${stars.map(s=>`<span class="star" style="left:${s.left}%;top:${s.top}%;animation-delay:${s.delay}s;animation-duration:${s.dur}s">✦</span>`).join("")}
+  </div>`;
+}
 function reves(){
   return `<section class="hero">
+    ${revesHeroHTML()}
     <div class="hero-emblem">☾</div>
     <h2>Rêves</h2>
     <p>Dans la Grèce antique, on lisait aussi l'avenir dans les rêves — <span class="clickable-deity" data-deity="morphée">Morphée</span> en façonnait les images, et des devins comme Artémidore de Daldis les décryptaient au réveil. Raconte ce dont tu te souviens.</p>
@@ -4370,11 +4420,23 @@ function reves(){
   </div>`;
 }
 
+// Résumé minimal envoyé à /api/dream en plus du récit lui-même : le métier notamment change
+// beaucoup le sens plausible d'un rêve (ex. un rêve de chute ou de retard n'évoque pas la
+// même chose selon qu'on est étudiant·e ou en poste à responsabilités) — retour direct
+// d'utilisatrice. Uniquement le contexte de vie (voir lifeContextFor()), jamais le thème
+// astral complet : un rêve reste avant tout un texte à interpréter pour lui-même.
+function profileForDream(){
+  const p = getProfile();
+  if(!p) return null;
+  return lifeContextFor(p);
+}
+
 async function generateDreamAnalysis(dreamText){
+  const profile = profileForDream();
   const r = await fetch("/api/dream", {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-App-Access-Code": getAccessCode() },
-    body: JSON.stringify({ dreamText })
+    body: JSON.stringify({ dreamText, ...(profile ? { profile } : {}) })
   });
   if(r.status === 401) localStorage.removeItem("delphesAccessCode");
   const data = await r.json().catch(()=>({}));
@@ -5137,11 +5199,14 @@ function tutelaryReasonFallback(deity){
 // énoncé mécanique ("correspondance signe -> carte") qui ne dirait rien de la personne.
 function majorLinksTextFallback(links){
   if(!links || !links.length) return null;
-  const sentences = links.map(l=>{
+  // Un paragraphe par carte (séparés par \n\n, comme le texte IA une fois généré — voir
+  // renderMajorLinks()) plutôt qu'une seule phrase agrégée, pour que le rendu reste
+  // cohérent visuellement que ce texte de secours soit affiché ou déjà remplacé par l'IA.
+  const paragraphs = links.map(l=>{
     const labelPart = l.labels.length > 1 ? `${l.labels.slice(0,-1).join(", ")} et ${l.labels[l.labels.length-1]}` : l.labels[0];
-    return `${labelPart} en ${l.sign} te relie à « ${l.card[0]} » (${l.card[1]} — ${l.card[3]})`;
+    return `${labelPart} en ${l.sign} te relie à « ${l.card[0]} » (${l.card[1]} — ${l.card[3]}).`;
   });
-  return `${sentences.join(" ; ")}.`;
+  return paragraphs.join("\n\n");
 }
 
 // Écran Profil astral : affiche le résultat s'il existe déjà, sinon le formulaire de
@@ -5207,6 +5272,34 @@ function renderProfilForm(prefill){
       </select>
     </div>
     <div class="draw-notes">
+      <p class="suit-h4" style="margin:0 0 6px">Métier</p>
+      <input id="profilOccupation" placeholder="Ton métier (optionnel)" value="${escapeHTML(p.occupation||"")}">
+      <small style="display:block;margin-top:6px;opacity:.7">Aide à ancrer tes lectures (tirages, rêves) dans ton quotidien réel.</small>
+    </div>
+    <div class="draw-notes">
+      <p class="suit-h4" style="margin:0 0 6px">Situation amoureuse</p>
+      <select id="profilLoveStatus">
+        <option value="" ${!p.loveStatus?"selected":""}>Préfère ne pas préciser</option>
+        <option value="celibataire" ${p.loveStatus==="celibataire"?"selected":""}>Célibataire</option>
+        <option value="en_couple" ${p.loveStatus==="en_couple"?"selected":""}>En couple</option>
+        <option value="marie" ${p.loveStatus==="marie"?"selected":""}>Marié·e ou pacsé·e</option>
+        <option value="divorce" ${p.loveStatus==="divorce"?"selected":""}>Divorcé·e ou séparé·e</option>
+        <option value="veuf" ${p.loveStatus==="veuf"?"selected":""}>Veuf ou veuve</option>
+      </select>
+    </div>
+    <div class="draw-notes">
+      <p class="suit-h4" style="margin:0 0 6px">As-tu des enfants ?</p>
+      <select id="profilHasChildren">
+        <option value="" ${!p.hasChildren?"selected":""}>Préfère ne pas préciser</option>
+        <option value="oui" ${p.hasChildren==="oui"?"selected":""}>Oui</option>
+        <option value="non" ${p.hasChildren==="non"?"selected":""}>Non</option>
+      </select>
+    </div>
+    <div class="draw-notes">
+      <p class="suit-h4" style="margin:0 0 6px">Centres d'intérêt</p>
+      <input id="profilInterests" placeholder="ex. randonnée, lecture, jardinage… (optionnel)" value="${escapeHTML(p.interests||"")}">
+    </div>
+    <div class="draw-notes">
       <p class="suit-h4" style="margin:0 0 6px">Date de naissance</p>
       <input id="profilDate" type="date" value="${escapeHTML(p.birthDate||"")}">
     </div>
@@ -5244,6 +5337,10 @@ function bindProfilForm(saved){
   document.getElementById("profilSubmit").onclick = async ()=>{
     const firstName = document.getElementById("profilFirstName").value.trim();
     const gender = document.getElementById("profilGender").value || null; // "f" | "m" | null (préfère ne pas préciser)
+    const occupation = document.getElementById("profilOccupation").value.trim() || null;
+    const loveStatus = document.getElementById("profilLoveStatus").value || null; // "celibataire"|"en_couple"|"marie"|"divorce"|"veuf"|null
+    const hasChildren = document.getElementById("profilHasChildren").value || null; // "oui"|"non"|null
+    const interests = document.getElementById("profilInterests").value.trim() || null;
     const birthDate = document.getElementById("profilDate").value;
     const timeUnknown = unknownCheckbox.checked;
     const birthTime = timeUnknown ? "" : document.getElementById("profilTime").value;
@@ -5266,7 +5363,7 @@ function bindProfilForm(saved){
     try{
       const astral = await fetchAstralProfile({ date: birthDate, time: timeUnknown ? null : birthTime, place: birthPlace });
       const nameNumber = nameNumerology(firstName);
-      saveProfileData({ firstName, gender, nameNumber, birthDate, birthTime: timeUnknown ? null : birthTime, timeUnknown, birthPlace, astral });
+      saveProfileData({ firstName, gender, occupation, loveStatus, hasChildren, interests, nameNumber, birthDate, birthTime: timeUnknown ? null : birthTime, timeUnknown, birthPlace, astral });
       showProfilAstral();
     } catch(err){
       errorEl.textContent = err.message || "Impossible de calculer le profil pour le moment.";

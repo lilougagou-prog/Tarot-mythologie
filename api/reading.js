@@ -8,9 +8,12 @@
 //     dans les tirages autres que le tirage général.
 //   - profile (optionnel, envoyé par le client quand un Profil astral est enregistré) :
 //     { firstName, nameNumber, nameNumberMeaning, sunSign, moonSign, ascendantSign,
-//     personalYear, personalYearMeaning }. ascendantSign peut être absent/null (heure de
-//     naissance inconnue). N'importe quel champ manquant ou profile absent au complet ne
-//     change rien au comportement — la lecture reste identique à avant cette fonctionnalité.
+//     personalYear, personalYearMeaning, lifeContext? }. ascendantSign peut être absent/null
+//     (heure de naissance inconnue). lifeContext (tous les champs optionnels) :
+//     { occupation?, loveStatus?, hasChildren?: true|false, interests? } — retour direct
+//     d'utilisatrice ("le métier a une grande importance pour les tirages tarot aussi").
+//     N'importe quel champ manquant ou profile absent au complet ne change rien au
+//     comportement — la lecture reste identique à avant cette fonctionnalité.
 //   - history (optionnel, envoyé par le client quand le Journal dégage une tendance —
 //     voir journalTrendsForReading() dans app.js) : { topCard, topDomain }, l'un ou l'autre
 //     pouvant être absent/null. Absent au complet tant que le Journal n'a pas assez
@@ -123,6 +126,20 @@ module.exports = async function handler(req, res) {
     if (Number.isFinite(profile.personalYear)) {
       const meaning = typeof profile.personalYearMeaning === "string" ? profile.personalYearMeaning : null;
       lines.push(`Année personnelle (numérologie) : ${profile.personalYear}${meaning ? ` — ${meaning}` : ""}.`);
+    }
+
+    // Contexte de vie optionnel (métier, situation amoureuse, enfants, centres d'intérêt) —
+    // retour direct d'utilisatrice : le métier notamment change beaucoup le sens concret
+    // d'une carte tirée pour une question de travail ou de décision.
+    if (profile.lifeContext && typeof profile.lifeContext === "object") {
+      const lc = profile.lifeContext;
+      const lcParts = [];
+      if (typeof lc.occupation === "string" && lc.occupation) lcParts.push(`métier : ${lc.occupation}`);
+      if (typeof lc.loveStatus === "string" && lc.loveStatus) lcParts.push(`situation amoureuse : ${lc.loveStatus}`);
+      if (lc.hasChildren === true) lcParts.push("a des enfants");
+      else if (lc.hasChildren === false) lcParts.push("n'a pas d'enfants");
+      if (typeof lc.interests === "string" && lc.interests) lcParts.push(`centres d'intérêt : ${lc.interests}`);
+      if (lcParts.length) lines.push(`Contexte de vie : ${lcParts.join(", ")}.`);
     }
 
     if (lines.length) {

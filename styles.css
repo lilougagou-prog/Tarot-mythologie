@@ -107,6 +107,18 @@ main{max-width:900px;margin:auto;padding:22px 18px}
   100%{transform:scale(1.22) translate(-3.5%,-2.5%)}
 }
 
+/* ===== Illustration de l'onglet Rêves (voir revesHeroHTML() dans app.js) : même animation
+   ken-burns que les vignettes ci-dessus, mais plus lente et douce (16s, moins de zoom) pour
+   une impression de nuages qui dérivent plutôt qu'un zoom marqué ; étoiles scintillantes
+   par-dessus via .star (déjà scintillant, voir starLoaderHTML()), juste repositionnées ===== */
+.reves-hero{position:relative;overflow:hidden;border-radius:20px;max-width:340px;margin:0 auto 14px;box-shadow:var(--shadow)}
+.reves-hero-img{width:100%;display:block;animation:reves-ken-burns 16s ease-in-out infinite alternate}
+.reves-hero .star{font-size:13px}
+@keyframes reves-ken-burns{
+  0%{transform:scale(1) translate(0,0)}
+  100%{transform:scale(1.12) translate(-2%,-1.5%)}
+}
+
 /* ===== Cartes ===== */
 .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
 .tarot-card{aspect-ratio:2/3.45;border-radius:18px;padding:10px;position:relative;overflow:hidden;border:2px solid rgba(201,163,90,.65);box-shadow:var(--shadow);cursor:pointer;background:linear-gradient(145deg,#fffaf0,#e9d7bd);transition:transform .15s ease,box-shadow .15s ease}
@@ -329,7 +341,7 @@ textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;paddin
 
 /* Respecte la préférence système "réduire les animations" */
 @media (prefers-reduced-motion: reduce){
-  .tile-img,.card-img,.illus .spark,.screen-anim,.screen-anim-detail,.reading-block,.progress>span,
+  .tile-img,.card-img,.reves-hero-img,.illus .spark,.screen-anim,.screen-anim-detail,.reading-block,.progress>span,
   .tile,.primary,.secondary,.chip,.icon-btn,.ghost,.bottom-nav button,.tarot-card,
   .flip-inner,.flip-slot .flip-inner,.tword,.discovery-badge,
   body::before,.hero-emblem,.home-glow .mote,.star,
