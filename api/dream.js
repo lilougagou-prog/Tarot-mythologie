@@ -5,7 +5,8 @@
 // littérale de l'avenir, seulement un reflet symbolique.
 //
 // Reçoit en POST : { dreamText: string, profile?: { occupation?, loveStatus?,
-//   hasChildren?: true|false, interests? } }
+//   hasChildren?: true|false, interests? }, recentReading?: { date?, cards: string[],
+//   synthesisExcerpt? } }
 //   - dreamText : récit libre du rêve, tel que tapé (non vide, max MAX_DREAM_LENGTH
 //     caractères).
 //   - profile (optionnel, voir profileForDream() dans app.js) : le métier notamment change
@@ -13,6 +14,12 @@
 //     grande importance pour l'interprétation des rêves"). Tous les champs sont
 //     individuellement optionnels ; profile absent au complet ne change rien au
 //     comportement, l'interprétation reste identique à avant cette fonctionnalité.
+//   - recentReading (optionnel, voir recentReadingForDream() dans app.js) : le tirage de
+//     tarot le plus récent de cette personne — les cartes tirées et un court extrait de la
+//     synthèse déjà générée, jamais la question posée (qui reste privée, même logique que
+//     memory dans api/reading.js). Un simple indice optionnel que l'IA peut utiliser SI
+//     pertinent, jamais un lien forcé — retour direct d'utilisatrice : les rêves et les
+//     tirages doivent pouvoir s'éclairer l'un l'autre.
 // Renvoie : { analysis: string } — 2 à 4 paragraphes séparés par un retour à la ligne
 // double, prêts à être affichés tels quels (voir renderDreamForm() dans app.js).
 //
@@ -47,7 +54,7 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  const { dreamText, profile } = req.body || {};
+  const { dreamText, profile, recentReading } = req.body || {};
 
   if (
     typeof dreamText !== "string" ||
@@ -83,12 +90,31 @@ module.exports = async function handler(req, res) {
     }
   }
 
+  // Tirage de tarot récent optionnel (voir recentReadingForDream() dans app.js) — retour
+  // direct d'utilisatrice : les rêves doivent pouvoir s'éclairer avec les tirages, mais
+  // seulement si c'est vraiment pertinent, jamais un rapprochement forcé.
+  let recentReadingBlock = "";
+  if (
+    recentReading &&
+    typeof recentReading === "object" &&
+    Array.isArray(recentReading.cards) &&
+    recentReading.cards.length &&
+    recentReading.cards.every((c) => typeof c === "string" && c)
+  ) {
+    const cardsList = recentReading.cards.join(", ");
+    const synthPart = typeof recentReading.synthesisExcerpt === "string" && recentReading.synthesisExcerpt.trim()
+      ? ` — la lecture en avait retenu : "${recentReading.synthesisExcerpt.trim()}"`
+      : "";
+    const datePart = typeof recentReading.date === "string" && recentReading.date ? ` (${recentReading.date})` : "";
+    recentReadingBlock = `\nTirage de tarot récent de cette personne${datePart} : ${cardsList}${synthPart}. INDICE OPTIONNEL seulement : si, et seulement si, il existe un lien clair et naturel avec ce rêve, tu peux t'appuyer dessus ; sinon ignore-le complètement, ne force jamais un rapprochement artificiel et ne le mentionne jamais si ça n'apporte rien — le récit du rêve reste la seule vraie source.\n`;
+  }
+
   const prompt = `Tu es un interprète de rêves inspiré de la tradition grecque antique de l'onirocritique — dans la lignée d'Artémidore de Daldis, auteur au IIe siècle après J.-C. de l'Onirocriticon, le traité d'interprétation des rêves le plus complet de l'Antiquité. Voici le récit d'un rêve, tel que raconté :
 
 """
 ${dreamText.trim()}
 """
-${lifeContextBlock}
+${lifeContextBlock}${recentReadingBlock}
 Rédige une interprétation en français, en 2 à 4 paragraphes fluides — un texte suivi, pas une liste à puces. Règles strictes :
 - Identifie 2 à 4 éléments ou symboles marquants du récit et donne à chacun un sens concret, ancré dans ce que cet élément évoque traditionnellement (eau, chute, poursuite, maison, animal, un proche...), jamais un sens générique interchangeable d'un rêve à l'autre.
 - Conclus par une synthèse qui relie ces éléments à un état intérieur, une préoccupation ou une émotion actuelle plausible.

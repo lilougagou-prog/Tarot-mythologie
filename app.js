@@ -2783,6 +2783,26 @@ function representativeAnimal(saved){
   return { locked: false, animal: { id: animalId, label: symbol.label, icon: symbol.icon, desc: symbol.desc, matched, source } };
 }
 
+// Résumé minimal du rêve le plus récent, prêt à envoyer à /api/reading (voir
+// generateAIReading()) — retour direct d'utilisatrice : les tirages et les rêves doivent
+// pouvoir s'éclairer l'un l'autre, dans les deux sens (voir recentReadingForDream() plus bas
+// pour le sens inverse). Seulement le rêve le plus RÉCENT (dreams est trié du plus récent au
+// plus ancien) et seulement s'il date de moins de RECENT_DREAM_MAX_DAYS jours — au-delà, il
+// n'a plus grand-chose à voir avec la question posée aujourd'hui. `id` sert de repère de
+// fraîcheur (voir bindDreamForm() : id = String(Date.now()) à la création, jamais recalculé
+// sur une modification) car `date` n'est qu'une chaîne déjà formatée (toLocaleString), pas
+// exploitable pour un calcul d'ancienneté. N'envoie qu'un court extrait (même troncature que
+// dreamJournalView()), jamais le récit complet.
+const RECENT_DREAM_MAX_DAYS = 7;
+function recentDreamForReading(){
+  if(!dreams.length) return null;
+  const d = dreams[0];
+  if(!d.text || !d.text.trim()) return null;
+  const ts = Number(d.id);
+  if(!Number.isFinite(ts) || (Date.now() - ts) > RECENT_DREAM_MAX_DAYS*24*60*60*1000) return null;
+  return { date: d.date, excerpt: d.text.length>140 ? d.text.slice(0,140).trim()+"…" : d.text.trim() };
+}
+
 // Résumé minimal des tendances du Journal, prêt à envoyer à /api/reading — null si pas
 // (encore) de tendance dégagée (dans ce cas la lecture se comporte exactement comme avant).
 function journalTrendsForReading(){
@@ -3052,6 +3072,14 @@ async function fetchAstralText(profileSummary, code){
   return data.text;
 }
 let astralTextFetchInFlight = false;
+// Numéro de version du texte majorLinksText — à incrémenter à chaque changement du prompt
+// (voir api/astral-text.js) qui change substantiellement le texte généré, MÊME quand ni
+// tutelaryDeityKey ni la simple présence du champ ne changent. Retour direct d'utilisatrice
+// après la réécriture "un paragraphe par point" : "c'est encore le même texte, c'est
+// normal ?" — sans ce numéro, un texte déjà en cache (généré avec l'ancien prompt) passait
+// les deux vérifications ci-dessous (deityKey inchangée, majorLinksText déjà présent) et ne
+// se régénérait donc jamais tout seul, même après un vrai changement de logique côté prompt.
+const MAJOR_LINKS_TEXT_VERSION = 2;
 // Même logique de discrétion qu'ensurePortrait() : jamais de prompt de code d'accès depuis
 // un simple affichage du Profil astral, échec silencieux (les phrases génériques restent
 // affichées), un seul appel réseau tant qu'aucun texte n'est en cache.
@@ -3075,7 +3103,10 @@ function ensureAstralText(){
   // ne contient pas ce champ — sans cette deuxième condition, ce profil resterait bloqué
   // indéfiniment sur la phrase de secours locale (majorLinksTextFallback()) au lieu du
   // vrai texte IA, alors qu'un simple appel suffirait à le compléter.
-  if(cached && cached.tutelaryDeityKey === liveDeityKey && (!expectsMajorLinksText || cached.majorLinksText)) return;
+  // ET, une troisième fois : même quand majorLinksText existe déjà, il peut avoir été généré
+  // avec une version antérieure du prompt (voir MAJOR_LINKS_TEXT_VERSION ci-dessus) — dans
+  // ce cas aussi, on régénère.
+  if(cached && cached.tutelaryDeityKey === liveDeityKey && (!expectsMajorLinksText || (cached.majorLinksText && cached.majorLinksTextVersion === MAJOR_LINKS_TEXT_VERSION))) return;
   if(astralTextFetchInFlight) return;
   const code = localStorage.getItem("delphesAccessCode");
   if(code === null) return;
@@ -3086,7 +3117,7 @@ function ensureAstralText(){
     .then(text=>{
       const fresh = getProfile();
       if(!fresh) return;
-      fresh.astralText = { ...text, tutelaryDeityKey: liveDeityKey };
+      fresh.astralText = { ...text, tutelaryDeityKey: liveDeityKey, majorLinksTextVersion: MAJOR_LINKS_TEXT_VERSION };
       saveProfileData(fresh);
       if(cardDetailReturnTo === showProfilAstral) showProfilAstral();
       else if(cardDetailReturnTo === showMajorLinks) showMajorLinks();
@@ -3638,10 +3669,11 @@ async function generateAIReading(question, cards, positions){
   const profile = profileForReading();
   const history = journalTrendsForReading();
   const memory = cardMemory(cards, question);
+  const dream = recentDreamForReading();
   const call = fetch("/api/reading", {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-App-Access-Code": getAccessCode() },
-    body: JSON.stringify({ question, cards, positions, ...(profile ? { profile } : {}), ...(history ? { history } : {}), ...(memory ? { memory } : {}) })
+    body: JSON.stringify({ question, cards, positions, ...(profile ? { profile } : {}), ...(history ? { history } : {}), ...(memory ? { memory } : {}), ...(dream ? { dream } : {}) })
   }).then(async r=>{
     if(r.status === 401){
       // Code manquant/incorrect : on l'efface pour qu'il soit redemandé au prochain tirage.
@@ -4511,7 +4543,7 @@ function reves(){
     ${revesHeroHTML()}
     <div class="hero-emblem">☾</div>
     <h2>Rêves</h2>
-    <p>Dans la Grèce antique, on lisait aussi l'avenir dans les rêves — <span class="clickable-deity" data-deity="morphée">Morphée</span> en façonnait les images, et des devins comme Artémidore de Daldis les décryptaient au réveil. Raconte ce dont tu te souviens.</p>
+    <p>Dans la Grèce antique, on lisait aussi l'avenir dans les rêves — <span class="clickable-deity" data-deity="morphée">Morphée</span> en façonnait les images, et des devins comme Artémidore de Daldis les décryptaient au réveil. Raconte ce dont tu te souviens, pour en connaître la signification.</p>
   </section>
   <div class="grid" style="margin-top:20px">
     <div class="tile" data-reves-go="new"><strong>✍️ Noter un rêve</strong><span>${dreamState.text.trim() ? "Reprends ton brouillon en cours." : "Raconte ce dont tu te souviens, seul(e) ou pour une interprétation."}</span></div>
@@ -4530,12 +4562,33 @@ function profileForDream(){
   return lifeContextFor(p);
 }
 
+// Résumé minimal du tirage le plus récent, prêt à envoyer à /api/dream (voir
+// generateDreamAnalysis()) — sens inverse de recentDreamForReading() plus haut : les cartes
+// tirées et un court extrait de la synthèse déjà générée, jamais la question posée (même
+// discrétion que cardMemory() : la question reste privée). `journal` est trié du plus
+// récent au plus ancien (unshift à l'enregistrement) — pas de filtre de fraîcheur ici
+// (contrairement aux rêves, ses entrées n'ont pas de repère numérique exploitable, `date`
+// n'étant qu'une chaîne déjà formatée) : le tirage le plus récent reste digne d'être
+// mentionné même après un délai, ne serait-ce que comme un fil qui continue.
+function recentReadingForDream(){
+  if(!journal.length) return null;
+  const j = journal[0];
+  if(!Array.isArray(j.cards) || !j.cards.length) return null;
+  const synth = typeof j.synthesis === "string" ? j.synthesis.trim() : "";
+  return {
+    date: j.date,
+    cards: j.cards.slice(0,3),
+    synthesisExcerpt: synth ? (synth.length>140 ? synth.slice(0,140).trim()+"…" : synth) : null,
+  };
+}
+
 async function generateDreamAnalysis(dreamText){
   const profile = profileForDream();
+  const recentReading = recentReadingForDream();
   const r = await fetch("/api/dream", {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-App-Access-Code": getAccessCode() },
-    body: JSON.stringify({ dreamText, ...(profile ? { profile } : {}) })
+    body: JSON.stringify({ dreamText, ...(profile ? { profile } : {}), ...(recentReading ? { recentReading } : {}) })
   });
   if(r.status === 401) localStorage.removeItem("delphesAccessCode");
   const data = await r.json().catch(()=>({}));
