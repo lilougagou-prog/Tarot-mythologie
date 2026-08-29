@@ -45,6 +45,65 @@ const ZODIAC_MAJOR_LINKS = {
   "Poissons":"XVIII — La Lune",
 };
 
+// Ancrage réel de chaque correspondance ci-dessus, en deux temps : `astro` explique le lien
+// TRADITIONNEL entre le signe et la carte (élément, planète maîtresse, symbolisme), `myth`
+// donne un fait mythologique grec CONCRET et vérifiable qui explique pourquoi le dieu/déesse
+// de cette carte l'incarne vraiment (ex. le lion de Némée pour Héraclès/La Force) — jamais
+// une vague paraphrase du mot-clé. Sert à la fois de contenu de secours local
+// (majorLinksTextFallback() ci-dessous) et de matière imposée à l'IA côté /api/astral-text
+// (voir mythAstro/mythFact dans profileForAstralText()) pour qu'elle ne soit jamais tentée
+// d'inventer un mythe approximatif ou erroné.
+const ZODIAC_MAJOR_MYTH = {
+  "Bélier": {
+    astro: "Bélier, premier signe du zodiaque, signe de feu cardinal gouverné par Mars, incarne l'instinct de commencement et d'autorité brute — la tradition en fait le signe de L'Empereur.",
+    myth: "Zeus n'a obtenu son trône qu'en renversant son père Cronos lors de la Titanomachie : une autorité conquise de haute lutte, jamais héritée passivement.",
+  },
+  "Taureau": {
+    astro: "Taureau, signe de terre fixe gouverné par Vénus, incarne la stabilité et ce qui se transmet dans la durée — la tradition en fait le signe du Pape, figure d'enseignement.",
+    myth: "Chiron, le plus sage des centaures, a formé patiemment des héros comme Achille, Jason ou Asclépios : une transmission fidèle qui prend le temps qu'il faut, jamais un savoir imposé d'un coup.",
+  },
+  "Gémeaux": {
+    astro: "Gémeaux, signe d'air mutable gouverné par Mercure, incarne la dualité et le choix entre deux voies — la tradition en fait le signe de L'Amoureux.",
+    myth: "Les jumeaux Castor et Pollux, un mortel et un immortel, étaient si liés l'un à l'autre que Pollux a partagé son immortalité pour ne jamais être séparé de son frère : un choix d'amour entre deux êtres.",
+  },
+  "Cancer": {
+    astro: "Cancer, signe d'eau cardinal gouverné par la Lune, incarne le mouvement cyclique qui revient toujours vers son point d'attache — la tradition en fait le signe du Chariot.",
+    myth: "Apollon traverse chaque jour le ciel sur un char solaire, dans une trajectoire réglée qui se répète sans jamais dévier : le même mouvement maîtrisé qui revient toujours à son origine.",
+  },
+  "Lion": {
+    astro: "Lion, signe de feu fixe gouverné par le Soleil, incarne le rayonnement et le courage — la tradition en fait tout naturellement le signe de La Force.",
+    myth: "Le lion lui-même vient du premier des douze travaux d'Héraclès : terrasser à mains nues, sans arme, le lion de Némée à la peau impénétrable — la maîtrise d'une force brute par la seule volonté.",
+  },
+  "Vierge": {
+    astro: "Vierge, signe de terre mutable gouverné par Mercure, incarne le tri patient et minutieux, l'attention aux détails qui font mûrir les choses — la tradition en fait le signe de L'Hermite.",
+    myth: "Déméter, déesse des moissons, s'est retirée du monde, errant seule et endeuillée à la recherche de sa fille Perséphone enlevée par Hadès, privant la terre de récoltes tant que sa quête solitaire ne trouvait pas d'issue.",
+  },
+  "Balance": {
+    astro: "Balance, seul signe du zodiaque représenté par un objet plutôt qu'un être vivant, incarne littéralement l'équilibre et la pesée — la tradition en fait évidemment le signe de La Justice.",
+    myth: "Thémis, déesse de la justice divine et de l'ordre, est celle-là même qu'on représente tenant une balance pour peser les actes : l'image qui a directement inspiré la carte.",
+  },
+  "Scorpion": {
+    astro: "Scorpion, signe d'eau fixe, est associé à la mort et à la transformation — la tradition en fait le signe de L'Arcane sans nom.",
+    myth: "Dans le mythe d'Orion, un scorpion envoyé pour le punir le tue d'une piqûre mortelle ; les deux furent changés en constellations qui ne se lèvent jamais ensemble, l'une s'effaçant quand l'autre paraît — un cycle de mort et de passage.",
+  },
+  "Sagittaire": {
+    astro: "Sagittaire, centaure archer mi-homme mi-cheval, est un être-pont entre deux natures — la tradition en fait le signe de Tempérance, carte de la médiation.",
+    myth: "Iris, messagère des dieux, est l'arc-en-ciel qui relie le ciel à la terre, l'Olympe au monde des mortels : un pont entre deux mondes, comme le centaure sagittaire relie l'instinct animal à la visée de sa flèche.",
+  },
+  "Capricorne": {
+    astro: "Capricorne, symbolisé depuis l'Antiquité par une chèvre, incarne l'instinct animal et l'attachement à la matière — la tradition en fait le signe du Diable.",
+    myth: "Pan, dieu à cornes et à pattes de bouc, est le bouc lui-même : dieu de l'instinct sauvage et de la panique (le mot vient de lui), c'est-à-dire de tout ce qui échappe à la maîtrise.",
+  },
+  "Verseau": {
+    astro: "Verseau, signe d'air fixe tourné vers l'avenir et l'indépendance, cherche une lumière qui guide au loin — la tradition en fait le signe de L'Étoile.",
+    myth: "Hécate, déesse des carrefours et des chemins nocturnes, porte une torche pour éclairer la route dans l'obscurité : une image d'orientation et d'espoir.",
+  },
+  "Poissons": {
+    astro: "Poissons, dernier signe du zodiaque, signe d'eau mutable, baigne dans l'inconscient et l'instinct plus que dans la raison — la tradition en fait le signe de La Lune.",
+    myth: "Séléné, déesse de la lune, gouverne la nuit et tire les marées : son attraction sur les eaux fait écho direct à Poissons, signe d'eau mû par des forces qu'on ne voit pas mais qu'on ressent.",
+  },
+};
+
 // Correspondances signe zodiacal + décan (tranche de 10°) -> carte numérale (2 à 10),
 // tradition des "decanates" du Golden Dawn popularisée par le Thoth Tarot de Crowley —
 // même famille ésotérique que ZODIAC_MAJOR_LINKS ci-dessus, mais à l'échelle du degré
@@ -2545,7 +2604,10 @@ function profileForAstralText(saved){
       note: deity.note,
       contributors: (deity.contributors||[]).map(c=>({ label: c.label, sign: c.sign, cardName: c.cardName || null, precise: !!c.precise })),
     } : null,
-    majorLinks: majorLinks ? majorLinks.map(l=>({ labels: l.labels, sign: l.sign, cardName: l.card[0], deityName: l.card[1], keywords: l.card[3] })) : null,
+    majorLinks: majorLinks ? majorLinks.map(l=>{
+      const myth = ZODIAC_MAJOR_MYTH[l.sign];
+      return { labels: l.labels, sign: l.sign, cardName: l.card[0], deityName: l.card[1], keywords: l.card[3], mythAstro: myth ? myth.astro : null, mythFact: myth ? myth.myth : null };
+    }) : null,
   };
 }
 
@@ -2968,6 +3030,7 @@ function ensureAstralText(){
   const cached = getCachedAstralText();
   const liveDeity = tutelaryDeity(p);
   const liveDeityKey = liveDeity ? liveDeity.deityKey : null;
+  const expectsMajorLinksText = !!majorLinksFor(p.astral);
   // Le texte en cache ne reste valable que si la divinité tutélaire recalculée EN DIRECT
   // est toujours la même que celle pour laquelle il a été rédigé (tutelaryDeityKey, stocké
   // au moment de la génération ci-dessous) — tutelaryDeity() n'est jamais lui-même mis en
@@ -2976,7 +3039,12 @@ function ensureAstralText(){
   // de Coupes/Deniers qui rendra le calcul encore plus précis pour d'autres personnes —
   // sans ce garde-fou, le paragraphe IA en cache continuerait de justifier une divinité
   // différente de celle réellement affichée.
-  if(cached && cached.tutelaryDeityKey === liveDeityKey) return;
+  // ET, séparément : un profil enregistré AVANT l'ajout de majorLinksText a un
+  // tutelaryDeityKey qui matche toujours (rien n'a changé côté divinité) mais un cache qui
+  // ne contient pas ce champ — sans cette deuxième condition, ce profil resterait bloqué
+  // indéfiniment sur la phrase de secours locale (majorLinksTextFallback()) au lieu du
+  // vrai texte IA, alors qu'un simple appel suffirait à le compléter.
+  if(cached && cached.tutelaryDeityKey === liveDeityKey && (!expectsMajorLinksText || cached.majorLinksText)) return;
   if(astralTextFetchInFlight) return;
   const code = localStorage.getItem("delphesAccessCode");
   if(code === null) return;
@@ -5194,9 +5262,13 @@ function tutelaryReasonFallback(deity){
 
 // Même principe que tutelaryReasonFallback() ci-dessus, pour les arcanes majeurs liés au
 // thème (voir profil()) : tant que majorLinksText (IA) n'est pas encore en cache, cette
-// phrase de secours locale nomme quand même chaque carte, le signe qui la relie et son
-// dieu/mots-clés — pas une vraie explication mythologique tissée, mais jamais un simple
-// énoncé mécanique ("correspondance signe -> carte") qui ne dirait rien de la personne.
+// phrase de secours locale nomme chaque carte, le signe qui la relie, son dieu/mots-clés,
+// ET s'appuie sur ZODIAC_MAJOR_MYTH (voir plus haut) pour expliquer, avec un vrai fait
+// mythologique vérifiable, pourquoi ce dieu incarne cette carte — jamais un simple énoncé
+// mécanique ("correspondance signe -> carte") qui ne dirait rien de la personne. Ce texte
+// de secours reste générique par nature (contrairement au texte IA, il ne peut pas
+// personnaliser "ce que ça révèle de TOI") : la dernière phrase répond quand même, en
+// termes génériques, à "qu'est-ce que ça apporte" via les mots-clés de la carte.
 function majorLinksTextFallback(links){
   if(!links || !links.length) return null;
   // Un paragraphe par carte (séparés par \n\n, comme le texte IA une fois généré — voir
@@ -5204,7 +5276,10 @@ function majorLinksTextFallback(links){
   // cohérent visuellement que ce texte de secours soit affiché ou déjà remplacé par l'IA.
   const paragraphs = links.map(l=>{
     const labelPart = l.labels.length > 1 ? `${l.labels.slice(0,-1).join(", ")} et ${l.labels[l.labels.length-1]}` : l.labels[0];
-    return `${labelPart} en ${l.sign} te relie à « ${l.card[0]} » (${l.card[1]} — ${l.card[3]}).`;
+    const myth = ZODIAC_MAJOR_MYTH[l.sign];
+    const mythSentence = myth ? ` ${myth.astro} ${myth.myth}` : "";
+    const keywordsList = l.card[3].split(" · ").join(", ");
+    return `${labelPart} en ${l.sign} te relie à « ${l.card[0]} » (${l.card[1]} — ${l.card[3]}).${mythSentence} Te reconnaître dans cette carte, c'est repérer en toi une capacité à incarner, à ta manière, cette énergie de ${keywordsList} — pas comme un trait figé une fois pour toutes, mais comme quelque chose à observer et à cultiver dans les moments qui le demandent.`;
   });
   return paragraphs.join("\n\n");
 }
