@@ -104,6 +104,19 @@ const ZODIAC_MAJOR_MYTH = {
   },
 };
 
+// Être Soleil en tel signe n'a pas le même poids ni le même sens qu'être Lune ou Ascendant
+// dans ce même signe — chacun engage un domaine de vie différent. Sert à différencier,
+// pour une même carte liée (voir ZODIAC_MAJOR_LINKS/ZODIAC_MAJOR_MYTH ci-dessus), ce
+// qu'apporte spécifiquement le Soleil de ce qu'apporte la Lune ou l'Ascendant — utilisé à la
+// fois par majorLinksTextFallback() ci-dessous et transmis à l'IA (voir pointDomain dans
+// profileForAstralText()) pour qu'un même mot-clé de carte ne soit jamais expliqué deux fois
+// dans les mêmes termes selon le point qui le porte.
+const POINT_DOMAIN_HINT = {
+  "Soleil": "ton identité profonde, ce qui te définit consciemment et ta vitalité",
+  "Lune": "ton monde intérieur, tes émotions et tes besoins instinctifs, souvent moins visibles de l'extérieur",
+  "Ascendant": "la façon dont tu te présentes au monde, ta première impression, ce que les autres perçoivent souvent de toi avant de te connaître vraiment",
+};
+
 // Correspondances signe zodiacal + décan (tranche de 10°) -> carte numérale (2 à 10),
 // tradition des "decanates" du Golden Dawn popularisée par le Thoth Tarot de Crowley —
 // même famille ésotérique que ZODIAC_MAJOR_LINKS ci-dessus, mais à l'échelle du degré
@@ -2590,7 +2603,28 @@ function profileForAstralText(saved){
   // avec le nom de leur dieu et leurs mots-clés (déjà connus localement, jamais à deviner
   // par l'IA) pour que majorLinksText ci-dessous puisse s'appuyer dessus sans inventer de
   // sens de carte. Voir la section "Arcanes majeurs liés à ton profil astral" dans profil().
+  // Une entrée PAR POINT (Soleil/Lune/Ascendant), jamais groupée par carte comme le fait
+  // majorLinksFor() pour la grille visuelle : être Soleil en tel signe n'apporte pas la même
+  // chose qu'être Lune ou Ascendant dans ce même signe (voir POINT_DOMAIN_HINT ci-dessus),
+  // même quand les deux tombent sur la même carte — l'IA doit donc écrire un paragraphe
+  // distinct par point, jamais un seul paragraphe fusionné qui gommerait la différence.
   const majorLinks = majorLinksFor(a);
+  const majorLinksByPoint = [];
+  (majorLinks||[]).forEach(l=>{
+    const myth = ZODIAC_MAJOR_MYTH[l.sign];
+    l.labels.forEach(label=>{
+      majorLinksByPoint.push({
+        point: label,
+        pointDomain: POINT_DOMAIN_HINT[label] || null,
+        sign: l.sign,
+        cardName: l.card[0],
+        deityName: l.card[1],
+        keywords: l.card[3],
+        mythAstro: myth ? myth.astro : null,
+        mythFact: myth ? myth.myth : null,
+      });
+    });
+  });
   return {
     firstName: saved.firstName,
     gender: saved.gender || null, // "f" | "m" | null (préfère ne pas préciser) — pour accorder correctement le texte généré
@@ -2604,10 +2638,7 @@ function profileForAstralText(saved){
       note: deity.note,
       contributors: (deity.contributors||[]).map(c=>({ label: c.label, sign: c.sign, cardName: c.cardName || null, precise: !!c.precise })),
     } : null,
-    majorLinks: majorLinks ? majorLinks.map(l=>{
-      const myth = ZODIAC_MAJOR_MYTH[l.sign];
-      return { labels: l.labels, sign: l.sign, cardName: l.card[0], deityName: l.card[1], keywords: l.card[3], mythAstro: myth ? myth.astro : null, mythFact: myth ? myth.myth : null };
-    }) : null,
+    majorLinks: majorLinksByPoint.length ? majorLinksByPoint : null,
   };
 }
 
@@ -5265,21 +5296,35 @@ function tutelaryReasonFallback(deity){
 // phrase de secours locale nomme chaque carte, le signe qui la relie, son dieu/mots-clés,
 // ET s'appuie sur ZODIAC_MAJOR_MYTH (voir plus haut) pour expliquer, avec un vrai fait
 // mythologique vérifiable, pourquoi ce dieu incarne cette carte — jamais un simple énoncé
-// mécanique ("correspondance signe -> carte") qui ne dirait rien de la personne. Ce texte
-// de secours reste générique par nature (contrairement au texte IA, il ne peut pas
-// personnaliser "ce que ça révèle de TOI") : la dernière phrase répond quand même, en
-// termes génériques, à "qu'est-ce que ça apporte" via les mots-clés de la carte.
+// mécanique ("correspondance signe -> carte") qui ne dirait rien de la personne.
+// Retour direct : le même texte ("pas comme un trait figé une fois pour toutes...") revenait
+// à l'identique sur les 3 points (Soleil/Lune/Ascendant), en plus de traiter Soleil en Lion
+// comme équivalent à Lune en Lion — alors que chacun engage un domaine de vie différent (voir
+// POINT_DOMAIN_HINT). Un paragraphe est donc désormais généré PAR POINT, pas par carte : si
+// Soleil et Ascendant tombent sur la même carte, ils ont chacun leur paragraphe, la carte et
+// son mythe n'étant réexpliqués qu'une fois (le second paragraphe y renvoie explicitement)
+// pour ne pas se répéter, mais la partie "qu'est-ce que ça apporte" reste toujours propre à
+// chaque point.
 function majorLinksTextFallback(links){
   if(!links || !links.length) return null;
-  // Un paragraphe par carte (séparés par \n\n, comme le texte IA une fois généré — voir
-  // renderMajorLinks()) plutôt qu'une seule phrase agrégée, pour que le rendu reste
-  // cohérent visuellement que ce texte de secours soit affiché ou déjà remplacé par l'IA.
-  const paragraphs = links.map(l=>{
-    const labelPart = l.labels.length > 1 ? `${l.labels.slice(0,-1).join(", ")} et ${l.labels[l.labels.length-1]}` : l.labels[0];
+  // Séparés par \n\n (comme le texte IA une fois généré — voir renderMajorLinks()) pour que
+  // le rendu reste cohérent visuellement que ce texte de secours soit affiché ou déjà
+  // remplacé par l'IA.
+  const paragraphs = [];
+  links.forEach(l=>{
     const myth = ZODIAC_MAJOR_MYTH[l.sign];
     const mythSentence = myth ? ` ${myth.astro} ${myth.myth}` : "";
     const keywordsList = l.card[3].split(" · ").join(", ");
-    return `${labelPart} en ${l.sign} te relie à « ${l.card[0]} » (${l.card[1]} — ${l.card[3]}).${mythSentence} Te reconnaître dans cette carte, c'est repérer en toi une capacité à incarner, à ta manière, cette énergie de ${keywordsList} — pas comme un trait figé une fois pour toutes, mais comme quelque chose à observer et à cultiver dans les moments qui le demandent.`;
+    l.labels.forEach((label, idx)=>{
+      const domain = POINT_DOMAIN_HINT[label];
+      const domainSentence = domain
+        ? `Comme c'est ${label==="Ascendant" ? "ton Ascendant" : label==="Lune" ? "ta Lune" : "ton Soleil"} qui porte ce lien, il touche surtout à ${domain} : cette énergie de ${keywordsList} se joue avant tout à cet endroit-là, pas comme un trait unique qui vaudrait pour tout le reste de toi.`
+        : `Te reconnaître dans cette carte, c'est repérer en toi une capacité à incarner cette énergie de ${keywordsList}.`;
+      const introSentence = idx === 0
+        ? `${label} en ${l.sign} te relie à « ${l.card[0]} » (${l.card[1]} — ${l.card[3]}).${mythSentence}`
+        : `${label}, aussi en ${l.sign}, te relie à cette même carte, « ${l.card[0]} » — mais pas de la même façon.`;
+      paragraphs.push(`${introSentence} ${domainSentence}`);
+    });
   });
   return paragraphs.join("\n\n");
 }

@@ -7,7 +7,7 @@
 //   ascendantSign?, planets: [{key, label, sign, house?, retrograde?}, ...],
 //   aspects: [{key, type, a, b}, ...], tutelaryDeity?: { name, note?,
 //   contributors: [{label, sign, cardName?, precise?}, ...] },
-//   majorLinks?: [{labels: string[], sign, cardName, deityName, keywords, mythAstro?,
+//   majorLinks?: [{point, pointDomain?, sign, cardName, deityName, keywords, mythAstro?,
 //   mythFact?}, ...] } }
 //   - gender: "f" | "m" | absent/null (préfère ne pas préciser) — pour accorder
 //     correctement les phrases générées ; sans lui, formulation volontairement neutre.
@@ -21,11 +21,16 @@
 //     explication sur une carte précise plutôt que sur le signe seul, quand c'est possible.
 //   - `majorLinks` : les arcanes majeurs liés au thème via Soleil/Lune/Ascendant (voir
 //     majorLinksFor()/ZODIAC_MAJOR_LINKS dans app.js — correspondance signe entier -> majeur,
-//     fixe, jamais calculée par l'IA). Chaque entrée donne déjà le dieu et les mots-clés de
-//     la carte pour que l'IA n'ait jamais à deviner un sens de carte, ainsi que `mythAstro`
-//     (le lien traditionnel signe -> carte) et `mythFact` (un fait mythologique grec réel et
-//     vérifiable expliquant pourquoi ce dieu incarne cette carte, voir ZODIAC_MAJOR_MYTH dans
-//     app.js) : l'IA doit s'appuyer dessus tels quels, jamais inventer un autre mythe.
+//     fixe, jamais calculée par l'IA). Une entrée PAR POINT (`point`: "Soleil"/"Lune"/
+//     "Ascendant"), jamais groupée par carte : deux points peuvent tomber sur la même carte
+//     (`cardName` identique sur deux entrées) sans que ça signifie la même chose, voir
+//     `pointDomain` (le domaine de vie propre à ce point, ex. identité pour le Soleil, monde
+//     intérieur pour la Lune, voir POINT_DOMAIN_HINT dans app.js). Chaque entrée donne déjà
+//     le dieu et les mots-clés de la carte pour que l'IA n'ait jamais à deviner un sens de
+//     carte, ainsi que `mythAstro` (le lien traditionnel signe -> carte) et `mythFact` (un
+//     fait mythologique grec réel et vérifiable expliquant pourquoi ce dieu incarne cette
+//     carte, voir ZODIAC_MAJOR_MYTH dans app.js) : l'IA doit s'appuyer dessus tels quels,
+//     jamais inventer un autre mythe.
 // Renvoie : { text: { nameNumber?: string, ascendant?: string, planets: {clé: string},
 //   aspects: {clé: string}, tutelaryReason?: string, majorLinksText?: string } }
 //
@@ -83,9 +88,10 @@ module.exports = async function handler(req, res) {
     : null;
   const majorLinks = Array.isArray(profile.majorLinks)
     ? profile.majorLinks
-        .filter((l) => l && Array.isArray(l.labels) && l.labels.length && typeof l.sign === "string" && typeof l.cardName === "string" && typeof l.deityName === "string")
+        .filter((l) => l && typeof l.point === "string" && l.point && typeof l.sign === "string" && typeof l.cardName === "string" && typeof l.deityName === "string")
         .map((l) => ({
-          labels: l.labels,
+          point: l.point,
+          pointDomain: typeof l.pointDomain === "string" ? l.pointDomain : null,
           sign: l.sign,
           cardName: l.cardName,
           deityName: l.deityName,
@@ -137,9 +143,13 @@ module.exports = async function handler(req, res) {
     if (contributors) lines.push(`Placements qui ont le plus contribué à ce choix : ${contributors}`);
   }
   if (majorLinks.length) {
-    lines.push("Arcanes majeurs déjà liés à ce thème par calcul (ne remets jamais ce choix en cause, n'en évoque aucun autre) :");
+    lines.push("Arcanes majeurs déjà liés à ce thème par calcul, UN POINT À LA FOIS (ne remets jamais ce choix en cause, n'en évoque aucun autre) :");
+    const seenCards = new Set();
     majorLinks.forEach((l) => {
-      lines.push(`- ${l.labels.join(" et ")} en ${l.sign} -> "${l.cardName}", dieu/déesse ${l.deityName} (mots-clés : ${l.keywords})`);
+      const alreadyIntroduced = seenCards.has(l.cardName);
+      seenCards.add(l.cardName);
+      lines.push(`- ${l.point} en ${l.sign} -> "${l.cardName}", dieu/déesse ${l.deityName} (mots-clés : ${l.keywords})${alreadyIntroduced ? " [même carte qu'un point déjà listé ci-dessus]" : ""}`);
+      if (l.pointDomain) lines.push(`  Domaine de vie propre à ce point précis (Soleil ≠ Lune ≠ Ascendant, même sur la même carte) : ${l.pointDomain}`);
       if (typeof l.mythAstro === "string" && l.mythAstro) lines.push(`  Pourquoi ce signe correspond traditionnellement à cette carte : ${l.mythAstro}`);
       if (typeof l.mythFact === "string" && l.mythFact) lines.push(`  Fait mythologique réel expliquant pourquoi ce dieu incarne cette carte (à reformuler avec tes mots, jamais à remplacer par un autre mythe) : ${l.mythFact}`);
     });
@@ -165,11 +175,12 @@ Pour CHACUN des éléments ci-dessus, rédige une phrase personnalisée en fran�
 - Chaque aspect : 1 seule phrase qui explique la dynamique entre les deux planètes de façon concrète, sans jamais utiliser les mots "aspect", "orbe", "conjonction", "trigone", "carré", "opposition" ou "sextile" — traduis-les en dynamique vécue (tension, alliance naturelle, occasion, frottement à observer…).
 - Nombre du prénom : 1 à 2 phrases qui relient ce nombre à un trait de personnalité concret.
 ${deity ? `- tutelaryReason : 2 à 3 phrases qui expliquent pourquoi CETTE figure mythologique précise résonne avec CE thème, en t'appuyant sur les placements qui ont le plus contribué au choix et sur ce que cette figure représente mythologiquement. Si un placement précise un "décan de la carte X" entre parenthèses, tu peux t'appuyer dessus pour ancrer l'explication sur cette carte précise plutôt que sur le signe seul — mais ne mentionne jamais le mot "décan" lui-même, ni "carte", ni le nom technique de la carte : reformule toujours en langage naturel, comme une simple facette du thème. N'explique jamais le calcul (poids, score) lui-même, seulement le sens. Ne remets jamais en cause le choix de la figure : explique-le, ne le questionne pas.` : ""}
-${majorLinks.length ? `- majorLinksText : un texte SUBSTANTIEL, un paragraphe DISTINCT par carte listée ci-dessus (séparés par un retour à la ligne double comme les autres textes de l'app), d'AU MOINS 5 à 6 phrases CHACUN — jamais une seule phrase expédiée par carte, jamais un résumé télégraphique. S'il y a 2 cartes, le texte total doit faire au moins 10 à 12 phrases ; s'il y en a 3, au moins 15 à 18. Pour CHAQUE carte, dans son propre paragraphe :
-  (1) explique d'abord, en 2-3 phrases CONCRÈTES, pourquoi CETTE carte précise — et uniquement celle-ci — est liée à ce thème : appuie-toi explicitement sur le fait mythologique réel donné ci-dessus pour cette carte (reformule-le avec tes mots, mais ne l'invente jamais, ne le remplace jamais par un autre mythe ni par un raccourci du type "le signe X correspond à la carte Y" resté abstrait) pour montrer, avec une vraie anecdote ou un vrai trait mythologique, pourquoi ce dieu/cette déesse incarne vraiment cette carte ;
-  (2) développe ensuite, sur AU MOINS 3 phrases distinctes et concrètes (pas une seule formule condensée), ce que cette carte révèle vraiment de ${firstName} ET ce que ça lui apporte concrètement de s'y reconnaître — un trait de caractère profond, une tension intérieure, une force ou une façon d'être précise, illustrée par une situation de vie plausible et parlante (comment ça se manifeste au quotidien, dans une relation, une décision, un moment de doute...), puis ce que cette prise de conscience permet de faire ou de voir différemment ; ne te contente jamais de reformuler le mot-clé donné, va chercher ce qu'il implique vraiment pour une personne.
+${majorLinks.length ? `- majorLinksText : un texte SUBSTANTIEL, un paragraphe DISTINCT par POINT listé ci-dessus (Soleil/Lune/Ascendant — jamais par carte : si deux points partagent la même carte, ils ont quand même chacun leur propre paragraphe, séparés par un retour à la ligne double comme les autres textes de l'app), d'AU MOINS 5 à 6 phrases CHACUN — jamais une seule phrase expédiée par point, jamais un résumé télégraphique. S'il y a 2 points, le texte total doit faire au moins 10 à 12 phrases ; s'il y en a 3, au moins 15 à 18. Pour CHAQUE point, dans son propre paragraphe :
+  (1) explique d'abord, en 2-3 phrases CONCRÈTES, pourquoi la carte associée à CE point précis est liée à ce thème. Si ce point est marqué "[même carte qu'un point déjà listé ci-dessus]", NE RÉEXPLIQUE PAS le mythe depuis le début (une phrase courte qui y renvoie suffit, ex. "la même carte que ton Soleil, mais...") — sinon, appuie-toi explicitement sur le fait mythologique réel donné ci-dessus pour cette carte (reformule-le avec tes mots, mais ne l'invente jamais, ne le remplace jamais par un autre mythe ni par un raccourci du type "le signe X correspond à la carte Y" resté abstrait) pour montrer, avec une vraie anecdote ou un vrai trait mythologique, pourquoi ce dieu/cette déesse incarne vraiment cette carte ;
+  (2) développe ensuite, sur AU MOINS 3 phrases distinctes et concrètes (pas une seule formule condensée), ce que cette carte révèle vraiment de ${firstName} À TRAVERS CE POINT PRÉCIS ET LUI SEUL — utilise le "Domaine de vie propre à ce point" donné ci-dessus pour ancrer la différence : le Soleil parle de qui elle/il est consciemment et de sa vitalité, la Lune de son monde intérieur et de ses besoins instinctifs souvent moins visibles, l'Ascendant de la façon dont elle/il apparaît aux autres avant qu'on la/le connaisse vraiment — donc, pour une même carte partagée entre deux points, les deux paragraphes doivent dire des choses VISIBLEMENT DIFFÉRENTES, jamais la même explication reformulée à peine. Illustre avec une situation de vie plausible et parlante (comment ça se manifeste au quotidien, dans une relation, une décision, un moment de doute...), puis ce que cette prise de conscience permet de faire ou de voir différemment ; ne te contente jamais de reformuler le mot-clé donné, va chercher ce qu'il implique vraiment pour une personne.
   Cette deuxième partie est celle qui doit apporter le plus de valeur : ne la bâcle jamais, ne la résume jamais à une seule phrase.
-  N'invente jamais une autre carte que celles listées, ni un sens qui ne découle pas de son dieu/mots-clés donnés. Nomme chaque carte par son nom entre guillemets français (ex. « Le Mat ») au moins une fois dans son paragraphe. Ne mentionne jamais le mot "arcane", "majeur" ou "correspondance ésotérique" : reste dans une langue naturelle, comme si tu racontais un lien de personnalité, pas un système de calcul.` : ""}
+  IMPORTANT : varie réellement la formulation et la structure d'un paragraphe à l'autre — n'utilise jamais la même phrase de conclusion ou le même tour de phrase répété pour chaque point (ex. jamais "pas comme un trait figé une fois pour toutes" ou toute formule équivalente réutilisée telle quelle) : chaque point doit se lire comme écrit spécifiquement pour lui, pas comme un gabarit rempli trois fois.
+  N'invente jamais une autre carte que celles listées, ni un sens qui ne découle pas de son dieu/mots-clés donnés. Nomme la carte par son nom entre guillemets français (ex. « Le Mat ») au moins une fois dans le paragraphe. Ne mentionne jamais le mot "arcane", "majeur" ou "correspondance ésotérique" : reste dans une langue naturelle, comme si tu racontais un lien de personnalité, pas un système de calcul.` : ""}
 - Jamais de "maison X" mentionnée sans dire ce qu'elle signifie en langage courant si tu la mentionnes.
 - Ton chaleureux, direct, humain — jamais mécanique, jamais de formule toute faite du type "cela montre que".
 
