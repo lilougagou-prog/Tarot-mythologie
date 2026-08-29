@@ -6072,7 +6072,29 @@ function bind(){
   document.body.classList.add(cls);
 })();
 
-if("serviceWorker" in navigator) navigator.serviceWorker.register("./service-worker.js").catch(()=>{});
+// Cause probable des retours répétés "le texte n'a toujours pas changé" après un correctif
+// pourtant bien déployé côté serveur : sans ceci, une PWA déjà ouverte (ou installée sur
+// l'écran d'accueil, où elle n'est quasiment jamais "rechargée" par l'utilisatrice) continue
+// à exécuter le JS déjà chargé en mémoire indéfiniment — le nouveau service-worker.js peut
+// très bien s'installer et prendre le contrôle en arrière-plan (self.skipWaiting()/
+// self.clients.claim(), voir service-worker.js) sans que la page déjà ouverte s'en rende
+// compte, puisque prendre le contrôle des FUTURES requêtes réseau ne change rien au code déjà
+// interprété. "controllerchange" se déclenche précisément quand ce nouveau service worker
+// prend le relais (y compris à la toute première visite, skipWaiting+clients.claim faisant
+// que ça arrive presque immédiatement) : on recharge alors la page une seule fois (le drapeau
+// `refreshing` évite une boucle si l'évènement se déclenchait plusieurs fois) pour que le
+// nouveau app.js soit vraiment exécuté. Sans danger pour un brouillon en cours (tirage ou
+// rêve) : chaque frappe est déjà sauvegardée en continu dans localStorage (tirageState/
+// dreamState), donc rien n'est perdu au rechargement.
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("./service-worker.js").catch(()=>{});
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener("controllerchange", ()=>{
+    if(refreshing) return;
+    refreshing = true;
+    window.location.reload();
+  });
+}
 // Safari iOS n'active les styles :active que sur les éléments ayant un vrai listener tactile :
 // cet écouteur (vide, passif) suffit à activer les micro-interactions au toucher partout dans l'app.
 document.addEventListener("touchstart", function(){}, { passive:true });
