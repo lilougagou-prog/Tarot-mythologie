@@ -2952,10 +2952,7 @@ function ensureAstralText(){
       fresh.astralText = { ...text, tutelaryDeityKey: liveDeityKey };
       saveProfileData(fresh);
       if(cardDetailReturnTo === showProfilAstral) showProfilAstral();
-      // majorLinksText (voir profil()) s'affiche sur l'onglet Profil lui-même, pas sur un
-      // écran "detail" couvert par cardDetailReturnTo — re-render explicite si c'est
-      // l'onglet actif au moment où le texte arrive.
-      if(route === "profil") render();
+      else if(cardDetailReturnTo === showMajorLinks) showMajorLinks();
     })
     .catch(()=>{ /* échec silencieux : les phrases génériques restent affichées */ })
     .finally(()=>{ astralTextFetchInFlight = false; });
@@ -4244,14 +4241,6 @@ function showDeityDetail(id, backTo = cardDetailReturnTo){
 function profil(){
   const links = profileMajorLinks();
   ensureRetrospective();
-  // Le texte qui explique CE lien (pourquoi ces cartes précisément, ce qu'elles disent de
-  // la personne) est de l'interprétation écrite : même découpage gratuit/premium que le
-  // reste du Profil astral (voir renderProfilResults()/premiumLockHTML()) — la grille de
-  // cartes elle-même (donnée brute : quel signe pointe vers quelle carte) reste gratuite,
-  // seule l'explication est verrouillée.
-  const premiumOn = isPremiumEnabled();
-  if(links && premiumOn) ensureAstralText();
-  const majorLinksText = premiumOn ? (getCachedAstralText()?.majorLinksText || majorLinksTextFallback(links) || null) : null;
   const retrospective = getCachedRetrospective();
   const retrospectiveReady = retrospective && retrospective.year === new Date().getFullYear();
   return `<section class="hero">
@@ -4264,17 +4253,58 @@ function profil(){
     <div class="tile" data-profil-go="journal"><strong>☽ Journal</strong><span>${journal.length} tirage${journal.length>1?"s":""} enregistré${journal.length>1?"s":""}.</span></div>
     <div class="tile" data-profil-go="stats"><strong>📊 Statistiques</strong><span>Tes tendances : cartes, thèmes, série de jours.</span></div>
     <div class="tile" data-profil-go="relations"><strong>🤝 Mes proches</strong><span>Compare ton thème à celui d'un partenaire, d'un enfant, d'un parent…</span></div>
+    ${links ? `<div class="tile" data-profil-go="majeurs"><strong>🃏 Arcanes majeurs liés</strong><span>Les cartes que ton Soleil, ta Lune et ton Ascendant réveillent dans le jeu.</span></div>` : ""}
     ${retrospectiveReady ? `<div class="tile" data-go-retrospective="1"><strong>🎂 Ta rétrospective de l'année</strong><span>Un an de tirages, résumé pour toi.</span></div>` : ""}
-  </div>
-  ${links ? `
-  <div class="section-title centered"><h3>Arcanes majeurs liés à ton profil astral</h3></div>
+  </div>`;
+}
+
+// Écran dédié (sorti de profil() pour lui laisser toute la place — auparavant une simple
+// section en bas de l'onglet Profil, désormais sa propre tuile) : quels arcanes majeurs le
+// thème réveille (Soleil/Lune/Ascendant, voir profileMajorLinks()/majorLinksFor()), et
+// pourquoi ces cartes précisément + ce qu'elles disent de la personne (majorLinksText, IA,
+// premium — voir plus haut).
+function renderMajorLinks(){
+  const links = profileMajorLinks();
+  if(!links){
+    return `<div class="section-title"><h3>Arcanes majeurs liés à ton profil astral</h3></div>
+    <p class="note" style="text-align:center">Renseigne d'abord ton profil astral pour découvrir les arcanes majeurs qu'il réveille.</p>`;
+  }
+  // Le texte qui explique CE lien (pourquoi ces cartes précisément, ce qu'elles disent de
+  // la personne) est de l'interprétation écrite : même découpage gratuit/premium que le
+  // reste du Profil astral (voir renderProfilResults()/premiumLockHTML()) — la grille de
+  // cartes elle-même (donnée brute : quel signe pointe vers quelle carte) reste gratuite,
+  // seule l'explication est verrouillée.
+  const premiumOn = isPremiumEnabled();
+  if(premiumOn) ensureAstralText();
+  const majorLinksText = premiumOn ? (getCachedAstralText()?.majorLinksText || majorLinksTextFallback(links) || null) : null;
+  return `<div class="section-title"><h3>Arcanes majeurs liés à ton profil astral</h3></div>
   ${premiumOn
     ? (majorLinksText ? `<p class="lore-text" style="margin-top:10px">${escapeHTML(majorLinksText)}</p>` : "")
     : premiumLockHTML("Pourquoi ces cartes précisément — et ce qu'elles disent de toi — fait partie du contenu premium.")}
   <div class="card-grid" style="margin-top:14px">${links.map(l=>`<div>
     <p class="suit-h4" style="text-align:center;margin-bottom:6px">${escapeHTML(l.labels.join(" & "))} en ${escapeHTML(l.sign)}</p>
     ${cardHTML(l.card,"major")}
-  </div>`).join("")}</div>` : ""}`;
+  </div>`).join("")}</div>`;
+}
+function showMajorLinks(){
+  preDetailScroll = window.scrollY;
+  document.getElementById("screen").innerHTML = `<div class="detail">${renderMajorLinks()}
+    <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
+  </div>`;
+  triggerScreenAnim("detail");
+  window.scrollTo(0,0);
+  document.getElementById("detailBack").onclick = ()=>{
+    // Capturé avant l'appel : render() (ou tout écran qu'il affiche) peut lui-même
+    // réécrire preDetailScroll pour SES propres besoins avant qu'on ait pu le relire —
+    // exactement le même risque de corruption que cardDetailReturnTo (voir le commentaire
+    // au-dessus de showSymbolDetail()), pour la même raison : une seule variable globale
+    // mutable, réutilisée par tous les écrans "detail".
+    const scrollTarget = preDetailScroll;
+    render();
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
+  };
+  cardDetailReturnTo = showMajorLinks;
+  bindCards();
 }
 
 /* ===================== ÉCRANS "MES PROCHES" ===================== */
@@ -5431,6 +5461,7 @@ function bind(){
       else if(key==="journal") showJournal();
       else if(key==="stats") showStats();
       else if(key==="relations") showRelations();
+      else if(key==="majeurs") showMajorLinks();
     };
   });
   document.getElementById("homeBtn").onclick=()=>setRoute("home");
