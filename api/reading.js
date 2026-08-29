@@ -22,6 +22,12 @@
 //     déjà apparue dans un tirage précédent sur un sujet proche — voir cardMemory() dans
 //     app.js) : { cardName, date, domainLabel }. Ne contient jamais le texte de la question
 //     passée, seulement le nom de la carte, sa date, et le domaine détecté.
+//   - dream (optionnel, envoyé par le client quand un rêve a été noté il y a moins de 7 jours
+//     — voir recentDreamForReading() dans app.js) : { date, excerpt }. Un simple indice
+//     optionnel que l'IA peut utiliser SI pertinent pour la question posée, jamais un lien
+//     forcé — retour direct d'utilisatrice : les tirages et les rêves doivent pouvoir
+//     s'éclairer l'un l'autre (voir aussi recentReading dans api/dream.js pour le sens
+//     inverse).
 // Renvoie : { cards: [string, ...] (même longueur et ordre que cards en entrée), synthesis }
 //
 // La clé API Anthropic vit uniquement ici, côté serveur, dans la variable
@@ -71,7 +77,7 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  const { question, cards, positions, profile, history, memory } = req.body || {};
+  const { question, cards, positions, profile, history, memory, dream } = req.body || {};
 
   if (
     typeof question !== "string" ||
@@ -180,6 +186,20 @@ module.exports = async function handler(req, res) {
     memoryBlock = `\nRemarque : la carte "${memory.cardName}" est déjà apparue dans un tirage précédent de cette personne sur un sujet proche (${memory.domainLabel}), le ${memory.date}. Tu peux le mentionner brièvement si c'est pertinent et naturel pour cette lecture — jamais de façon appuyée, et seulement si ça enrichit vraiment la lecture.\n`;
   }
 
+  // Bloc de rêve récent optionnel (voir recentDreamForReading() dans app.js) — retour direct
+  // d'utilisatrice : les tirages doivent pouvoir s'éclairer avec les rêves, mais seulement si
+  // c'est vraiment pertinent, jamais un rapprochement forcé entre deux choses sans rapport.
+  let dreamBlock = "";
+  if (
+    dream &&
+    typeof dream === "object" &&
+    typeof dream.excerpt === "string" &&
+    dream.excerpt.trim() &&
+    typeof dream.date === "string"
+  ) {
+    dreamBlock = `\nRêve récent noté par cette personne (${dream.date}) : "${dream.excerpt.trim()}" — INDICE OPTIONNEL seulement : si, et seulement si, il existe un lien clair et naturel avec la question posée ou les cartes tirées, tu peux t'appuyer dessus pour enrichir la lecture ; sinon ignore-le complètement, ne force jamais un rapprochement artificiel et ne le mentionne jamais si ça n'apporte rien.\n`;
+  }
+
   const n = cards.length;
   const hasPositions = Array.isArray(positions) && positions.some((p) => typeof p === "string" && p);
 
@@ -189,7 +209,7 @@ module.exports = async function handler(req, res) {
 
 Cette personne a tiré ${n === 1 ? "cette carte" : `ces ${n} cartes`}, dans cet ordre${hasPositions ? " (avec la position de chacune dans le tirage entre parenthèses)" : ""} :
 ${cardBlock}
-${personalBlock}${historyBlock}${memoryBlock}
+${personalBlock}${historyBlock}${memoryBlock}${dreamBlock}
 Rédige une lecture de tarot en français, comme le ferait un professionnel expérimenté en face à face. Règles strictes :
 - Appelle toujours chaque carte par son nom exact donné ci-dessus (par exemple "le 10 d'Épées", "Le Chariot") — jamais par un simple mot-clé comme "Harmonie".
 ${hasPositions ? "- Tiens compte du sens de la position de chaque carte dans le tirage (donnée entre parenthèses) pour son interprétation.\n" : ""}- Réponds vraiment et précisément à la question posée, pas de façon générique.
