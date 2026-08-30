@@ -4435,6 +4435,7 @@ function showDeityDetail(id, backTo = cardDetailReturnTo){
 /* ===================== ONGLET PROFIL (profil astral + journal) ===================== */
 
 function profil(){
+  const saved = getProfile();
   const links = profileMajorLinks();
   ensureRetrospective();
   const retrospective = getCachedRetrospective();
@@ -4452,7 +4453,8 @@ function profil(){
     ${links ? `<div class="tile" data-profil-go="majeurs"><strong>🃏 Arcanes majeurs liés</strong><span>Les cartes que ton Soleil, ta Lune et ton Ascendant réveillent dans le jeu.</span></div>` : ""}
     ${retrospectiveReady ? `<div class="tile" data-go-retrospective="1"><strong>🎂 Ta rétrospective de l'année</strong><span>Un an de tirages, résumé pour toi.</span></div>` : ""}
   </div>
-  <p class="note" style="text-align:center;margin-top:22px"><a href="politique-confidentialite.html" target="_blank" rel="noopener">Politique de confidentialité</a></p>`;
+  <button class="secondary" data-profil-edit="1" style="display:block;margin:22px auto 0">${saved ? "Modifier mes informations" : "Renseigner mes informations"}</button>
+  <p class="note" style="text-align:center;margin-top:16px"><a href="politique-confidentialite.html" target="_blank" rel="noopener">Politique de confidentialité</a></p>`;
 }
 
 // Écran dédié (sorti de profil() pour lui laisser toute la place — auparavant une simple
@@ -5425,7 +5427,6 @@ function showProfilAstral(){
     render();
     requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
-  document.getElementById("profilEdit").onclick = ()=> showProfilEditForm();
   bindChips(); // rend cliquable la divinité tutélaire (data-deity) et l'Animal représentatif (data-symbol)
   const premiumToggle = document.getElementById("premiumToggle");
   if(premiumToggle) premiumToggle.onchange = ()=>{ setPremiumEnabled(premiumToggle.checked); showProfilAstral(); };
@@ -5526,7 +5527,12 @@ function bindProfilForm(saved){
   });
 
   document.getElementById("profilFormCancel").onclick = ()=>{
-    if(saved) showProfilAstral(); else render();
+    // Depuis le déplacement du bouton « Modifier mes informations » dans l'onglet Profil
+    // lui-même (profil(), plus au fond de l'écran Profil astral), ce formulaire n'est plus
+    // jamais atteint avec un profil déjà enregistré (saved) autrement que depuis cet onglet
+    // — render() y ramène correctement puisque `route` reste "profil" pendant toute la
+    // navigation vers ce formulaire, exactement comme pour les autres écrans "detail".
+    render();
   };
 
   document.getElementById("profilSubmit").onclick = async ()=>{
@@ -5681,8 +5687,7 @@ function renderProfilResults(saved){
       ${a.aspects.map(asp=>`<div class="symbol"><b>${PLANET_LABELS[asp.bodies[0]]} ${asp.type} ${PLANET_LABELS[asp.bodies[1]]}</b>${expl(aspectText(asp))}<br><small>orbe ${asp.orb}°</small></div>`).join("")}
     </div>` : ""}
 
-    <button class="secondary" id="profilEdit" style="margin-top:20px">Modifier mes informations</button>
-    <button class="ghost" id="detailBack">← Retour</button>
+    <button class="ghost" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
 }
 
@@ -5986,6 +5991,12 @@ function bind(){
       else if(key==="majeurs") showMajorLinks();
     };
   });
+  // Retour direct d'utilisatrice : « Modifier mes informations » vivait uniquement au fond
+  // de l'écran Profil astral (renderProfilResults()), pas accessible directement depuis
+  // l'onglet Profil lui-même. Bouton dédié ici, câblé comme les autres éléments de premier
+  // niveau (voir data-go/data-route ci-dessus) plutôt que dans les bindings spécifiques à un
+  // écran "detail" — profil() n'en est pas un.
+  document.querySelectorAll("[data-profil-edit]").forEach(el=>el.onclick=()=>showProfilEditForm());
   document.querySelectorAll("[data-reves-go]").forEach(el=>{
     el.onclick = ()=>{
       const key = el.dataset.revesGo;
