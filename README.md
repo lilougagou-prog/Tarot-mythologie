@@ -9,6 +9,7 @@ Application web (PWA) de tarot mythologique grec — tirage interactif, lecture 
 - `assets/` — illustrations des 22 arcanes majeurs (Le Mat, Bateleur, Papesse, Impératrice, Empereur, Pape, Amoureux, Chariot, Justice, Hermite, Roue de Fortune, Force, Pendu, Arcane sans nom, Tempérance, Diable, Maison-Dieu, Étoile, Lune, Soleil, Jugement, Monde) — collection complète. Illustration progressive des 56 cartes mineures : le jeu d'Épées, le jeu de Bâtons et désormais le jeu de Coupes sont tous les trois complets (10 numérales + 4 figures de cour chacun, `card-epees-*.jpg`, `card-batons-*.jpg` et `card-coupes-*.jpg`) ; seul Deniers utilise encore un glyphe emoji ou des pips en attendant son illustration. 4 illustrations (`learn-*.jpg`) pour les cases de l'onglet Apprendre, et 4 illustrations (`suit-*.jpg`) pour les 4 enseignes dans les sous-sections « Figures de cour » et « Cartes numérales ». `reves-hero.jpg` (700×1050) illustre l'onglet Rêves (voir « Rêves — comment ça marche »).
 - `manifest.json` + `icon.svg` — nécessaires pour l'installation en PWA
 - `service-worker.js` — cache offline
+- `politique-confidentialite.html` — page statique et autonome (pas de dépendance à `app.js`/`styles.css`, pour rester consultable même si le reste de l'appli change) requise avant toute publication sur l'App Store/Play Store — voir « Politique de confidentialité » plus bas
 - `api/reading.js` — backend serverless (Vercel) qui appelle l'API Anthropic côté serveur
 - `api/astral.js` — backend serverless (Vercel) qui calcule un profil astral (thème natal) à partir d'une date/heure/lieu de naissance
 - `api/transits.js` — backend serverless (Vercel) qui calcule les positions planétaires du jour, pour l'Horoscope du jour (aucune donnée personnelle reçue)
@@ -203,6 +204,15 @@ npx vercel dev
 1. Ouvrir l'URL de déploiement (Vercel) dans Safari sur l'iPhone.
 2. Appuyer sur Partager → Ajouter à l'écran d'accueil → Ajouter.
 3. L'application apparaît avec son icône et s'ouvre comme une app, y compris hors ligne (sauf la lecture IA, qui a besoin du réseau — avec repli automatique sinon).
+
+## Politique de confidentialité (avant publication sur un store)
+Apple (App Store Connect) et Google (Play Console) exigent tous les deux une URL de politique de confidentialité au moment de la soumission — même pour une appli qui, comme celle-ci aujourd'hui, ne crée pas de compte et ne fait remonter aucune donnée à un serveur pour la conserver : le simple fait d'envoyer des données à un tiers pour traitement (ici, un résumé du profil à l'API Anthropic pour générer une lecture IA) doit être déclaré.
+
+`politique-confidentialite.html` est une page statique et **autonome** (aucune dépendance à `app.js`/`styles.css` — juste ses propres styles inline, pour rester consultable même si le reste de l'appli change de forme) déployée au même endroit que le reste de l'appli, donc accessible à une URL stable du type `https://<ton-domaine-vercel>/politique-confidentialite.html`. C'est cette URL qu'il faut coller dans le champ « Privacy Policy URL » d'App Store Connect / Play Console. Un lien discret vers cette même page est aussi présent en bas de l'onglet Profil (`profil()` dans `app.js`) — Apple demande généralement qu'elle reste accessible aussi bien depuis l'appli que depuis la fiche du store.
+
+**Deux champs restent à compléter avant publication** (marqués `[...]` directement dans le fichier) : le nom (ou la structure) qui exploite l'appli, et une adresse e-mail de contact pour les questions de confidentialité — volontairement laissés en placeholder plutôt que pré-remplis avec une adresse personnelle sans confirmation explicite, cette page étant vouée à devenir publique et durable.
+
+**Cette page ne décrit que les pratiques RÉELLES et ACTUELLES de l'appli** (rien n'est stocké sur un serveur, aucun compte, aucune mesure d'audience) — volontairement, plutôt que d'anticiper des fonctionnalités pas encore construites. Le jour où l'appli gagne des comptes utilisateurs, une sauvegarde en ligne, ou des statistiques d'usage (voir « Pistes de suite possibles » plus bas), cette page devra être mise à jour AVANT la mise en service de ces fonctionnalités, pas après — une politique de confidentialité doit toujours refléter la pratique en vigueur, jamais une pratique passée ou anticipée. Sa date de dernière mise à jour, en haut de la page, doit être rafraîchie à chaque changement de fond.
 
 ## État actuel du reste de l'app
 - Navigation 5 onglets (Accueil / Tirage / Apprendre / Rêves / Profil) — Symboles n'est plus un onglet de premier niveau depuis l'ajout de Rêves, fusionné dans Apprendre comme une tuile de plus (voir « Rêves — comment ça marche »)

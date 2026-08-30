@@ -4451,7 +4451,8 @@ function profil(){
     <div class="tile" data-profil-go="relations"><strong>🤝 Mes proches</strong><span>Compare ton thème à celui d'un partenaire, d'un enfant, d'un parent…</span></div>
     ${links ? `<div class="tile" data-profil-go="majeurs"><strong>🃏 Arcanes majeurs liés</strong><span>Les cartes que ton Soleil, ta Lune et ton Ascendant réveillent dans le jeu.</span></div>` : ""}
     ${retrospectiveReady ? `<div class="tile" data-go-retrospective="1"><strong>🎂 Ta rétrospective de l'année</strong><span>Un an de tirages, résumé pour toi.</span></div>` : ""}
-  </div>`;
+  </div>
+  <p class="note" style="text-align:center;margin-top:22px"><a href="politique-confidentialite.html" target="_blank" rel="noopener">Politique de confidentialité</a></p>`;
 }
 
 // Écran dédié (sorti de profil() pour lui laisser toute la place — auparavant une simple
