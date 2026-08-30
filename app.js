@@ -3940,7 +3940,7 @@ function home(){
   ${lore ? `<p class="lore-text" style="max-width:560px;margin:14px auto 0;text-align:center;opacity:.85">${escapeHTML(lore.myth.length > 220 ? lore.myth.slice(0,220).trim()+"…" : lore.myth)}</p>` : ""}
   <p class="tap-hint">touche la carte pour en découvrir la lecture complète</p>
   <div class="grid" style="margin-top:30px">
-    <div class="tile" data-go="tirage"><strong>✦ Tirer les cartes</strong><span>Choisis toi-même trois cartes dans le jeu.</span></div>
+    <div class="tile" data-go="tirage"><strong>✦ Tirer les cartes</strong><span>Pose ta question, choisis le tirage qui lui correspond.</span></div>
     <div class="tile" data-go="apprendre"><strong>◈ Apprendre</strong><span>Un parcours progressif sur les 78 cartes.</span></div>
     <div class="tile" data-go="reves"><strong>☾ Rêves</strong><span>Note un rêve, fais-le interpréter à la manière des devins grecs.</span></div>
     <div class="tile" data-go="profil"><strong>☉ Profil</strong><span>Ton profil astral et tes tirages passés.</span></div>
@@ -4474,14 +4474,27 @@ function renderMajorLinks(){
   const premiumOn = isPremiumEnabled();
   if(premiumOn) ensureAstralText();
   const majorLinksText = premiumOn ? (getCachedAstralText()?.majorLinksText || majorLinksTextFallback(links) || null) : null;
+  // Retour direct : l'illustration de chaque carte doit précéder SON texte, pas être
+  // reléguée dans une grille séparée tout en bas de l'écran. majorLinksText contient un
+  // paragraphe par POINT (voir majorLinksTextFallback()/le prompt de /api/astral-text.js),
+  // généré dans le même ordre que `links` puis, pour un même lien, dans l'ordre de
+  // `l.labels` — donc en découpant les paragraphes et en en reprenant `l.labels.length`
+  // d'affilée pour chaque lien, on retrouve exactement les paragraphes qui parlent de CETTE
+  // carte, à accoler juste après son illustration.
+  const paragraphs = majorLinksText ? majorLinksText.split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean) : [];
+  let cursor = 0;
+  const blocks = links.map(l=>{
+    const ownParagraphs = paragraphs.slice(cursor, cursor + l.labels.length);
+    cursor += l.labels.length;
+    return { link: l, paragraphs: ownParagraphs };
+  });
   return `<div class="section-title"><h3>Arcanes majeurs liés à ton profil astral</h3></div>
-  ${premiumOn
-    ? (majorLinksText ? majorLinksText.split(/\n\s*\n/).map(p=>`<p class="lore-text" style="margin-top:10px">${escapeHTML(p.trim())}</p>`).join("") : "")
-    : premiumLockHTML("Pourquoi ces cartes précisément — et ce qu'elles disent de toi — fait partie du contenu premium.")}
-  <div class="card-grid" style="margin-top:14px">${links.map(l=>`<div>
-    <p class="suit-h4" style="text-align:center;margin-bottom:6px">${escapeHTML(l.labels.join(" & "))} en ${escapeHTML(l.sign)}</p>
-    ${cardHTML(l.card,"major")}
-  </div>`).join("")}</div>`;
+  ${premiumOn ? "" : premiumLockHTML("Pourquoi ces cartes précisément — et ce qu'elles disent de toi — fait partie du contenu premium.")}
+  ${blocks.map(b=>`<div style="margin-top:22px">
+    <p class="suit-h4" style="text-align:center;margin-bottom:6px">${escapeHTML(b.link.labels.join(" & "))} en ${escapeHTML(b.link.sign)}</p>
+    <div class="card-grid">${cardHTML(b.link.card,"major")}</div>
+    ${premiumOn ? b.paragraphs.map(p=>`<p class="lore-text" style="margin-top:10px">${escapeHTML(p)}</p>`).join("") : ""}
+  </div>`).join("")}`;
 }
 function showMajorLinks(){
   preDetailScroll = window.scrollY;
