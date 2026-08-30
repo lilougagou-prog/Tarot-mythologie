@@ -3079,7 +3079,7 @@ let astralTextFetchInFlight = false;
 // normal ?" — sans ce numéro, un texte déjà en cache (généré avec l'ancien prompt) passait
 // les deux vérifications ci-dessous (deityKey inchangée, majorLinksText déjà présent) et ne
 // se régénérait donc jamais tout seul, même après un vrai changement de logique côté prompt.
-const MAJOR_LINKS_TEXT_VERSION = 2;
+const MAJOR_LINKS_TEXT_VERSION = 3;
 // Même logique de discrétion qu'ensurePortrait() : jamais de prompt de code d'accès depuis
 // un simple affichage du Profil astral, échec silencieux (les phrases génériques restent
 // affichées), un seul appel réseau tant qu'aucun texte n'est en cache.
@@ -5350,14 +5350,24 @@ function tutelaryReasonFallback(deity){
 // ET s'appuie sur ZODIAC_MAJOR_MYTH (voir plus haut) pour expliquer, avec un vrai fait
 // mythologique vérifiable, pourquoi ce dieu incarne cette carte — jamais un simple énoncé
 // mécanique ("correspondance signe -> carte") qui ne dirait rien de la personne.
-// Retour direct : le même texte ("pas comme un trait figé une fois pour toutes...") revenait
-// à l'identique sur les 3 points (Soleil/Lune/Ascendant), en plus de traiter Soleil en Lion
-// comme équivalent à Lune en Lion — alors que chacun engage un domaine de vie différent (voir
-// POINT_DOMAIN_HINT). Un paragraphe est donc désormais généré PAR POINT, pas par carte : si
-// Soleil et Ascendant tombent sur la même carte, ils ont chacun leur paragraphe, la carte et
-// son mythe n'étant réexpliqués qu'une fois (le second paragraphe y renvoie explicitement)
-// pour ne pas se répéter, mais la partie "qu'est-ce que ça apporte" reste toujours propre à
-// chaque point.
+// Deux retours successifs sur cette phrase de secours (le texte IA, lui, n'a pas ce problème
+// puisque le prompt lui interdit explicitement la répétition — voir /api/astral-text.js) :
+// 1. "les trois textes terminent pareil" — la phrase de clôture précédente ne variait que par
+//    substitution de mots (le nom du point) dans un gabarit par ailleurs identique, avec la
+//    même clause finale mot pour mot ("se joue avant tout à cet endroit-là...") sur les 3
+//    paragraphes. POINT_CLOSING_SENTENCE ci-dessous donne à chaque point sa propre PHRASE
+//    entière, pas seulement ses propres mots.
+// 2. "la relation avec l'arcane choisie n'est pas vraiment mise en valeur, tu parles plutôt
+//    du signe astrologique" — la clôture parlait du "point" et de son "domaine" de façon
+//    abstraite, la carte elle-même n'étant citée qu'en ouverture de paragraphe. Chaque
+//    clôture démarre désormais explicitement par "Cette carte", et se referme sur les
+//    mots-clés DE LA CARTE (pas seulement l'idée du domaine) : la carte reste le sujet de la
+//    phrase, le point n'étant que l'angle par lequel elle s'exprime chez cette personne.
+const POINT_CLOSING_SENTENCE = {
+  "Soleil": (keywordsList) => `Cette carte parle alors de ce que tu es en plein jour, consciemment : ${keywordsList} — une part de toi que tu peux assumer et revendiquer ouvertement.`,
+  "Lune": (keywordsList) => `Cette carte parle alors de ce que tu vis surtout en privé : ${keywordsList} — une part de toi qui se manifeste dans l'intimité de tes émotions, pas toujours visible au premier abord.`,
+  "Ascendant": (keywordsList) => `Cette carte parle alors de l'image que tu donnes, parfois sans même le vouloir : ${keywordsList} — une part de toi que les autres perçoivent souvent avant que tu ne la reconnaisses toi-même.`,
+};
 function majorLinksTextFallback(links){
   if(!links || !links.length) return null;
   // Séparés par \n\n (comme le texte IA une fois généré — voir renderMajorLinks()) pour que
@@ -5369,14 +5379,12 @@ function majorLinksTextFallback(links){
     const mythSentence = myth ? ` ${myth.astro} ${myth.myth}` : "";
     const keywordsList = l.card[3].split(" · ").join(", ");
     l.labels.forEach((label, idx)=>{
-      const domain = POINT_DOMAIN_HINT[label];
-      const domainSentence = domain
-        ? `Comme c'est ${label==="Ascendant" ? "ton Ascendant" : label==="Lune" ? "ta Lune" : "ton Soleil"} qui porte ce lien, il touche surtout à ${domain} : cette énergie de ${keywordsList} se joue avant tout à cet endroit-là, pas comme un trait unique qui vaudrait pour tout le reste de toi.`
-        : `Te reconnaître dans cette carte, c'est repérer en toi une capacité à incarner cette énergie de ${keywordsList}.`;
+      const closingFn = POINT_CLOSING_SENTENCE[label];
+      const closing = closingFn ? closingFn(keywordsList) : `Cette carte parle alors de ce que tu portes en toi : ${keywordsList}.`;
       const introSentence = idx === 0
         ? `${label} en ${l.sign} te relie à « ${l.card[0]} » (${l.card[1]} — ${l.card[3]}).${mythSentence}`
         : `${label}, aussi en ${l.sign}, te relie à cette même carte, « ${l.card[0]} » — mais pas de la même façon.`;
-      paragraphs.push(`${introSentence} ${domainSentence}`);
+      paragraphs.push(`${introSentence} ${closing}`);
     });
   });
   return paragraphs.join("\n\n");
