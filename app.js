@@ -469,23 +469,23 @@ const CARD_LORE = {
 },
 "As de Deniers": {
   marseille:"Une main tient un unique denier doré au-dessus d'un jardin fleuri : opportunité concrète, début tangible, promesse de croissance matérielle bien enracinée.",
-  myth:"Gaïa, mère de toute chose, fait surgir de la terre elle-même tout ce qui nourrit et fait vivre. Cet As est ce même don originel — une graine bien réelle, qui ne demande qu'à être plantée avec soin."
+  myth:"Rhéa, mère des premiers Olympiens, protégea seule la promesse d'un avenir divin en cachant l'enfant Zeus dans une grotte plutôt que de le voir englouti (voir la fiche « Rhéa »). Cet As est cette même promesse tangible, encore fragile, qu'il faut savoir mettre à l'abri le temps qu'elle grandisse."
 },
 "2 de Deniers": {
   marseille:"Un personnage jongle avec deux deniers reliés par un ruban en forme d'infini, un navire tanguant en arrière-plan : adaptation, équilibre à maintenir entre plusieurs priorités concrètes.",
-  myth:"Protée, dieu marin insaisissable, changeait sans cesse de forme pour s'ajuster à chaque situation plutôt que d'y résister. Cette carte demande cette même souplesse : jongler sans perdre l'équilibre."
+  myth:"Kairos, l'instant opportun, ne se saisit qu'en plein mouvement, jamais après coup (voir la fiche « Kairos »). Cette carte demande cette même vigilance : jongler sans perdre l'équilibre, au bon moment plutôt qu'à n'importe lequel."
 },
 "3 de Deniers": {
   marseille:"Un artisan sculpte une pierre dans une abbaye, deux figures consultent ses plans à ses côtés : travail collectif, compétence reconnue, projet qui prend forme grâce à la collaboration.",
-  myth:"Héphaïstos ne construisait jamais seul les grandes œuvres de l'Olympe : les Cyclopes et d'autres artisans divins unissaient leur savoir-faire au sien. Cette carte célèbre ce même travail à plusieurs mains, plus solide que tout effort isolé."
+  myth:"Dédale, architecte du Labyrinthe crétois, ne construisit jamais une œuvre aussi retorse tout seul (voir la fiche « Dédale »). Cette carte célèbre ce même travail à plusieurs mains, plus solide que tout effort isolé."
 },
 "4 de Deniers": {
   marseille:"Un personnage serre fermement un denier contre sa poitrine, deux sous ses pieds, un sur sa tête : contrôle, besoin de sécurité qui peut virer à la rigidité si l'on s'y accroche trop fort.",
-  myth:"Ploutos, rendu aveugle, distribue la richesse sans toujours voir à qui elle profite vraiment — un excès de retenue peut, comme un excès de largesse, priver l'abondance de son sens. Cette carte questionne ce qu'on retient peut-être trop fort pour rien."
+  myth:"Ctésios, aspect domestique de Zeus gardien des réserves du foyer, veille sur ce qu'on amasse plutôt que sur ce qu'on dépense (voir la fiche « Ctésios »). Cette carte questionne ce qu'on retient peut-être trop fort pour rien."
 },
 "5 de Deniers": {
   marseille:"Deux personnages démunis passent devant un vitrail éclairé sans y entrer, dans le froid : période difficile, sentiment d'exclusion — alors qu'un refuge est pourtant tout proche.",
-  myth:"Déméter, en deuil, laissa la terre entière stérile et froide, aveugle un temps aux dieux qui pourtant cherchaient à l'aider. Cette carte rappelle que même dans l'épreuve, un secours reste parfois à portée, si l'on accepte de le voir."
+  myth:"Penia, la Pauvreté elle-même, mendiait autrefois à la porte d'un festin où l'abondance coulait à flots sans qu'elle y ait sa place (voir la fiche « Penia »). Cette carte rappelle que même dans l'épreuve, un secours reste parfois à portée, si l'on accepte de le voir."
 },
 "6 de Deniers": {
   marseille:"Un marchand pèse et distribue des pièces à deux mendiants agenouillés : générosité, échange, redistribution équilibrée entre celui qui a et celui qui a besoin.",
@@ -590,6 +590,14 @@ Object.assign(CARD_IMAGES, {
   "Cavalier de Coupes": "assets/card-coupes-cavalier.jpg",
   "Reine de Coupes": "assets/card-coupes-reine.jpg",
   "Roi de Coupes": "assets/card-coupes-roi.jpg",
+  // Cartes numérales de Deniers (1-5) — fournies par l'utilisatrice, début de
+  // l'illustration de la dernière enseigne encore en glyphe/pips (6-10 et les 4 figures de
+  // cour de Deniers restent à illustrer).
+  "As de Deniers": "assets/card-deniers-1.jpg",
+  "2 de Deniers": "assets/card-deniers-2.jpg",
+  "3 de Deniers": "assets/card-deniers-3.jpg",
+  "4 de Deniers": "assets/card-deniers-4.jpg",
+  "5 de Deniers": "assets/card-deniers-5.jpg",
 });
 
 // Cartes numérales dotées d'une figure mythologique propre (contrairement aux autres
@@ -631,6 +639,11 @@ const NUMBER_CARD_DEITY = {
   "8 de Coupes": "ulysse",
   "9 de Coupes": "hébé",
   "10 de Coupes": "hyménée",
+  "As de Deniers": "rhéa",
+  "2 de Deniers": "kairos",
+  "3 de Deniers": "dédale",
+  "4 de Deniers": "ctésios",
+  "5 de Deniers": "penia",
 };
 // Symboles propres à une carte numérale précise (une fois illustrée avec sa propre figure,
 // voir NUMBER_CARD_DEITY ci-dessus), utilisés par allCards() à la place de la formule
@@ -647,6 +660,8 @@ const NUMBER_CARD_SYMBOLS = {
   "5 de Coupes": "lyre · monde souterrain",
   "8 de Coupes": "mer",
   "10 de Coupes": "torches",
+  "As de Deniers": "grotte",
+  "3 de Deniers": "labyrinthe",
 };
 // Nom affiché comme "divinité" d'une carte dans les écrans de détail : la figure propre
 // à la carte si elle existe (NUMBER_CARD_DEITY), sinon c[1] tel quel (le nom du dieu pour
@@ -844,9 +859,9 @@ const SYMBOL_LIBRARY = {
     "La tradition en offre malgré tout un exemple concret et rituel : lors de la procession sacrée qui menait chaque année les futurs initiés d'Athènes à Éleusis pour les Mystères, un homme masqué, posté sur le pont franchissant le Céphise, couvrait les passants de moqueries et d'insultes — un rite appelé les gephyrismoi (« railleries du pont »), comme si le pont exigeait qu'on y dépose son orgueil avant d'accéder au sacré.",
     "Il est ainsi devenu un symbole de transition choisie, de lien construit et de réconciliation entre deux états qui semblaient incompatibles.",
   ]},
-  "grotte":{icon:"🕳",label:"Grotte",category:"Lieux & passages",desc:"Inconscient, retrait nécessaire, initiation loin du regard des autres.",links:[],lore:[
+  "grotte":{icon:"🕳",label:"Grotte",category:"Lieux & passages",desc:"Inconscient, retrait nécessaire, initiation loin du regard des autres.",links:["rhéa"],lore:[
     "La grotte occupe une place à part dans la mythologie grecque : c'est un lieu caché, à l'écart du regard des dieux comme des hommes, où peuvent se produire des événements décisifs.",
-    "Le mythe le plus célèbre est celui de la naissance de Zeus lui-même : pour le soustraire à son père Cronos, qui dévorait ses enfants, sa mère Rhéa le cacha dans une grotte du mont Ida, en Crète, où il fut élevé en secret jusqu'à pouvoir renverser son père.",
+    "Le mythe le plus célèbre est celui de la naissance de Zeus lui-même : pour le soustraire à son père Cronos, qui dévorait ses enfants, sa mère Rhéa (voir la fiche « Rhéa ») le cacha dans une grotte du mont Ida, en Crète, où il fut élevé en secret jusqu'à pouvoir renverser son père.",
     "Les grottes abritent aussi des figures oraculaires, comme celle de Trophonios, où l'on descendait consulter un oracle si redoutable que ceux qui en ressortaient étaient dits ne plus jamais sourire.",
     "Homère en décrit une autre, plus paisible, dans l'Odyssée : la grotte des Nymphes sur l'île d'Ithaque, où les marins déposaient leurs offrandes. Elle possédait deux entrées, l'une réservée aux mortels, l'autre — tournée vers le nord — réservée aux seuls dieux, preuve qu'un même lieu caché peut ouvrir sur deux mondes selon la porte qu'on choisit d'emprunter.",
     "La grotte est devenue un symbole de retrait nécessaire, d'initiation loin du regard des autres et de protection avant de pouvoir affronter le monde.",
@@ -896,12 +911,12 @@ const SYMBOL_LIBRARY = {
     "Il est devenu un symbole de transformation profonde, de mort symbolique et de vérité qui ne peut plus rester cachée une fois qu'on y est descendu.",
     "Le monde souterrain est particulièrement associé à Hadès et à Perséphone — et, par sa propre descente, à Orphée.",
   ]},
-  "labyrinthe":{icon:"🌀",label:"Labyrinthe",category:"Lieux & passages",desc:"Épreuve complexe, chemin qui s'égare avant de se retrouver — à condition d'avoir un fil à suivre.",links:["minos","ariane"],lore:[
-    "Le labyrinthe fut construit en Crète par l'architecte Dédale, sur l'ordre du roi Minos (voir la fiche « Minos »), pour y enfermer le Minotaure : une créature à tête de taureau et corps d'homme, née de l'union contre nature de la reine Pasiphaé et d'un taureau envoyé par Poséidon.",
+  "labyrinthe":{icon:"🌀",label:"Labyrinthe",category:"Lieux & passages",desc:"Épreuve complexe, chemin qui s'égare avant de se retrouver — à condition d'avoir un fil à suivre.",links:["minos","ariane","dédale"],lore:[
+    "Le labyrinthe fut construit en Crète par l'architecte Dédale (voir la fiche « Dédale »), sur l'ordre du roi Minos (voir la fiche « Minos »), pour y enfermer le Minotaure : une créature à tête de taureau et corps d'homme, née de l'union contre nature de la reine Pasiphaé et d'un taureau envoyé par Poséidon.",
     "Chaque année, Athènes devait envoyer sept jeunes gens et sept jeunes filles en offrande au monstre, jusqu'à ce que le héros Thésée se porte volontaire pour l'affronter. Ariane, fille de Minos, tomba amoureuse de lui et lui offrit un fil à dérouler en avançant, afin de pouvoir retrouver la sortie une fois le Minotaure vaincu (voir la fiche « Ariane »).",
     "Thésée tua le monstre au cœur du dédale et en ressortit en suivant le fil à rebours — mais le labyrinthe garda une dernière victime : son propre architecte. Dédale, enfermé par Minos avec son fils Icare pour avoir aidé Ariane, ne put s'en échapper qu'en fabriquant des ailes de plumes et de cire, un vol dont Icare, monté trop près du soleil, ne revint jamais.",
     "Le labyrinthe est ainsi devenu un symbole d'épreuve complexe, de chemin qui s'égare avant de se retrouver, de piège qu'on peut créer soi-même sans pouvoir toujours s'en libérer, et de guidage indispensable — le fil — pour traverser ce qu'on ne peut affronter seul.",
-    "Le labyrinthe est particulièrement associé à Minos et à Ariane.",
+    "Le labyrinthe est particulièrement associé à Minos, à Ariane et à Dédale, son architecte.",
   ]},
 
   // Mythologie — attributs et divinités
@@ -1627,6 +1642,13 @@ const DEITY_NOTES = {
   "hypnos":"Dieu du Sommeil, frère jumeau de Thanatos et père de Morphée — un pouvoir assez redoutable pour tromper Zeus lui-même.",
   "orphée":"Musicien légendaire dont le chant charmait bêtes, arbres et jusqu'aux Enfers — descendu chercher son épouse Eurydice, il la perdit une seconde fois.",
   "hyménée":"Dieu du mariage, fils d'Apollon et d'une Muse selon la tradition la plus répandue — les Grecs l'invoquaient à voix haute à chaque noce, persuadés qu'une fête sans lui tournerait au malheur.",
+
+  /* ----- Personnifications des cartes numérales illustrées de Deniers ----- */
+  "rhéa":"Titanide, mère des six premiers Olympiens — elle sauva seule Zeus de son père Cronos, qui dévorait ses propres enfants.",
+  "kairos":"Personnification du moment opportun — jeune, ailé, une seule mèche de cheveux à saisir avant qu'il ne soit passé.",
+  "dédale":"Architecte et inventeur légendaire, bâtisseur du Labyrinthe crétois — et seul homme à s'en être échappé par les airs.",
+  "ctésios":"Épiclèse de Zeus protecteur du foyer et des biens amassés, honoré dans chaque maison sous la forme d'une jarre bien gardée.",
+  "penia":"Personnification de la Pauvreté, mère d'Éros selon Platon — l'union d'un manque et d'une ressource, née un soir de fête.",
 };
 
 // Textes mythologiques développés pour les figures listées ci-dessus (voir showDeityDetail() /
@@ -2144,6 +2166,38 @@ const DEITY_LORE = {
     "Sa présence, pourtant, ne garantit pas toujours un présage favorable. Ovide raconte qu'appelé aux noces d'Orphée et Eurydice, Hyménée s'y rendit bien, mais sans prononcer les paroles rituelles ni afficher son visage joyeux : sa torche ne fit que fumer sans jamais vouloir prendre, quels que soient les efforts pour l'agiter — un présage qui, dans les faits, se révéla en dessous de la vérité (voir la fiche « Orphée »).",
     "Une tradition plus tardive veut aussi qu'il ait perdu, aux noces de Dionysos et d'Ariane sur l'île de Naxos, une voix pourtant réputée aussi belle que celle de son père Apollon (voir la fiche « Ariane ») — comme si présider aux noces des autres avait, plus d'une fois, un prix pour lui-même.",
     "Dans le Tarot, Hyménée est la figure du 10 de Coupes, où une famille réunie lève les bras vers un arc-en-ciel de dix coupes : cette carte est la fête qu'il préside dans ce qu'elle a de plus réussi, cette joie qui se transmet des mariés jusqu'aux enfants qui dansent déjà sous le même arc.",
+  ],
+
+  /* ----- Personnifications des cartes numérales illustrées de Deniers (voir NUMBER_CARD_DEITY) ----- */
+  "rhéa": [
+    "Rhéa, fille du Ciel et de la Terre (Ouranos et Gaïa), épousa son frère Cronos et mit au monde les six premiers dieux de l'Olympe : Hestia, Déméter, Héra, Hadès, Poséidon et Zeus. Mais Cronos, averti qu'un de ses enfants le détrônerait un jour comme il avait lui-même détrôné son père, avalait chacun d'eux dès sa naissance.",
+    "Lorsque vint le tour de Zeus, Rhéa refusa de le perdre comme les autres : elle se retira secrètement en Crète pour accoucher, cacha le nouveau-né dans une grotte du mont Ida, confié aux nymphes et à la chèvre Amalthée, et tendit à Cronos une pierre emmaillotée qu'il avala sans se douter de la substitution (voir la fiche « Grotte »).",
+    "Zeus, une fois adulte, revint forcer son père à rendre tous les enfants qu'il avait engloutis — ses propres frères et sœurs, désormais adultes eux aussi — avant de le renverser à son tour lors de la Titanomachie. Rhéa, par cette seule ruse, avait rendu possible la naissance de l'Olympe tel qu'on le connaît.",
+    "Dans le Tarot, Rhéa est la figure de l'As de Deniers, où une main tend un unique denier doré au-dessus d'un jardin fleuri : comme elle, cette carte protège une promesse encore fragile — une graine, un commencement — le temps qu'il lui faut pour grandir sans être englouti trop tôt.",
+  ],
+  "kairos": [
+    "Kairos personnifie l'instant favorable — non pas le temps qui s'écoule (Chronos), mais l'occasion précise qui se présente une fois et ne se répète pas.",
+    "La tradition le représente jeune et ailé, souvent muni de sandales ailées et d'une balance en équilibre sur le fil d'un rasoir : une longue mèche pend sur son front, tandis que l'arrière de son crâne reste chauve — on ne peut le saisir qu'en face, au moment même où il passe, jamais après qu'il s'est éloigné.",
+    "Le sculpteur Lysippe en fit l'une de ses œuvres les plus célèbres, une statue tant admirée dans l'Antiquité qu'elle inspira des épigrammes entières consacrées à en décrire l'allégorie : la fortune ne se refuse jamais, mais elle ne prévient pas non plus de son passage.",
+    "Dans le Tarot, Kairos est la figure du 2 de Deniers, où un jeune homme ailé jongle avec deux deniers au bord de vagues déchaînées : cet équilibre tenu au sommet d'un rocher n'a rien de statique — c'est un ajustement permanent, exactement la vigilance qu'exige de saisir le bon moment sans jamais le laisser filer.",
+  ],
+  "dédale": [
+    "Dédale est l'archétype grec de l'ingéniosité technique : architecte, sculpteur et inventeur, on lui attribue tout autant des statues si vivantes qu'on les croyait animées que des outils devenus indispensables aux artisans de son temps.",
+    "Sur l'ordre du roi Minos, il construisit en Crète le Labyrinthe — un dédale de couloirs si complexe que son propre créateur y aurait presque pu se perdre — pour y enfermer le Minotaure (voir la fiche « Labyrinthe »).",
+    "Minos, craignant qu'il ne révèle le secret de sa construction, l'enferma lui-même dans le Labyrinthe avec son fils Icare. Dédale, refusant d'y rester prisonnier de sa propre œuvre, fabriqua pour tous deux des ailes de plumes assemblées à la cire — une évasion par les airs qui coûta la vie à Icare, monté trop près du soleil, mais que Dédale, lui, mena à son terme.",
+    "Dans le Tarot, Dédale est la figure du 3 de Deniers, où un architecte et deux collaborateurs penchés sur des plans de labyrinthe donnent forme à un projet commun : la même intelligence qui a conçu l'édifice le plus retors de la mythologie ne travaille jamais seule sur cette carte — elle a besoin de mains pour la suivre.",
+  ],
+  "ctésios": [
+    "Zeus Ctésios (« Zeus des biens ») est l'aspect du roi des dieux tourné vers l'intérieur du foyer plutôt que vers le ciel ou l'Olympe : le gardien discret des réserves, des provisions et de tout ce qu'une maisonnée met de côté pour durer.",
+    "Son culte domestique se pratiquait sans temple ni grande cérémonie : chaque maison entretenait dans son cellier une simple jarre à deux anses, remplie d'eau pure, d'huile et de fruits, couronnée de laine — un autel miniature dédié à la prospérité accumulée plutôt qu'à la richesse soudaine.",
+    "Contrairement aux grandes figures de l'abondance comme Ploutos, qui incarne la richesse elle-même, Ctésios personnifie moins l'avoir que le fait de le préserver : une vigilance patiente, plus proche de l'économie domestique que de la fortune éclatante.",
+    "Dans le Tarot, Ctésios est la figure du 4 de Deniers, où un personnage serre un denier contre sa poitrine, deux autres sous ses pieds et un dernier sur sa tête : cette carte est cette même vigilance sur ce qu'on possède déjà — utile tant qu'elle protège, mais qui, comme la jarre gardée de trop près, risque de finir par n'être plus qu'un fardeau qu'on n'ose plus ouvrir.",
+  ],
+  "penia": [
+    "Penia personnifie le dénuement — non pas la misère absolue, mais le manque permanent qui pousse sans cesse à chercher, jamais tout à fait comblé.",
+    "Platon raconte, dans le Banquet, comment elle se présenta au festin donné pour la naissance d'Aphrodite, mendiant à la porte pendant que les dieux festoyaient à l'intérieur. Apercevant Poros, personnification de l'Abondance et de la Ressource, ivre du nectar servi ce soir-là, elle s'unit à lui pour concevoir un enfant : Éros, le désir amoureux.",
+    "De cette union naît, selon Platon, la nature même de l'amour : toujours en quête, jamais rassasié, tenant à la fois de sa mère un dénuement perpétuel et de son père l'ingéniosité à toujours trouver un moyen d'obtenir ce qui lui manque.",
+    "Dans le Tarot, Penia est la figure du 5 de Deniers, où deux silhouettes démunies passent dans le froid devant un vitrail éclairé sans y entrer : elle est cette exclusion qui semble sans issue — et pourtant, comme le rappelle son propre mythe, c'est souvent du manque lui-même que naît la ressource pour en sortir.",
   ],
 };
 
