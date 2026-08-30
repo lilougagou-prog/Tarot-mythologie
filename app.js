@@ -3941,7 +3941,7 @@ function home(){
   <p class="tap-hint">touche la carte pour en découvrir la lecture complète</p>
   <div class="grid" style="margin-top:30px">
     <div class="tile" data-go="tirage"><strong>✦ Tirer les cartes</strong><span>Pose ta question, choisis le tirage qui lui correspond.</span></div>
-    <div class="tile" data-go="apprendre"><strong>◈ Apprendre</strong><span>Un parcours progressif sur les 78 cartes.</span></div>
+    <div class="tile" data-go="apprendre"><strong>◈ Apprendre</strong><span>Les cartes, les figures mythologiques et les symboles du jeu, à explorer par catégorie.</span></div>
     <div class="tile" data-go="reves"><strong>☾ Rêves</strong><span>Note un rêve, fais-le interpréter à la manière des devins grecs.</span></div>
     <div class="tile" data-go="profil"><strong>☉ Profil</strong><span>Ton profil astral et tes tirages passés.</span></div>
   </div>`;
@@ -4152,7 +4152,7 @@ function apprendre(){
     <div class="tile" data-learn="cour">${illusHTML("assets/learn-cour.jpg","cour")}<strong>Figures de cour</strong><span>16 figures, réparties en 4 enseignes.</span></div>
     <div class="tile" data-learn="numerales">${illusHTML("assets/learn-numerales.jpg","numerales")}<strong>Cartes numérales</strong><span>40 cartes, de l'As au Dix.</span></div>
     <div class="tile" data-learn="figures">${illusHTML("assets/learn-figures.jpg","figures")}<strong>Figures mythologiques</strong><span>Les ${Object.keys(DEITY_NOTES).length} divinités et héros du jeu.</span></div>
-    <div class="tile" data-learn="symboles"><strong>✧ Bibliothèque symbolique</strong><span>Tous les symboles et les nombres, reliés aux cartes et aux figures.</span></div>
+    <div class="tile" data-learn="symboles">${illusHTML("assets/learn-symboles.jpg","symboles")}<strong>Bibliothèque symbolique</strong><span>Tous les symboles et les nombres, reliés aux cartes et aux figures.</span></div>
   </div>`;
 }
 
