@@ -329,6 +329,23 @@ textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;paddin
 
 @media(min-width:700px){main{padding:35px 28px}.bottom-nav{max-width:900px;margin:auto;border-radius:20px 20px 0 0}}
 
+/* ===== Bouton flottant du son d'ambiance (voir AmbientAudio dans app.js) — persistant,
+   hors du flux #screen pour survivre aux re-rendus de render(), positionné juste
+   au-dessus de la nav du bas plutôt que dans la grille du topbar (qui est déjà équilibrée
+   autour du titre centré, backBtn/homeBtn compris ; un 3e bouton y aurait cassé ce
+   centrage). Le halo doré (.sound-toggle.playing) signale une ambiance active sans dépendre
+   uniquement de l'icône, plus visible en un coup d'œil pendant la navigation. ===== */
+.sound-toggle{
+  position:fixed; right:14px; bottom:calc(78px + env(safe-area-inset-bottom));
+  z-index:21; width:44px; height:44px; border-radius:50%;
+  border:1px solid var(--line); background:rgba(248,241,228,.92); backdrop-filter:blur(12px);
+  color:var(--deep); font-size:19px; line-height:1; cursor:pointer; box-shadow:var(--shadow);
+  transition:transform .12s ease, box-shadow .3s ease;
+}
+.sound-toggle:active{transform:scale(.88)}
+.sound-toggle.playing{box-shadow:0 0 0 3px rgba(201,163,90,.35), var(--shadow)}
+@media(min-width:700px){.sound-toggle{right:calc(50% - 450px + 14px)}}
+
 /* ===== Transition à chaque changement d'écran (voir triggerScreenAnim() dans app.js) =====
    .screen-anim : onglets + retour vers un écran parent — léger zoom arrière, comme un pas
    en arrière qui prend du recul.
