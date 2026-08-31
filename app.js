@@ -2780,34 +2780,74 @@ function discoveryFX(){
 // qu'un seul répété partout, dans le même esprit que la couleur sonore propre à chaque
 // onglet (voir AMBIENT_MOODS). Respecte prefers-reduced-motion (styles.css) : le tracé et
 // les étoiles apparaissent alors directement, complets, sans animation.
+// `stars` : coordonnées ; `edges` : paires d'index d'étoiles reliées par un trait — un même
+// index peut apparaître dans plusieurs paires (jonction, comme un vrai astérisme), et une
+// étoile jamais citée dans `edges` reste "libre" (poussière d'étoile isolée, sans trait).
+// Retour direct d'utilisatrice, deuxième passe : la version précédente (un unique tracé
+// séquentiel point à point) ne "faisait plus constellation" — ni jonctions entre les traits,
+// ni étoiles isolées, exactement ce qui distingue un astérisme d'un simple gribouillis.
 const CONSTELLATION_VARIANTS = {
-  home:      [[20,100],[65,55],[110,80],[150,35],[195,70],[235,30],[275,60]],
-  tirage:    [[15,40],[55,85],[95,45],[140,90],[180,50],[220,85],[260,45],[285,75]],
-  apprendre: [[20,95],[62,45],[105,75],[145,25],[185,65],[225,20],[265,55],[288,30]],
-  reves:     [[25,30],[60,70],[100,25],[140,65],[175,20],[215,60],[255,25],[280,55]],
-  profil:    [[20,60],[55,20],[95,55],[135,15],[175,50],[210,10],[250,45],[280,20]],
+  home: {
+    stars:[[20,95],[60,50],[100,75],[145,40],[190,70],[115,105],[228,50],[258,92]],
+    edges:[[0,1],[1,2],[2,3],[3,4],[2,5]],
+  },
+  tirage: {
+    stars:[[60,60],[20,30],[20,92],[102,25],[102,95],[152,55],[192,80],[240,35],[268,68]],
+    edges:[[0,1],[0,2],[0,3],[0,4]],
+  },
+  apprendre: {
+    stars:[[20,95],[62,45],[105,75],[145,25],[185,65],[225,20],[80,110],[262,55],[272,90]],
+    edges:[[0,1],[1,2],[2,3],[3,4],[4,5],[2,6]],
+  },
+  reves: {
+    stars:[[25,35],[65,65],[105,30],[150,60],[190,25],[122,95],[232,50],[262,80]],
+    edges:[[0,1],[1,2],[2,3],[3,4],[3,5]],
+  },
+  profil: {
+    stars:[[150,55],[110,20],[190,20],[90,80],[210,80],[150,15],[30,58],[270,58]],
+    edges:[[0,1],[0,2],[0,3],[0,4]],
+  },
 };
-function polylineLength(points){
-  let total = 0;
-  for(let i=1;i<points.length;i++){
-    total += Math.hypot(points[i][0]-points[i-1][0], points[i][1]-points[i-1][1]);
-  }
-  return total;
-}
+// Opacités variées plutôt qu'une intensité uniforme (retour direct d'utilisatrice) — comme
+// de vraies étoiles, certaines plus franches, d'autres presque évanescentes.
+const CONSTELLATION_STAR_OPACITY = [1, .5, .8, .35, .65, .45, .3, .55];
+const CONSTELLATION_EDGE_OPACITY = [.55, .3, .45, .25, .4];
+
 function constellationHTML(variant){
-  const points = CONSTELLATION_VARIANTS[variant] || CONSTELLATION_VARIANTS.apprendre;
-  const len = polylineLength(points);
-  const radii = [2.6, 2.1, 2.8, 2, 2.4, 2.2, 2.6, 2];
-  // Chaque étoile "s'allume" quand le tracé l'atteint : délai réparti sur la même durée que
-  // l'animation de la ligne (2.2s, voir styles.css .constellation-line).
-  const stars = points.map((p,i)=>{
-    const delay = (i/(points.length-1)) * 2.2;
-    return `<circle cx="${p[0]}" cy="${p[1]}" r="${radii[i%radii.length]}" style="animation-delay:${delay.toFixed(2)}s"/>`;
+  const v = CONSTELLATION_VARIANTS[variant] || CONSTELLATION_VARIANTS.apprendre;
+  const { stars, edges } = v;
+  const radii = [2.8, 2.1, 3, 2, 2.5, 2.2, 2.8, 2];
+
+  // Les traits se dessinent l'un après l'autre (pas tous en même temps) — plus lent et plus
+  // lisible, chaque jonction se révèle à son tour comme un vrai tracé de constellation
+  // plutôt qu'un flash unique. ~1.5s de tracé par trait, décalés de 1.05s pour un léger
+  // chevauchement — nettement plus lent que la précédente version (2.2s pour tout le motif).
+  const EDGE_DURATION = 1.5, EDGE_STAGGER = 1.05;
+  const starDelay = new Array(stars.length).fill(null);
+  const lines = edges.map(([a,b], i)=>{
+    const delay = i * EDGE_STAGGER;
+    const [x1,y1] = stars[a], [x2,y2] = stars[b];
+    const len = Math.hypot(x2-x1, y2-y1);
+    const opacity = CONSTELLATION_EDGE_OPACITY[i % CONSTELLATION_EDGE_OPACITY.length];
+    // Une étoile s'allume dès que le PREMIER trait qui la touche atteint son tour.
+    if(starDelay[a] === null || delay < starDelay[a]) starDelay[a] = delay;
+    if(starDelay[b] === null || delay + EDGE_DURATION < starDelay[b]) starDelay[b] = delay + EDGE_DURATION;
+    return `<line class="constellation-edge" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--gold)" stroke-width="0.85" opacity="${opacity}"
+      style="stroke-dasharray:${len.toFixed(1)};stroke-dashoffset:${len.toFixed(1)};animation-delay:${delay.toFixed(2)}s;animation-duration:${EDGE_DURATION}s"/>`;
+  }).join("");
+  // Étoiles jamais reliées : poussière d'étoile isolée, apparaît tôt et sans attendre un
+  // trait qui ne viendra jamais — délai court, légèrement dispersé pour rester organique.
+  const starsHTML = stars.map((p,i)=>{
+    const delay = starDelay[i] !== null ? starDelay[i] : .3 + (i % 3) * .5;
+    const opacity = CONSTELLATION_STAR_OPACITY[i % CONSTELLATION_STAR_OPACITY.length];
+    // --star-opacity (pas l'attribut SVG "opacity") : le keyframe constellation-pop anime la
+    // propriété CSS opacity elle-même, qui écraserait sinon l'attribut à sa dernière image —
+    // voir le commentaire dans styles.css.
+    return `<circle cx="${p[0]}" cy="${p[1]}" r="${radii[i%radii.length]}" style="--star-opacity:${opacity};animation-delay:${delay.toFixed(2)}s"/>`;
   }).join("");
   return `<svg class="constellation-bg" viewBox="0 0 300 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <polyline class="constellation-line" points="${points.map(p=>p.join(",")).join(" ")}" fill="none" stroke="var(--gold)" stroke-width="0.9"
-      style="stroke-dasharray:${len.toFixed(1)};stroke-dashoffset:${len.toFixed(1)}"/>
-    <g class="constellation-stars" fill="var(--gold-bright)">${stars}</g>
+    <g class="constellation-edges" fill="none">${lines}</g>
+    <g class="constellation-stars" fill="var(--gold-bright)">${starsHTML}</g>
   </svg>`;
 }
 
