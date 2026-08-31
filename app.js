@@ -2772,15 +2772,42 @@ function discoveryFX(){
   return `<div class="discovery-badge">✦ Première découverte</div>`;
 }
 
-// Filigrane statique de constellation posé derrière un ".hero" (voir apprendre() et
-// symboles()) — purement décoratif, un seul motif fixe (pas besoin d'en varier le tracé).
-function constellationHTML(){
+// Filigrane de constellation posé derrière le titre de chaque onglet (home()/tirage()/
+// apprendre()/reves()/profil()) — retour direct d'utilisatrice : plus visible qu'avant (on
+// "la voyait un peu" seulement sur Apprendre) et surtout animée, le tracé se dessinant
+// progressivement à l'affichage plutôt qu'un simple filigrane figé, pour donner un peu de
+// dynamique à chaque en-tête. Un motif différent par onglet (CONSTELLATION_VARIANTS) plutôt
+// qu'un seul répété partout, dans le même esprit que la couleur sonore propre à chaque
+// onglet (voir AMBIENT_MOODS). Respecte prefers-reduced-motion (styles.css) : le tracé et
+// les étoiles apparaissent alors directement, complets, sans animation.
+const CONSTELLATION_VARIANTS = {
+  home:      [[20,100],[65,55],[110,80],[150,35],[195,70],[235,30],[275,60]],
+  tirage:    [[15,40],[55,85],[95,45],[140,90],[180,50],[220,85],[260,45],[285,75]],
+  apprendre: [[20,95],[62,45],[105,75],[145,25],[185,65],[225,20],[265,55],[288,30]],
+  reves:     [[25,30],[60,70],[100,25],[140,65],[175,20],[215,60],[255,25],[280,55]],
+  profil:    [[20,60],[55,20],[95,55],[135,15],[175,50],[210,10],[250,45],[280,20]],
+};
+function polylineLength(points){
+  let total = 0;
+  for(let i=1;i<points.length;i++){
+    total += Math.hypot(points[i][0]-points[i-1][0], points[i][1]-points[i-1][1]);
+  }
+  return total;
+}
+function constellationHTML(variant){
+  const points = CONSTELLATION_VARIANTS[variant] || CONSTELLATION_VARIANTS.apprendre;
+  const len = polylineLength(points);
+  const radii = [2.6, 2.1, 2.8, 2, 2.4, 2.2, 2.6, 2];
+  // Chaque étoile "s'allume" quand le tracé l'atteint : délai réparti sur la même durée que
+  // l'animation de la ligne (2.2s, voir styles.css .constellation-line).
+  const stars = points.map((p,i)=>{
+    const delay = (i/(points.length-1)) * 2.2;
+    return `<circle cx="${p[0]}" cy="${p[1]}" r="${radii[i%radii.length]}" style="animation-delay:${delay.toFixed(2)}s"/>`;
+  }).join("");
   return `<svg class="constellation-bg" viewBox="0 0 300 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <polyline points="20,90 70,40 130,60 190,20 250,55 280,30" fill="none" stroke="var(--gold)" stroke-width="0.6" opacity="0.4"/>
-    <g fill="var(--gold-bright)">
-      <circle cx="20" cy="90" r="2"/><circle cx="70" cy="40" r="2.4"/><circle cx="130" cy="60" r="1.8"/>
-      <circle cx="190" cy="20" r="2.2"/><circle cx="250" cy="55" r="1.6"/><circle cx="280" cy="30" r="2"/>
-    </g>
+    <polyline class="constellation-line" points="${points.map(p=>p.join(",")).join(" ")}" fill="none" stroke="var(--gold)" stroke-width="0.9"
+      style="stroke-dasharray:${len.toFixed(1)};stroke-dashoffset:${len.toFixed(1)}"/>
+    <g class="constellation-stars" fill="var(--gold-bright)">${stars}</g>
   </svg>`;
 }
 
@@ -4233,6 +4260,7 @@ function home(){
   ensureRitual(day, cachedTransits);
   const ritual = getCachedRitual();
   return `<section class="hero">
+    ${constellationHTML("home")}
     ${homeGlowHTML()}
     <div class="hero-emblem-cluster">
       <span class="hero-emblem mini" style="animation-delay:.6s">✦</span>
@@ -4262,6 +4290,7 @@ function home(){
 function tirage(){
   if(!tirageState.spreadType){
     return `<section class="draw-zone">
+      ${constellationHTML("tirage")}
       ${oracleGlowHTML()}
       <div class="hero-emblem small">✦</div>
       <p class="note">Choisis le tirage qui correspond à ta question.</p>
@@ -4281,6 +4310,7 @@ function tirage(){
   const conf = spreadConf();
   if(!tirageState.spread){
     return `<section class="draw-zone">
+      ${constellationHTML("tirage")}
       ${oracleGlowHTML()}
       <div class="hero-emblem small">${conf.glyph}</div>
       <span class="pill">${escapeHTML(conf.name)}</span>
@@ -4452,7 +4482,7 @@ function profileMajorLinks(){
 function apprendre(){
   const p = learningProgress();
   return `<section class="hero">
-    ${constellationHTML()}
+    ${constellationHTML("apprendre")}
     <div class="hero-emblem">✦</div>
     <h2>Apprendre le Tarot de Delphes</h2>
     <p>Explore le jeu par catégorie, ou découvre les figures mythologiques qui l'inspirent.</p>
@@ -4753,6 +4783,7 @@ function profil(){
   const retrospective = getCachedRetrospective();
   const retrospectiveReady = retrospective && retrospective.year === new Date().getFullYear();
   return `<section class="hero">
+    ${constellationHTML("profil")}
     <div class="hero-emblem">☉</div>
     <h2>Profil</h2>
     <p>Ton profil astral et l'historique de tes tirages — tout reste privé, sur cet appareil.</p>
@@ -4867,10 +4898,14 @@ function revesHeroHTML(){
   </div>`;
 }
 function reves(){
+  // Retour direct d'utilisatrice : l'image doit apparaître APRÈS le titre, pas avant — même
+  // ordre (emblème + titre d'abord) que les autres onglets (home()/apprendre()/profil()),
+  // pour une vraie unité visuelle plutôt qu'un onglet Rêves qui commence différemment.
   return `<section class="hero">
-    ${revesHeroHTML()}
+    ${constellationHTML("reves")}
     <div class="hero-emblem">☾</div>
     <h2>Rêves</h2>
+    ${revesHeroHTML()}
     <p>Dans la Grèce antique, on lisait aussi l'avenir dans les rêves — <span class="clickable-deity" data-deity="morphée">Morphée</span> en façonnait les images, et des devins comme Artémidore de Daldis les décryptaient au réveil. Raconte ce dont tu te souviens, pour en connaître la signification.</p>
   </section>
   <div class="grid" style="margin-top:20px">
