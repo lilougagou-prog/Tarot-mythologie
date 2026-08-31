@@ -505,7 +505,7 @@ const CARD_LORE = {
 },
 "10 de Deniers": {
   marseille:"Une famille sur trois générations se tient réunie dans une cour prospère, entourée de dix deniers : héritage, réussite durable qui dépasse la seule réussite individuelle pour se transmettre.",
-  myth:"Gaïa, mère originelle, engendra les générations divines qui façonnèrent le monde bien après elle — une fondation si solide qu'elle continue de porter tout ce qui est venu ensuite. Cette carte est cet aboutissement qui se transmet, plutôt que de s'arrêter à soi."
+  myth:"Euthénie personnifie la Prospérité et l'Abondance durable, celle qui s'accumule patiemment plutôt que d'arriver d'un seul coup (voir la fiche « Euthénie »). Cette carte est cet aboutissement qui se transmet, plutôt que de s'arrêter à soi."
 }
 };
 
@@ -598,23 +598,30 @@ Object.assign(CARD_IMAGES, {
   "4 de Deniers": "assets/card-deniers-4.jpg",
   "5 de Deniers": "assets/card-deniers-5.jpg",
   // Cartes numérales de Deniers (6-9) et Valet de Deniers — fournies par l'utilisatrice,
-  // deuxième lot. Reste à illustrer : le 10 de Deniers et les 3 autres figures de cour
-  // (Cavalier, Reine, Roi).
+  // deuxième lot.
   "6 de Deniers": "assets/card-deniers-6.jpg",
   "7 de Deniers": "assets/card-deniers-7.jpg",
   "8 de Deniers": "assets/card-deniers-8.jpg",
   "9 de Deniers": "assets/card-deniers-9.jpg",
   "Valet de Deniers": "assets/card-deniers-valet.jpg",
+  // 10 de Deniers et les 3 dernières figures de cour (Cavalier/Triptolème,
+  // Reine/Perséphone, Roi/Ploutos) — troisième et dernier lot, fourni par l'utilisatrice.
+  // Les 78 cartes du jeu sont désormais toutes illustrées.
+  "10 de Deniers": "assets/card-deniers-10.jpg",
+  "Cavalier de Deniers": "assets/card-deniers-cavalier.jpg",
+  "Reine de Deniers": "assets/card-deniers-reine.jpg",
+  "Roi de Deniers": "assets/card-deniers-roi.jpg",
 });
 
-// Cartes numérales dotées d'une figure mythologique propre (contrairement aux autres
-// cartes numérales, qui partagent encore un simple mot générique entre les 4 enseignes —
-// voir NUMBER_KEYS) : la divinité associée prend la place de ce mot générique dans les
-// écrans de détail (voir cardDeityLabel() ci-dessous), exactement comme pour les majeurs
-// et les figures de cour. Pour l'instant limité aux cartes numérales illustrées
-// (CARD_IMAGES ci-dessus) ; à étendre au fil des prochaines illustrations mineures. Les
-// figures de cour n'ont pas besoin d'entrée ici : COURTS leur attribue déjà une divinité
-// propre nativement (c[1]), contrairement aux cartes numérales.
+// Cartes numérales dotées d'une figure mythologique propre (contrairement au mot générique
+// partagé entre les 4 enseignes que NUMBER_KEYS assignait avant illustration) : la divinité
+// associée prend la place de ce mot générique dans les écrans de détail (voir
+// cardDeityLabel() ci-dessous), exactement comme pour les majeurs et les figures de cour.
+// Les 40 cartes numérales (10 par enseigne) ont désormais chacune la leur — la dernière,
+// le 10 de Deniers/Euthénie, complète l'ensemble en même temps que les 78 cartes du jeu
+// deviennent toutes illustrées. Les figures de cour n'ont pas besoin d'entrée ici : COURTS
+// leur attribue déjà une divinité propre nativement (c[1]), contrairement aux cartes
+// numérales.
 const NUMBER_CARD_DEITY = {
   "As de Épées": "aletheia",
   "2 de Épées": "ananké",
@@ -655,6 +662,7 @@ const NUMBER_CARD_DEITY = {
   "7 de Deniers": "aristée",
   "8 de Deniers": "techné",
   "9 de Deniers": "aglaé",
+  "10 de Deniers": "euthénie",
 };
 // Symboles propres à une carte numérale précise (une fois illustrée avec sa propre figure,
 // voir NUMBER_CARD_DEITY ci-dessus), utilisés par allCards() à la place de la formule
@@ -1337,7 +1345,7 @@ const SYMBOL_LIBRARY = {
     "L'olivier est devenu le symbole de la paix, de la sagesse, de la prospérité, de la civilisation et de la protection divine.",
     "L'olivier est particulièrement associé à Athéna.",
   ]},
-  "blé":{icon:"🌾",label:"Blé",category:"Plantes",desc:"Récolte, travail, nourriture, cycle des saisons.",links:["déméter"],lore:[
+  "blé":{icon:"🌾",label:"Blé",category:"Plantes",desc:"Récolte, travail, nourriture, cycle des saisons.",links:["déméter","perséphone","triptolème"],lore:[
     "Le blé est avant tout associé à Déméter, déesse de l'agriculture et des récoltes.",
     "Lorsque Perséphone fut enlevée par Hadès, Déméter, accablée de chagrin, parcourut le monde à sa recherche et cessa de faire pousser les plantes. La terre devint stérile et les récoltes disparurent.",
     "Lorsque Perséphone put finalement revenir auprès d'elle, la terre recommença à produire. Le cycle de Perséphone expliquait ainsi symboliquement l'alternance des saisons et le retour des récoltes.",
@@ -1664,6 +1672,7 @@ const DEITY_NOTES = {
   "aristée":"Héros divinisé, fils d'Apollon, qui enseigna aux hommes l'art de l'élevage des abeilles, de l'olivier et du fromage.",
   "techné":"Personnification du savoir-faire artisanal — figure mineure et tardive, jamais dotée d'un mythe propre comme les grands Olympiens.",
   "aglaé":"La plus jeune des trois Charites, personnifiant l'éclat et la splendeur — selon certaines traditions, l'épouse d'Héphaïstos.",
+  "euthénie":"Personnification de la Prospérité et de l'Abondance durable — figure tardive et allégorique, jamais dotée d'un mythe propre comme les grands Olympiens.",
 };
 
 // Textes mythologiques développés pour les figures listées ci-dessus (voir showDeityDetail() /
@@ -1752,6 +1761,7 @@ const DEITY_LORE = {
     "Fille de Zeus et de Déméter, Perséphone cueillait des fleurs dans un pré lorsque la terre s'ouvrit sous elle et qu'Hadès l'emporta sur son char vers son royaume souterrain.",
     "Ayant mangé quelques grains de grenade offerts par Hadès (voir la fiche « Grenade »), elle se lia irrévocablement aux Enfers et dut, par un accord négocié par Zeus, y passer une partie de chaque année, devenant reine des morts autant que fille de la déesse des moissons.",
     "Son passage entre les deux mondes en fait la figure même de la transformation qui n'efface jamais totalement ce qu'on était avant.",
+    "Dans le Tarot, Perséphone est la Reine de Deniers, qui tient son denier avec douceur au milieu d'une abondance discrète : cette carte est cette même alternance féconde, la certitude que la croissance a besoin de ses saisons de repli pour revenir plus sûrement encore.",
   ],
   "iris": [
     "Fille du Titan Thaumas et de l'Océanide Électre, Iris personnifie l'arc-en-ciel (voir la fiche « Arc-en-ciel »), pont visible entre le ciel et la terre qu'elle emprunte pour porter les messages des dieux aux mortels comme aux autres divinités.",
@@ -1860,10 +1870,12 @@ const DEITY_LORE = {
   "triptolème": [
     "Jeune prince formé par Déméter elle-même, en reconnaissance de l'hospitalité que sa famille lui offrit alors qu'elle cherchait sa fille Perséphone à travers le monde, Triptolème reçut de la déesse l'art de cultiver le blé.",
     "Monté sur un char ailé tiré par des dragons, il parcourut la terre entière pour enseigner l'agriculture à tous les peuples, devenant ainsi le messager du plus grand don de Déméter aux hommes.",
+    "Dans le Tarot, Triptolème est le Cavalier de Deniers, qui avance sans se presser dans un champ plutôt que sur un chemin de bataille : cette carte est cette même vocation patiente, transmettre un savoir utile terre après terre, sans jamais céder à la hâte.",
   ],
   "ploutos": [
     "Dieu de la richesse et de l'abondance des récoltes, Ploutos est le fils de Déméter — un lien qui rattache la richesse à la fertilité de la terre plutôt qu'à l'or amassé.",
     "Zeus le rendit aveugle pour qu'il distribue ses faveurs sans favoritisme, sans distinguer les bons des mauvais — une richesse qui, depuis, tombe autant sur le mérite que sur le hasard.",
+    "Dans le Tarot, Ploutos est le Roi de Deniers, siégeant entouré d'une richesse tangible : cette carte est cette même prospérité installée, un sens pratique et une autorité fondés sur des résultats concrets et durables — encore à mettre au service de quelque chose.",
   ],
   "jason": [
     "Héritier légitime du trône d'Iolcos, spolié par son oncle Pélias, Jason reçut de ce dernier une mission jugée impossible en échange de la couronne : ramener la Toison d'or, gardée par un dragon ne dormant jamais, aux confins du monde connu.",
@@ -2238,6 +2250,12 @@ const DEITY_LORE = {
     "Homère, dans l'Iliade, en fait l'épouse d'Héphaïstos (voir la fiche « Héphaïstos ») — une union surprenante entre le dieu forgeron, boiteux et disgracié par les autres Olympiens, et celle qui personnifie justement l'éclat et la beauté rayonnante.",
     "Parmi ses sœurs, elle incarne plus particulièrement la splendeur qui couronne un accomplissement déjà réussi — non plus l'effort ou le partage, mais le rayonnement tranquille de ce qui n'a plus rien à prouver.",
     "Dans le Tarot, Aglaé est la figure du 9 de Deniers, où une femme élégante se tient seule dans un jardin abondant, un oiseau posé sur la main : cette carte est exactement cet éclat assumé, l'aisance de celle qui profite enfin, sans plus rien devoir démontrer, de ce qu'elle a bâti seule.",
+  ],
+  "euthénie": [
+    "Euthénie personnifie la Prospérité et l'Abondance durable — moins un personnage aux exploits racontés qu'une qualité incarnée, apparue surtout dans l'art et la pensée grecques tardives pour donner un visage au fruit visible d'une terre bien cultivée et d'une maison bien tenue.",
+    "Elle appartient à cette même famille de figures allégoriques que Techné ou Éléos (voir les fiches « Techné » et « Éléos ») : des personnifications sans mythe développé, honorées pour la qualité qu'elles incarnent plutôt que pour des exploits qui leur seraient propres.",
+    "Elle partage avec Ctésios, gardien du garde-manger domestique (voir la fiche « Ctésios »), ce même terrain : non la richesse conquise ou héritée d'un seul coup, mais celle qui s'accumule patiemment, génération après génération, jusqu'à devenir un bien commun plutôt qu'individuel.",
+    "Dans le Tarot, Euthénie est la figure du 10 de Deniers, où trois générations d'une même famille se retrouvent réunies dans une cour prospère, entourées de dix deniers : cette carte est cet aboutissement qui ne s'arrête jamais à une seule personne, mais se transmet et se partage.",
   ],
 };
 
