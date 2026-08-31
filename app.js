@@ -489,19 +489,19 @@ const CARD_LORE = {
 },
 "6 de Deniers": {
   marseille:"Un marchand pèse et distribue des pièces à deux mendiants agenouillés : générosité, échange, redistribution équilibrée entre celui qui a et celui qui a besoin.",
-  myth:"Triptolème, formé par Déméter, ne garda pas pour lui seul le secret de l'agriculture : il le porta de terre en terre pour que chacun en profite. Cette carte est ce même geste de partage, juste et mesuré."
+  myth:"Éléos, personnification de la Pitié, avait à Athènes un autel unique consacré à la seule compassion, refuge de tous les suppliants (voir la fiche « Éléos »). Cette carte est ce même geste de partage, juste et mesuré."
 },
 "7 de Deniers": {
   marseille:"Un cultivateur s'appuie sur sa houe, contemplant sept deniers accrochés à un buisson : évaluation, pause dans l'effort pour juger si la récolte à venir vaut la peine investie.",
-  myth:"Triptolème encore, entre deux semailles, devait attendre que la terre fasse son œuvre sans pouvoir en précipiter le cours. Cette carte est ce temps d'observation patiente, avant de savoir si l'effort portera ses fruits."
+  myth:"Aristée, formé par les Nymphes à l'art de l'élevage et de la culture, dut apprendre la patience avant de voir ses efforts porter leurs fruits (voir la fiche « Aristée »). Cette carte est ce temps d'observation patiente, avant de savoir si l'effort portera ses fruits."
 },
 "8 de Deniers": {
   marseille:"Un artisan burine ses deniers un à un, appliqué, dans un atelier ordonné : travail méthodique, perfectionnement d'un savoir-faire par la répétition patiente.",
-  myth:"Héphaïstos, encore, ne façonnait ses œuvres les plus admirables — le bouclier d'Achille, les filets invisibles — qu'après d'innombrables heures à la forge. Cette carte est cette même maîtrise qui ne s'acquiert que par la pratique répétée."
+  myth:"Techné, personnification du savoir-faire artisanal, ne s'acquiert que par la répétition d'un même geste, jusqu'à ce que la main le connaisse mieux que l'esprit (voir la fiche « Techné »). Cette carte est cette même maîtrise qui ne s'acquiert que par la pratique répétée."
 },
 "9 de Deniers": {
   marseille:"Une figure élégante se tient seule dans un jardin abondant, un faucon sur le poing : indépendance, aisance acquise par soi-même, plaisir tranquille d'une réussite qui n'a plus rien à prouver.",
-  myth:"Cybèle, déesse de la terre nourricière, régnait sur une abondance sauvage qu'elle seule savait apprivoiser, libre et souveraine. Cette carte est cette même autonomie sereine, faite d'un travail déjà accompli."
+  myth:"Aglaé, la plus jeune des trois Charites, personnifie l'éclat qui couronne un accomplissement déjà réussi (voir la fiche « Aglaé »). Cette carte est cette même autonomie sereine, faite d'un travail déjà accompli."
 },
 "10 de Deniers": {
   marseille:"Une famille sur trois générations se tient réunie dans une cour prospère, entourée de dix deniers : héritage, réussite durable qui dépasse la seule réussite individuelle pour se transmettre.",
@@ -591,13 +591,20 @@ Object.assign(CARD_IMAGES, {
   "Reine de Coupes": "assets/card-coupes-reine.jpg",
   "Roi de Coupes": "assets/card-coupes-roi.jpg",
   // Cartes numérales de Deniers (1-5) — fournies par l'utilisatrice, début de
-  // l'illustration de la dernière enseigne encore en glyphe/pips (6-10 et les 4 figures de
-  // cour de Deniers restent à illustrer).
+  // l'illustration de la dernière enseigne encore en glyphe/pips.
   "As de Deniers": "assets/card-deniers-1.jpg",
   "2 de Deniers": "assets/card-deniers-2.jpg",
   "3 de Deniers": "assets/card-deniers-3.jpg",
   "4 de Deniers": "assets/card-deniers-4.jpg",
   "5 de Deniers": "assets/card-deniers-5.jpg",
+  // Cartes numérales de Deniers (6-9) et Valet de Deniers — fournies par l'utilisatrice,
+  // deuxième lot. Reste à illustrer : le 10 de Deniers et les 3 autres figures de cour
+  // (Cavalier, Reine, Roi).
+  "6 de Deniers": "assets/card-deniers-6.jpg",
+  "7 de Deniers": "assets/card-deniers-7.jpg",
+  "8 de Deniers": "assets/card-deniers-8.jpg",
+  "9 de Deniers": "assets/card-deniers-9.jpg",
+  "Valet de Deniers": "assets/card-deniers-valet.jpg",
 });
 
 // Cartes numérales dotées d'une figure mythologique propre (contrairement aux autres
@@ -644,6 +651,10 @@ const NUMBER_CARD_DEITY = {
   "3 de Deniers": "dédale",
   "4 de Deniers": "ctésios",
   "5 de Deniers": "penia",
+  "6 de Deniers": "éléos",
+  "7 de Deniers": "aristée",
+  "8 de Deniers": "techné",
+  "9 de Deniers": "aglaé",
 };
 // Symboles propres à une carte numérale précise (une fois illustrée avec sa propre figure,
 // voir NUMBER_CARD_DEITY ci-dessus), utilisés par allCards() à la place de la formule
@@ -1649,6 +1660,10 @@ const DEITY_NOTES = {
   "dédale":"Architecte et inventeur légendaire, bâtisseur du Labyrinthe crétois — et seul homme à s'en être échappé par les airs.",
   "ctésios":"Épiclèse de Zeus protecteur du foyer et des biens amassés, honoré dans chaque maison sous la forme d'une jarre bien gardée.",
   "penia":"Personnification de la Pauvreté, mère d'Éros selon Platon — l'union d'un manque et d'une ressource, née un soir de fête.",
+  "éléos":"Personnification de la Pitié et de la Compassion, honorée à Athènes sur un autel unique en son genre, refuge des suppliants.",
+  "aristée":"Héros divinisé, fils d'Apollon, qui enseigna aux hommes l'art de l'élevage des abeilles, de l'olivier et du fromage.",
+  "techné":"Personnification du savoir-faire artisanal — figure mineure et tardive, jamais dotée d'un mythe propre comme les grands Olympiens.",
+  "aglaé":"La plus jeune des trois Charites, personnifiant l'éclat et la splendeur — selon certaines traditions, l'épouse d'Héphaïstos.",
 };
 
 // Textes mythologiques développés pour les figures listées ci-dessus (voir showDeityDetail() /
@@ -1840,6 +1855,7 @@ const DEITY_LORE = {
   "chloris": [
     "Déesse des fleurs, Chloris transforme en jardin chaque lieu qu'elle traverse — son simple souffle suffit, dit-on, à faire éclore les plantes sur son passage.",
     "Enlevée par Zéphyr, le vent d'ouest, qui l'épousa ensuite en réparation, elle devint la déesse romaine Flora sous une autre identité — l'un des rares mythes grecs où la déesse enlevée obtient en retour un domaine et un pouvoir propres.",
+    "Dans le Tarot, Chloris est le Valet de Deniers, qui contemple un denier doré au milieu d'un jardin en pleine floraison : la même promesse de croissance qu'elle fait éclore partout où elle passe, ici concentrée dans une seule pièce qui ne demande encore qu'à porter ses fruits.",
   ],
   "triptolème": [
     "Jeune prince formé par Déméter elle-même, en reconnaissance de l'hospitalité que sa famille lui offrit alors qu'elle cherchait sa fille Perséphone à travers le monde, Triptolème reçut de la déesse l'art de cultiver le blé.",
@@ -1872,7 +1888,7 @@ const DEITY_LORE = {
     "Chacune de ces épreuves se résout non par la force, mais par la patience, l'humilité à accepter une aide extérieure et, à l'inverse, la rechute dans l'impulsivité qui l'avait perdue une première fois : le nom même de Psyché signifie « âme » en grec, et son parcours est resté la figure même de l'âme qui doit traverser l'épreuve et la tentation pour atteindre l'union complète.",
   ],
   "charites": [
-    "Trois déesses de la grâce et de la joie — le plus souvent nommées Aglaé, Euphrosyne et Thalie —, les Charites ne sont jamais représentées seules : elles dansent toujours ensemble, indissociables les unes des autres.",
+    "Trois déesses de la grâce et de la joie — le plus souvent nommées Aglaé (voir la fiche « Aglaé »), Euphrosyne et Thalie —, les Charites ne sont jamais représentées seules : elles dansent toujours ensemble, indissociables les unes des autres.",
     "Compagnes d'Aphrodite et des Muses, elles président à tout ce qui rend la vie belle sans nécessité — la beauté, la fête, la reconnaissance — plutôt qu'à ce qui est simplement utile.",
   ],
   "narcisse": [
@@ -2086,7 +2102,7 @@ const DEITY_LORE = {
   ],
   "hormos": [
     "Hormos personnifie l'élan qui précède toute action — l'impulsion brute, avant même qu'un but précis ne soit choisi.",
-    "Les Athéniens lui vouaient un autel, tout près de celui dédié à Éléos, la Pitié, comme s'il fallait honorer côte à côte la force qui pousse à agir et la retenue qui sait, parfois, la tempérer.",
+    "Les Athéniens lui vouaient un autel, tout près de celui dédié à Éléos, la Pitié (voir la fiche « Éléos »), comme s'il fallait honorer côte à côte la force qui pousse à agir et la retenue qui sait, parfois, la tempérer.",
     "Figure mineure et peu documentée, Hormos n'a jamais eu de mythe développé qui lui soit propre — comme si l'élan qu'il personnifie ne s'attardait jamais assez longtemps sur un seul récit pour s'y fixer.",
     "Dans le Tarot, Hormos est la figure de l'As de Bâtons, où une main surgit des nuages tenant un bâton encore en bourgeon : une énergie brute et sans direction encore choisie, mais qui ne demande déjà plus qu'à s'exprimer.",
   ],
@@ -2143,7 +2159,7 @@ const DEITY_LORE = {
     "Dans le Tarot, Philotès est la figure de l'As de Coupes, où une main tendue depuis les nuages offre une coupe débordante d'eau vive : ce premier élan qui donne sans calcul ni condition, avant même de savoir ce qu'il en coûtera, est exactement ce qu'elle personnifie.",
   ],
   "euphrosyne": [
-    "Euphrosyne, dont le nom signifie « joie » ou « bonne humeur », est l'une des trois Charites — les déesses de la grâce que la tradition ne représente jamais seules, toujours dansant ensemble aux côtés d'Aglaé et de Thalie (voir les fiches « Charites » et « Thalia »).",
+    "Euphrosyne, dont le nom signifie « joie » ou « bonne humeur », est l'une des trois Charites — les déesses de la grâce que la tradition ne représente jamais seules, toujours dansant ensemble aux côtés d'Aglaé et de Thalie (voir les fiches « Charites », « Aglaé » et « Thalia »).",
     "Selon Hésiode, elle est fille de Zeus et de l'Océanide Eurynomé, même si les sources antiques varient sur le nombre exact et la généalogie des Charites. Compagnes d'Aphrodite et des Muses, les trois sœurs président aux fêtes et aux banquets de l'Olympe — tout ce qui rend la vie belle sans nécessité.",
     "Parmi ses sœurs, elle personnifie plus particulièrement la joie elle-même — non l'abondance ou la fête que représente Thalia (voir la fiche « Thalia »), mais l'allégresse qui ne naît que du partage, le plaisir simple d'être ensemble.",
     "Dans le Tarot, Euphrosyne est la figure du 3 de Coupes, où trois femmes lèvent leurs coupes ensemble vers le ciel : cette joie-là ne se vit jamais seule — inutile de la chercher dans la solitude, elle n'existe qu'à plusieurs.",
@@ -2198,6 +2214,30 @@ const DEITY_LORE = {
     "Platon raconte, dans le Banquet, comment elle se présenta au festin donné pour la naissance d'Aphrodite, mendiant à la porte pendant que les dieux festoyaient à l'intérieur. Apercevant Poros, personnification de l'Abondance et de la Ressource, ivre du nectar servi ce soir-là, elle s'unit à lui pour concevoir un enfant : Éros, le désir amoureux.",
     "De cette union naît, selon Platon, la nature même de l'amour : toujours en quête, jamais rassasié, tenant à la fois de sa mère un dénuement perpétuel et de son père l'ingéniosité à toujours trouver un moyen d'obtenir ce qui lui manque.",
     "Dans le Tarot, Penia est la figure du 5 de Deniers, où deux silhouettes démunies passent dans le froid devant un vitrail éclairé sans y entrer : elle est cette exclusion qui semble sans issue — et pourtant, comme le rappelle son propre mythe, c'est souvent du manque lui-même que naît la ressource pour en sortir.",
+  ],
+  "éléos": [
+    "Éléos personnifie la Pitié et la compassion envers le malheur d'autrui — un sentiment si estimé par les Athéniens qu'ils lui élevèrent, sur l'Agora, un autel unique en son genre : dédié non à un dieu de l'Olympe, mais à cette seule vertu.",
+    "Selon Pausanias, cet autel servait de refuge aux suppliants — esclaves en fuite, exilés, vaincus de toute origine — car nulle part ailleurs en Grèce une cité n'honorait ainsi la clémence elle-même plutôt qu'un dieu censé l'accorder (voir la fiche « Hormos », dont l'autel se trouvait tout près).",
+    "Contrairement à Némésis, qui rétablit un équilibre par la sanction (voir la fiche « Némésis »), Éléos agit dans l'autre sens : elle ne punit jamais, elle épargne — un geste que même les puissants pouvaient recevoir sans y perdre leur rang.",
+    "Dans le Tarot, Éléos est la figure du 6 de Deniers, où un homme richement vêtu partage ses pièces entre deux mendiants à genoux, une balance à la main : cette carte est ce même geste — mesuré, mais réel — qui redistribue sans jamais humilier celui qui reçoit.",
+  ],
+  "aristée": [
+    "Aristée, fils d'Apollon et de la nymphe Cyrène, fut élevé par les Nymphes et les Muses, qui lui enseignèrent l'art de cultiver la terre et d'élever les abeilles — des savoirs qu'il transmit ensuite lui-même aux hommes, comme Triptolème avant lui pour le blé (voir la fiche « Triptolème »).",
+    "Virgile raconte comment, ayant perdu toutes ses abeilles après la mort accidentelle d'Eurydice — la nymphe s'était noyée en le fuyant —, Aristée dut consulter le devin marin Protée pour apprendre comment en faire renaître un essaim entier de la carcasse d'un taureau sacrifié : un long rite, patient et minutieux, pour retrouver ce qu'il avait perdu.",
+    "Sa légende en fait le patron discret de tous les savoirs agricoles qui demandent du temps avant de porter leurs fruits — l'olivier, l'abeille, le fromage — plutôt que les récoltes rapides que président d'autres figures.",
+    "Dans le Tarot, Aristée est la figure du 7 de Deniers, où un cultivateur s'appuie sur sa houe pour contempler ce qu'il a déjà planté, sans pouvoir encore juger si cela suffira : cette pause n'est pas de l'inaction, mais exactement le temps qu'exige tout ce qu'il a jadis appris à faire grandir.",
+  ],
+  "techné": [
+    "Techné personnifie l'habileté manuelle et le savoir-faire acquis par la pratique — le mot grec technē a d'ailleurs donné notre propre mot « technique ».",
+    "Contrairement à Athéna ou Héphaïstos (voir les fiches « Athéna » et « Héphaïstos »), dont le patronage sur les métiers et l'artisanat repose sur un mythe développé, Techné reste une figure tardive et allégorique, apparue surtout dans l'art et la littérature gréco-romaines pour représenter cette qualité elle-même plutôt qu'un personnage aux exploits racontés.",
+    "Elle incarne ainsi moins un pouvoir divin qu'une valeur : la maîtrise patiente d'un geste répété, jusqu'à ce que la main sache ce que l'esprit n'a plus besoin de lui rappeler.",
+    "Dans le Tarot, Techné est la figure du 8 de Deniers, où une artisane burine un denier après l'autre dans un atelier ordonné : cette carte est exactement ce savoir-faire qui ne s'acquiert que par la répétition, geste après geste, jusqu'à devenir une seconde nature.",
+  ],
+  "aglaé": [
+    "Aglaé, dont le nom signifie « splendeur » ou « éclat », est la plus jeune des trois Charites — les déesses de la grâce que la tradition ne représente jamais seules, toujours dansant aux côtés d'Euphrosyne et de Thalie (voir les fiches « Charites », « Euphrosyne » et « Thalia »).",
+    "Homère, dans l'Iliade, en fait l'épouse d'Héphaïstos (voir la fiche « Héphaïstos ») — une union surprenante entre le dieu forgeron, boiteux et disgracié par les autres Olympiens, et celle qui personnifie justement l'éclat et la beauté rayonnante.",
+    "Parmi ses sœurs, elle incarne plus particulièrement la splendeur qui couronne un accomplissement déjà réussi — non plus l'effort ou le partage, mais le rayonnement tranquille de ce qui n'a plus rien à prouver.",
+    "Dans le Tarot, Aglaé est la figure du 9 de Deniers, où une femme élégante se tient seule dans un jardin abondant, un oiseau posé sur la main : cette carte est exactement cet éclat assumé, l'aisance de celle qui profite enfin, sans plus rien devoir démontrer, de ce qu'elle a bâti seule.",
   ],
 };
 
@@ -2754,7 +2794,10 @@ function setPremiumEnabled(on){ localStorage.setItem("delphesPremium", on ? "1" 
 const FREE_MAJORS = new Set(["Le Mat", "I — Le Bateleur"]);
 const FREE_COURTS = new Set(["Roi de Bâtons", "Roi de Coupes", "Roi d'Épées", "Roi de Deniers"]);
 const FREE_SYMBOLS = new Set(["abeille", "aigle", "ailes", "air", "araignée"]); // 5 premiers par ordre alphabétique de la Bibliothèque symbolique
-const FREE_FIGURES = new Set(["achille", "actéon", "agon", "aletheia"]); // 4 premières par ordre alphabétique de Figures mythologiques
+// 4 premières par ordre alphabétique de Figures mythologiques — recalculé à l'ajout d'Aglaé
+// (illustration du 9 de Deniers), qui s'intercale avant "agon" et "aletheia" : "aletheia"
+// sort donc du lot gratuit (déplacée en premium) au profit d'"aglaé".
+const FREE_FIGURES = new Set(["achille", "actéon", "aglaé", "agon"]);
 const FREE_SPREAD_TYPES = new Set(["general"]);
 
 // L'éclairage mythologique d'une carte (majeur/figure de cour) est gratuit seulement pour

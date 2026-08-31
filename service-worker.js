@@ -1,4 +1,4 @@
-const CACHE="delphes-v93";
+const CACHE="delphes-v94";
 const ASSETS=["./","./index.html","./styles.css","./app.js","./manifest.json","./icon.svg","./politique-confidentialite.html"];
 
 self.addEventListener("install",event=>{
