@@ -2296,20 +2296,26 @@ function saveDreams(){ localStorage.setItem("delphesDreams", JSON.stringify(drea
    tarot peut s'utiliser dans un lieu silencieux, mieux vaut que le son reste un choix
    explicite plutôt qu'une surprise au premier tirage. */
 const AMBIENT_MOODS = {
-  // Accueil : accord de sol majeur ouvert, tempo respiratoire modéré — chaleureux, accueillant.
-  home:      { chord:[98.00, 146.83, 246.94, 392.00], filterHz:1200, lfoRate:.12 },
-  // Tirage : la mineur, filtre plus feutré, respiration plus lente — suspense, oracle.
-  tirage:    { chord:[110.00, 164.81, 261.63, 659.25], filterHz:700,  lfoRate:.07 },
-  // Apprendre : ré suspendu (pas de tierce qui "résout"), filtre clair — attention posée.
-  apprendre: { chord:[146.83, 220.00, 329.63, 587.33], filterHz:1600, lfoRate:.15 },
-  // Rêves : accord ouvert avec une 9e (mi/si/fa#), très filtré, respiration la plus lente — flou, aérien.
-  reves:     { chord:[164.81, 246.94, 369.99, 554.37], filterHz:900,  lfoRate:.05 },
-  // Profil : accord ouvert avec une 6te (do/sol/la), voix de scintillement la plus lente — céleste, étoilé.
-  profil:    { chord:[130.81, 196.00, 220.00, 659.25], filterHz:1100, lfoRate:.09, shimmerRate:.035 },
+  // Chaque onglet : fondamentale + quinte fixes (l'ancrage, jamais retouché après le
+  // démarrage), puis 2 voix "couleur"/"scintillement" qui partent de chord[2]/chord[3] mais
+  // errent ensuite lentement parmi palette (voir scheduleWander()) — sans ça, l'accord reste
+  // figé et devient vite lassant à l'oreille sur un onglet où l'on reste longtemps (retour
+  // direct d'utilisatrice : "ça prend vite la tête").
+  home:      { chord:[98.00, 146.83, 246.94, 392.00], palette:[246.94, 220.00, 329.63, 293.66], filterHz:1200, lfoRate:.12 },
+  tirage:    { chord:[110.00, 164.81, 261.63, 659.25], palette:[261.63, 246.94, 293.66, 349.23], filterHz:700,  lfoRate:.07 },
+  apprendre: { chord:[146.83, 220.00, 329.63, 587.33], palette:[329.63, 369.99, 392.00, 493.88], filterHz:1600, lfoRate:.15 },
+  reves:     { chord:[164.81, 246.94, 369.99, 554.37], palette:[369.99, 415.30, 493.88, 554.37], filterHz:900,  lfoRate:.05 },
+  profil:    { chord:[130.81, 196.00, 220.00, 659.25], palette:[220.00, 246.94, 293.66, 329.63], filterHz:1100, lfoRate:.09, shimmerRate:.035 },
 };
+// Multiplicateurs de vitesse par voix — sans ça, les 4 voix respirent exactement en même
+// temps (même LFO rate), ce qui se reconnaît en quelques secondes comme "le même patch qui
+// boucle" ; des périodes légèrement décalées (jamais un rapport entier) mettent des dizaines
+// de secondes à retomber en phase, exactement la technique des boucles de bande d'Eno.
+const AMBIENT_VOICE_RATE_MUL = [1, .84, 1.18, 1];
 const AmbientAudio = {
   MUTE_KEY: "delphesSoundMuted",
-  ctx: null, master: null, filter: null, delay: null, feedback: null, voices: null,
+  ctx: null, master: null, filter: null, filterLfo: null, filterLfoGain: null,
+  delay: null, feedback: null, voices: null,
   pendingMood: "home", started: false,
 
   // Muet tant que rien n'a été explicitement choisi (voir le commentaire d'en-tête) —
@@ -2323,9 +2329,31 @@ const AmbientAudio = {
     const now = this.ctx.currentTime;
     this.voices.forEach((v, i)=>{
       v.osc.frequency.setTargetAtTime(mood.chord[i], now, 1.4);
-      v.lfo.frequency.setTargetAtTime(i===3 && mood.shimmerRate ? mood.shimmerRate : mood.lfoRate, now, 1.4);
+      v.lfo.frequency.setTargetAtTime((i===3 && mood.shimmerRate ? mood.shimmerRate : mood.lfoRate) * v.rateMul, now, 1.4);
     });
     this.filter.frequency.setTargetAtTime(mood.filterHz, now, 1.4);
+    if(this.filterLfoGain) this.filterLfoGain.gain.setTargetAtTime(mood.filterHz * .22, now, 1.4);
+  },
+
+  // Fait dériver lentement les voix "couleur" (i=2) et "scintillement" (i=3) vers une autre
+  // note de la palette de l'onglet courant (lu à chaque appel, jamais figé à l'appel
+  // précédent — s'adapte donc naturellement à un changement d'onglet entre-temps), sur un
+  // délai aléatoire propre à chaque voix pour qu'elles ne changent jamais ensemble.
+  // `.unref()` (Node uniquement, absent des navigateurs — d'où le test) évite qu'un test
+  // automatisé reste bloqué à attendre ce minuteur avant de pouvoir se terminer.
+  scheduleWander(i){
+    const delay = (25 + Math.random()*30) * 1000; // 25-55s
+    const t = setTimeout(()=>{
+      if(!this.started || !this.voices) return;
+      const mood = AMBIENT_MOODS[this.pendingMood] || AMBIENT_MOODS.home;
+      const palette = mood.palette || mood.chord;
+      const current = this.voices[i].osc.frequency.value;
+      const options = palette.filter(f => Math.abs(f - current) > 1);
+      const next = options.length ? options[Math.floor(Math.random() * options.length)] : palette[0];
+      this.voices[i].osc.frequency.setTargetAtTime(next, this.ctx.currentTime, 4);
+      this.scheduleWander(i);
+    }, delay);
+    if(t && typeof t.unref === "function") t.unref();
   },
 
   ensureStarted(){
@@ -2346,6 +2374,16 @@ const AmbientAudio = {
     this.filter.Q.value = 0.7;
     this.filter.connect(this.master);
 
+    // Respiration lente du filtre lui-même (~32s de période) : sans ça, le timbre reste
+    // parfaitement statique entre deux changements d'onglet, un autre facteur de lassitude.
+    this.filterLfo = this.ctx.createOscillator();
+    this.filterLfo.frequency.value = 1/32;
+    this.filterLfoGain = this.ctx.createGain();
+    this.filterLfoGain.gain.value = mood.filterHz * .22;
+    this.filterLfo.connect(this.filterLfoGain);
+    this.filterLfoGain.connect(this.filter.frequency);
+    this.filterLfo.start();
+
     // Un soupçon d'écho en boucle courte (pas une vraie réverbération) pour donner de
     // l'espace à la nappe sans le poids d'un ConvolverNode + réponse impulsionnelle.
     this.delay = this.ctx.createDelay(1.2);
@@ -2358,8 +2396,11 @@ const AmbientAudio = {
     this.delay.connect(this.master);
 
     // 4 voix soutenues : fondamentale, quinte, couleur (tierce/sus/6te selon l'onglet),
-    // scintillement aigu — chacune modulée par sa propre LFO de gain pour une respiration
-    // organique plutôt qu'un son de synthé figé.
+    // scintillement aigu — chacune modulée par sa propre LFO de gain (vitesse légèrement
+    // décalée, voir AMBIENT_VOICE_RATE_MUL) pour une respiration organique plutôt qu'un son
+    // de synthé figé, et par un panoramique qui dérive doucement (quand StereoPannerNode est
+    // disponible) pour donner de la largeur plutôt qu'un point sonore unique et immobile.
+    const panBase = [-.3, .3, -.15, .15];
     this.voices = mood.chord.map((freq, i)=>{
       const osc = this.ctx.createOscillator();
       osc.type = i===3 ? "triangle" : "sine";
@@ -2367,18 +2408,38 @@ const AmbientAudio = {
       const gain = this.ctx.createGain();
       const baseGain = [.16, .12, .09, .05][i];
       gain.gain.value = baseGain;
+
+      const rateMul = AMBIENT_VOICE_RATE_MUL[i];
       const lfo = this.ctx.createOscillator();
-      lfo.frequency.value = i===3 && mood.shimmerRate ? mood.shimmerRate : mood.lfoRate;
+      lfo.frequency.value = (i===3 && mood.shimmerRate ? mood.shimmerRate : mood.lfoRate) * rateMul;
       const lfoGain = this.ctx.createGain();
       lfoGain.gain.value = baseGain * .6;
       lfo.connect(lfoGain);
       lfoGain.connect(gain.gain);
+
+      let outNode = gain, panner = null, panLfo = null;
+      if(typeof this.ctx.createStereoPanner === "function"){
+        panner = this.ctx.createStereoPanner();
+        panner.pan.value = panBase[i];
+        panLfo = this.ctx.createOscillator();
+        panLfo.frequency.value = .03 + i * .011; // périodes distinctes, jamais synchronisées
+        const panLfoGain = this.ctx.createGain();
+        panLfoGain.gain.value = .25;
+        panLfo.connect(panLfoGain);
+        panLfoGain.connect(panner.pan);
+        panLfo.start();
+        gain.connect(panner);
+        outNode = panner;
+      }
+
       osc.connect(gain);
-      gain.connect(this.filter);
+      outNode.connect(this.filter);
       osc.start();
       lfo.start();
-      return { osc, gain, lfo, lfoGain };
+      return { osc, gain, lfo, lfoGain, panner, panLfo, rateMul };
     });
+    this.scheduleWander(2);
+    this.scheduleWander(3);
 
     this.applyMute();
   },
