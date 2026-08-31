@@ -2281,6 +2281,141 @@ let dreamState = JSON.parse(localStorage.getItem("delphesDreamState") || "null")
 function saveDreamState(){ localStorage.setItem("delphesDreamState", JSON.stringify(dreamState)); }
 function saveDreams(){ localStorage.setItem("delphesDreams", JSON.stringify(dreams)); }
 
+/* ===================== AMBIANCE SONORE (musique générative par onglet) =====================
+   Retour direct d'utilisatrice : une ambiance sonore sur chaque onglet. Aucun fichier audio
+   ici — ni composition ni vérification de licence possibles de mon côté — donc une nappe
+   générée en temps réel avec la Web Audio API : poids quasi nul (rien à télécharger, la PWA
+   reste légère), aucun souci de droits, et chaque onglet peut avoir sa propre couleur sonore
+   sans multiplier les fichiers. 4 voix soutenues (fondamentale/quinte/couleur/scintillement)
+   glissent doucement d'un accord à l'autre au changement d'onglet plutôt que de couper puis
+   relancer, pour une transition sans à-coup.
+
+   Démarrage : les navigateurs bloquent tout son avant un vrai geste utilisateur — le moteur
+   ne se construit donc qu'au premier clic sur le bouton flottant #soundBtn (ensureStarted()),
+   jamais tout seul à l'ouverture. Muet par défaut (voir isMuted() ci-dessous) : une appli de
+   tarot peut s'utiliser dans un lieu silencieux, mieux vaut que le son reste un choix
+   explicite plutôt qu'une surprise au premier tirage. */
+const AMBIENT_MOODS = {
+  // Accueil : accord de sol majeur ouvert, tempo respiratoire modéré — chaleureux, accueillant.
+  home:      { chord:[98.00, 146.83, 246.94, 392.00], filterHz:1200, lfoRate:.12 },
+  // Tirage : la mineur, filtre plus feutré, respiration plus lente — suspense, oracle.
+  tirage:    { chord:[110.00, 164.81, 261.63, 659.25], filterHz:700,  lfoRate:.07 },
+  // Apprendre : ré suspendu (pas de tierce qui "résout"), filtre clair — attention posée.
+  apprendre: { chord:[146.83, 220.00, 329.63, 587.33], filterHz:1600, lfoRate:.15 },
+  // Rêves : accord ouvert avec une 9e (mi/si/fa#), très filtré, respiration la plus lente — flou, aérien.
+  reves:     { chord:[164.81, 246.94, 369.99, 554.37], filterHz:900,  lfoRate:.05 },
+  // Profil : accord ouvert avec une 6te (do/sol/la), voix de scintillement la plus lente — céleste, étoilé.
+  profil:    { chord:[130.81, 196.00, 220.00, 659.25], filterHz:1100, lfoRate:.09, shimmerRate:.035 },
+};
+const AmbientAudio = {
+  MUTE_KEY: "delphesSoundMuted",
+  ctx: null, master: null, filter: null, delay: null, feedback: null, voices: null,
+  pendingMood: "home", started: false,
+
+  // Muet tant que rien n'a été explicitement choisi (voir le commentaire d'en-tête) —
+  // seul un tap sur #soundBtn écrit "0" pour activer le son durablement (localStorage).
+  isMuted(){ return localStorage.getItem(this.MUTE_KEY) !== "0"; },
+
+  setMood(routeKey){
+    const mood = AMBIENT_MOODS[routeKey] || AMBIENT_MOODS.home;
+    this.pendingMood = routeKey in AMBIENT_MOODS ? routeKey : "home";
+    if(!this.started || !this.ctx) return; // appliqué au vrai démarrage (ensureStarted())
+    const now = this.ctx.currentTime;
+    this.voices.forEach((v, i)=>{
+      v.osc.frequency.setTargetAtTime(mood.chord[i], now, 1.4);
+      v.lfo.frequency.setTargetAtTime(i===3 && mood.shimmerRate ? mood.shimmerRate : mood.lfoRate, now, 1.4);
+    });
+    this.filter.frequency.setTargetAtTime(mood.filterHz, now, 1.4);
+  },
+
+  ensureStarted(){
+    if(this.started){ this.ctx.resume?.(); return; }
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if(!Ctx) return; // navigateur sans Web Audio : l'ambiance reste simplement absente
+    this.started = true;
+    this.ctx = new Ctx();
+    const mood = AMBIENT_MOODS[this.pendingMood] || AMBIENT_MOODS.home;
+
+    this.master = this.ctx.createGain();
+    this.master.gain.value = 0; // toujours silencieux à la construction, ramené ensuite par applyMute()
+    this.master.connect(this.ctx.destination);
+
+    this.filter = this.ctx.createBiquadFilter();
+    this.filter.type = "lowpass";
+    this.filter.frequency.value = mood.filterHz;
+    this.filter.Q.value = 0.7;
+    this.filter.connect(this.master);
+
+    // Un soupçon d'écho en boucle courte (pas une vraie réverbération) pour donner de
+    // l'espace à la nappe sans le poids d'un ConvolverNode + réponse impulsionnelle.
+    this.delay = this.ctx.createDelay(1.2);
+    this.delay.delayTime.value = .55;
+    this.feedback = this.ctx.createGain();
+    this.feedback.gain.value = .28;
+    this.filter.connect(this.delay);
+    this.delay.connect(this.feedback);
+    this.feedback.connect(this.delay);
+    this.delay.connect(this.master);
+
+    // 4 voix soutenues : fondamentale, quinte, couleur (tierce/sus/6te selon l'onglet),
+    // scintillement aigu — chacune modulée par sa propre LFO de gain pour une respiration
+    // organique plutôt qu'un son de synthé figé.
+    this.voices = mood.chord.map((freq, i)=>{
+      const osc = this.ctx.createOscillator();
+      osc.type = i===3 ? "triangle" : "sine";
+      osc.frequency.value = freq;
+      const gain = this.ctx.createGain();
+      const baseGain = [.16, .12, .09, .05][i];
+      gain.gain.value = baseGain;
+      const lfo = this.ctx.createOscillator();
+      lfo.frequency.value = i===3 && mood.shimmerRate ? mood.shimmerRate : mood.lfoRate;
+      const lfoGain = this.ctx.createGain();
+      lfoGain.gain.value = baseGain * .6;
+      lfo.connect(lfoGain);
+      lfoGain.connect(gain.gain);
+      osc.connect(gain);
+      gain.connect(this.filter);
+      osc.start();
+      lfo.start();
+      return { osc, gain, lfo, lfoGain };
+    });
+
+    this.applyMute();
+  },
+
+  applyMute(){
+    if(!this.ctx) return;
+    const now = this.ctx.currentTime;
+    this.master.gain.cancelScheduledValues(now);
+    this.master.gain.setTargetAtTime(this.isMuted() ? 0 : .5, now, .8);
+  },
+
+  toggleMute(){
+    const next = this.isMuted() ? "0" : "1";
+    localStorage.setItem(this.MUTE_KEY, next);
+    this.ensureStarted(); // premier tap : construit le moteur ET l'active dans le même geste
+    this.setMood(this.pendingMood);
+    this.applyMute();
+    this.syncButton();
+  },
+
+  // classList.toggle()/setAttribute() sont vérifiés avant appel : toujours présents sur un
+  // vrai élément DOM, mais plusieurs bancs d'essai plus anciens (antérieurs à ce bouton)
+  // simulent #screen avec des éléments factices très minimaux qui n'ont pas ces méthodes —
+  // ce garde-fou évite de les casser sans rien changer au comportement réel dans le navigateur.
+  syncButton(){
+    const btn = document.getElementById("soundBtn");
+    if(!btn) return;
+    const muted = this.isMuted();
+    btn.textContent = muted ? "🔈" : "🔊";
+    if(btn.classList && typeof btn.classList.toggle === "function") btn.classList.toggle("playing", !muted);
+    if(typeof btn.setAttribute === "function"){
+      btn.setAttribute("aria-pressed", String(!muted));
+      btn.setAttribute("aria-label", muted ? "Activer le son d'ambiance" : "Couper le son d'ambiance");
+    }
+  },
+};
+
 /* ===================== UTILITAIRES ===================== */
 
 function escapeHTML(value){
@@ -3849,6 +3984,7 @@ function render(){
   const back = document.getElementById("backBtn");
   if(back) back.hidden = route === "home";
   title.textContent = {home:"Tarot de Delphes", tirage:"Tirage", apprendre:"Apprendre", reves:"Rêves", profil:"Profil"}[route] || "Tarot de Delphes";
+  AmbientAudio.setMood(route);
   if(route==="home") screen.innerHTML = home();
   if(route==="tirage") screen.innerHTML = tirage();
   if(route==="apprendre") screen.innerHTML = apprendre();
@@ -6121,6 +6257,8 @@ function bind(){
   });
   document.getElementById("homeBtn").onclick=()=>setRoute("home");
   document.getElementById("backBtn").onclick=()=>setRoute("home");
+  document.getElementById("soundBtn").onclick=()=>AmbientAudio.toggleMute();
+  AmbientAudio.syncButton();
 
   const dayCard = document.querySelector(".day-card[data-card]");
   if(dayCard) dayCard.onclick = ()=> showDetail(JSON.parse(decodeURIComponent(dayCard.dataset.card)));
