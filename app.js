@@ -3443,8 +3443,8 @@ let astralTextFetchInFlight = false;
 // v4 : "les textes ne correspondent pas aux cartes" — majorLinksText est passé d'une chaîne
 // découpée par position (un paragraphe par point, dans l'ordre attendu, séparés par une
 // ligne vide) à un tableau {point, text} explicitement étiqueté (voir api/astral-text.js et
-// renderMajorLinks() ci-dessous) — un texte en cache dans l'ancien format (une chaîne) ne
-// doit plus jamais être réutilisé tel quel.
+// renderPersonalMythology() ci-dessous) — un texte en cache dans l'ancien format (une
+// chaîne) ne doit plus jamais être réutilisé tel quel.
 const MAJOR_LINKS_TEXT_VERSION = 4;
 // Même logique de discrétion qu'ensurePortrait() : jamais de prompt de code d'accès depuis
 // un simple affichage du Profil astral, échec silencieux (les phrases génériques restent
@@ -3486,7 +3486,7 @@ function ensureAstralText(){
       fresh.astralText = { ...text, tutelaryDeityKey: liveDeityKey, majorLinksTextVersion: MAJOR_LINKS_TEXT_VERSION };
       saveProfileData(fresh);
       if(cardDetailReturnTo === showProfilAstral) showProfilAstral();
-      else if(cardDetailReturnTo === showMajorLinks) showMajorLinks();
+      else if(cardDetailReturnTo === showPersonalMythology) showPersonalMythology();
     })
     .catch(()=>{ /* échec silencieux : les phrases génériques restent affichées */ })
     .finally(()=>{ astralTextFetchInFlight = false; });
@@ -4824,7 +4824,14 @@ function showDeityDetail(id, backTo = cardDetailReturnTo){
 
 function profil(){
   const saved = getProfile();
-  const links = profileMajorLinks();
+  // Retour direct d'utilisatrice : divinité tutélaire, animal représentatif et arcanes
+  // majeurs liés sont trois façons différentes de dire « voici ce que ton thème dit de toi
+  // mythologiquement » — auparavant éclatées (les deux premières dans l'écran Profil astral,
+  // la 3e sur son propre écran) plutôt que regroupées. Cet écran unique (renderPersonalMythology()/
+  // showPersonalMythology(), route "mythologie") sert aussi d'ancrage prévu pour une future
+  // fonctionnalité de bracelets personnalisés (un dieu, un animal, des arcanes — la même
+  // matière symbolique qui composera leurs breloques). Ne s'affiche que si un thème astral
+  // est enregistré (`saved.astral`), les trois sections en dépendant toutes.
   return `<section class="hero">
     ${constellationHTML("profil")}
     <div class="hero-emblem">☉</div>
@@ -4834,29 +4841,40 @@ function profil(){
   <div class="grid" style="margin-top:20px">
     <div class="tile" data-screen-go="astral"><strong>☉ Profil astral</strong><span>Ton thème natal complet, calculé à partir de ta date, heure et lieu de naissance.</span></div>
     <div class="tile" data-screen-go="relations"><strong>🤝 Mes proches</strong><span>Compare ton thème à celui d'un partenaire, d'un enfant, d'un parent…</span></div>
-    ${links ? `<div class="tile" data-screen-go="majeurs"><strong>🃏 Arcanes majeurs liés</strong><span>Les cartes que ton Soleil, ta Lune et ton Ascendant réveillent dans le jeu.</span></div>` : ""}
+    ${saved && saved.astral ? `<div class="tile" data-screen-go="mythologie"><strong>🃏 Mythologie personnelle</strong><span>Ta divinité tutélaire, ton animal représentatif, et les arcanes majeurs que ton thème réveille.</span></div>` : ""}
   </div>
   <button class="secondary" data-profil-edit="1" style="display:block;margin:22px auto 0">${saved ? "Modifier mes informations" : "Renseigner mes informations"}</button>
   <p class="note" style="text-align:center;margin-top:16px"><a href="politique-confidentialite.html" target="_blank" rel="noopener">Politique de confidentialité</a></p>`;
 }
 
 // Écran dédié (sorti de profil() pour lui laisser toute la place — auparavant une simple
-// section en bas de l'onglet Profil, désormais sa propre tuile) : quels arcanes majeurs le
-// thème réveille (Soleil/Lune/Ascendant, voir profileMajorLinks()/majorLinksFor()), et
+// section en bas de l'onglet Profil, puis son propre écran limité aux seuls arcanes majeurs
+// liés) : regroupe désormais TOUTE la lecture mythologique du thème — divinité tutélaire et
+// animal représentatif (déménagés depuis renderProfilResults(), voir plus haut) ainsi que les
+// arcanes majeurs liés (Soleil/Lune/Ascendant, voir profileMajorLinks()/majorLinksFor()) et
 // pourquoi ces cartes précisément + ce qu'elles disent de la personne (majorLinksText, IA,
-// premium — voir plus haut).
-function renderMajorLinks(){
-  const links = profileMajorLinks();
-  if(!links){
-    return `<div class="section-title"><h3>Arcanes majeurs liés à ton profil astral</h3></div>
-    <p class="note" style="text-align:center">Renseigne d'abord ton profil astral pour découvrir les arcanes majeurs qu'il réveille.</p>`;
+// premium — voir plus haut). Retour direct d'utilisatrice : ces trois éléments répondent tous
+// à la même question (« qu'est-ce que mon thème dit de moi mythologiquement ? ») et vivaient
+// pourtant à deux endroits séparés — cet écran unique sert aussi d'ancrage prévu pour une
+// future fonctionnalité de bracelets personnalisés.
+function renderPersonalMythology(){
+  const saved = getProfile();
+  if(!saved || !saved.astral){
+    return `<div class="section-title"><h3>Mythologie personnelle</h3></div>
+    <p class="note" style="text-align:center">Renseigne d'abord ton profil astral pour découvrir ta mythologie personnelle.</p>`;
   }
-  // Le texte qui explique CE lien (pourquoi ces cartes précisément, ce qu'elles disent de
-  // la personne) est de l'interprétation écrite : même découpage gratuit/premium que le
-  // reste du Profil astral (voir renderProfilResults()/premiumLockHTML()) — la grille de
-  // cartes elle-même (donnée brute : quel signe pointe vers quelle carte) reste gratuite,
-  // seule l'explication est verrouillée.
   const premiumOn = isPremiumEnabled();
+  const astralText = (saved.astralText && typeof saved.astralText === "object") ? saved.astralText : null;
+
+  // --- Divinité tutélaire ---
+  const deity = tutelaryDeity(saved);
+  const tutelaryReasonText = (typeof astralText?.tutelaryReason === "string" ? astralText.tutelaryReason : tutelaryReasonFallback(deity)) || "La figure la plus présente dans ton thème natal.";
+
+  // --- Animal représentatif ---
+  const ra = representativeAnimal(saved);
+
+  // --- Arcanes majeurs liés ---
+  const links = profileMajorLinks();
   if(premiumOn) ensureAstralText();
   // Retour direct d'utilisatrice : "les textes ne correspondent pas aux cartes" — l'ancienne
   // version découpait un seul bloc de texte IA en paragraphes PAR POSITION (en supposant que
@@ -4872,33 +4890,64 @@ function renderMajorLinks(){
   // juste d'être invalidé par ensureAstralText() (ci-dessus, MAJOR_LINKS_TEXT_VERSION a
   // changé) garde encore l'ANCIEN texte en cache — une simple chaîne, format d'avant ce
   // correctif — le temps que le nouvel appel IA (asynchrone) se termine. Sans ce garde,
-  // aiMajorLinksText.find() plantait sur cette chaîne et faisait échouer tout l'écran :
-  // vu depuis l'onglet Profil, la tuile "Arcanes majeurs liés" semblait alors ne plus
-  // réagir au clic (l'exception empêchait l'écran de s'afficher).
+  // aiMajorLinksText.find() plantait sur cette chaîne et faisait échouer tout l'écran : vu
+  // depuis l'onglet Profil, la tuile "Mythologie personnelle" semblait alors ne plus réagir
+  // au clic (l'exception empêchait l'écran de s'afficher).
   const cachedAiMajorLinksText = premiumOn ? getCachedAstralText()?.majorLinksText : null;
   const aiMajorLinksText = Array.isArray(cachedAiMajorLinksText) ? cachedAiMajorLinksText : null;
-  const fallbackMajorLinksText = premiumOn ? majorLinksTextFallback(links) : null;
+  const fallbackMajorLinksText = (premiumOn && links) ? majorLinksTextFallback(links) : null;
   function textForPoint(point){
     const fromAI = aiMajorLinksText && aiMajorLinksText.find(e=>e.point===point);
     if(fromAI) return fromAI.text;
     const fromFallback = fallbackMajorLinksText && fallbackMajorLinksText.find(e=>e.point===point);
     return fromFallback ? fromFallback.text : null;
   }
-  const blocks = links.map(l=>({
+  const blocks = links ? links.map(l=>({
     link: l,
     paragraphs: l.labels.map(label=>textForPoint(label)).filter(Boolean),
-  }));
-  return `<div class="section-title"><h3>Arcanes majeurs liés à ton profil astral</h3></div>
+  })) : [];
+
+  return `<div class="section-title"><h3>Mythologie personnelle</h3></div>
+  <p class="note" style="text-align:center">Ta divinité tutélaire, ton animal représentatif, et les arcanes majeurs que ton thème réveille dans le jeu.</p>
+
+  <div class="section-title centered" style="margin-top:24px"><h3>Ta divinité tutélaire</h3></div>
+  ${premiumOn ? (deity ? `
+  ${cardHTML(deity.card, deity.card[4]==="major"?"major":(SUITS[deity.card[6]]?.[0]||"major"))}
+  <div class="symbol-list">
+    <div class="symbol clickable" data-deity="${escapeHTML(deity.deityKey)}" style="text-align:center">
+      <b>${escapeHTML(deity.deityName)}</b>
+      ${deity.note ? `<br><small>${escapeHTML(deity.note)}</small>` : ""}
+    </div>
+  </div>
+  <p class="note" style="text-align:center;margin-top:6px">${escapeHTML(tutelaryReasonText)} Touche la carte pour la découvrir, ou son nom pour en savoir plus sur ${escapeHTML(deity.deityName)}.</p>` : `<p class="note" style="text-align:center">Pas encore assez d'éléments dans ton thème pour la calculer.</p>`)
+    : premiumLockHTML("La divinité tutélaire calculée à partir de ton thème fait partie du contenu premium.")}
+
+  <div class="section-title centered" style="margin-top:24px"><h3>Ton animal représentatif</h3></div>
+  ${ra.locked ? premiumLockHTML(ra.premium
+      ? `Se révèle après ${ra.readingsNeeded} tirages enregistrés dans ton Journal (${ra.readingsCount}/${ra.readingsNeeded} pour l'instant).`
+      : `Combine ton thème astral et tes questions les plus fréquentes, une fois ${ra.readingsNeeded} tirages enregistrés dans ton Journal — active le mode premium ci-dessus.`)
+    : (ra.animal ? `
+  <div class="symbol-list">
+    <div class="symbol clickable" data-symbol="${escapeHTML(ra.animal.id)}" style="text-align:center">
+      <div style="font-size:32px">${escapeHTML(ra.animal.icon||"✦")}</div>
+      <b>${escapeHTML(ra.animal.label)}</b>
+      ${ra.animal.desc ? `<br><small>${escapeHTML(ra.animal.desc)}</small>` : ""}
+    </div>
+  </div>
+  <p class="note" style="text-align:center;margin-top:6px">D'après ${escapeHTML(ra.animal.source)}. Touche pour en savoir plus.</p>` : `<p class="note" style="text-align:center">Enregistre ton profil astral pour le révéler.</p>`)}
+
+  <div class="section-title centered" style="margin-top:24px"><h3>Arcanes majeurs liés</h3></div>
+  ${links ? `
   ${premiumOn ? "" : premiumLockHTML("Pourquoi ces cartes précisément — et ce qu'elles disent de toi — fait partie du contenu premium.")}
   ${blocks.map(b=>`<div style="margin-top:22px">
     <p class="suit-h4" style="text-align:center;margin-bottom:6px">${escapeHTML(b.link.labels.join(" & "))} en ${escapeHTML(b.link.sign)}</p>
     <div class="card-grid">${cardHTML(b.link.card,"major")}</div>
     ${premiumOn ? b.paragraphs.map(p=>`<p class="lore-text" style="margin-top:10px">${escapeHTML(p)}</p>`).join("") : ""}
-  </div>`).join("")}`;
+  </div>`).join("")}` : `<p class="note" style="text-align:center">Aucun arcane majeur clairement réveillé par ce thème pour l'instant.</p>`}`;
 }
-function showMajorLinks(){
+function showPersonalMythology(){
   preDetailScroll = window.scrollY;
-  document.getElementById("screen").innerHTML = `<div class="detail">${renderMajorLinks()}
+  document.getElementById("screen").innerHTML = `<div class="detail">${renderPersonalMythology()}
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
   triggerScreenAnim("detail");
@@ -4913,8 +4962,9 @@ function showMajorLinks(){
     render();
     requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
-  cardDetailReturnTo = showMajorLinks;
+  cardDetailReturnTo = showPersonalMythology;
   bindCards();
+  bindChips(); // rend cliquables la divinité tutélaire (data-deity) et l'animal représentatif (data-symbol)
 }
 
 /* ===================== ONGLET RÊVES (onirocritique grecque, IA) ===================== */
@@ -5787,8 +5837,8 @@ const POINT_CLOSING_SENTENCE = {
   "Ascendant": (keywordsList) => `Cette carte parle alors de l'image que tu donnes, parfois sans même le vouloir : ${keywordsList} — une part de toi que les autres perçoivent souvent avant que tu ne la reconnaisses toi-même.`,
 };
 // Retourne un tableau {point, text} — même forme que le texte IA une fois généré (voir
-// api/astral-text.js et renderMajorLinks() ci-dessous), qui fait correspondre chaque texte à
-// sa carte par le NOM du point plutôt que par sa position dans une liste : deux points
+// api/astral-text.js et renderPersonalMythology() ci-dessous), qui fait correspondre chaque
+// texte à sa carte par le NOM du point plutôt que par sa position dans une liste : deux points
 // peuvent partager la même carte (labels.length > 1 sur un même lien), chacun garde son
 // propre objet, jamais fusionnés en un seul texte.
 function majorLinksTextFallback(links){
@@ -5831,8 +5881,9 @@ function showProfilAstral(){
     render();
     requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
-  bindChips(); // rend cliquable la divinité tutélaire (data-deity) et l'Animal représentatif (data-symbol)
-  bindCards(); // rend cliquable l'illustration de la carte de la divinité tutélaire (data-card)
+  // Divinité tutélaire, animal représentatif et leurs bindings (bindChips()/bindCards())
+  // ont déménagé avec eux vers renderPersonalMythology()/showPersonalMythology() — cet
+  // écran-ci (Profil astral) n'a plus rien de cliquable en dehors du bouton Retour.
   const premiumToggle = document.getElementById("premiumToggle");
   if(premiumToggle) premiumToggle.onchange = ()=>{ setPremiumEnabled(premiumToggle.checked); showProfilAstral(); };
   // Le portrait et les textes d'interprétation IA font partie du contenu premium (voir
@@ -5991,7 +6042,6 @@ function renderProfilResults(saved){
   const portrait = typeof saved.portrait === "string" ? saved.portrait : null; // lu directement sur `saved` (pas via getCachedPortrait()/getProfile()) pour rester cohérent avec le reste de la fonction, qui dérive tout de son propre paramètre
   const astralText = (saved.astralText && typeof saved.astralText === "object") ? saved.astralText : null; // même logique : lu directement sur `saved`
   const summary = natalSummaryParagraph(saved);
-  const deity = tutelaryDeity(saved);
   // Texte de chaque case : la phrase générée par IA si elle est déjà en cache (astralText),
   // sinon la phrase toute faite habituelle (natalPlanetSentence() etc.) le temps que la
   // génération se termine ou si elle échoue — jamais de case vide. Toutes ces phrases
@@ -6004,8 +6054,6 @@ function renderProfilResults(saved){
   const aspectKey = asp => `${asp.bodies[0]}_${asp.type}_${asp.bodies[1]}`;
   const aspectText = asp => (astralText?.aspects && typeof astralText.aspects[aspectKey(asp)] === "string" ? astralText.aspects[aspectKey(asp)] : natalAspectSentence(asp)) || "";
   const nameNumberText = (typeof astralText?.nameNumber === "string" ? astralText.nameNumber : numMeaning?.[2]) || "";
-  const tutelaryReasonText = (typeof astralText?.tutelaryReason === "string" ? astralText.tutelaryReason : tutelaryReasonFallback(deity)) || "La figure la plus présente dans ton thème natal.";
-  const ra = representativeAnimal(saved);
   const premiumOn = isPremiumEnabled();
   const expl = text => premiumOn ? `<br>${escapeHTML(text)}` : ""; // n'affiche la phrase d'interprétation que si le mode premium est actif
 
@@ -6025,32 +6073,6 @@ function renderProfilResults(saved){
           ? portrait.split(/\n\s*\n/).map(p=>`<p class="lore-text" style="margin-top:10px">${escapeHTML(p.trim())}</p>`).join("")
           : (summary ? `<p class="lore-text" style="margin-top:10px">${escapeHTML(summary)}</p>` : ""))
       : premiumLockHTML("Le portrait de personnalité et le résumé de ton thème font partie du contenu premium.")}
-
-    <div class="section-title centered" style="margin-top:24px"><h3>Ta divinité tutélaire</h3></div>
-    ${premiumOn ? (deity ? `
-    ${cardHTML(deity.card, deity.card[4]==="major"?"major":(SUITS[deity.card[6]]?.[0]||"major"))}
-    <div class="symbol-list">
-      <div class="symbol clickable" data-deity="${escapeHTML(deity.deityKey)}" style="text-align:center">
-        <b>${escapeHTML(deity.deityName)}</b>
-        ${deity.note ? `<br><small>${escapeHTML(deity.note)}</small>` : ""}
-      </div>
-    </div>
-    <p class="note" style="text-align:center;margin-top:6px">${escapeHTML(tutelaryReasonText)} Touche la carte pour la découvrir, ou son nom pour en savoir plus sur ${escapeHTML(deity.deityName)}.</p>` : `<p class="note" style="text-align:center">Pas encore assez d'éléments dans ton thème pour la calculer.</p>`)
-      : premiumLockHTML("La divinité tutélaire calculée à partir de ton thème fait partie du contenu premium.")}
-
-    <div class="section-title centered" style="margin-top:24px"><h3>Ton animal représentatif</h3></div>
-    ${ra.locked ? premiumLockHTML(ra.premium
-        ? `Se révèle après ${ra.readingsNeeded} tirages enregistrés dans ton Journal (${ra.readingsCount}/${ra.readingsNeeded} pour l'instant).`
-        : `Combine ton thème astral et tes questions les plus fréquentes, une fois ${ra.readingsNeeded} tirages enregistrés dans ton Journal — active le mode premium ci-dessus.`)
-      : (ra.animal ? `
-    <div class="symbol-list">
-      <div class="symbol clickable" data-symbol="${escapeHTML(ra.animal.id)}" style="text-align:center">
-        <div style="font-size:32px">${escapeHTML(ra.animal.icon||"✦")}</div>
-        <b>${escapeHTML(ra.animal.label)}</b>
-        ${ra.animal.desc ? `<br><small>${escapeHTML(ra.animal.desc)}</small>` : ""}
-      </div>
-    </div>
-    <p class="note" style="text-align:center;margin-top:6px">D'après ${escapeHTML(ra.animal.source)}. Touche pour en savoir plus.</p>` : `<p class="note" style="text-align:center">Enregistre ton profil astral pour le révéler.</p>`)}
 
     ${numMeaning ? `<div class="symbol-list" style="margin-top:14px">
       <div class="symbol"><b>Nombre du prénom : ${saved.nameNumber} — ${escapeHTML(numMeaning[0])}</b>${expl(nameNumberText)}</div>
@@ -6397,7 +6419,7 @@ function bind(){
       else if(key==="journal") showJournal();
       else if(key==="stats") showStats();
       else if(key==="relations") showRelations();
-      else if(key==="majeurs") showMajorLinks();
+      else if(key==="mythologie") showPersonalMythology();
     };
   });
   // Retour direct d'utilisatrice : « Modifier mes informations » vivait uniquement au fond
