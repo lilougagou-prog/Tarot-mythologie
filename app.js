@@ -3457,7 +3457,12 @@ let astralTextFetchInFlight = false;
 // normal ?" — sans ce numéro, un texte déjà en cache (généré avec l'ancien prompt) passait
 // les deux vérifications ci-dessous (deityKey inchangée, majorLinksText déjà présent) et ne
 // se régénérait donc jamais tout seul, même après un vrai changement de logique côté prompt.
-const MAJOR_LINKS_TEXT_VERSION = 3;
+// v4 : "les textes ne correspondent pas aux cartes" — majorLinksText est passé d'une chaîne
+// découpée par position (un paragraphe par point, dans l'ordre attendu, séparés par une
+// ligne vide) à un tableau {point, text} explicitement étiqueté (voir api/astral-text.js et
+// renderMajorLinks() ci-dessous) — un texte en cache dans l'ancien format (une chaîne) ne
+// doit plus jamais être réutilisé tel quel.
+const MAJOR_LINKS_TEXT_VERSION = 4;
 // Même logique de discrétion qu'ensurePortrait() : jamais de prompt de code d'accès depuis
 // un simple affichage du Profil astral, échec silencieux (les phrases génériques restent
 // affichées), un seul appel réseau tant qu'aucun texte n'est en cache.
@@ -4858,21 +4863,28 @@ function renderMajorLinks(){
   // seule l'explication est verrouillée.
   const premiumOn = isPremiumEnabled();
   if(premiumOn) ensureAstralText();
-  const majorLinksText = premiumOn ? (getCachedAstralText()?.majorLinksText || majorLinksTextFallback(links) || null) : null;
-  // Retour direct : l'illustration de chaque carte doit précéder SON texte, pas être
-  // reléguée dans une grille séparée tout en bas de l'écran. majorLinksText contient un
-  // paragraphe par POINT (voir majorLinksTextFallback()/le prompt de /api/astral-text.js),
-  // généré dans le même ordre que `links` puis, pour un même lien, dans l'ordre de
-  // `l.labels` — donc en découpant les paragraphes et en en reprenant `l.labels.length`
-  // d'affilée pour chaque lien, on retrouve exactement les paragraphes qui parlent de CETTE
-  // carte, à accoler juste après son illustration.
-  const paragraphs = majorLinksText ? majorLinksText.split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean) : [];
-  let cursor = 0;
-  const blocks = links.map(l=>{
-    const ownParagraphs = paragraphs.slice(cursor, cursor + l.labels.length);
-    cursor += l.labels.length;
-    return { link: l, paragraphs: ownParagraphs };
-  });
+  // Retour direct d'utilisatrice : "les textes ne correspondent pas aux cartes" — l'ancienne
+  // version découpait un seul bloc de texte IA en paragraphes PAR POSITION (en supposant que
+  // l'IA respecte toujours exactement un paragraphe par point, dans le bon ordre) : un seul
+  // écart dans le formatage suffisait à décaler silencieusement le texte d'un point vers la
+  // mauvaise carte, sans qu'aucune erreur ne se déclenche. majorLinksText est maintenant un
+  // tableau {point, text} explicitement étiqueté par point (voir api/astral-text.js) — on
+  // fait donc correspondre chaque carte à son texte par le NOM du point, jamais par position.
+  // Repli en cascade PAR POINT (pas un repli global qui écraserait des points où l'IA a
+  // répondu correctement) : texte IA pour ce point précis s'il existe, sinon la phrase locale
+  // déterministe de majorLinksTextFallback() pour CE point uniquement.
+  const aiMajorLinksText = premiumOn ? (getCachedAstralText()?.majorLinksText || null) : null;
+  const fallbackMajorLinksText = premiumOn ? majorLinksTextFallback(links) : null;
+  function textForPoint(point){
+    const fromAI = aiMajorLinksText && aiMajorLinksText.find(e=>e.point===point);
+    if(fromAI) return fromAI.text;
+    const fromFallback = fallbackMajorLinksText && fallbackMajorLinksText.find(e=>e.point===point);
+    return fromFallback ? fromFallback.text : null;
+  }
+  const blocks = links.map(l=>({
+    link: l,
+    paragraphs: l.labels.map(label=>textForPoint(label)).filter(Boolean),
+  }));
   return `<div class="section-title"><h3>Arcanes majeurs liés à ton profil astral</h3></div>
   ${premiumOn ? "" : premiumLockHTML("Pourquoi ces cartes précisément — et ce qu'elles disent de toi — fait partie du contenu premium.")}
   ${blocks.map(b=>`<div style="margin-top:22px">
@@ -5771,12 +5783,14 @@ const POINT_CLOSING_SENTENCE = {
   "Lune": (keywordsList) => `Cette carte parle alors de ce que tu vis surtout en privé : ${keywordsList} — une part de toi qui se manifeste dans l'intimité de tes émotions, pas toujours visible au premier abord.`,
   "Ascendant": (keywordsList) => `Cette carte parle alors de l'image que tu donnes, parfois sans même le vouloir : ${keywordsList} — une part de toi que les autres perçoivent souvent avant que tu ne la reconnaisses toi-même.`,
 };
+// Retourne un tableau {point, text} — même forme que le texte IA une fois généré (voir
+// api/astral-text.js et renderMajorLinks() ci-dessous), qui fait correspondre chaque texte à
+// sa carte par le NOM du point plutôt que par sa position dans une liste : deux points
+// peuvent partager la même carte (labels.length > 1 sur un même lien), chacun garde son
+// propre objet, jamais fusionnés en un seul texte.
 function majorLinksTextFallback(links){
   if(!links || !links.length) return null;
-  // Séparés par \n\n (comme le texte IA une fois généré — voir renderMajorLinks()) pour que
-  // le rendu reste cohérent visuellement que ce texte de secours soit affiché ou déjà
-  // remplacé par l'IA.
-  const paragraphs = [];
+  const result = [];
   links.forEach(l=>{
     const myth = ZODIAC_MAJOR_MYTH[l.sign];
     const mythSentence = myth ? ` ${myth.astro} ${myth.myth}` : "";
@@ -5787,10 +5801,10 @@ function majorLinksTextFallback(links){
       const introSentence = idx === 0
         ? `${label} en ${l.sign} te relie à « ${l.card[0]} » (${l.card[1]} — ${l.card[3]}).${mythSentence}`
         : `${label}, aussi en ${l.sign}, te relie à cette même carte, « ${l.card[0]} » — mais pas de la même façon.`;
-      paragraphs.push(`${introSentence} ${closing}`);
+      result.push({ point: label, text: `${introSentence} ${closing}` });
     });
   });
-  return paragraphs.join("\n\n");
+  return result;
 }
 
 // Écran Profil astral : affiche le résultat s'il existe déjà, sinon le formulaire de
