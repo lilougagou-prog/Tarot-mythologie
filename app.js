@@ -4873,7 +4873,15 @@ function renderMajorLinks(){
   // Repli en cascade PAR POINT (pas un repli global qui écraserait des points où l'IA a
   // répondu correctement) : texte IA pour ce point précis s'il existe, sinon la phrase locale
   // déterministe de majorLinksTextFallback() pour CE point uniquement.
-  const aiMajorLinksText = premiumOn ? (getCachedAstralText()?.majorLinksText || null) : null;
+  // Array.isArray() plutôt qu'un simple truthy check : un profil dont le cache vient tout
+  // juste d'être invalidé par ensureAstralText() (ci-dessus, MAJOR_LINKS_TEXT_VERSION a
+  // changé) garde encore l'ANCIEN texte en cache — une simple chaîne, format d'avant ce
+  // correctif — le temps que le nouvel appel IA (asynchrone) se termine. Sans ce garde,
+  // aiMajorLinksText.find() plantait sur cette chaîne et faisait échouer tout l'écran :
+  // vu depuis l'onglet Profil, la tuile "Arcanes majeurs liés" semblait alors ne plus
+  // réagir au clic (l'exception empêchait l'écran de s'afficher).
+  const cachedAiMajorLinksText = premiumOn ? getCachedAstralText()?.majorLinksText : null;
+  const aiMajorLinksText = Array.isArray(cachedAiMajorLinksText) ? cachedAiMajorLinksText : null;
   const fallbackMajorLinksText = premiumOn ? majorLinksTextFallback(links) : null;
   function textForPoint(point){
     const fromAI = aiMajorLinksText && aiMajorLinksText.find(e=>e.point===point);
@@ -5829,6 +5837,7 @@ function showProfilAstral(){
     requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
   bindChips(); // rend cliquable la divinité tutélaire (data-deity) et l'Animal représentatif (data-symbol)
+  bindCards(); // rend cliquable l'illustration de la carte de la divinité tutélaire (data-card)
   const premiumToggle = document.getElementById("premiumToggle");
   if(premiumToggle) premiumToggle.onchange = ()=>{ setPremiumEnabled(premiumToggle.checked); showProfilAstral(); };
   // Le portrait et les textes d'interprétation IA font partie du contenu premium (voir
@@ -6024,14 +6033,14 @@ function renderProfilResults(saved){
 
     <div class="section-title centered" style="margin-top:24px"><h3>Ta divinité tutélaire</h3></div>
     ${premiumOn ? (deity ? `
+    <div class="card-grid">${cardHTML(deity.card, deity.card[4]==="major"?"major":(SUITS[deity.card[6]]?.[0]||"major"))}</div>
     <div class="symbol-list">
       <div class="symbol clickable" data-deity="${escapeHTML(deity.deityKey)}" style="text-align:center">
-        <div style="font-size:32px">${escapeHTML(deity.card[2]||"✦")}</div>
         <b>${escapeHTML(deity.deityName)}</b>
         ${deity.note ? `<br><small>${escapeHTML(deity.note)}</small>` : ""}
       </div>
     </div>
-    <p class="note" style="text-align:center;margin-top:6px">${escapeHTML(tutelaryReasonText)} Touche pour en savoir plus.</p>` : `<p class="note" style="text-align:center">Pas encore assez d'éléments dans ton thème pour la calculer.</p>`)
+    <p class="note" style="text-align:center;margin-top:6px">${escapeHTML(tutelaryReasonText)} Touche la carte pour la découvrir, ou son nom pour en savoir plus sur ${escapeHTML(deity.deityName)}.</p>` : `<p class="note" style="text-align:center">Pas encore assez d'éléments dans ton thème pour la calculer.</p>`)
       : premiumLockHTML("La divinité tutélaire calculée à partir de ton thème fait partie du contenu premium.")}
 
     <div class="section-title centered" style="margin-top:24px"><h3>Ton animal représentatif</h3></div>
