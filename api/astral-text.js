@@ -32,7 +32,14 @@
 //     carte, voir ZODIAC_MAJOR_MYTH dans app.js) : l'IA doit s'appuyer dessus tels quels,
 //     jamais inventer un autre mythe.
 // Renvoie : { text: { nameNumber?: string, ascendant?: string, planets: {clé: string},
-//   aspects: {clé: string}, tutelaryReason?: string, majorLinksText?: string } }
+//   aspects: {clé: string}, tutelaryReason?: string,
+//   majorLinksText?: [{point: string, text: string}, ...] } }
+//   - majorLinksText : un objet PAR POINT (`point` reprend exactement la valeur envoyée dans
+//     `majorLinks[].point`, ex. "Soleil"), jamais un seul bloc de texte à découper par
+//     position — voir le commentaire dans le corps de la fonction (validPoints) pour
+//     pourquoi : l'ancien format (une chaîne, un paragraphe par point supposé dans l'ordre)
+//     pouvait silencieusement associer le texte d'un point à la mauvaise carte dès que l'IA
+//     s'écartait un peu de la structure attendue.
 //
 // Généré une seule fois et mis en cache côté client (profile.astralText dans
 // localStorage), régénéré si la divinité tutélaire recalculée change (voir
@@ -175,17 +182,17 @@ Pour CHACUN des éléments ci-dessus, rédige une phrase personnalisée en fran�
 - Chaque aspect : 1 seule phrase qui explique la dynamique entre les deux planètes de façon concrète, sans jamais utiliser les mots "aspect", "orbe", "conjonction", "trigone", "carré", "opposition" ou "sextile" — traduis-les en dynamique vécue (tension, alliance naturelle, occasion, frottement à observer…).
 - Nombre du prénom : 1 à 2 phrases qui relient ce nombre à un trait de personnalité concret.
 ${deity ? `- tutelaryReason : 2 à 3 phrases qui expliquent pourquoi CETTE figure mythologique précise résonne avec CE thème, en t'appuyant sur les placements qui ont le plus contribué au choix et sur ce que cette figure représente mythologiquement. Si un placement précise un "décan de la carte X" entre parenthèses, tu peux t'appuyer dessus pour ancrer l'explication sur cette carte précise plutôt que sur le signe seul — mais ne mentionne jamais le mot "décan" lui-même, ni "carte", ni le nom technique de la carte : reformule toujours en langage naturel, comme une simple facette du thème. N'explique jamais le calcul (poids, score) lui-même, seulement le sens. Ne remets jamais en cause le choix de la figure : explique-le, ne le questionne pas.` : ""}
-${majorLinks.length ? `- majorLinksText : un texte SUBSTANTIEL, un paragraphe DISTINCT par POINT listé ci-dessus (Soleil/Lune/Ascendant — jamais par carte : si deux points partagent la même carte, ils ont quand même chacun leur propre paragraphe, séparés par un retour à la ligne double comme les autres textes de l'app), d'AU MOINS 5 à 6 phrases CHACUN — jamais une seule phrase expédiée par point, jamais un résumé télégraphique. S'il y a 2 points, le texte total doit faire au moins 10 à 12 phrases ; s'il y en a 3, au moins 15 à 18. Pour CHAQUE point, dans son propre paragraphe :
+${majorLinks.length ? `- majorLinksText : un TABLEAU d'objets, un par POINT listé ci-dessus (Soleil/Lune/Ascendant — jamais un objet par carte : si deux points partagent la même carte, ils ont quand même chacun le leur), chaque objet exactement sous la forme {"point": "<recopie ICI, mot pour mot, le nom du point tel que listé ci-dessus — ex. "Soleil", jamais reformulé ni traduit>", "text": "<le paragraphe pour CE point>"}. Ne renvoie JAMAIS un texte fusionné pour plusieurs points dans un seul "text", et ne saute JAMAIS un point de la liste — un objet par point, ni plus ni moins. Chaque "text" doit faire AU MOINS 5 à 6 phrases — jamais une seule phrase expédiée, jamais un résumé télégraphique. Pour CHAQUE "text" :
   (1) explique d'abord, en 2-3 phrases CONCRÈTES, pourquoi la carte associée à CE point précis est liée à ce thème. Si ce point est marqué "[même carte qu'un point déjà listé ci-dessus]", NE RÉEXPLIQUE PAS le mythe depuis le début (une phrase courte qui y renvoie suffit, ex. "la même carte que ton Soleil, mais...") — sinon, appuie-toi explicitement sur le fait mythologique réel donné ci-dessus pour cette carte (reformule-le avec tes mots, mais ne l'invente jamais, ne le remplace jamais par un autre mythe ni par un raccourci du type "le signe X correspond à la carte Y" resté abstrait) pour montrer, avec une vraie anecdote ou un vrai trait mythologique, pourquoi ce dieu/cette déesse incarne vraiment cette carte ;
-  (2) développe ensuite, sur AU MOINS 3 phrases distinctes et concrètes (pas une seule formule condensée), ce que CETTE CARTE — son nom, son dieu/sa déesse, ses mots-clés — révèle vraiment de ${firstName} À TRAVERS CE POINT PRÉCIS ET LUI SEUL. Le "Domaine de vie propre à ce point" donné ci-dessus (Soleil = identité consciente et vitalité, Lune = monde intérieur et besoins instinctifs souvent moins visibles, Ascendant = image perçue par les autres avant qu'on la/le connaisse vraiment) sert UNIQUEMENT à choisir l'ANGLE par lequel tu abordes la carte — ce n'est jamais lui, le sujet du paragraphe : la carte doit rester le sujet grammatical et le fil conducteur de la plupart des phrases (nomme-la, reviens à ses mots-clés, à ce qu'elle représente), jamais un paragraphe qui parle surtout du signe, du point ou d'un trait de caractère générique sans jamais reconvoquer la carte elle-même. Pour une même carte partagée entre deux points, les deux paragraphes doivent dire des choses VISIBLEMENT DIFFÉRENTES (l'angle change), jamais la même explication reformulée à peine. Illustre avec une situation de vie plausible et parlante (comment ça se manifeste au quotidien, dans une relation, une décision, un moment de doute...), puis ce que cette prise de conscience permet de faire ou de voir différemment ; ne te contente jamais de reformuler le mot-clé donné, va chercher ce qu'il implique vraiment pour une personne.
+  (2) développe ensuite, sur AU MOINS 3 phrases distinctes et concrètes (pas une seule formule condensée), ce que CETTE CARTE — son nom, son dieu/sa déesse, ses mots-clés — révèle vraiment de ${firstName} À TRAVERS CE POINT PRÉCIS ET LUI SEUL. Le "Domaine de vie propre à ce point" donné ci-dessus (Soleil = identité consciente et vitalité, Lune = monde intérieur et besoins instinctifs souvent moins visibles, Ascendant = image perçue par les autres avant qu'on la/le connaisse vraiment) sert UNIQUEMENT à choisir l'ANGLE par lequel tu abordes la carte — ce n'est jamais lui, le sujet du texte : la carte doit rester le sujet grammatical et le fil conducteur de la plupart des phrases (nomme-la, reviens à ses mots-clés, à ce qu'elle représente), jamais un texte qui parle surtout du signe, du point ou d'un trait de caractère générique sans jamais reconvoquer la carte elle-même. Pour une même carte partagée entre deux points, les deux "text" doivent dire des choses VISIBLEMENT DIFFÉRENTES (l'angle change), jamais la même explication reformulée à peine. Illustre avec une situation de vie plausible et parlante (comment ça se manifeste au quotidien, dans une relation, une décision, un moment de doute...), puis ce que cette prise de conscience permet de faire ou de voir différemment ; ne te contente jamais de reformuler le mot-clé donné, va chercher ce qu'il implique vraiment pour une personne.
   Cette deuxième partie est celle qui doit apporter le plus de valeur : ne la bâcle jamais, ne la résume jamais à une seule phrase.
-  IMPORTANT : varie réellement la formulation et la structure d'un paragraphe à l'autre — n'utilise jamais la même phrase de conclusion ou le même tour de phrase répété pour chaque point (ex. jamais "pas comme un trait figé une fois pour toutes", "se joue avant tout à cet endroit-là" ou toute formule équivalente réutilisée telle quelle) : chaque point doit se lire comme écrit spécifiquement pour lui, pas comme un gabarit rempli trois fois.
-  N'invente jamais une autre carte que celles listées, ni un sens qui ne découle pas de son dieu/mots-clés donnés. Nomme la carte par son nom entre guillemets français (ex. « Le Mat ») au moins une fois dans le paragraphe. Ne mentionne jamais le mot "arcane", "majeur" ou "correspondance ésotérique" : reste dans une langue naturelle, comme si tu racontais un lien de personnalité, pas un système de calcul.` : ""}
+  IMPORTANT : varie réellement la formulation et la structure d'un "text" à l'autre — n'utilise jamais la même phrase de conclusion ou le même tour de phrase répété pour chaque point (ex. jamais "pas comme un trait figé une fois pour toutes", "se joue avant tout à cet endroit-là" ou toute formule équivalente réutilisée telle quelle) : chaque point doit se lire comme écrit spécifiquement pour lui, pas comme un gabarit rempli trois fois.
+  N'invente jamais une autre carte que celles listées, ni un sens qui ne découle pas de son dieu/mots-clés donnés. Nomme la carte par son nom entre guillemets français (ex. « Le Mat ») au moins une fois dans le texte. Ne mentionne jamais le mot "arcane", "majeur" ou "correspondance ésotérique" : reste dans une langue naturelle, comme si tu racontais un lien de personnalité, pas un système de calcul.` : ""}
 - Jamais de "maison X" mentionnée sans dire ce qu'elle signifie en langage courant si tu la mentionnes.
 - Ton chaleureux, direct, humain — jamais mécanique, jamais de formule toute faite du type "cela montre que".
 
 Réponds UNIQUEMENT avec un objet JSON valide, sans texte autour, sans balises markdown, exactement sous cette forme (les clés de "planets" et "aspects" doivent être EXACTEMENT les clés entre guillemets données ci-dessus, pas les labels) :
-{"nameNumber":${hasNameNumber ? '"..."' : "null"},"ascendant":${hasAscendant ? '"..."' : "null"},"planets":{${planets.map((p) => `"${p.key}":"..."`).join(",")}},"aspects":{${aspects.map((a) => `"${a.key}":"..."`).join(",")}},"tutelaryReason":${deity ? '"..."' : "null"},"majorLinksText":${majorLinks.length ? '"..."' : "null"}}`;
+{"nameNumber":${hasNameNumber ? '"..."' : "null"},"ascendant":${hasAscendant ? '"..."' : "null"},"planets":{${planets.map((p) => `"${p.key}":"..."`).join(",")}},"aspects":{${aspects.map((a) => `"${a.key}":"..."`).join(",")}},"tutelaryReason":${deity ? '"..."' : "null"},"majorLinksText":${majorLinks.length ? `[${majorLinks.map((l) => `{"point":"${l.point}","text":"..."}`).join(",")}]` : "null"}}`;
 
   try {
     const message = await anthropic.messages.create({
@@ -220,6 +227,24 @@ Réponds UNIQUEMENT avec un objet JSON valide, sans texte autour, sans balises m
         if (typeof parsed.aspects[a.key] === "string" && parsed.aspects[a.key].trim()) cleanAspects[a.key] = parsed.aspects[a.key].trim();
       }
     }
+    // majorLinksText : un tableau {point, text} plutôt qu'un seul bloc de texte séparé par
+    // des lignes vides — retour direct d'utilisatrice, "les textes ne correspondent pas aux
+    // cartes". L'ancien format (une chaîne, découpée côté client par nombre de paragraphes
+    // dans l'ordre attendu) supposait que l'IA respecte TOUJOURS exactement un paragraphe par
+    // point, dans le bon ordre, séparés par une ligne vide — un seul écart (deux points
+    // fusionnés en un paragraphe, une ligne vide en trop à l'intérieur d'un paragraphe...)
+    // décalait silencieusement tout ce qui suivait, sans aucune erreur détectable, jusqu'à ce
+    // que le mauvais texte se retrouve sous la mauvaise carte. Chaque objet est maintenant
+    // étiqueté par son point ("Soleil"/"Lune"/"Ascendant") et validé contre la liste des
+    // points réellement demandés (validPoints) — le client fait correspondre par point plutôt
+    // que par position, un objet mal formé ou un point absent n'entraîne plus qu'un repli
+    // local pour CE point précis, jamais un mélange entre cartes.
+    const validPoints = new Set(majorLinks.map((l) => l.point));
+    const cleanMajorLinksText = Array.isArray(parsed.majorLinksText)
+      ? parsed.majorLinksText
+          .filter((e) => e && typeof e.point === "string" && validPoints.has(e.point) && typeof e.text === "string" && e.text.trim())
+          .map((e) => ({ point: e.point, text: e.text.trim() }))
+      : [];
 
     res.status(200).json({
       text: {
@@ -228,7 +253,7 @@ Réponds UNIQUEMENT avec un objet JSON valide, sans texte autour, sans balises m
         planets: cleanPlanets,
         aspects: cleanAspects,
         tutelaryReason: typeof parsed.tutelaryReason === "string" && parsed.tutelaryReason.trim() ? parsed.tutelaryReason.trim() : null,
-        majorLinksText: typeof parsed.majorLinksText === "string" && parsed.majorLinksText.trim() ? parsed.majorLinksText.trim() : null,
+        majorLinksText: cleanMajorLinksText.length ? cleanMajorLinksText : null,
       },
     });
   } catch (err) {
