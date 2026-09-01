@@ -1,7 +1,7 @@
 // Backend serverless (Vercel) — génère une lecture de tarot via l'API Anthropic.
 //
 // Reçoit en POST : { question: string, cards: [carte, ...], positions?: [string, ...], profile?, history? }
-//   - cards : de 1 à 12 cartes (tirage "Oui/Non" à "Année à venir", voir SPREADS
+//   - cards : de 1 à 10 cartes (tirage "Oui/Non" à "Croix celtique", voir SPREADS
 //     dans app.js) — plus la même limitation à exactement 3 cartes.
 //   - positions (optionnel) : intitulé de chaque position dans le tirage, dans le même
 //     ordre que cards (ex. "Défi", "Résultat"...) — donne à l'IA le sens de chaque carte
@@ -84,10 +84,10 @@ module.exports = async function handler(req, res) {
     !question.trim() ||
     !Array.isArray(cards) ||
     cards.length < 1 ||
-    cards.length > 12
+    cards.length > 10
   ) {
     res.status(400).json({
-      error: "Requête invalide : { question: string, cards: [1 à 12 cartes] } attendu.",
+      error: "Requête invalide : { question: string, cards: [1 à 10 cartes] } attendu.",
     });
     return;
   }
@@ -204,7 +204,7 @@ module.exports = async function handler(req, res) {
   const hasPositions = Array.isArray(positions) && positions.some((p) => typeof p === "string" && p);
 
   // Prompt repris de generateAIReading() dans app.js, généralisé pour n'importe quel
-  // nombre de cartes (1 à 12 selon le tirage choisi — voir SPREADS dans app.js).
+  // nombre de cartes (1 à 10 selon le tirage choisi — voir SPREADS dans app.js).
   const prompt = `Tu es un tarologue professionnel, chaleureux, direct et humain. Une personne pose cette question : "${question}"
 
 Cette personne a tiré ${n === 1 ? "cette carte" : `ces ${n} cartes`}, dans cet ordre${hasPositions ? " (avec la position de chacune dans le tirage entre parenthèses)" : ""} :
