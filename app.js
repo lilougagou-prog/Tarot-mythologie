@@ -160,19 +160,33 @@ function decanCardFor(sign, degreeInSign){
 // mi-homme mi-cheval -> cheval). Deux animaux (Pégase, Araignée) ne sont rattachés à aucun
 // signe : ils ne peuvent surgir que via DOMAIN_ANIMAL ci-dessous, sur la base des questions
 // posées plutôt que de la naissance.
+// Retour direct d'utilisatrice : "je préfère que chaque signe tombe sur son « vrai » animal
+// (bélier -> bélier de la Toison d'or, lion -> lion de Némée...) et les signes sans animal,
+// là tu fais une association". Six signes SONT littéralement un animal dans leur mythe
+// fondateur (le mythe qui a donné son nom à la constellation, pas seulement un dieu associé
+// au signe) : Bélier, Taureau, Cancer, Lion, Scorpion, Poissons. Capricorne (chèvre-poisson)
+// et Sagittaire (centaure, mi-homme mi-cheval) sont des hybrides — retenue leur moitié
+// animale, déjà un vrai animal du mythe (Amalthée, le centaure). Les quatre signes restants
+// (Gémeaux, Vierge, Balance, Verseau) n'ont pas d'animal propre dans leur mythe — ce sont des
+// figures humaines/divines (les Dioscures, une vierge, une balance tenue par une déesse, un
+// échanson) — une association reste donc nécessaire, choisie pour son lien direct au mythe
+// (jamais un simple "écho thématique" comme avant) : Gémeaux -> le cygne dont Léda a eu Castor
+// et Pollux ; Verseau -> l'aigle qui enlève Ganymède, devenu ce signe ; Vierge -> l'abeille
+// (Déméter, Mélissai) et Balance -> la colombe (Vénus/Aphrodite régit la Balance en
+// astrologie) restent des associations, mais déjà correctement sourcées, inchangées.
 const SIGN_ANIMAL = {
-  "Bélier":"aigle",       // lié à Zeus, dieu du majeur du signe (voir la fiche « Aigle »)
+  "Bélier":"bélier",      // le bélier à la Toison d'or, sauvé par Hermès (voir la fiche « Bélier »)
   "Taureau":"taureau",    // le signe est littéralement cet animal, lui-même lié à Zeus/Poséidon/Minos
-  "Gémeaux":"papillon",   // lié à Psyché, épouse d'Éros — dieu du majeur du signe (l'Amoureux)
-  "Cancer":"corbeau",     // lié à Apollon, dieu du majeur du signe (le Chariot)
-  "Lion":"cerf",          // le cerf de Cérynie, 3e travail d'Héraclès — dieu du majeur du signe (la Force)
+  "Gémeaux":"cygne",      // Castor et Pollux naissent de l'union de Zeus-cygne et Léda (voir la fiche « Cygne »)
+  "Cancer":"crabe",       // le crabe envoyé par Héra contre Héraclès (voir la fiche « Crabe »)
+  "Lion":"lion",          // le lion de Némée, 1er travail d'Héraclès (voir la fiche « Lion »)
   "Vierge":"abeille",     // travail patient et récolte organisée — écho thématique à Déméter, dieu du majeur (l'Hermite)
-  "Balance":"colombe",    // paix et harmonie retrouvées — écho thématique à Thémis, dieu du majeur (la Justice)
-  "Scorpion":"serpent",   // lié aux puissances chthoniennes et au monde souterrain — dieu du majeur du signe (Hadès)
+  "Balance":"colombe",    // Vénus (Aphrodite) régit la Balance en astrologie — colombe, l'oiseau d'Aphrodite
+  "Scorpion":"scorpion",  // le scorpion envoyé par Apollon contre Orion (voir la fiche « Scorpion »)
   "Sagittaire":"cheval",  // le Sagittaire, traditionnellement un centaure, mi-homme mi-cheval
-  "Capricorne":"dauphin", // le Capricorne, traditionnellement une chèvre-poisson — la moitié aquatique
-  "Verseau":"chien",      // lié à Hécate, dieu du majeur du signe (l'Étoile)
-  "Poissons":"cygne",     // grâce et clair de lune sur l'eau — écho thématique à Séléné, dieu du majeur (la Lune)
+  "Capricorne":"chèvre",  // Amalthée, placée parmi les étoiles sous cette forme (voir la fiche « Chèvre »)
+  "Verseau":"aigle",      // l'aigle de Zeus qui enlève Ganymède, futur Verseau (voir la fiche « Aigle »)
+  "Poissons":"poisson",   // Aphrodite et Éros changés en poissons pour fuir Typhon (voir la fiche « Poisson »)
 };
 
 // Domaine de question dominant du Journal (voir QUESTION_DOMAINS/detectDomain() plus bas)
@@ -988,14 +1002,6 @@ const SYMBOL_LIBRARY = {
     "Les torches sont donc devenues un symbole de lumière, de connaissance, de révélation, de guidance et de recherche de la vérité.",
     "Les torches sont particulièrement associées à Hécate et, dans le mythe de Perséphone, à Déméter — et, lors des noces, à Hyménée.",
   ]},
-  "lion":{icon:"🦁",label:"Lion",category:"Mythologie",desc:"Lié à Héraclès : courage, force domptée sans violence gratuite.",links:["héraclès"],lore:[
-    "Le lion est lié à Héraclès à travers son premier grand exploit : le lion de Némée.",
-    "Cette créature monstrueuse ravageait la région de Némée et possédait une peau que les armes ordinaires ne pouvaient transpercer. Héraclès dut finalement l'affronter à mains nues et l'étouffa.",
-    "Après avoir vaincu le lion, il utilisa ses propres griffes pour découper sa peau, qu'il porta ensuite comme une armure. La dépouille du monstre devint ainsi le signe visible de sa force et de son triomphe.",
-    "Zeus aurait ensuite placé le lion de Némée parmi les étoiles, où il devint la constellation du Lion — un rappel céleste, comme pour le corbeau ou le dauphin, que certains exploits méritent d'être fixés dans le ciel pour ne jamais être oubliés.",
-    "Le lion est devenu un symbole de courage, de puissance, de force, de victoire et de dépassement de l'impossible.",
-    "Le lion est particulièrement associé à Héraclès.",
-  ]},
   "vigne":{icon:"🍇",label:"Vigne",category:"Mythologie",desc:"Attribut de Dionysos : plaisir, transformation, abondance instinctive.",links:["dionysos"],lore:[
     "La vigne est indissociable de Dionysos, dieu du vin, de l'ivresse, de la fête, mais aussi de la transformation et de l'extase.",
     "Dans les mythes, Dionysos voyage avec son cortège de satyres, de ménades et de divinités liées à la nature sauvage. La vigne et le vin deviennent les moyens par lesquels l'être humain quitte momentanément son état ordinaire et entre dans un autre état de conscience.",
@@ -1196,6 +1202,7 @@ const SYMBOL_LIBRARY = {
   // Animaux
   "aigle":{icon:"🦅",label:"Aigle",category:"Animaux",desc:"Hauteur de vue, pouvoir, vision d'ensemble — lié à Zeus.",links:["zeus"],lore:[
     "L'aigle est l'oiseau de Zeus et l'un de ses attributs les plus reconnaissables. Dans les récits mythologiques, Zeus peut lui-même prendre la forme d'un aigle, notamment lorsqu'il enlève Ganymède pour l'amener auprès des dieux.",
+    "Devenu l'échanson des dieux sur l'Olympe, Ganymède est à son tour placé parmi les étoiles par Zeus : il devient la constellation, puis le signe, du Verseau — l'aigle qui l'a porté jusque-là reste associé à ce voyage entre le ciel et la terre.",
     "L'aigle est aussi celui qui s'élève plus haut que les autres oiseaux et qui semble pouvoir regarder le monde depuis les hauteurs du ciel. Il devient ainsi l'image parfaite de Zeus, maître de l'Olympe et dieu du ciel.",
     "Dans une autre tradition, l'aigle apparaît comme un signe favorable envoyé par Zeus. Il peut alors être interprété comme un messager venu du ciel.",
     "L'aigle est aussi l'instrument de la punition de Zeus : c'est un aigle qu'il envoie chaque jour dévorer le foie de Prométhée enchaîné sur son rocher, un foie qui repousse chaque nuit pour que le châtiment ne s'achève jamais (voir la fiche « Chaîne ») — preuve que l'oiseau qui élève peut aussi, sur ordre du même dieu, devenir l'instrument d'un tourment sans fin.",
@@ -1309,6 +1316,58 @@ const SYMBOL_LIBRARY = {
     "Le travail d'Arachné, techniquement parfait, ne laissait rien à reprocher — ce qui rendit la déesse plus furieuse encore. Athéna déchira la tapisserie et frappa la jeune femme, qui, de honte, tenta de se pendre. Prise de pitié au dernier instant, Athéna la sauva de la mort mais la changea en araignée, la condamnant à tisser sans fin, suspendue à son propre fil.",
     "L'araignée est ainsi devenue un symbole d'habileté sans limite, de création patiente, mais aussi d'orgueil qui défie trop haut et de talent qui, pour n'avoir pas su se taire, se retrouve puni jusque dans sa propre perfection.",
     "L'araignée est particulièrement associée à Athéna, par le mythe d'Arachné.",
+  ]},
+  // Les six animaux qui suivent complètent SIGN_ANIMAL (voir plus haut) : chaque signe du
+  // zodiaque qui EST littéralement un animal dans son mythe fondateur tombe désormais sur cet
+  // animal-là plutôt que sur une simple association thématique — retour direct d'utilisatrice
+  // ("chaque signe tombe sur son « vrai » animal [...] et les signes sans animal, là tu fais
+  // une association").
+  "bélier":{icon:"🐏",label:"Bélier",category:"Animaux",desc:"Le bélier à la Toison d'or : sacrifice salvateur, guide céleste, quête à accomplir.",links:["hermès"],lore:[
+    "Phrixos et Hellé, les enfants de la reine Néphélé, sont promis au sacrifice par leur belle-mère Ino, qui a fait mentir un oracle pour s'en débarrasser. Pour les sauver, leur mère obtient d'Hermès un bélier extraordinaire à la toison d'or, capable de voler et de parler.",
+    "Le bélier emporte les deux enfants dans les airs, loin du danger. En chemin, Hellé, prise de vertige, tombe dans le détroit qui portera désormais son nom, l'Hellespont — seul Phrixos achève le voyage, jusqu'en Colchide, à l'autre bout du monde connu.",
+    "En remerciement d'avoir eu la vie sauve, Phrixos sacrifie le bélier à Zeus et suspend sa toison, devenue d'or, à un arbre sacré gardé par un dragon qui ne dort jamais.",
+    "C'est cette même Toison d'or que Jason ira chercher des générations plus tard à la tête des Argonautes, avec l'aide décisive de la magicienne Médée (voir la fiche « Jason »).",
+    "En mémoire du sacrifice, Zeus place le bélier parmi les étoiles : il devient la constellation, puis le signe, du Bélier.",
+    "Le bélier est ainsi devenu un symbole de sacrifice salvateur, de protection accordée aux plus faibles, de voyage périlleux et de quête à mener jusqu'au bout.",
+    "Le bélier est particulièrement associé à Hermès, qui offre l'animal salvateur, et à Zeus, qui le place parmi les étoiles.",
+  ]},
+  "crabe":{icon:"🦀",label:"Crabe",category:"Animaux",desc:"Envoyé par Héra contre Héraclès : loyauté obstinée, sacrifice sans éclat.",links:["héra","héraclès"],lore:[
+    "Le crabe apparaît dans le deuxième des douze travaux d'Héraclès, lorsque le héros affronte l'hydre de Lerne, un monstre à plusieurs têtes dont deux repoussent à chaque fois qu'une seule est tranchée (voir la fiche « Héraclès »).",
+    "Héra, qui poursuit Héraclès d'une haine implacable depuis sa naissance, envoie alors un crabe géant lui pincer le pied pour le distraire pendant le combat.",
+    "Héraclès, sans même interrompre son geste, écrase le crabe sous son talon — un détail presque anecdotique au milieu d'un combat autrement titanesque, mais qui n'échappe pas à la reconnaissance d'Héra.",
+    "En remerciement de cette loyauté, même vaine, la déesse place le crabe parmi les étoiles : il devient la constellation, puis le signe, du Cancer.",
+    "Le crabe est ainsi devenu un symbole de loyauté obstinée, de sacrifice sans éclat au service d'une cause plus grande que soi, et de protection têtue même quand l'issue est perdue d'avance.",
+    "Le crabe est particulièrement associé à Héra, qui l'envoie contre Héraclès et le récompense malgré son échec.",
+  ]},
+  "lion":{icon:"🦁",label:"Lion",category:"Animaux",desc:"Lié à Héraclès : courage, force domptée sans violence gratuite.",links:["héraclès"],lore:[
+    "Le lion est lié à Héraclès à travers son premier grand exploit : le lion de Némée.",
+    "Cette créature monstrueuse ravageait la région de Némée et possédait une peau que les armes ordinaires ne pouvaient transpercer. Héraclès dut finalement l'affronter à mains nues et l'étouffa.",
+    "Après avoir vaincu le lion, il utilisa ses propres griffes pour découper sa peau, qu'il porta ensuite comme une armure. La dépouille du monstre devint ainsi le signe visible de sa force et de son triomphe.",
+    "Zeus aurait ensuite placé le lion de Némée parmi les étoiles, où il devint la constellation, puis le signe, du Lion — un rappel céleste, comme pour le corbeau ou le dauphin, que certains exploits méritent d'être fixés dans le ciel pour ne jamais être oubliés.",
+    "Le lion est devenu un symbole de courage, de puissance, de force, de victoire et de dépassement de l'impossible.",
+    "Le lion est particulièrement associé à Héraclès.",
+  ]},
+  "scorpion":{icon:"🦂",label:"Scorpion",category:"Animaux",desc:"Envoyé par Apollon contre Orion : jalousie protectrice, mise à distance éternelle.",links:["apollon","artémis"],lore:[
+    "Le scorpion apparaît dans le mythe d'Orion, le chasseur géant devenu le compagnon de chasse d'Artémis — une complicité si grande qu'Apollon, craignant de voir sa sœur s'éprendre d'un mortel, décide d'y mettre fin (voir la fiche « Orion »).",
+    "Apollon lance un scorpion géant à la poursuite d'Orion, qui ne parvient à lui échapper qu'en se jetant à la mer.",
+    "Désignant alors à Artémis une forme sombre qui nage au loin sans lui révéler qui elle est, Apollon met sa sœur au défi de l'atteindre de ses flèches — elle vise juste, sans jamais savoir qu'elle vient de tuer celui qu'elle aimait.",
+    "Bouleversée, Artémis obtient qu'Orion soit placé parmi les étoiles ; le scorpion y est envoyé lui aussi, mais assez loin pour que les deux constellations ne se lèvent jamais ensemble dans le ciel.",
+    "Le scorpion est ainsi devenu un symbole de jalousie protectrice, de piège tendu par ruse plutôt que par force, et de mise à distance qui dure jusque dans le ciel.",
+    "Le scorpion est particulièrement associé à Apollon, qui l'envoie contre Orion, et à Artémis, malgré elle.",
+  ]},
+  "chèvre":{icon:"🐐",label:"Chèvre",category:"Animaux",desc:"Amalthée, qui nourrit Zeus enfant en secret : dévouement discret, protection généreuse.",links:["zeus"],lore:[
+    "La chèvre est liée à Amalthée, qui nourrit Zeus de son lait alors qu'il est encore nourrisson, caché dans une grotte du mont Ida en Crète pour échapper à son père Cronos, qui dévore ses propres enfants (voir la fiche « Grotte »).",
+    "En jouant avec elle, le jeune Zeus lui brise accidentellement une corne. Pour se faire pardonner, il la dote d'un pouvoir merveilleux : produire indéfiniment tout ce que son propriétaire peut désirer — c'est la naissance de la corne d'abondance (voir la fiche « Corne d'abondance »).",
+    "Devenu roi des dieux, Zeus n'oublie pas ce dévouement discret : il place Amalthée elle-même parmi les étoiles, sous la forme de la constellation, puis du signe, du Capricorne.",
+    "La chèvre est ainsi devenue un symbole de dévouement discret, de protection généreuse offerte sans rien attendre en retour, et de tendresse qui traverse même l'enfance d'un dieu.",
+    "La chèvre est particulièrement associée à Zeus, par l'intermédiaire d'Amalthée.",
+  ]},
+  "poisson":{icon:"🐟",label:"Poisson",category:"Animaux",desc:"Aphrodite et Éros changés en poissons pour fuir Typhon : fuite salvatrice, lien qui ne se rompt pas.",links:["aphrodite","éros"],lore:[
+    "Le mythe des poissons du zodiaque met en scène Aphrodite et son fils Éros, surpris par l'arrivée soudaine de Typhon, le monstre le plus terrifiant jamais enfanté par Gaïa, capable de faire fuir jusqu'aux dieux de l'Olympe.",
+    "Pour lui échapper, Aphrodite et Éros se jettent dans l'Euphrate et se changent en poissons — certaines versions racontent qu'ils s'attachent l'un à l'autre par une corde, pour ne jamais se perdre dans la fuite.",
+    "Les deux poissons, unis par ce lien, sont ensuite placés parmi les étoiles : ils deviennent la constellation, puis le signe, des Poissons.",
+    "Le poisson est ainsi devenu un symbole de fuite salvatrice devant un danger qui dépasse même les dieux, et de lien qui résiste à la panique et ne se rompt jamais.",
+    "Le poisson est particulièrement associé à Aphrodite et à Éros, unis dans cette fuite commune.",
   ]},
 
   // Plantes & végétaux
