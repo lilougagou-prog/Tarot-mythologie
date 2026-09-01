@@ -772,31 +772,14 @@ const SPREADS = {
     count:10, poolSize:24,
     positions:["Situation actuelle","Défi","Racine (passé)","Passé récent","Ce qui te guide","Futur proche","Toi-même","Entourage","Espoirs et craintes","Résultat"],
   },
-  annee: {
-    key:"annee", name:"Année à venir", glyph:"❋",
-    description:"Un aperçu mois par mois, de maintenant jusqu'à la fin de l'année.",
-    count:12, poolSize:24, // valeurs par défaut ; count/positions réellement utilisés sont
-    // recalculés dynamiquement dans spreadConf() (voir remainingMonthsPositions ci-dessous).
-    positions:["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"],
-  },
 };
-const MONTH_NAMES = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-// Le tirage "Année à venir" ne pioche que pour les mois restants de l'année en cours
-// (mois courant inclus) plutôt que toujours 12 cartes — inutile de tirer une carte pour
-// un mois déjà passé.
-function remainingMonthsPositions(now){
-  return MONTH_NAMES.slice((now||new Date()).getMonth());
-}
-// Question posée par défaut pour "Année à venir" : ce tirage n'a pas de question propre
-// (voir tile-click dans bind()), on saute directement à la pioche.
-const YEAR_DEFAULT_QUESTION = "Comment vont se dérouler les mois à venir, jusqu'à la fin de l'année ?";
+// Retour direct d'utilisatrice : le tirage "Année à venir" (une carte par mois restant de
+// l'année) est retiré de l'onglet Tirage — retirer une entrée de SPREADS suffit à faire
+// disparaître sa tuile, `Object.values(SPREADS)` étant la seule source de cette grille (voir
+// tirage() ci-dessous). Avec lui disparaissent MONTH_NAMES/remainingMonthsPositions() et
+// YEAR_DEFAULT_QUESTION, qui n'existaient que pour ce tirage.
 function spreadConf(){
-  const base = SPREADS[tirageState.spreadType] || SPREADS.general;
-  if(base.key === "annee"){
-    const positions = remainingMonthsPositions();
-    return { ...base, count: positions.length, positions };
-  }
-  return base;
+  return SPREADS[tirageState.spreadType] || SPREADS.general;
 }
 
 // Réduction numérologique classique : additionne les chiffres jusqu'à retomber sur un
@@ -3555,9 +3538,9 @@ async function fetchRetrospective(summary, code){
 }
 let retrospectiveFetchInFlight = false;
 // Même logique de discrétion qu'ensureTransits()/ensurePortrait() : jamais de prompt de
-// code d'accès depuis un simple chargement du Profil (onglet où vit désormais la tuile
-// "Ta rétrospective de l'année", en 4e position), échec silencieux, un seul appel tant
-// qu'aucune rétrospective n'existe pour l'année en cours.
+// code d'accès depuis un simple chargement de l'onglet Tirage (où vit désormais la tuile
+// "Ta rétrospective de l'année", section "Ton historique" — déplacée depuis Profil/Astro),
+// échec silencieux, un seul appel tant qu'aucune rétrospective n'existe pour l'année en cours.
 function ensureRetrospective(){
   const p = getProfile();
   if(!p || !p.birthDate) return;
@@ -3575,7 +3558,7 @@ function ensureRetrospective(){
   fetchRetrospective(retrospectiveSummary(stats, p), code)
     .then(text=>{
       localStorage.setItem("delphesRetrospective", JSON.stringify({ year: now.getFullYear(), text }));
-      if(route==="profil") render();
+      if(route==="tirage") render();
     })
     .catch(()=>{ /* échec silencieux : pas de rétrospective cette année, réessayé à la prochaine visite */ })
     .finally(()=>{ retrospectiveFetchInFlight = false; });
@@ -4041,8 +4024,8 @@ function compareGroup(people){
 
 async function generateAIReading(question, cards, positions){
   // Le budget de temps grandit avec le nombre de cartes, exactement comme max_tokens côté
-  // serveur (voir api/reading.js) : une Croix celtique ou une Année à venir demande à l'IA
-  // de rédiger beaucoup plus de texte qu'un tirage à 1 ou 3 cartes, et prend donc
+  // serveur (voir api/reading.js) : une Croix celtique demande à l'IA de rédiger beaucoup
+  // plus de texte qu'un tirage à 1 ou 3 cartes, et prend donc
   // mécaniquement plus longtemps à générer. Un plafond fixe de 15s (l'ancienne valeur)
   // coupait la connexion avant que la réponse ait eu le temps d'arriver pour la plupart des
   // tirages un peu grands, ce qui faisait basculer silencieusement vers la lecture hors-ligne
@@ -4116,7 +4099,7 @@ function render(){
   document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.toggle("active", b.dataset.route===route));
   const back = document.getElementById("backBtn");
   if(back) back.hidden = route === "home";
-  title.textContent = {home:"Tarot de Delphes", tirage:"Tirage", apprendre:"Apprendre", reves:"Rêves", profil:"Profil"}[route] || "Tarot de Delphes";
+  title.textContent = {home:"Tarot de Delphes", tirage:"Tirage", apprendre:"Apprendre", reves:"Rêves", profil:"Astro"}[route] || "Tarot de Delphes";
   AmbientAudio.setMood(route);
   if(route==="home") screen.innerHTML = home();
   if(route==="tirage") screen.innerHTML = tirage();
@@ -4328,12 +4311,21 @@ function home(){
     <div class="tile" data-go="tirage"><strong>✦ Tirer les cartes</strong><span>Pose ta question, choisis le tirage qui lui correspond.</span></div>
     <div class="tile" data-go="apprendre"><strong>◈ Apprendre</strong><span>Les cartes, les figures mythologiques et les symboles du jeu, à explorer par catégorie.</span></div>
     <div class="tile" data-go="reves"><strong>☾ Rêves</strong><span>Note un rêve, fais-le interpréter à la manière des devins grecs.</span></div>
-    <div class="tile" data-go="profil"><strong>☉ Profil</strong><span>Ton profil astral et tes tirages passés.</span></div>
+    <div class="tile" data-go="profil"><strong>☉ Astro</strong><span>Ton thème natal, tes proches, et les arcanes qui te sont liés.</span></div>
   </div>`;
 }
 
 function tirage(){
   if(!tirageState.spreadType){
+    // Retour direct d'utilisatrice : Journal, Statistiques et Rétrospective vivaient dans
+    // l'onglet Profil (désormais Astro) alors qu'ils portent tous les trois sur l'historique
+    // des TIRAGES, pas sur le thème astral — regroupés ici, à la suite des types de tirage,
+    // sous "Ton historique". ensureRetrospective()/getCachedRetrospective() (import du même
+    // bloc que profil() utilisait) : seul cet écran (le tirage non commencé) affiche cette
+    // tuile, donc c'est ici, et seulement ici, qu'on a besoin de vérifier si elle est prête.
+    ensureRetrospective();
+    const retrospective = getCachedRetrospective();
+    const retrospectiveReady = retrospective && retrospective.year === new Date().getFullYear();
     return `<section class="draw-zone">
       ${constellationHTML("tirage")}
       ${oracleGlowHTML()}
@@ -4342,14 +4334,19 @@ function tirage(){
     </section>
     <div class="grid" style="margin-top:10px">
       ${Object.values(SPREADS).map(s=>{
-        const displayCount = s.key === "annee" ? remainingMonthsPositions().length : s.count;
         const locked = !canStartSpread(s.key);
         return `<div class="tile${locked?" locked":""}" data-spread="${s.key}">
         <strong>${s.glyph} ${escapeHTML(s.name)}${locked?" 🔒":""}</strong>
-        <span>${escapeHTML(s.description)} (${displayCount} carte${displayCount>1?"s":""})</span>
-        ${locked ? `<span class="note" style="display:block;margin-top:4px">${isSpreadTypeFree(s.key) ? "Ton tirage général gratuit du jour est déjà utilisé — reviens demain, ou passe en premium." : "Fonctionnalité premium — active-la depuis l'onglet Profil."}</span>` : ""}
+        <span>${escapeHTML(s.description)} (${s.count} carte${s.count>1?"s":""})</span>
+        ${locked ? `<span class="note" style="display:block;margin-top:4px">${isSpreadTypeFree(s.key) ? "Ton tirage général gratuit du jour est déjà utilisé — reviens demain, ou passe en premium." : "Fonctionnalité premium — active-la depuis l'onglet Astro."}</span>` : ""}
       </div>`;
       }).join("")}
+    </div>
+    <div class="section-title centered" style="margin-top:28px"><h3>Ton historique</h3></div>
+    <div class="grid">
+      <div class="tile" data-screen-go="journal"><strong>☽ Journal</strong><span>${journal.length} tirage${journal.length>1?"s":""} enregistré${journal.length>1?"s":""}.</span></div>
+      <div class="tile" data-screen-go="stats"><strong>📊 Statistiques</strong><span>Tes tendances : cartes, thèmes, série de jours.</span></div>
+      ${retrospectiveReady ? `<div class="tile" data-go-retrospective="1"><strong>🎂 Ta rétrospective de l'année</strong><span>Un an de tirages, résumé pour toi.</span></div>` : ""}
     </div>`;
   }
   const conf = spreadConf();
@@ -4427,7 +4424,7 @@ function currentReadingTexts(){
 }
 
 function renderDrawResult(){
-  const { question, spread, picks, notes, saved, aiStatus, spreadType } = tirageState;
+  const { question, spread, picks, notes, saved, aiStatus } = tirageState;
   const chosen = picks.map(i=>spread[i]);
   const domain = detectDomain(question);
   const conf = spreadConf();
@@ -4440,9 +4437,7 @@ function renderDrawResult(){
        ${reading.source==="local" && aiStatus==="error" ? `<p class="note">(Lecture générée hors-ligne — le service de lecture personnalisée n'a pas répondu.)</p>` : ""}`;
 
   return `
-    ${spreadType === "annee"
-      ? `<p class="question-recall">✦ Année à venir</p>`
-      : `<p class="question-recall">« ${escapeHTML(question)} »</p>`}
+    <p class="question-recall">« ${escapeHTML(question)} »</p>
     <div class="reading-grid">
       ${chosen.map((c,i)=>`<article class="reading-block">
         <div class="reading-roman">${escapeHTML(conf.positions[i]||"")}</div>
@@ -4819,27 +4814,27 @@ function showDeityDetail(id, backTo = cardDetailReturnTo){
   bindCards(); bindChips();
 }
 
-/* ===================== ONGLET PROFIL (profil astral + journal) ===================== */
+/* ===================== ONGLET PROFIL / ASTRO (thème natal, proches, arcanes liés) ===================== */
+// Route interne restée "profil" (fonction, `data-route`, clés localStorage…) — seul le
+// libellé affiché a changé, en bas ("Astro") comme dans le titre en haut (voir `render()`) :
+// retour direct d'utilisatrice, renommage superficiel plutôt qu'un renommage interne, sans
+// bénéfice pour qui que ce soit d'autre que la cohérence du nom de fichier des commentaires.
+// Journal, Statistiques et Rétrospective ont déménagé dans l'onglet Tirage (voir tirage()) —
+// ils portent sur l'historique des TIRAGES, pas sur le thème astral.
 
 function profil(){
   const saved = getProfile();
   const links = profileMajorLinks();
-  ensureRetrospective();
-  const retrospective = getCachedRetrospective();
-  const retrospectiveReady = retrospective && retrospective.year === new Date().getFullYear();
   return `<section class="hero">
     ${constellationHTML("profil")}
     <div class="hero-emblem">☉</div>
     <h2>Profil</h2>
-    <p>Ton profil astral et l'historique de tes tirages — tout reste privé, sur cet appareil.</p>
+    <p>Ton thème natal, tes proches, et les arcanes qui te sont liés — tout reste privé, sur cet appareil.</p>
   </section>
   <div class="grid" style="margin-top:20px">
-    <div class="tile" data-profil-go="astral"><strong>☉ Profil astral</strong><span>Ton thème natal complet, calculé à partir de ta date, heure et lieu de naissance.</span></div>
-    <div class="tile" data-profil-go="journal"><strong>☽ Journal</strong><span>${journal.length} tirage${journal.length>1?"s":""} enregistré${journal.length>1?"s":""}.</span></div>
-    <div class="tile" data-profil-go="stats"><strong>📊 Statistiques</strong><span>Tes tendances : cartes, thèmes, série de jours.</span></div>
-    <div class="tile" data-profil-go="relations"><strong>🤝 Mes proches</strong><span>Compare ton thème à celui d'un partenaire, d'un enfant, d'un parent…</span></div>
-    ${links ? `<div class="tile" data-profil-go="majeurs"><strong>🃏 Arcanes majeurs liés</strong><span>Les cartes que ton Soleil, ta Lune et ton Ascendant réveillent dans le jeu.</span></div>` : ""}
-    ${retrospectiveReady ? `<div class="tile" data-go-retrospective="1"><strong>🎂 Ta rétrospective de l'année</strong><span>Un an de tirages, résumé pour toi.</span></div>` : ""}
+    <div class="tile" data-screen-go="astral"><strong>☉ Profil astral</strong><span>Ton thème natal complet, calculé à partir de ta date, heure et lieu de naissance.</span></div>
+    <div class="tile" data-screen-go="relations"><strong>🤝 Mes proches</strong><span>Compare ton thème à celui d'un partenaire, d'un enfant, d'un parent…</span></div>
+    ${links ? `<div class="tile" data-screen-go="majeurs"><strong>🃏 Arcanes majeurs liés</strong><span>Les cartes que ton Soleil, ta Lune et ton Ascendant réveillent dans le jeu.</span></div>` : ""}
   </div>
   <button class="secondary" data-profil-edit="1" style="display:block;margin:22px auto 0">${saved ? "Modifier mes informations" : "Renseigner mes informations"}</button>
   <p class="note" style="text-align:center;margin-top:16px"><a href="politique-confidentialite.html" target="_blank" rel="noopener">Politique de confidentialité</a></p>`;
@@ -6125,9 +6120,10 @@ function journalView(){
   </article>`).join("")}`;
 }
 
-// Écran "detail" (accessible depuis la tuile Journal de l'onglet Profil) — même motif
-// que les autres sous-écrans (showLearnMajors, etc.), le bouton Retour ramène au menu
-// Profil puisque `route` reste "profil" pendant toute la navigation.
+// Écran "detail" (accessible depuis la tuile Journal de l'onglet Tirage, section "Ton
+// historique" — déplacée depuis l'onglet Profil/Astro) — même motif que les autres
+// sous-écrans (showLearnMajors, etc.), le bouton Retour ramène au menu Tirage puisque
+// `route` reste "tirage" pendant toute la navigation.
 function showJournal(){
   preDetailScroll = window.scrollY;
   document.getElementById("screen").innerHTML = `<div class="detail">${journalView()}
@@ -6391,9 +6387,12 @@ function bind(){
       else if(key==="symboles") showSymbolsLibrary();
     };
   });
-  document.querySelectorAll("[data-profil-go]").forEach(el=>{
+  // Dispatcher commun à deux onglets : Profil/Astro (astral/relations/majeurs) ET Tirage,
+  // section "Ton historique" (journal/stats — voir tirage()) — d'où un nom d'attribut
+  // volontairement neutre plutôt que "profil".
+  document.querySelectorAll("[data-screen-go]").forEach(el=>{
     el.onclick = ()=>{
-      const key = el.dataset.profilGo;
+      const key = el.dataset.screenGo;
       if(key==="astral") showProfilAstral();
       else if(key==="journal") showJournal();
       else if(key==="stats") showStats();
@@ -6427,17 +6426,11 @@ function bind(){
       const key = el.dataset.spread;
       if(!canStartSpread(key)){
         alert(isSpreadTypeFree(key)
-          ? "Ton tirage général gratuit du jour est déjà utilisé — reviens demain, ou active le mode premium depuis l'onglet Profil."
-          : "Ce tirage fait partie du contenu premium — active-le depuis l'onglet Profil.");
+          ? "Ton tirage général gratuit du jour est déjà utilisé — reviens demain, ou active le mode premium depuis l'onglet Astro."
+          : "Ce tirage fait partie du contenu premium — active-le depuis l'onglet Astro.");
         return;
       }
-      if(key === "annee"){
-        // Pas de question à écrire pour ce tirage : on saute directement à la pioche,
-        // avec une question par défaut (utilisée pour la lecture, jamais affichée à saisir).
-        tirageState = { question: YEAR_DEFAULT_QUESTION, spreadType: key, spread: shuffledDeck().slice(0, SPREADS.annee.poolSize), picks: [], notes:"", saved:false, savedIndex:null, aiReading:null, aiStatus:"idle" };
-      } else {
-        tirageState.spreadType = key;
-      }
+      tirageState.spreadType = key;
       saveTirageState(); render();
     };
   });
@@ -6453,7 +6446,7 @@ function bind(){
       // (question déjà saisie), on peut tirer plusieurs fois de suite sans repasser par la
       // sélection de tirage — c'est ce second tirage général du jour qu'il faut bloquer.
       if(!canStartSpread(tirageState.spreadType)){
-        alert("Ton tirage général gratuit du jour est déjà utilisé — reviens demain, ou active le mode premium depuis l'onglet Profil.");
+        alert("Ton tirage général gratuit du jour est déjà utilisé — reviens demain, ou active le mode premium depuis l'onglet Astro.");
         return;
       }
       const poolSize = spreadConf().poolSize;
