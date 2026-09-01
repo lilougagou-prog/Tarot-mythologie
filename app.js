@@ -6033,7 +6033,7 @@ function renderProfilResults(saved){
 
     <div class="section-title centered" style="margin-top:24px"><h3>Ta divinité tutélaire</h3></div>
     ${premiumOn ? (deity ? `
-    <div class="card-grid">${cardHTML(deity.card, deity.card[4]==="major"?"major":(SUITS[deity.card[6]]?.[0]||"major"))}</div>
+    ${cardHTML(deity.card, deity.card[4]==="major"?"major":(SUITS[deity.card[6]]?.[0]||"major"))}
     <div class="symbol-list">
       <div class="symbol clickable" data-deity="${escapeHTML(deity.deityKey)}" style="text-align:center">
         <b>${escapeHTML(deity.deityName)}</b>
