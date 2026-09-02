@@ -3102,7 +3102,14 @@ function isSpreadTypeFree(key){ return FREE_SPREAD_TYPES.has(key); }
    La boutique elle-même n'existe pas encore ("qui doit être créé") : BRACELET_SHOP_BASE_URL et
    BRACELET_PREMIUM_DISCOUNT_CODE sont des PLACEHOLDERS, à remplacer dès que la vraie boutique
    (Shopify ou autre) est en ligne — tout le reste (braceletCardSlug(), braceletLinkFor())
-   n'aura besoin d'aucun changement, seuls ces deux constantes bougent. */
+   n'aura besoin d'aucun changement, seuls ces deux constantes bougent.
+   Retour direct d'utilisatrice, une fois tout ça en place : "Enlève les boutons faire son
+   bracelet pour l'instant. On les mettra quand je serai prête" — BRACELET_ENABLED coupe
+   l'AFFICHAGE des deux sections (profil principal et chaque proche, voir les deux appels de
+   braceletSectionHTML() plus bas) sans toucher au reste du mécanisme : tout ce qui précède
+   (recette, lien, réduction premium) reste intact et prêt, il suffira de repasser ce drapeau
+   à true quand la boutique existera pour tout réafficher d'un coup, sans rien réécrire. */
+const BRACELET_ENABLED = false;
 const BRACELET_SHOP_BASE_URL = "https://boutique.tarot-de-delphes.fr/bracelet"; // TODO: remplacer par l'URL réelle une fois la boutique créée
 const BRACELET_PREMIUM_DISCOUNT_CODE = "DELPHES-PREMIUM"; // TODO: remplacer par le vrai code de réduction de la boutique
 
@@ -4942,7 +4949,7 @@ function renderPersonalMythology(){
   return `<div class="section-title"><h3>Mythologie personnelle</h3></div>
   <p class="note" style="text-align:center">Ta divinité tutélaire, et les arcanes majeurs que ton thème réveille dans le jeu.</p>
 
-  ${braceletSectionHTML(links, saved.firstName, premiumOn)}
+  ${BRACELET_ENABLED ? braceletSectionHTML(links, saved.firstName, premiumOn) : ""}
 
   <div class="section-title centered" style="margin-top:24px"><h3>Ta divinité tutélaire</h3></div>
   ${premiumOn ? (deity ? `
@@ -5481,7 +5488,7 @@ function renderComparison(primary, relation){
   return `<div class="detail">
     <div class="section-title"><h3>Toi & ${escapeHTML(relation.firstName)}</h3></div>
 
-    ${braceletSectionHTML(majorLinksFor(relation.astral), relation.firstName, premiumOn, `Le bracelet de ${relation.firstName}`, `Créer le bracelet de ${relation.firstName}`)}
+    ${BRACELET_ENABLED ? braceletSectionHTML(majorLinksFor(relation.astral), relation.firstName, premiumOn, `Le bracelet de ${relation.firstName}`, `Créer le bracelet de ${relation.firstName}`) : ""}
 
     <p class="question-recall" style="margin-top:20px">« ${escapeHTML(relLabel)} »</p>
     <p style="text-align:center;margin-top:6px"><button class="ghost" id="editRelationFromComparison" style="font-size:12px;padding:4px 10px">✎ Modifier ses informations</button></p>
