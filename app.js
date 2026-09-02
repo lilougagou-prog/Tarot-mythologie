@@ -151,40 +151,15 @@ function decanCardFor(sign, degreeInSign){
   return cards[idx];
 }
 
-// Signe zodiacal -> animal symbolique (catégorie "Animaux" de SYMBOL_LIBRARY), pour
-// l'Animal représentatif (voir representativeAnimal() plus bas).
-// Retour direct d'utilisatrice : "je préfère que chaque signe tombe sur son « vrai » animal
-// (bélier -> bélier de la Toison d'or, lion -> lion de Némée...) et les signes sans animal,
-// là tu fais une association". Six signes SONT littéralement un animal dans leur mythe
-// fondateur (le mythe qui a donné son nom à la constellation, pas seulement un dieu associé
-// au signe) : Bélier, Taureau, Cancer, Lion, Scorpion, Poissons. Capricorne (chèvre-poisson)
-// et Sagittaire (centaure, mi-homme mi-cheval) sont des hybrides — retenue leur moitié
-// animale, déjà un vrai animal du mythe (Amalthée, le centaure). Les quatre signes restants
-// (Gémeaux, Vierge, Balance, Verseau) n'ont pas d'animal propre dans leur mythe — ce sont des
-// figures humaines/divines (les Dioscures, une vierge, une balance tenue par une déesse, un
-// échanson) — une association reste donc nécessaire, choisie pour son lien direct au mythe
-// (jamais un simple "écho thématique" comme avant) : Gémeaux -> le cygne dont Léda a eu Castor
-// et Pollux ; Verseau -> l'aigle qui enlève Ganymède, devenu ce signe ; Vierge -> l'abeille
-// (Déméter, Mélissai) et Balance -> la colombe (Vénus/Aphrodite régit la Balance en
-// astrologie) restent des associations, mais déjà correctement sourcées, inchangées.
-// Retour direct d'utilisatrice suivant, "pour simplifier" : un second signal affinait
-// auparavant ce choix — le domaine de question le plus fréquent du Journal (DOMAIN_ANIMAL,
-// via Pégase et Araignée, jamais rattachés à un signe) — retiré depuis (voir
-// representativeAnimal() plus bas) : seul le signe solaire détermine désormais l'animal.
-const SIGN_ANIMAL = {
-  "Bélier":"bélier",      // le bélier à la Toison d'or, sauvé par Hermès (voir la fiche « Bélier »)
-  "Taureau":"taureau",    // le signe est littéralement cet animal, lui-même lié à Zeus/Poséidon/Minos
-  "Gémeaux":"cygne",      // Castor et Pollux naissent de l'union de Zeus-cygne et Léda (voir la fiche « Cygne »)
-  "Cancer":"crabe",       // le crabe envoyé par Héra contre Héraclès (voir la fiche « Crabe »)
-  "Lion":"lion",          // le lion de Némée, 1er travail d'Héraclès (voir la fiche « Lion »)
-  "Vierge":"abeille",     // travail patient et récolte organisée — écho thématique à Déméter, dieu du majeur (l'Hermite)
-  "Balance":"colombe",    // Vénus (Aphrodite) régit la Balance en astrologie — colombe, l'oiseau d'Aphrodite
-  "Scorpion":"scorpion",  // le scorpion envoyé par Apollon contre Orion (voir la fiche « Scorpion »)
-  "Sagittaire":"cheval",  // le Sagittaire, traditionnellement un centaure, mi-homme mi-cheval
-  "Capricorne":"chèvre",  // Amalthée, placée parmi les étoiles sous cette forme (voir la fiche « Chèvre »)
-  "Verseau":"aigle",      // l'aigle de Zeus qui enlève Ganymède, futur Verseau (voir la fiche « Aigle »)
-  "Poissons":"poisson",   // Aphrodite et Éros changés en poissons pour fuir Typhon (voir la fiche « Poisson »)
-};
+// Retour direct d'utilisatrice : "En fait on va carrément l'enlever" — l'Animal
+// représentatif (SIGN_ANIMAL, ex-DOMAIN_ANIMAL, representativeAnimal()) est entièrement
+// retiré ; "Mythologie personnelle" (voir renderPersonalMythology() plus bas) ne garde plus
+// que Ta divinité tutélaire et les Arcanes majeurs liés — jusqu'à 3 illustrations au total
+// (Soleil/Lune/Ascendant), pensées comme base d'une future fonctionnalité de bracelets
+// personnalisés. Les fiches mythologiques déjà écrites pour cette fonctionnalité (bélier,
+// crabe, lion, scorpion, chèvre, poisson, et le paragraphe Ganymède/Verseau ajouté à aigle)
+// restent intactes dans SYMBOL_LIBRARY plus bas — seule la table de correspondance
+// signe -> animal et la fonction qui la consommait ont disparu.
 
 // Fiches enrichies : lecture Tarot de Marseille + éclairage mythologique — pour la carte du jour et le détail des arcanes.
 const CARD_LORE = {
@@ -1300,11 +1275,11 @@ const SYMBOL_LIBRARY = {
     "L'araignée est ainsi devenue un symbole d'habileté sans limite, de création patiente, mais aussi d'orgueil qui défie trop haut et de talent qui, pour n'avoir pas su se taire, se retrouve puni jusque dans sa propre perfection.",
     "L'araignée est particulièrement associée à Athéna, par le mythe d'Arachné.",
   ]},
-  // Les six animaux qui suivent complètent SIGN_ANIMAL (voir plus haut) : chaque signe du
-  // zodiaque qui EST littéralement un animal dans son mythe fondateur tombe désormais sur cet
-  // animal-là plutôt que sur une simple association thématique — retour direct d'utilisatrice
-  // ("chaque signe tombe sur son « vrai » animal [...] et les signes sans animal, là tu fais
-  // une association").
+  // Les six animaux qui suivent ont été écrits pour l'Animal représentatif, retiré depuis
+  // (voir plus haut, "En fait on va carrément l'enlever" — les fiches elles-mêmes restent,
+  // "garde bien les textes écrit sur les animaux") : chaque signe du zodiaque qui EST
+  // littéralement un animal dans son mythe fondateur (plutôt qu'une simple association
+  // thématique) a sa propre fiche ici.
   "bélier":{icon:"🐏",label:"Bélier",category:"Animaux",desc:"Le bélier à la Toison d'or : sacrifice salvateur, guide céleste, quête à accomplir.",links:["hermès"],lore:[
     "Phrixos et Hellé, les enfants de la reine Néphélé, sont promis au sacrifice par leur belle-mère Ino, qui a fait mentir un oracle pour s'en débarrasser. Pour les sauver, leur mère obtient d'Hermès un bélier extraordinaire à la toison d'or, capable de voler et de parler.",
     "Le bélier emporte les deux enfants dans les airs, loin du danger. En chemin, Hellé, prise de vertige, tombe dans le détroit qui portera désormais son nom, l'Hellespont — seul Phrixos achève le voyage, jusqu'en Colchide, à l'autre bout du monde connu.",
@@ -3088,7 +3063,7 @@ function setPremiumEnabled(on){ localStorage.setItem("delphesPremium", on ? "1" 
 // échantillon réduit de la bibliothèque (5 symboles, 4 figures mythologiques, 2 arcanes
 // majeurs, les 4 Rois de figures de cour — aucune carte numérale), le Journal et ses
 // statistiques en entier, le Profil astral sans aucune explication écrite (ni divinité
-// tutélaire, ni Animal représentatif). Premium = tout le reste. Comme pour
+// tutélaire, ni arcanes majeurs liés). Premium = tout le reste. Comme pour
 // isPremiumEnabled() ci-dessus, ce n'est qu'un découpage appliqué au flag local — seule
 // isPremiumEnabled() aura besoin de changer le jour où un vrai système d'achat existera.
 const FREE_MAJORS = new Set(["Le Mat", "I — Le Bateleur"]);
@@ -3140,27 +3115,6 @@ function premiumLockHTML(message){
       <br><small>${escapeHTML(message)}</small>
     </div>
   </div>`;
-}
-
-// Détermine l'Animal représentatif : uniquement le signe solaire du thème natal (SIGN_ANIMAL).
-// Retour direct d'utilisatrice ("pour simplifier on va enlever le domaine par question
-// dominant du journal") : affinait auparavant ce choix avec le domaine de question le plus
-// fréquent du Journal (DOMAIN_ANIMAL, via journalTrends().topDomain), une fois assez de
-// tirages enregistrés pour que ce domaine soit un vrai motif — logique retirée avec elle,
-// ainsi que le seuil REPRESENTATIVE_ANIMAL_MIN_READINGS (10 tirages) qui n'existait que pour
-// cette raison : l'animal ne dépend plus que du thème astral, débloqué dès qu'un profil est
-// enregistré, exactement comme la divinité tutélaire. Fonctionnalité premium (voir
-// isPremiumEnabled()) : renvoie toujours { locked: true, ... } tant qu'elle n'est pas activée.
-function representativeAnimal(saved){
-  const premium = isPremiumEnabled();
-  if(!premium) return { locked: true };
-
-  const sunSign = saved?.astral?.bodies?.sun?.sign;
-  const animalId = sunSign ? SIGN_ANIMAL[sunSign] : null;
-  if(!animalId) return { locked: false, animal: null }; // débloqué mais rien à afficher pour l'instant (pas de profil astral)
-
-  const symbol = SYMBOL_LIBRARY[animalId];
-  return { locked: false, animal: { id: animalId, label: symbol.label, icon: symbol.icon, desc: symbol.desc } };
 }
 
 // Résumé minimal du rêve le plus récent, prêt à envoyer à /api/reading (voir
@@ -3268,9 +3222,9 @@ function journalStats(entries){
 
   // Affinités mythologiques : quelles divinités et quels symboles reviennent le plus
   // souvent dans les cartes tirées — un profil qui se construit et s'affine à mesure que le
-  // Journal grossit, contrairement à la divinité tutélaire ou l'Animal représentatif
-  // (calculés une fois pour toutes à partir du thème astral). Indépendant de
-  // domainDistribution ci-dessus (qui regarde les QUESTIONS posées, pas les cartes tirées).
+  // Journal grossit, contrairement à la divinité tutélaire (calculée une fois pour toutes à
+  // partir du thème astral). Indépendant de domainDistribution ci-dessus (qui regarde les
+  // QUESTIONS posées, pas les cartes tirées).
   const deityCounts = {}, symbolCounts = {};
   entries.forEach(j=>{
     (j.cards||[]).forEach(name=>{
@@ -4843,14 +4797,15 @@ function showDeityDetail(id, backTo = cardDetailReturnTo){
 
 function profil(){
   const saved = getProfile();
-  // Retour direct d'utilisatrice : divinité tutélaire, animal représentatif et arcanes
-  // majeurs liés sont trois façons différentes de dire « voici ce que ton thème dit de toi
-  // mythologiquement » — auparavant éclatées (les deux premières dans l'écran Profil astral,
-  // la 3e sur son propre écran) plutôt que regroupées. Cet écran unique (renderPersonalMythology()/
-  // showPersonalMythology(), route "mythologie") sert aussi d'ancrage prévu pour une future
-  // fonctionnalité de bracelets personnalisés (un dieu, un animal, des arcanes — la même
-  // matière symbolique qui composera leurs breloques). Ne s'affiche que si un thème astral
-  // est enregistré (`saved.astral`), les trois sections en dépendant toutes.
+  // Retour direct d'utilisatrice : divinité tutélaire et arcanes majeurs liés sont deux
+  // façons différentes de dire « voici ce que ton thème dit de toi mythologiquement » —
+  // auparavant éclatées (l'une dans l'écran Profil astral, l'autre sur son propre écran)
+  // plutôt que regroupées. Cet écran unique (renderPersonalMythology()/showPersonalMythology(),
+  // route "mythologie") sert aussi d'ancrage prévu pour une future fonctionnalité de
+  // bracelets personnalisés : jusqu'à 3 illustrations au total (la carte de la divinité, plus
+  // Soleil/Lune/Ascendant côté arcanes majeurs) comme base de leurs breloques — l'Animal
+  // représentatif, qui vivait ici aussi, a depuis été retiré (voir plus haut, "En fait on va
+  // carrément l'enlever"). Ne s'affiche que si un thème astral est enregistré (`saved.astral`).
   return `<section class="hero">
     ${constellationHTML("profil")}
     <div class="hero-emblem">☉</div>
@@ -4860,7 +4815,7 @@ function profil(){
   <div class="grid" style="margin-top:20px">
     <div class="tile" data-screen-go="astral"><strong>☉ Profil astral</strong><span>Ton thème natal complet, calculé à partir de ta date, heure et lieu de naissance.</span></div>
     <div class="tile" data-screen-go="relations"><strong>🤝 Mes proches</strong><span>Compare ton thème à celui d'un partenaire, d'un enfant, d'un parent…</span></div>
-    ${saved && saved.astral ? `<div class="tile" data-screen-go="mythologie"><strong>🃏 Mythologie personnelle</strong><span>Ta divinité tutélaire, ton animal représentatif, et les arcanes majeurs que ton thème réveille.</span></div>` : ""}
+    ${saved && saved.astral ? `<div class="tile" data-screen-go="mythologie"><strong>🃏 Mythologie personnelle</strong><span>Ta divinité tutélaire et les arcanes majeurs que ton thème réveille.</span></div>` : ""}
   </div>
   <button class="secondary" data-profil-edit="1" style="display:block;margin:22px auto 0">${saved ? "Modifier mes informations" : "Renseigner mes informations"}</button>
   <p class="note" style="text-align:center;margin-top:16px"><a href="politique-confidentialite.html" target="_blank" rel="noopener">Politique de confidentialité</a></p>`;
@@ -4868,14 +4823,19 @@ function profil(){
 
 // Écran dédié (sorti de profil() pour lui laisser toute la place — auparavant une simple
 // section en bas de l'onglet Profil, puis son propre écran limité aux seuls arcanes majeurs
-// liés) : regroupe désormais TOUTE la lecture mythologique du thème — divinité tutélaire et
-// animal représentatif (déménagés depuis renderProfilResults(), voir plus haut) ainsi que les
-// arcanes majeurs liés (Soleil/Lune/Ascendant, voir profileMajorLinks()/majorLinksFor()) et
-// pourquoi ces cartes précisément + ce qu'elles disent de la personne (majorLinksText, IA,
-// premium — voir plus haut). Retour direct d'utilisatrice : ces trois éléments répondent tous
-// à la même question (« qu'est-ce que mon thème dit de moi mythologiquement ? ») et vivaient
+// liés) : regroupe désormais TOUTE la lecture mythologique du thème — divinité tutélaire
+// (déménagée depuis renderProfilResults(), voir plus haut) ainsi que les arcanes majeurs
+// liés (Soleil/Lune/Ascendant, voir profileMajorLinks()/majorLinksFor()) et pourquoi ces
+// cartes précisément + ce qu'elles disent de la personne (majorLinksText, IA, premium — voir
+// plus haut). Retour direct d'utilisatrice : ces deux éléments répondent tous les deux à la
+// même question (« qu'est-ce que mon thème dit de moi mythologiquement ? ») et vivaient
 // pourtant à deux endroits séparés — cet écran unique sert aussi d'ancrage prévu pour une
-// future fonctionnalité de bracelets personnalisés.
+// future fonctionnalité de bracelets personnalisés : jusqu'à 3 illustrations au total (la
+// carte de la divinité, plus une par point Soleil/Lune/Ascendant côté arcanes majeurs).
+// Un 3e élément, l'Animal représentatif, a vécu ici lui aussi un temps — retiré depuis
+// ("En fait on va carrément l'enlever [...] Garde bien les textes écrit sur les animaux") :
+// ses fiches mythologiques restent intactes dans SYMBOL_LIBRARY (voir plus haut, bélier/
+// crabe/lion/scorpion/chèvre/poisson), seule la fonctionnalité qui les surfaçait ici disparaît.
 function renderPersonalMythology(){
   const saved = getProfile();
   if(!saved || !saved.astral){
@@ -4888,9 +4848,6 @@ function renderPersonalMythology(){
   // --- Divinité tutélaire ---
   const deity = tutelaryDeity(saved);
   const tutelaryReasonText = (typeof astralText?.tutelaryReason === "string" ? astralText.tutelaryReason : tutelaryReasonFallback(deity)) || "La figure la plus présente dans ton thème natal.";
-
-  // --- Animal représentatif ---
-  const ra = representativeAnimal(saved);
 
   // --- Arcanes majeurs liés ---
   const links = profileMajorLinks();
@@ -4927,7 +4884,7 @@ function renderPersonalMythology(){
   })) : [];
 
   return `<div class="section-title"><h3>Mythologie personnelle</h3></div>
-  <p class="note" style="text-align:center">Ta divinité tutélaire, ton animal représentatif, et les arcanes majeurs que ton thème réveille dans le jeu.</p>
+  <p class="note" style="text-align:center">Ta divinité tutélaire, et les arcanes majeurs que ton thème réveille dans le jeu.</p>
 
   <div class="section-title centered" style="margin-top:24px"><h3>Ta divinité tutélaire</h3></div>
   ${premiumOn ? (deity ? `
@@ -4940,18 +4897,6 @@ function renderPersonalMythology(){
   </div>
   <p class="note" style="text-align:center;margin-top:6px">${escapeHTML(tutelaryReasonText)} Touche la carte pour la découvrir, ou son nom pour en savoir plus sur ${escapeHTML(deity.deityName)}.</p>` : `<p class="note" style="text-align:center">Pas encore assez d'éléments dans ton thème pour la calculer.</p>`)
     : premiumLockHTML("La divinité tutélaire calculée à partir de ton thème fait partie du contenu premium.")}
-
-  <div class="section-title centered" style="margin-top:24px"><h3>Ton animal représentatif</h3></div>
-  ${ra.locked ? premiumLockHTML("L'animal symbolique lié à ton thème fait partie du contenu premium.")
-    : (ra.animal ? `
-  <div class="symbol-list">
-    <div class="symbol clickable" data-symbol="${escapeHTML(ra.animal.id)}" style="text-align:center">
-      <div style="font-size:32px">${escapeHTML(ra.animal.icon||"✦")}</div>
-      <b>${escapeHTML(ra.animal.label)}</b>
-      ${ra.animal.desc ? `<br><small>${escapeHTML(ra.animal.desc)}</small>` : ""}
-    </div>
-  </div>
-  <p class="note" style="text-align:center;margin-top:6px">D'après ton thème astral. Touche pour en savoir plus.</p>` : `<p class="note" style="text-align:center">Enregistre ton profil astral pour le révéler.</p>`)}
 
   <div class="section-title centered" style="margin-top:24px"><h3>Arcanes majeurs liés</h3></div>
   ${links ? `
@@ -4981,7 +4926,7 @@ function showPersonalMythology(){
   };
   cardDetailReturnTo = showPersonalMythology;
   bindCards();
-  bindChips(); // rend cliquables la divinité tutélaire (data-deity) et l'animal représentatif (data-symbol)
+  bindChips(); // rend cliquable la divinité tutélaire (data-deity)
 }
 
 /* ===================== ONGLET RÊVES (onirocritique grecque, IA) ===================== */
@@ -5898,9 +5843,9 @@ function showProfilAstral(){
     render();
     requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
-  // Divinité tutélaire, animal représentatif et leurs bindings (bindChips()/bindCards())
-  // ont déménagé avec eux vers renderPersonalMythology()/showPersonalMythology() — cet
-  // écran-ci (Profil astral) n'a plus rien de cliquable en dehors du bouton Retour.
+  // La divinité tutélaire et ses bindings (bindChips()/bindCards()) ont déménagé avec elle
+  // vers renderPersonalMythology()/showPersonalMythology() — cet écran-ci (Profil astral)
+  // n'a plus rien de cliquable en dehors du bouton Retour.
   const premiumToggle = document.getElementById("premiumToggle");
   if(premiumToggle) premiumToggle.onchange = ()=>{ setPremiumEnabled(premiumToggle.checked); showProfilAstral(); };
   // Le portrait et les textes d'interprétation IA font partie du contenu premium (voir
