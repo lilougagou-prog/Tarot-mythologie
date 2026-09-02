@@ -2748,8 +2748,28 @@ function getAccessCode(){
 // délibéré (un appareil réinitialisé remet le compteur à zéro), mais un filet suffisant pour
 // une phase de test avec des personnes connues — exactement le même compromis, assumé, que le
 // reste de l'app (aucun compte, aucune vraie identité côté serveur).
+// PAR MOIS CIVIL, pas par jour ni un total figé pour toujours — retour direct d'utilisatrice
+// ("c'est par jour ? Ou par mois ?"), tranché pour coller au cycle de facturation de
+// l'abonnement (9,99€/mois, voir PAYMENT_ENABLED plus bas) : 10 appels par jour aurait été
+// bien trop généreux pour un simple garde-fou de test (300/mois), et un total figé pour
+// toujours aurait fini par bloquer définitivement les deux personnes qui testent aujourd'hui,
+// sans date à laquelle elles retrouvent l'usage normal. Remise à zéro automatique au
+// changement de mois (comparaison de chaîne "AAAA-MM", même technique que
+// hasUsedFreeGeneralReadingToday() ci-dessous mais à l'échelle du mois plutôt que du jour —
+// aucune tâche de fond à programmer).
 const AI_CALL_LIMIT_PER_PERSON = 10;
-function aiCallsUsed(){ return parseInt(localStorage.getItem("delphesAiCallsUsed") || "0", 10) || 0; }
+function currentMonthKey(){
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+}
+function aiCallsUsageThisMonth(){
+  let usage;
+  try{ usage = JSON.parse(localStorage.getItem("delphesAiCallsUsage") || "null"); }catch{ usage = null; }
+  const month = currentMonthKey();
+  if(!usage || usage.month !== month) return { month, count: 0 }; // premier appel du mois (ou tout premier appel) -> repart de 0
+  return usage;
+}
+function aiCallsUsed(){ return aiCallsUsageThisMonth().count; }
 function aiCallsRemaining(){ return Math.max(0, AI_CALL_LIMIT_PER_PERSON - aiCallsUsed()); }
 // Appelée juste avant CHACUN des 7 appels réseau vers un endpoint IA (reading/portrait/
 // astral-text/retrospective/ritual/comparison-text/dream — jamais astral.js ni transits.js,
@@ -2760,8 +2780,9 @@ function aiCallsRemaining(){ return Math.max(0, AI_CALL_LIMIT_PER_PERSON - aiCal
 // distinguer ce cas d'un vrai problème réseau.
 function enforceAiCallLimit(){
   if(!isPremiumEnabled()) return; // le gratuit a déjà sa propre limite, indépendante de celle-ci
-  if(aiCallsUsed() >= AI_CALL_LIMIT_PER_PERSON) throw new Error(`limite d'essais IA atteinte (${AI_CALL_LIMIT_PER_PERSON}/${AI_CALL_LIMIT_PER_PERSON})`);
-  localStorage.setItem("delphesAiCallsUsed", String(aiCallsUsed() + 1));
+  const usage = aiCallsUsageThisMonth();
+  if(usage.count >= AI_CALL_LIMIT_PER_PERSON) throw new Error(`limite d'essais IA atteinte (${AI_CALL_LIMIT_PER_PERSON}/${AI_CALL_LIMIT_PER_PERSON} ce mois-ci)`);
+  localStorage.setItem("delphesAiCallsUsage", JSON.stringify({ month: usage.month, count: usage.count + 1 }));
 }
 
 // Profil astral (prénom + thème natal), enregistré localement une fois calculé — voir
