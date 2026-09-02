@@ -242,9 +242,16 @@ textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;paddin
 .primary:disabled{opacity:.4;cursor:not-allowed}
 .primary:active:not(:disabled){transform:scale(.96)}
 .secondary{border:1px solid var(--line);background:transparent;padding:12px 18px;border-radius:999px;cursor:pointer;font-family:"Cinzel",serif;font-size:12px;letter-spacing:.04em;transition:transform .12s ease}
-.secondary:active{transform:scale(.96)}
+.secondary:active:not(:disabled){transform:scale(.96)}
+.secondary:disabled{opacity:.3;cursor:not-allowed}
 .ghost{border:0;background:none;color:var(--deep);opacity:.55;padding:12px 14px;cursor:pointer;font-size:13px;text-decoration:underline;display:block;margin:0 auto;transition:transform .12s ease}
 .ghost:active{transform:scale(.96)}
+
+/* ===== Précédent/Suivant sur la fiche d'une carte (onglet Apprendre) : voir showDetail()
+   dans app.js — n'apparaît que quand la fiche a été ouverte depuis une grille ordonnée
+   (tous les Majeurs, ou les cartes d'une même enseigne). ===== */
+.detail-card-nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px}
+.detail-card-nav button{flex:1}
 .note{font-size:13px;opacity:.65;line-height:1.6}
 /* Ligne du calendrier attique (accueil) : couleur plus prononcée que .note pour ne pas
    se fondre dans le reste du texte muet du hero. */
@@ -372,6 +379,17 @@ textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;paddin
 .sound-toggle:active{transform:scale(.88)}
 .sound-toggle.playing{box-shadow:0 0 0 3px rgba(201,163,90,.35), var(--shadow)}
 @media(min-width:700px){.sound-toggle{right:calc(50% - 450px + 14px)}}
+
+/* ===== Filigrane de marque (clé + soleil + étoile, extrait du dos de carte) — persistant
+   hors du flux #screen, comme .sound-toggle ci-dessus, pour rester visible sur CHAQUE écran
+   sans dépendre de render(). Retour direct d'utilisatrice : "Mets la sur chaque page, de
+   manière discrète mais présente." D'où une opacité volontairement faible et
+   pointer-events:none : un repère silencieux dans un coin, jamais un bouton de plus. ===== */
+.brand-mark{
+  position:fixed; left:14px; bottom:calc(78px + env(safe-area-inset-bottom));
+  z-index:8; width:30px; height:auto; opacity:.4; pointer-events:none; user-select:none;
+}
+@media(min-width:700px){.brand-mark{left:calc(50% - 450px + 14px)}}
 
 /* ===== Transition à chaque changement d'écran (voir triggerScreenAnim() dans app.js) =====
    .screen-anim : onglets + retour vers un écran parent — léger zoom arrière, comme un pas
