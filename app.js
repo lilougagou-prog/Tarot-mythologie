@@ -2757,7 +2757,16 @@ function getAccessCode(){
 // changement de mois (comparaison de chaîne "AAAA-MM", même technique que
 // hasUsedFreeGeneralReadingToday() ci-dessous mais à l'échelle du mois plutôt que du jour —
 // aucune tâche de fond à programmer).
-const AI_CALL_LIMIT_PER_PERSON = 10;
+// 10 -> 50 : retour direct d'utilisatrice ("10 par mois c'est pas trop peu pour du premium ?")
+// — à raison, 10 était clairement trop serré : l'Horoscope du jour (ensureRitual(), appelé
+// automatiquement à chaque ouverture de l'accueil, 1 seul appel réel par jour grâce à son
+// propre cache — voir getCachedRitual()) consomme À LUI SEUL jusqu'à ~30 appels/mois pour
+// quelqu'un qui ouvre l'app tous les jours, l'usage quotidien normal visé par une appli de
+// divination — 10 aurait donc épuisé tout le quota avant même le premier tirage du mois. 50
+// laisse de la marge pour l'horoscope quotidien PLUS plusieurs tirages/interprétations de
+// rêve à la demande, tout en restant un vrai garde-fou (le coût réel de 50 appels/mois/
+// personne reste négligeable pour une phase de test avec des personnes connues).
+const AI_CALL_LIMIT_PER_PERSON = 50;
 function currentMonthKey(){
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
