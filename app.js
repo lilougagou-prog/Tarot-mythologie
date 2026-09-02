@@ -4490,8 +4490,21 @@ function profileMajorLinks(){
   return majorLinksFor(p.astral);
 }
 
+// Combien des figures de DEITY_NOTES sont bien reliées à au moins une carte du jeu — même
+// critère que le calcul de `related` dans showDeityDetail(). Retour direct d'utilisatrice
+// ("il n'y a pas 104 divinités dans le jeu de tarot") : DEITY_NOTES compte 104 figures au
+// total, mais 26 d'entre elles n'existent que comme contexte mythologique dans le lore d'une
+// AUTRE fiche (ex. Jason, cité par la fiche « Bélier », n'a pas lui-même de carte) — la tuile
+// "Figures mythologiques" d'apprendre() ne doit donc affirmer aucun de ces deux chiffres
+// comme "le nombre de divinités du jeu" sans préciser lequel des deux il désigne.
+function deityFigureHasCard(id){
+  return CARDS.some(c => (c[4]==="major"||c[4]==="court") ? (c[1]||"").toLowerCase()===id : NUMBER_CARD_DEITY[c[0]]===id);
+}
+
 function apprendre(){
   const p = learningProgress();
+  const figuresTotal = Object.keys(DEITY_NOTES).length;
+  const figuresOnCards = Object.keys(DEITY_NOTES).filter(deityFigureHasCard).length;
   return `<section class="hero">
     ${constellationHTML("apprendre")}
     <div class="hero-emblem">✦</div>
@@ -4504,7 +4517,7 @@ function apprendre(){
     <div class="tile" data-learn="majeurs">${illusHTML("assets/learn-majeurs.jpg","majeurs")}<strong>Arcanes majeurs</strong><span>Les 22 grandes figures du jeu.</span></div>
     <div class="tile" data-learn="cour">${illusHTML("assets/learn-cour.jpg","cour")}<strong>Figures de cour</strong><span>16 figures, réparties en 4 enseignes.</span></div>
     <div class="tile" data-learn="numerales">${illusHTML("assets/learn-numerales.jpg","numerales")}<strong>Cartes numérales</strong><span>40 cartes, de l'As au Dix.</span></div>
-    <div class="tile" data-learn="figures">${illusHTML("assets/learn-figures.jpg","figures")}<strong>Figures mythologiques</strong><span>Les ${Object.keys(DEITY_NOTES).length} divinités et héros du jeu.</span></div>
+    <div class="tile" data-learn="figures">${illusHTML("assets/learn-figures.jpg","figures")}<strong>Figures mythologiques</strong><span>${figuresTotal} divinités et héros, dont ${figuresOnCards} incarnent une carte du jeu.</span></div>
     <div class="tile" data-learn="symboles">${illusHTML("assets/learn-symboles.jpg","symboles")}<strong>Bibliothèque symbolique</strong><span>Tous les symboles et les nombres, reliés aux cartes et aux figures.</span></div>
   </div>`;
 }
@@ -4901,7 +4914,7 @@ function renderPersonalMythology(){
   ${premiumOn ? "" : premiumLockHTML("Pourquoi ces cartes précisément — et ce qu'elles disent de toi — fait partie du contenu premium.")}
   ${blocks.map(b=>`<div style="margin-top:22px">
     <p class="suit-h4" style="text-align:center;margin-bottom:6px">${escapeHTML(b.link.labels.join(" & "))} en ${escapeHTML(b.link.sign)}</p>
-    <div class="card-grid">${cardHTML(b.link.card,"major")}</div>
+    ${cardHTML(b.link.card,"major")}
     ${premiumOn ? b.paragraphs.map(p=>`<p class="lore-text" style="margin-top:10px">${escapeHTML(p)}</p>`).join("") : ""}
   </div>`).join("")}` : `<p class="note" style="text-align:center">Aucun arcane majeur clairement réveillé par ce thème pour l'instant.</p>`}`;
 }
