@@ -1,5 +1,5 @@
-const CACHE="delphes-v118";
-const ASSETS=["./","./index.html","./styles.css","./app.js","./manifest.json","./icon.svg","./politique-confidentialite.html","./assets/logo-mark.png"];
+const CACHE="delphes-v119";
+const ASSETS=["./","./index.html","./styles.css","./app.js","./manifest.json","./icon.svg","./icon-192.png","./icon-512.png","./icon-180.png","./politique-confidentialite.html","./assets/logo-mark.png"];
 
 self.addEventListener("install",event=>{
   event.waitUntil(
