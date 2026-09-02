@@ -3087,6 +3087,49 @@ function isSymbolLoreFree(id){ return FREE_SYMBOLS.has(id); }
 function isFigureLoreFree(id){ return FREE_FIGURES.has(id); }
 function isSpreadTypeFree(key){ return FREE_SPREAD_TYPES.has(key); }
 
+/* ===================== BRACELET PERSONNALISÉ (voir "Arcanes majeurs liés") =====================
+   Retour direct d'utilisatrice : "j'imaginais la partie arcanes liés comme gratuite. Comme ça
+   chacun peut générer un bracelet. Par contre les comptes premium auront une réduction sur
+   l'achat du bracelet." — à la différence du reste du contenu écrit du Profil astral (voir
+   isPremiumEnabled() ci-dessus), les arcanes majeurs liés (quelles cartes, pas le TEXTE qui
+   les explique) et le bracelet qui en découle restent gratuits pour tout le monde ; seule une
+   réduction à l'achat distingue les comptes premium. "Une fois que l'on a tiré ses arcanes
+   liées, on a un bracelet généré. Quand on clique dessus, on est renvoyé sur le site marchand,
+   avec exactement le bracelet qui a été généré (on peut ensuite le remodifier si on aime
+   pas)." — le pont vers la boutique est un simple lien, pas une intégration technique : la
+   "recette" (quelles cartes) est encodée dans l'URL, la boutique pré-remplit sa configuration
+   avec, et la personne peut ensuite la modifier normalement sur place.
+   La boutique elle-même n'existe pas encore ("qui doit être créé") : BRACELET_SHOP_BASE_URL et
+   BRACELET_PREMIUM_DISCOUNT_CODE sont des PLACEHOLDERS, à remplacer dès que la vraie boutique
+   (Shopify ou autre) est en ligne — tout le reste (braceletCardSlug(), braceletLinkFor())
+   n'aura besoin d'aucun changement, seuls ces deux constantes bougent. */
+const BRACELET_SHOP_BASE_URL = "https://boutique.tarot-de-delphes.fr/bracelet"; // TODO: remplacer par l'URL réelle une fois la boutique créée
+const BRACELET_PREMIUM_DISCOUNT_CODE = "DELPHES-PREMIUM"; // TODO: remplacer par le vrai code de réduction de la boutique
+
+// "XI — La Force" -> "la-force" ; "Le Mat" (le seul arcane sans numéro) -> "le-mat". Un id
+// court et lisible par carte, stable (dérivé du nom, jamais recalculé aléatoirement) pour
+// que la boutique puisse reconnaître chaque arcane sans dépendre du texte affiché en entier.
+function braceletCardSlug(cardName){
+  const label = cardName.includes(" — ") ? cardName.split(" — ")[1] : cardName;
+  return label.toLowerCase()
+    .normalize("NFD").replace(/[̀-ͯ]/g, "") // retire les accents (e accent -> e, etc.)
+    .replace(/'/g, "-").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
+// Construit le lien "Créer le bracelet" à partir d'une liste de blocs {card, labels, sign}
+// (le résultat de majorLinksFor(), voir plus haut — même structure pour le profil principal
+// et pour un proche). `forName` identifie à qui ce bracelet est destiné (affiché côté
+// boutique, jamais utilisé pour retrouver qui que ce soit) ; `discount`, seulement quand le
+// compte est premium, ajoute le code de réduction. Aucune donnée personnelle au-delà du
+// prénom choisi n'est transmise : ni date de naissance, ni lieu, ni le reste du thème.
+function braceletLinkFor(links, forName, discount){
+  const cards = links.map(b => braceletCardSlug(b.card[0]));
+  const params = new URLSearchParams({ ref: "delphes", cards: cards.join(",") });
+  if(forName) params.set("for", forName);
+  if(discount) params.set("promo", BRACELET_PREMIUM_DISCOUNT_CODE);
+  return `${BRACELET_SHOP_BASE_URL}?${params.toString()}`;
+}
+
 // Un seul tirage général gratuit par jour civil (heure locale) sans le mode premium — clé
 // dédiée en localStorage, comparée à la date du jour à chaque appel (donc remise à zéro
 // automatiquement au changement de date, sans tâche de fond à programmer).
@@ -4840,9 +4883,11 @@ function profil(){
 // cartes précisément + ce qu'elles disent de la personne (majorLinksText, IA, premium — voir
 // plus haut). Retour direct d'utilisatrice : ces deux éléments répondent tous les deux à la
 // même question (« qu'est-ce que mon thème dit de moi mythologiquement ? ») et vivaient
-// pourtant à deux endroits séparés — cet écran unique sert aussi d'ancrage prévu pour une
-// future fonctionnalité de bracelets personnalisés : jusqu'à 3 illustrations au total (la
-// carte de la divinité, plus une par point Soleil/Lune/Ascendant côté arcanes majeurs).
+// pourtant à deux endroits séparés — cet écran unique sert aussi de base à la génération de
+// bracelet personnalisé (voir braceletSectionHTML() plus bas) : jusqu'à 3 illustrations au
+// total (la carte de la divinité, plus une par point Soleil/Lune/Ascendant côté arcanes
+// majeurs), mais seuls les arcanes majeurs liés déterminent la recette du bracelet — la
+// divinité tutélaire reste une lecture à part, premium.
 // Un 3e élément, l'Animal représentatif, a vécu ici lui aussi un temps — retiré depuis
 // ("En fait on va carrément l'enlever [...] Garde bien les textes écrit sur les animaux") :
 // ses fiches mythologiques restent intactes dans SYMBOL_LIBRARY (voir plus haut, bélier/
@@ -4916,7 +4961,32 @@ function renderPersonalMythology(){
     <p class="suit-h4" style="text-align:center;margin-bottom:6px">${escapeHTML(b.link.labels.join(" & "))} en ${escapeHTML(b.link.sign)}</p>
     ${cardHTML(b.link.card,"major")}
     ${premiumOn ? b.paragraphs.map(p=>`<p class="lore-text" style="margin-top:10px">${escapeHTML(p)}</p>`).join("") : ""}
-  </div>`).join("")}` : `<p class="note" style="text-align:center">Aucun arcane majeur clairement réveillé par ce thème pour l'instant.</p>`}`;
+  </div>`).join("")}` : `<p class="note" style="text-align:center">Aucun arcane majeur clairement réveillé par ce thème pour l'instant.</p>`}
+
+  ${braceletSectionHTML(links, saved.firstName, premiumOn)}`;
+}
+
+// Retour direct d'utilisatrice : "j'imaginais la partie arcanes liés comme gratuite. Comme ça
+// chacun peut générer un bracelet. Par contre les comptes premium auront une réduction sur
+// l'achat du bracelet. Une fois que l'on a tiré ses arcanes liées, on a un bracelet généré.
+// Quand on clique dessus, on est renvoyé sur le site marchand, avec exactement le bracelet
+// qui a été généré." — TOUJOURS gratuite (pas de premiumLockHTML ici, à la différence du
+// bloc "Arcanes majeurs liés" juste au-dessus, dont seul le TEXTE explicatif est premium) :
+// `links` (le résultat de majorLinksFor(), voir plus haut) suffit à lui seul à déterminer la
+// recette du bracelet, aucun texte n'est nécessaire pour le générer. Factorisée pour être
+// réutilisée à l'identique pour un proche (voir renderComparison() plus bas, "sans la
+// description IA" — qui ne s'applique de toute façon jamais ici, cette section n'en affiche
+// aucune, premium ou pas).
+// `title` : personnalisé par renderComparison() pour un proche ("Le bracelet de Léa" plutôt
+// que "Ton bracelet") — évite de retoucher le HTML déjà généré après coup.
+function braceletSectionHTML(links, forName, premiumOn, title = "Ton bracelet", buttonLabel = "Créer mon bracelet"){
+  if(!links) return `<div class="section-title centered" style="margin-top:24px"><h3>${escapeHTML(title)}</h3></div>
+  <p class="note" style="text-align:center">Débloque au moins un arcane majeur lié pour pouvoir générer un bracelet.</p>`;
+  const cardLabels = links.map(b => (b.card[0].includes(" — ") ? b.card[0].split(" — ")[1] : b.card[0]));
+  return `<div class="section-title centered" style="margin-top:24px"><h3>${escapeHTML(title)}</h3></div>
+  <p class="note" style="text-align:center">${links.length} breloque${links.length>1?"s":""}, gratuites pour tout le monde : ${cardLabels.map(escapeHTML).join(", ")}.${premiumOn ? " Ta réduction premium sera appliquée automatiquement." : " Passe premium pour une réduction à l'achat."}</p>
+  <a class="primary" href="${escapeHTML(braceletLinkFor(links, forName, premiumOn))}" target="_blank" rel="noopener" style="display:block;width:fit-content;margin:14px auto 0;text-align:center;text-decoration:none">${escapeHTML(buttonLabel)}</a>
+  <p class="note" style="text-align:center;margin-top:8px">Le bracelet arrive déjà configuré sur le site — libre à toi de le modifier ensuite.</p>`;
 }
 function showPersonalMythology(){
   preDetailScroll = window.scrollY;
@@ -5422,6 +5492,8 @@ function renderComparison(primary, relation){
       <div class="symbol" style="text-align:center"><b>Toi</b>${resolvedPlaceOf(primary)?`<br><small style="opacity:.7">${escapeHTML(resolvedPlaceOf(primary))}</small>`:""}<br>☉ ${escapeHTML(cmp.signs.a.sun||"—")}<br>☽ ${escapeHTML(cmp.signs.a.moon||"—")}${cmp.signs.a.ascendant?`<br>Asc. ${escapeHTML(cmp.signs.a.ascendant)}`:""}</div>
       <div class="symbol" style="text-align:center"><b>${escapeHTML(relation.firstName)}</b>${resolvedPlaceOf(relation)?`<br><small style="opacity:.7">${escapeHTML(resolvedPlaceOf(relation))}</small>`:""}<br>☉ ${escapeHTML(cmp.signs.b.sun||"—")}<br>☽ ${escapeHTML(cmp.signs.b.moon||"—")}${cmp.signs.b.ascendant?`<br>Asc. ${escapeHTML(cmp.signs.b.ascendant)}`:""}</div>
     </div>
+
+    ${braceletSectionHTML(majorLinksFor(relation.astral), relation.firstName, premiumOn, `Le bracelet de ${relation.firstName}`, `Créer le bracelet de ${relation.firstName}`)}
 
     ${(()=>{ const text = premiumOn ? getCachedComparisonText(primary, relation) : null; return text
       ? text.split(/\n\s*\n/).map(p=>`<p class="lore-text" style="margin-top:14px">${escapeHTML(p.trim())}</p>`).join("")
