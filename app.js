@@ -2736,6 +2736,34 @@ function getAccessCode(){
   return code;
 }
 
+// Retour direct d'utilisatrice : "Met un garde fou pour les tests ia (maximum 10 par personne
+// pour le premium...) vu que pour la version gratuite c'est déjà limité" — le mode gratuit a
+// sa propre limite indépendante (1 tirage général par jour, voir hasUsedFreeGeneralReadingToday()
+// plus bas, plus le reste du contenu IA déjà verrouillé premium à l'affichage) ; celle-ci vise
+// spécifiquement le premium, activé par défaut pour tout le monde tant qu'aucun vrai paiement
+// n'existe (voir isPremiumEnabled()) — sans elle, n'importe quel appareil pourrait déclencher
+// un nombre illimité d'appels IA facturés. Un simple compteur local, comme le reste de l'app
+// (APP_ACCESS_CODE ci-dessus protège contre un inconnu qui tomberait sur l'URL, pas contre un
+// usage prolongé par une personne qui a déjà le code) : pas une protection béton contre un abus
+// délibéré (un appareil réinitialisé remet le compteur à zéro), mais un filet suffisant pour
+// une phase de test avec des personnes connues — exactement le même compromis, assumé, que le
+// reste de l'app (aucun compte, aucune vraie identité côté serveur).
+const AI_CALL_LIMIT_PER_PERSON = 10;
+function aiCallsUsed(){ return parseInt(localStorage.getItem("delphesAiCallsUsed") || "0", 10) || 0; }
+function aiCallsRemaining(){ return Math.max(0, AI_CALL_LIMIT_PER_PERSON - aiCallsUsed()); }
+// Appelée juste avant CHACUN des 7 appels réseau vers un endpoint IA (reading/portrait/
+// astral-text/retrospective/ritual/comparison-text/dream — jamais astral.js ni transits.js,
+// purement calculatoires, aucun appel IA). Lève une erreur au lieu de planter silencieusement :
+// chaque appelant retombe déjà sur son repli hors-ligne habituel pour toute erreur réseau/API
+// (voir par ex. le catch de startAIReading() plus bas), donc rien de plus à câbler ailleurs —
+// le message d'erreur précis, lui, remonte dans les logs déjà en place (console.warn) pour
+// distinguer ce cas d'un vrai problème réseau.
+function enforceAiCallLimit(){
+  if(!isPremiumEnabled()) return; // le gratuit a déjà sa propre limite, indépendante de celle-ci
+  if(aiCallsUsed() >= AI_CALL_LIMIT_PER_PERSON) throw new Error(`limite d'essais IA atteinte (${AI_CALL_LIMIT_PER_PERSON}/${AI_CALL_LIMIT_PER_PERSON})`);
+  localStorage.setItem("delphesAiCallsUsed", String(aiCallsUsed() + 1));
+}
+
 // Profil astral (prénom + thème natal), enregistré localement une fois calculé — voir
 // showProfilAstral(). Jamais envoyé nulle part sauf, avec l'accord implicite de son
 // existence, en résumé minimal à /api/reading pour nuancer une lecture (voir
@@ -3055,8 +3083,124 @@ function journalTrends(){
 // été introduit — seul un choix explicite ("0", via la case à cocher du Profil astral)
 // bascule sur l'expérience gratuite. Le jour du vrai lancement payant (App Store), ce
 // défaut sera inversé pour que le mode gratuit redevienne l'état de repli normal.
-function isPremiumEnabled(){ return localStorage.getItem("delphesPremium") !== "0"; }
+// PAYMENT_ENABLED (voir juste plus bas) fait bien ce remplacement : quand il passe à true,
+// isPremiumEnabled() ignore l'interrupteur local et ne renvoie plus que le vrai statut
+// d'abonnement Stripe (hasActiveSubscription()) — tant qu'il reste à false (aujourd'hui),
+// ce qui suit est inchangé au caractère près.
+function isPremiumEnabled(){
+  if(PAYMENT_ENABLED) return hasActiveSubscription();
+  return localStorage.getItem("delphesPremium") !== "0";
+}
 function setPremiumEnabled(on){ localStorage.setItem("delphesPremium", on ? "1" : "0"); }
+
+/* ===================== PAIEMENT PREMIUM (Stripe, préparé mais PAS ENCORE activé) =====================
+   Retour direct d'utilisatrice : "tu peux préparer le système de paiement, sans l'activer
+   pour l'instant ? Ça sera à 9,99€ par mois." — même esprit que BRACELET_ENABLED plus haut :
+   tout le mécanisme est construit et testé, mais entièrement invisible tant que
+   PAYMENT_ENABLED reste à false. Le repasser à true (et configurer les 2 variables
+   d'environnement ci-dessous sur Vercel) suffira à l'activer, sans rien réécrire.
+
+   Stripe plutôt qu'Apple/Google (StoreKit/Play Billing) : l'app n'existe aujourd'hui QUE
+   comme PWA (voir la discussion sur la publication App Store) — aucun binaire natif à
+   configurer pour du IAP, donc aucun autre choix réaliste tant que ce chantier n'a pas eu
+   lieu. Stripe Checkout fonctionne directement depuis un navigateur mobile (webview ou
+   Safari/Chrome), exactement l'usage actuel ("je fais tout de mon téléphone"). Le jour où
+   l'app est emballée nativement (Capacitor, voir README), Apple/Google IAP pourra s'ajouter
+   COMME UN SECOND mode de paiement, sans retirer celui-ci.
+
+   Architecture volontairement sans base de données ni webhook, cohérente avec le reste de
+   l'app (aucun compte, tout en localStorage) : à la place d'une source de vérité "à nous",
+   Stripe LUI-MÊME sert de source de vérité. Le navigateur garde juste l'identifiant de
+   l'abonnement Stripe créé (delphesSubscription, localStorage) et le fait revalider par
+   Stripe directement (`/api/subscription-status`) au plus une fois par jour — jamais de
+   webhook à sécuriser, jamais de base à maintenir. Contrepartie assumée : un abonnement
+   annulé côté Stripe reste actif localement jusqu'à la prochaine revérification (max 24h),
+   et n'importe qui pourrait en théorie fabriquer un delphesSubscription bidon dans son
+   navigateur — exactement le même compromis "confiance côté client" que le reste de l'app
+   (voir isPremiumEnabled() ci-dessus) ; un vrai serveur de vérité deviendra nécessaire si
+   l'app grandit au-delà d'une phase de test avec des personnes connues.
+
+   À CONFIGURER SUR VERCEL avant d'espérer un test, même en laissant PAYMENT_ENABLED à
+   false pour l'instant (les 3 endpoints /api/create-checkout-session, /api/checkout-
+   session-status et /api/subscription-status répondent sinon une erreur 500 propre,
+   jamais un plantage) :
+   - STRIPE_SECRET_KEY : clé secrète Stripe (commence par sk_test_... en mode test,
+     sk_live_... en production) — Tableau de bord Stripe → Développeurs → Clés API.
+   - STRIPE_PRICE_ID : l'id du Price Stripe (commence par price_...) pour l'abonnement à
+     9,99€/mois — à créer dans Stripe (Produits → + Ajouter un produit → récurrent mensuel,
+     9,99€) AVANT de renseigner cette variable. */
+const PAYMENT_ENABLED = false;
+const SUBSCRIPTION_PRICE_LABEL = "9,99 €/mois"; // purement informatif à l'affichage — le vrai montant facturé vient du Price Stripe (STRIPE_PRICE_ID), jamais recopié ici
+
+function getStoredSubscription(){
+  try{ return JSON.parse(localStorage.getItem("delphesSubscription") || "null"); }
+  catch{ return null; }
+}
+function saveStoredSubscription(sub){ localStorage.setItem("delphesSubscription", JSON.stringify(sub)); }
+function clearStoredSubscription(){ localStorage.removeItem("delphesSubscription"); }
+function hasActiveSubscription(){
+  const sub = getStoredSubscription();
+  return !!(sub && sub.active);
+}
+
+// Démarre un paiement : demande une session Stripe Checkout au backend, puis redirige le
+// navigateur dessus (Stripe héberge lui-même la page de paiement — aucune donnée de carte ne
+// transite jamais par ce serveur). `returnUrl` (l'URL de l'app elle-même) est fournie par le
+// client plutôt que fixée côté serveur : évite de coder en dur un domaine qui peut différer
+// entre déploiement de test et déploiement final.
+async function startSubscriptionCheckout(){
+  const r = await fetch("/api/create-checkout-session", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-App-Access-Code": getAccessCode() },
+    body: JSON.stringify({ returnUrl: window.location.origin + window.location.pathname }),
+  });
+  if(!r.ok) throw new Error("paiement indisponible");
+  const data = await r.json();
+  if(!data.url) throw new Error("réponse de paiement invalide");
+  window.location.href = data.url;
+}
+
+// Au retour d'un paiement Stripe réussi, l'URL contient ?checkout=success&session_id=...
+// (voir success_url dans api/create-checkout-session.js) : on confirme le paiement auprès du
+// backend (qui interroge Stripe), on garde l'id d'abonnement obtenu, et on nettoie l'URL tout
+// de suite (avant même la réponse) pour ne jamais retraiter le même retour à un rechargement.
+async function checkPendingCheckoutReturn(){
+  const params = new URLSearchParams(window.location.search);
+  const checkout = params.get("checkout");
+  if(checkout !== "success" && checkout !== "cancelled") return;
+  const sessionId = params.get("session_id");
+  history.replaceState(null, "", window.location.pathname);
+  if(checkout !== "success" || !sessionId) return;
+  try{
+    const r = await fetch(`/api/checkout-session-status?session_id=${encodeURIComponent(sessionId)}`, {
+      headers: { "X-App-Access-Code": getAccessCode() },
+    });
+    const data = await r.json();
+    if(data.paid && data.subscriptionId){
+      saveStoredSubscription({ subscriptionId: data.subscriptionId, customerId: data.customerId || null, active: true, checkedAt: Date.now() });
+    }
+  }catch{ /* échec silencieux : le statut sera revérifié au prochain verifySubscriptionStatus() */ }
+}
+
+// Revérifie auprès de Stripe qu'un abonnement déjà enregistré localement est toujours actif
+// (annulation, échec de paiement...) — au plus une fois par jour, même logique de discrétion
+// que ensureRitual()/ensurePortrait() (un seul appel réseau en vol, échec silencieux).
+let subscriptionCheckInFlight = false;
+function verifySubscriptionStatus(){
+  const sub = getStoredSubscription();
+  if(!sub || !sub.subscriptionId) return;
+  const oneDayMs = 24*60*60*1000;
+  if(sub.checkedAt && Date.now() - sub.checkedAt < oneDayMs) return;
+  if(subscriptionCheckInFlight) return;
+  subscriptionCheckInFlight = true;
+  fetch(`/api/subscription-status?subscription_id=${encodeURIComponent(sub.subscriptionId)}`, {
+    headers: { "X-App-Access-Code": getAccessCode() },
+  })
+    .then(r=>r.json())
+    .then(data=>{ saveStoredSubscription({ ...sub, active: !!data.active, checkedAt: Date.now() }); })
+    .catch(()=>{ /* échec silencieux : on garde le dernier statut connu jusqu'à la prochaine vérification */ })
+    .finally(()=>{ subscriptionCheckInFlight = false; });
+}
 
 // Découpage gratuit/premium défini avec l'utilisateur en vue d'une publication App Store
 // (voir aussi le README) : gratuit = 1 tirage général par jour, la carte du jour, un
@@ -3397,6 +3541,7 @@ function getCachedPortrait(){
   return (p && typeof p.portrait === "string") ? p.portrait : null;
 }
 async function fetchPortrait(profileSummary, code){
+  enforceAiCallLimit();
   const r = await fetch("/api/portrait", {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-App-Access-Code": code },
@@ -3445,6 +3590,7 @@ function getCachedAstralText(){
   return (p && p.astralText && typeof p.astralText === "object") ? p.astralText : null;
 }
 async function fetchAstralText(profileSummary, code){
+  enforceAiCallLimit();
   const r = await fetch("/api/astral-text", {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-App-Access-Code": code },
@@ -3549,6 +3695,7 @@ function retrospectiveSummary(stats, profile){
   };
 }
 async function fetchRetrospective(summary, code){
+  enforceAiCallLimit();
   const r = await fetch("/api/retrospective", {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-App-Access-Code": code },
@@ -3633,6 +3780,7 @@ function getCachedRitual(){
   return null;
 }
 async function fetchRitual(summary, code){
+  enforceAiCallLimit();
   const r = await fetch("/api/ritual", {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-App-Access-Code": code },
@@ -3983,6 +4131,7 @@ function getCachedComparisonText(primary, relation){
   return null;
 }
 async function fetchComparisonText(payload, code){
+  enforceAiCallLimit();
   const r = await fetch("/api/comparison-text", {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-App-Access-Code": code },
@@ -4059,6 +4208,7 @@ async function generateAIReading(question, cards, positions){
   const history = journalTrendsForReading();
   const memory = cardMemory(cards, question);
   const dream = recentDreamForReading();
+  enforceAiCallLimit();
   const call = fetch("/api/reading", {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-App-Access-Code": getAccessCode() },
@@ -5105,6 +5255,7 @@ function recentReadingForDream(){
 async function generateDreamAnalysis(dreamText){
   const profile = profileForDream();
   const recentReading = recentReadingForDream();
+  enforceAiCallLimit();
   const r = await fetch("/api/dream", {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-App-Access-Code": getAccessCode() },
@@ -5941,6 +6092,17 @@ function showProfilAstral(){
   // n'a plus rien de cliquable en dehors du bouton Retour.
   const premiumToggle = document.getElementById("premiumToggle");
   if(premiumToggle) premiumToggle.onchange = ()=>{ setPremiumEnabled(premiumToggle.checked); showProfilAstral(); };
+  // N'existe que si PAYMENT_ENABLED est activé (voir renderProfilResults()) — inerte pour
+  // l'instant.
+  const subscribeBtn = document.getElementById("subscribeBtn");
+  if(subscribeBtn) subscribeBtn.onclick = ()=>{
+    subscribeBtn.disabled = true;
+    startSubscriptionCheckout().catch(err=>{
+      console.warn("Paiement indisponible :", err && err.message ? err.message : err);
+      alert("Le paiement n'est pas disponible pour le moment. Réessaie un peu plus tard.");
+      subscribeBtn.disabled = false;
+    });
+  };
   // Le portrait et les textes d'interprétation IA font partie du contenu premium (voir
   // renderProfilResults) : inutile de déclencher ces appels — et leur coût — pour un
   // profil qui ne les affichera pas.
@@ -6116,6 +6278,10 @@ function renderProfilResults(saved){
     <div class="section-title"><h3>Profil astral</h3></div>
     <p class="question-recall">« ${escapeHTML(saved.firstName)} »</p>
 
+    ${PAYMENT_ENABLED ? (premiumOn
+      ? `<p class="note" style="text-align:center;margin-top:10px">✦ Abonnement premium actif</p>`
+      : `<button class="primary" id="subscribeBtn" style="display:block;margin:14px auto 0">Passer premium — ${escapeHTML(SUBSCRIPTION_PRICE_LABEL)}</button>`
+    ) : ""}
     <p class="note" style="text-align:center;margin-top:10px">
       <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer">
         <input id="premiumToggle" type="checkbox" style="width:auto" ${premiumOn?"checked":""}>
@@ -6651,5 +6817,14 @@ document.addEventListener("click", (e)=>{
   btn.appendChild(ripple);
   setTimeout(()=> ripple.remove(), 600);
 });
+
+// Paiement Stripe (voir PAYMENT_ENABLED plus haut) : traite un éventuel retour de paiement
+// dans l'URL puis revérifie un abonnement déjà enregistré — jamais avant le premier rendu
+// (même logique que les ensureX() ailleurs dans l'app : on affiche d'abord avec l'état déjà
+// connu, on rafraîchit dès que la confirmation Stripe arrive). Inerte tant que
+// PAYMENT_ENABLED reste à false.
+if(PAYMENT_ENABLED){
+  checkPendingCheckoutReturn().then(()=>{ verifySubscriptionStatus(); render(); }).catch(()=>{});
+}
 
 render();
