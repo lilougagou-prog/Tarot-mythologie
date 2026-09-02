@@ -4942,6 +4942,8 @@ function renderPersonalMythology(){
   return `<div class="section-title"><h3>Mythologie personnelle</h3></div>
   <p class="note" style="text-align:center">Ta divinité tutélaire, et les arcanes majeurs que ton thème réveille dans le jeu.</p>
 
+  ${braceletSectionHTML(links, saved.firstName, premiumOn)}
+
   <div class="section-title centered" style="margin-top:24px"><h3>Ta divinité tutélaire</h3></div>
   ${premiumOn ? (deity ? `
   ${cardHTML(deity.card, deity.card[4]==="major"?"major":(SUITS[deity.card[6]]?.[0]||"major"))}
@@ -4961,9 +4963,7 @@ function renderPersonalMythology(){
     <p class="suit-h4" style="text-align:center;margin-bottom:6px">${escapeHTML(b.link.labels.join(" & "))} en ${escapeHTML(b.link.sign)}</p>
     ${cardHTML(b.link.card,"major")}
     ${premiumOn ? b.paragraphs.map(p=>`<p class="lore-text" style="margin-top:10px">${escapeHTML(p)}</p>`).join("") : ""}
-  </div>`).join("")}` : `<p class="note" style="text-align:center">Aucun arcane majeur clairement réveillé par ce thème pour l'instant.</p>`}
-
-  ${braceletSectionHTML(links, saved.firstName, premiumOn)}`;
+  </div>`).join("")}` : `<p class="note" style="text-align:center">Aucun arcane majeur clairement réveillé par ce thème pour l'instant.</p>`}`;
 }
 
 // Retour direct d'utilisatrice : "j'imaginais la partie arcanes liés comme gratuite. Comme ça
@@ -4979,14 +4979,16 @@ function renderPersonalMythology(){
 // aucune, premium ou pas).
 // `title` : personnalisé par renderComparison() pour un proche ("Le bracelet de Léa" plutôt
 // que "Ton bracelet") — évite de retoucher le HTML déjà généré après coup.
+// Retour direct d'utilisatrice, juste après le premier jet : "Créer mon bracelet doit être
+// tout en haut. Enlève le texte explicatif en haut et en dessous. Pareil pour les proches" —
+// remontée en tête de renderPersonalMythology()/renderComparison() (voir ces deux fonctions),
+// et réduite au strict CTA : plus de note "X breloques, gratuites..." ni de "Le bracelet
+// arrive déjà configuré...", uniquement le titre et le bouton.
 function braceletSectionHTML(links, forName, premiumOn, title = "Ton bracelet", buttonLabel = "Créer mon bracelet"){
-  if(!links) return `<div class="section-title centered" style="margin-top:24px"><h3>${escapeHTML(title)}</h3></div>
+  if(!links) return `<div class="section-title centered"><h3>${escapeHTML(title)}</h3></div>
   <p class="note" style="text-align:center">Débloque au moins un arcane majeur lié pour pouvoir générer un bracelet.</p>`;
-  const cardLabels = links.map(b => (b.card[0].includes(" — ") ? b.card[0].split(" — ")[1] : b.card[0]));
-  return `<div class="section-title centered" style="margin-top:24px"><h3>${escapeHTML(title)}</h3></div>
-  <p class="note" style="text-align:center">${links.length} breloque${links.length>1?"s":""}, gratuites pour tout le monde : ${cardLabels.map(escapeHTML).join(", ")}.${premiumOn ? " Ta réduction premium sera appliquée automatiquement." : " Passe premium pour une réduction à l'achat."}</p>
-  <a class="primary" href="${escapeHTML(braceletLinkFor(links, forName, premiumOn))}" target="_blank" rel="noopener" style="display:block;width:fit-content;margin:14px auto 0;text-align:center;text-decoration:none">${escapeHTML(buttonLabel)}</a>
-  <p class="note" style="text-align:center;margin-top:8px">Le bracelet arrive déjà configuré sur le site — libre à toi de le modifier ensuite.</p>`;
+  return `<div class="section-title centered"><h3>${escapeHTML(title)}</h3></div>
+  <a class="primary" href="${escapeHTML(braceletLinkFor(links, forName, premiumOn))}" target="_blank" rel="noopener" style="display:block;width:fit-content;margin:10px auto 0;text-align:center;text-decoration:none">${escapeHTML(buttonLabel)}</a>`;
 }
 function showPersonalMythology(){
   preDetailScroll = window.scrollY;
@@ -5478,7 +5480,10 @@ function renderComparison(primary, relation){
 
   return `<div class="detail">
     <div class="section-title"><h3>Toi & ${escapeHTML(relation.firstName)}</h3></div>
-    <p class="question-recall">« ${escapeHTML(relLabel)} »</p>
+
+    ${braceletSectionHTML(majorLinksFor(relation.astral), relation.firstName, premiumOn, `Le bracelet de ${relation.firstName}`, `Créer le bracelet de ${relation.firstName}`)}
+
+    <p class="question-recall" style="margin-top:20px">« ${escapeHTML(relLabel)} »</p>
     <p style="text-align:center;margin-top:6px"><button class="ghost" id="editRelationFromComparison" style="font-size:12px;padding:4px 10px">✎ Modifier ses informations</button></p>
 
     <p class="note" style="text-align:center;margin-top:10px">
@@ -5492,8 +5497,6 @@ function renderComparison(primary, relation){
       <div class="symbol" style="text-align:center"><b>Toi</b>${resolvedPlaceOf(primary)?`<br><small style="opacity:.7">${escapeHTML(resolvedPlaceOf(primary))}</small>`:""}<br>☉ ${escapeHTML(cmp.signs.a.sun||"—")}<br>☽ ${escapeHTML(cmp.signs.a.moon||"—")}${cmp.signs.a.ascendant?`<br>Asc. ${escapeHTML(cmp.signs.a.ascendant)}`:""}</div>
       <div class="symbol" style="text-align:center"><b>${escapeHTML(relation.firstName)}</b>${resolvedPlaceOf(relation)?`<br><small style="opacity:.7">${escapeHTML(resolvedPlaceOf(relation))}</small>`:""}<br>☉ ${escapeHTML(cmp.signs.b.sun||"—")}<br>☽ ${escapeHTML(cmp.signs.b.moon||"—")}${cmp.signs.b.ascendant?`<br>Asc. ${escapeHTML(cmp.signs.b.ascendant)}`:""}</div>
     </div>
-
-    ${braceletSectionHTML(majorLinksFor(relation.astral), relation.firstName, premiumOn, `Le bracelet de ${relation.firstName}`, `Créer le bracelet de ${relation.firstName}`)}
 
     ${(()=>{ const text = premiumOn ? getCachedComparisonText(primary, relation) : null; return text
       ? text.split(/\n\s*\n/).map(p=>`<p class="lore-text" style="margin-top:14px">${escapeHTML(p.trim())}</p>`).join("")
