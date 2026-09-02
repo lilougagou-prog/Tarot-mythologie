@@ -4533,7 +4533,7 @@ function showLearnMajors(){
     requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
   cardDetailReturnTo = showLearnMajors;
-  bindCards();
+  bindCards(MAJORS); // liste ordonnée -> boutons Précédent/Suivant dans showDetail (voir bindCards)
 }
 
 const SUIT_IMAGES = {"Bâtons":"assets/suit-batons.jpg","Coupes":"assets/suit-coupes.jpg","Deniers":"assets/suit-deniers.jpg","Épées":"assets/suit-epees.jpg"};
@@ -4577,7 +4577,7 @@ function showLearnSuit(kind, suit){
   window.scrollTo(0,0);
   document.getElementById("detailBack").onclick = ()=> showLearnCategory(kind);
   cardDetailReturnTo = () => showLearnSuit(kind, suit);
-  bindCards();
+  bindCards(cards); // liste ordonnée -> boutons Précédent/Suivant dans showDetail (voir bindCards)
 }
 
 function showLearnFigures(){
@@ -6239,12 +6239,24 @@ function showRetrospective(){
 }
 
 // Voir le commentaire au-dessus de showSymbolDetail() pour le paramètre backTo.
-function showDetail(c, backTo = cardDetailReturnTo){
+// Retour direct d'utilisatrice : "Quand on consulte les carte (dans l'onglet apprendre)
+// j'aimerai que lon puisse passer à la carte d'après ou d'avant sans avoir à cliquer sur
+// retour et retourner au menu." — `list`, quand fourni (par bindCards(list), voir plus bas),
+// est la liste ORDONNÉE des cartes du même écran de grille (les 22 majeurs, ou les cartes
+// d'une même enseigne) : elle permet d'afficher des boutons Précédent/Suivant qui restent
+// dans cette même liste sans repasser par la grille. Absent (undefined) partout ailleurs
+// dans l'app (résultats de tirage, "cartes concernées" d'un symbole/figure/nombre...), ce
+// qui masque simplement ces boutons — comportement inchangé pour ces écrans-là.
+function showDetail(c, backTo = cardDetailReturnTo, list){
   const suit = c[6], cls = c[4]==="major" ? "major" : (SUITS[suit]?.[0] || "major");
   const lore = CARD_LORE[c[0]];
   const deityLabel = cardDeityLabel(c);
   const wasNew = markSeen("cards", c[0]);
   preDetailScroll = window.scrollY;
+  // c[0] (le nom) est unique dans CARDS/MAJORS/COURTS : il sert de clé de position dans `list`.
+  const idx = list ? list.findIndex(x=>x[0]===c[0]) : -1;
+  const prevCard = (list && idx > 0) ? list[idx-1] : null;
+  const nextCard = (list && idx > -1 && idx < list.length-1) ? list[idx+1] : null;
   document.getElementById("screen").innerHTML = `<div class="detail">
     ${wasNew ? discoveryFX() : ""}
     ${cardHTML(c,cls)}
@@ -6266,6 +6278,10 @@ function showDetail(c, backTo = cardDetailReturnTo){
     ${symbolChips(c[5])}
     ${c[4]==="number"?`<div class="symbol-list" style="margin-top:14px"><div class="symbol"><b>Direction du nombre</b><br>${escapeHTML(NUMBER_KEYS[c[7]]?.[2]||"")}</div></div>`:""}
     ${suit?`<div class="symbol-list" style="margin-top:14px"><div class="symbol"><b>Enseigne</b><br>${escapeHTML(suit)} · ${escapeHTML(SUITS[suit]?.[2]||"")}</div></div>`:""}
+    ${list ? `<div class="detail-card-nav">
+      <button class="secondary" id="detailPrev" ${prevCard?"":"disabled"}>‹ Précédente</button>
+      <button class="secondary" id="detailNext" ${nextCard?"":"disabled"}>Suivante ›</button>
+    </div>` : ""}
     <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
   </div>`;
   triggerScreenAnim("detail");
@@ -6277,17 +6293,23 @@ function showDetail(c, backTo = cardDetailReturnTo){
     backTo();
     requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
   };
+  if(prevCard) document.getElementById("detailPrev").onclick = ()=> showDetail(prevCard, backTo, list);
+  if(nextCard) document.getElementById("detailNext").onclick = ()=> showDetail(nextCard, backTo, list);
   // Pour qu'un lien cliqué depuis cette fiche (nom de la figure, symbole…) revienne bien
   // ici plutôt que de sauter directement à l'écran qui nous a menés à cette carte.
-  cardDetailReturnTo = () => showDetail(c, backTo);
+  cardDetailReturnTo = () => showDetail(c, backTo, list);
   bindChips();
 }
 
 /* ===================== LIAISONS D'ÉVÉNEMENTS ===================== */
 
-function bindCards(){
+// `list`, optionnel : liste ordonnée à transmettre à showDetail() pour ses boutons
+// Précédent/Suivant (voir le commentaire au-dessus de showDetail). Seuls showLearnMajors()
+// et showLearnSuit() (grilles de l'onglet Apprendre) la fournissent ; tous les autres appels
+// de bindCards() dans l'app restent inchangés (pas de liste -> pas de boutons).
+function bindCards(list){
   document.querySelectorAll("[data-card]").forEach(el=>{
-    el.onclick = ()=> showDetail(JSON.parse(decodeURIComponent(el.dataset.card)));
+    el.onclick = ()=> showDetail(JSON.parse(decodeURIComponent(el.dataset.card)), undefined, list);
   });
 }
 
@@ -6398,7 +6420,24 @@ function bind(){
     };
   });
   document.getElementById("homeBtn").onclick=()=>setRoute("home");
-  document.getElementById("backBtn").onclick=()=>setRoute("home");
+  // Retour direct d'utilisatrice : "chaque petit bouton retour doit ramener à la page
+  // consultée précédemment (et ce dans chaque onglet) et non pas sur l'accueil." Avant, ce
+  // bouton faisait toujours setRoute("home") — quelle que soit la profondeur de navigation
+  // dans l'onglet courant (ex. Apprendre -> Majeurs -> une carte -> ce bouton renvoyait à
+  // Accueil au lieu de la grille des Majeurs).
+  // On délègue au bouton "← Retour" DÉJÀ présent sur l'écran (#detailBack) quand il existe :
+  // c'est lui, pas cardDetailReturnTo, qui sait remonter exactement d'un niveau (il appelle
+  // backTo(), capturé UNE SEULE FOIS à l'ouverture de cet écran précis — voir le commentaire
+  // au-dessus de showSymbolDetail()). cardDetailReturnTo, lui, est régulièrement réécrit pour
+  // pointer vers l'écran COURANT lui-même (pour que les liens internes à une fiche — nom de
+  // déité, symbole… — reviennent bien ici), donc s'y fier ici rouvrirait la même fiche au
+  // lieu de remonter. Seuls les écrans racine d'un onglet (home/tirage/apprendre/reves/
+  // profil) n'ont pas de #detailBack : pour eux, on va à Accueil comme avant.
+  document.getElementById("backBtn").onclick = ()=>{
+    const inScreenBack = document.getElementById("detailBack");
+    if(inScreenBack) inScreenBack.click();
+    else setRoute("home");
+  };
   document.getElementById("soundBtn").onclick=()=>AmbientAudio.toggleMute();
   AmbientAudio.syncButton();
 
