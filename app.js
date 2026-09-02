@@ -4070,8 +4070,6 @@ function render(){
   const title = document.getElementById("pageTitle");
   if(!screen || !title) return;
   document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.toggle("active", b.dataset.route===route));
-  const back = document.getElementById("backBtn");
-  if(back) back.hidden = route === "home";
   title.textContent = {home:"Tarot de Delphes", tirage:"Tirage", apprendre:"Apprendre", reves:"Rêves", profil:"Astro"}[route] || "Tarot de Delphes";
   AmbientAudio.setMood(route);
   if(route==="home") screen.innerHTML = home();
@@ -6420,24 +6418,6 @@ function bind(){
     };
   });
   document.getElementById("homeBtn").onclick=()=>setRoute("home");
-  // Retour direct d'utilisatrice : "chaque petit bouton retour doit ramener à la page
-  // consultée précédemment (et ce dans chaque onglet) et non pas sur l'accueil." Avant, ce
-  // bouton faisait toujours setRoute("home") — quelle que soit la profondeur de navigation
-  // dans l'onglet courant (ex. Apprendre -> Majeurs -> une carte -> ce bouton renvoyait à
-  // Accueil au lieu de la grille des Majeurs).
-  // On délègue au bouton "← Retour" DÉJÀ présent sur l'écran (#detailBack) quand il existe :
-  // c'est lui, pas cardDetailReturnTo, qui sait remonter exactement d'un niveau (il appelle
-  // backTo(), capturé UNE SEULE FOIS à l'ouverture de cet écran précis — voir le commentaire
-  // au-dessus de showSymbolDetail()). cardDetailReturnTo, lui, est régulièrement réécrit pour
-  // pointer vers l'écran COURANT lui-même (pour que les liens internes à une fiche — nom de
-  // déité, symbole… — reviennent bien ici), donc s'y fier ici rouvrirait la même fiche au
-  // lieu de remonter. Seuls les écrans racine d'un onglet (home/tirage/apprendre/reves/
-  // profil) n'ont pas de #detailBack : pour eux, on va à Accueil comme avant.
-  document.getElementById("backBtn").onclick = ()=>{
-    const inScreenBack = document.getElementById("detailBack");
-    if(inScreenBack) inScreenBack.click();
-    else setRoute("home");
-  };
   document.getElementById("soundBtn").onclick=()=>AmbientAudio.toggleMute();
   AmbientAudio.syncButton();
 

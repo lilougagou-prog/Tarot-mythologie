@@ -36,6 +36,12 @@ body.tod-night::before{background:radial-gradient(circle at 50% 10%, rgba(178,16
 /* ===== Barre du haut, centrée, style divinatoire ===== */
 .topbar{position:sticky;top:0;z-index:10;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;padding:14px 14px 10px;background:rgba(248,241,228,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 .topbar > div{text-align:center;grid-column:2}
+/* Filigrane de marque (clé + soleil + étoile, voir assets/logo-mark.png) : prend la place
+   du bouton retour dans le coin haut-gauche — retour direct d'utilisatrice, ce bouton
+   faisait doublon avec le "← Retour" déjà présent sur chaque écran (#detailBack). Plus
+   présent qu'un simple filigrane discret (non cliquable pour autant, aria-hidden : ce n'est
+   plus un contrôle de navigation, juste une marque). */
+.brand-mark-topbar{width:38px;height:auto;opacity:.6;justify-self:start;pointer-events:none;user-select:none}
 .eyebrow{font-family:"Cinzel",serif;font-size:9px;letter-spacing:.22em;opacity:.55;text-transform:uppercase}
 h1,h2,h3{font-family:"Cinzel",serif;margin:.15em 0;font-weight:600;letter-spacing:.02em}
 h1{font-size:19px;line-height:1.3}
@@ -379,17 +385,6 @@ textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;paddin
 .sound-toggle:active{transform:scale(.88)}
 .sound-toggle.playing{box-shadow:0 0 0 3px rgba(201,163,90,.35), var(--shadow)}
 @media(min-width:700px){.sound-toggle{right:calc(50% - 450px + 14px)}}
-
-/* ===== Filigrane de marque (clé + soleil + étoile, extrait du dos de carte) — persistant
-   hors du flux #screen, comme .sound-toggle ci-dessus, pour rester visible sur CHAQUE écran
-   sans dépendre de render(). Retour direct d'utilisatrice : "Mets la sur chaque page, de
-   manière discrète mais présente." D'où une opacité volontairement faible et
-   pointer-events:none : un repère silencieux dans un coin, jamais un bouton de plus. ===== */
-.brand-mark{
-  position:fixed; left:14px; bottom:calc(78px + env(safe-area-inset-bottom));
-  z-index:8; width:30px; height:auto; opacity:.4; pointer-events:none; user-select:none;
-}
-@media(min-width:700px){.brand-mark{left:calc(50% - 450px + 14px)}}
 
 /* ===== Transition à chaque changement d'écran (voir triggerScreenAnim() dans app.js) =====
    .screen-anim : onglets + retour vers un écran parent — léger zoom arrière, comme un pas
