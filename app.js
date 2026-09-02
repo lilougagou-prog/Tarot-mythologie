@@ -152,14 +152,7 @@ function decanCardFor(sign, degreeInSign){
 }
 
 // Signe zodiacal -> animal symbolique (catégorie "Animaux" de SYMBOL_LIBRARY), pour
-// l'Animal représentatif (voir representativeAnimal() plus bas). Un animal par signe,
-// choisi en priorité pour son lien mythologique déjà écrit dans la fiche du symbole
-// lui-même (ex. Cancer/Apollon -> corbeau, dont la fiche raconte justement l'épisode
-// d'Apollon) ; à défaut de mythe déjà établi pour ce signe précis, un lien thématique ou
-// iconographique plus large (ex. Sagittaire, traditionnellement représenté en centaure,
-// mi-homme mi-cheval -> cheval). Deux animaux (Pégase, Araignée) ne sont rattachés à aucun
-// signe : ils ne peuvent surgir que via DOMAIN_ANIMAL ci-dessous, sur la base des questions
-// posées plutôt que de la naissance.
+// l'Animal représentatif (voir representativeAnimal() plus bas).
 // Retour direct d'utilisatrice : "je préfère que chaque signe tombe sur son « vrai » animal
 // (bélier -> bélier de la Toison d'or, lion -> lion de Némée...) et les signes sans animal,
 // là tu fais une association". Six signes SONT littéralement un animal dans leur mythe
@@ -174,6 +167,10 @@ function decanCardFor(sign, degreeInSign){
 // et Pollux ; Verseau -> l'aigle qui enlève Ganymède, devenu ce signe ; Vierge -> l'abeille
 // (Déméter, Mélissai) et Balance -> la colombe (Vénus/Aphrodite régit la Balance en
 // astrologie) restent des associations, mais déjà correctement sourcées, inchangées.
+// Retour direct d'utilisatrice suivant, "pour simplifier" : un second signal affinait
+// auparavant ce choix — le domaine de question le plus fréquent du Journal (DOMAIN_ANIMAL,
+// via Pégase et Araignée, jamais rattachés à un signe) — retiré depuis (voir
+// representativeAnimal() plus bas) : seul le signe solaire détermine désormais l'animal.
 const SIGN_ANIMAL = {
   "Bélier":"bélier",      // le bélier à la Toison d'or, sauvé par Hermès (voir la fiche « Bélier »)
   "Taureau":"taureau",    // le signe est littéralement cet animal, lui-même lié à Zeus/Poséidon/Minos
@@ -187,20 +184,6 @@ const SIGN_ANIMAL = {
   "Capricorne":"chèvre",  // Amalthée, placée parmi les étoiles sous cette forme (voir la fiche « Chèvre »)
   "Verseau":"aigle",      // l'aigle de Zeus qui enlève Ganymède, futur Verseau (voir la fiche « Aigle »)
   "Poissons":"poisson",   // Aphrodite et Éros changés en poissons pour fuir Typhon (voir la fiche « Poisson »)
-};
-
-// Domaine de question dominant du Journal (voir QUESTION_DOMAINS/detectDomain() plus bas)
-// -> animal symbolique, pour affiner l'Animal représentatif avec ce qui est vécu plutôt que
-// seulement ce qui est écrit dans le thème natal. Certains recoupent volontairement
-// SIGN_ANIMAL (ex. Colombe pour l'amour, déjà liée à Aphrodite dans sa fiche) : quand les
-// deux signaux tombent sur le même animal, c'est un renforcement, pas un conflit.
-const DOMAIN_ANIMAL = {
-  "un lien affectif":"colombe",                    // lié à Aphrodite (voir la fiche « Colombe »)
-  "ta vie professionnelle":"abeille",               // travail, organisation, ruche
-  "une question matérielle":"araignée",             // habileté patiente qui construit ce qu'elle tisse (voir la fiche « Araignée »)
-  "ton équilibre personnel":"serpent",              // guérison, lié à Asclépios (voir la fiche « Serpent »)
-  "ta vie personnelle et familiale":"cygne",         // Léda et la naissance de ses enfants (voir la fiche « Cygne »)
-  "une décision à prendre":"pégase",                // élévation après un choix assumé, lié à Bellérophon (voir la fiche « Pégase »)
 };
 
 // Fiches enrichies : lecture Tarot de Marseille + éclairage mythologique — pour la carte du jour et le détail des arcanes.
@@ -3085,12 +3068,6 @@ function journalTrends(){
   return { totalReadings: journal.length, topCard, topDomain };
 }
 
-// Nombre minimum de tirages enregistrés avant que l'Animal représentatif (ci-dessous) ne se
-// calcule. Volontairement plus élevé que JOURNAL_TRENDS_MIN_ENTRIES (3, pour une simple
-// tendance affichée dans le Journal) : cette fonctionnalité prétend refléter un vrai
-// comportement récurrent, pas une coïncidence sur quelques tirages.
-const REPRESENTATIVE_ANIMAL_MIN_READINGS = 10;
-
 // Fonctionnalité premium (voir showProfilResults()/renderProfilResults()) : simple
 // interrupteur local, propre à cet appareil — un place-tenant pour un futur vrai système de
 // compte/abonnement, qui n'existe pas aujourd'hui (l'app reste 100% locale, voir le
@@ -3165,42 +3142,25 @@ function premiumLockHTML(message){
   </div>`;
 }
 
-// Détermine l'Animal représentatif : le signe solaire du thème natal indique un premier
-// animal (SIGN_ANIMAL), affiné par le domaine de question le plus fréquent du Journal
-// (DOMAIN_ANIMAL, via journalTrends().topDomain) une fois qu'assez de tirages ont été
-// enregistrés pour que ce domaine soit un vrai motif plutôt qu'une coïncidence. Fonctionnalité
-// premium (voir isPremiumEnabled()) : renvoie toujours { locked: true, ... } tant qu'elle
-// n'est pas activée ou que le seuil de tirages n'est pas atteint, pour que l'écran puisse
-// afficher un aperçu (« encore N tirages ») plutôt que rien.
+// Détermine l'Animal représentatif : uniquement le signe solaire du thème natal (SIGN_ANIMAL).
+// Retour direct d'utilisatrice ("pour simplifier on va enlever le domaine par question
+// dominant du journal") : affinait auparavant ce choix avec le domaine de question le plus
+// fréquent du Journal (DOMAIN_ANIMAL, via journalTrends().topDomain), une fois assez de
+// tirages enregistrés pour que ce domaine soit un vrai motif — logique retirée avec elle,
+// ainsi que le seuil REPRESENTATIVE_ANIMAL_MIN_READINGS (10 tirages) qui n'existait que pour
+// cette raison : l'animal ne dépend plus que du thème astral, débloqué dès qu'un profil est
+// enregistré, exactement comme la divinité tutélaire. Fonctionnalité premium (voir
+// isPremiumEnabled()) : renvoie toujours { locked: true, ... } tant qu'elle n'est pas activée.
 function representativeAnimal(saved){
   const premium = isPremiumEnabled();
-  const readingsCount = journal.length;
-  const unlocked = premium && readingsCount >= REPRESENTATIVE_ANIMAL_MIN_READINGS;
-  if(!unlocked) return { locked: true, premium, readingsCount, readingsNeeded: REPRESENTATIVE_ANIMAL_MIN_READINGS };
+  if(!premium) return { locked: true };
 
   const sunSign = saved?.astral?.bodies?.sun?.sign;
-  const astralAnimalId = sunSign ? SIGN_ANIMAL[sunSign] : null;
-  // journal.length >= REPRESENTATIVE_ANIMAL_MIN_READINGS (10) >= JOURNAL_TRENDS_MIN_ENTRIES
-  // (3), donc journalTrends() ne peut jamais être null ici pour manque de tirages.
-  const trends = journalTrends();
-  const domainAnimalId = (trends && trends.topDomain) ? DOMAIN_ANIMAL[trends.topDomain.label] : null;
-
-  // Le domaine de question, plus récent et plus "vécu", prime quand il tranche ; le thème
-  // astral (fixe depuis la naissance) sert de repli tant qu'aucun sujet ne se dégage
-  // clairement des tirages enregistrés.
-  const animalId = domainAnimalId || astralAnimalId;
-  if(!animalId) return { locked: false, animal: null }; // débloqué mais rien à afficher pour l'instant (ni profil astral, ni domaine net)
+  const animalId = sunSign ? SIGN_ANIMAL[sunSign] : null;
+  if(!animalId) return { locked: false, animal: null }; // débloqué mais rien à afficher pour l'instant (pas de profil astral)
 
   const symbol = SYMBOL_LIBRARY[animalId];
-  const matched = !!(astralAnimalId && domainAnimalId && astralAnimalId === domainAnimalId);
-  // Explication toujours locale/déterministe (pas d'appel IA pour cette fonctionnalité,
-  // volontairement plus légère que la divinité tutélaire).
-  let source;
-  if(matched) source = "ton thème astral et tes questions les plus fréquentes se rejoignent sur cet animal";
-  else if(domainAnimalId) source = `surtout tes questions les plus fréquentes (${trends.topDomain.label})`;
-  else source = "ton thème astral, en attendant qu'un sujet se dégage plus nettement de tes tirages";
-
-  return { locked: false, animal: { id: animalId, label: symbol.label, icon: symbol.icon, desc: symbol.desc, matched, source } };
+  return { locked: false, animal: { id: animalId, label: symbol.label, icon: symbol.icon, desc: symbol.desc } };
 }
 
 // Résumé minimal du rêve le plus récent, prêt à envoyer à /api/reading (voir
@@ -4982,9 +4942,7 @@ function renderPersonalMythology(){
     : premiumLockHTML("La divinité tutélaire calculée à partir de ton thème fait partie du contenu premium.")}
 
   <div class="section-title centered" style="margin-top:24px"><h3>Ton animal représentatif</h3></div>
-  ${ra.locked ? premiumLockHTML(ra.premium
-      ? `Se révèle après ${ra.readingsNeeded} tirages enregistrés dans ton Journal (${ra.readingsCount}/${ra.readingsNeeded} pour l'instant).`
-      : `Combine ton thème astral et tes questions les plus fréquentes, une fois ${ra.readingsNeeded} tirages enregistrés dans ton Journal — active le mode premium ci-dessus.`)
+  ${ra.locked ? premiumLockHTML("L'animal symbolique lié à ton thème fait partie du contenu premium.")
     : (ra.animal ? `
   <div class="symbol-list">
     <div class="symbol clickable" data-symbol="${escapeHTML(ra.animal.id)}" style="text-align:center">
@@ -4993,7 +4951,7 @@ function renderPersonalMythology(){
       ${ra.animal.desc ? `<br><small>${escapeHTML(ra.animal.desc)}</small>` : ""}
     </div>
   </div>
-  <p class="note" style="text-align:center;margin-top:6px">D'après ${escapeHTML(ra.animal.source)}. Touche pour en savoir plus.</p>` : `<p class="note" style="text-align:center">Enregistre ton profil astral pour le révéler.</p>`)}
+  <p class="note" style="text-align:center;margin-top:6px">D'après ton thème astral. Touche pour en savoir plus.</p>` : `<p class="note" style="text-align:center">Enregistre ton profil astral pour le révéler.</p>`)}
 
   <div class="section-title centered" style="margin-top:24px"><h3>Arcanes majeurs liés</h3></div>
   ${links ? `
