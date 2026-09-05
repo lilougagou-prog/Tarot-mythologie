@@ -886,7 +886,7 @@ const SYMBOL_LIBRARY = {
     "Le monde souterrain est particulièrement associé à Hadès et à Perséphone — et, par sa propre descente, à Orphée.",
   ]},
   "labyrinthe":{icon:"🌀",label:"Labyrinthe",category:"Lieux & passages",desc:"Épreuve complexe, chemin qui s'égare avant de se retrouver — à condition d'avoir un fil à suivre.",links:["minos","ariane","dédale"],lore:[
-    "Le labyrinthe fut construit en Crète par l'architecte Dédale (voir la fiche « Dédale »), sur l'ordre du roi Minos (voir la fiche « Minos »), pour y enfermer le Minotaure : une créature à tête de taureau et corps d'homme, née de l'union contre nature de la reine Pasiphaé et d'un taureau envoyé par Poséidon.",
+    "Le labyrinthe fut construit en Crète par l'architecte Dédale (voir la fiche « Dédale »), sur l'ordre du roi Minos (voir la fiche « Minos »), pour y enfermer le Minotaure : une créature à tête de taureau et corps d'homme, née de l'union contre nature de la reine Pasiphaé (voir la fiche « Pasiphaé ») et d'un taureau envoyé par Poséidon.",
     "Chaque année, Athènes devait envoyer sept jeunes gens et sept jeunes filles en offrande au monstre, jusqu'à ce que le héros Thésée se porte volontaire pour l'affronter. Ariane, fille de Minos, tomba amoureuse de lui et lui offrit un fil à dérouler en avançant, afin de pouvoir retrouver la sortie une fois le Minotaure vaincu (voir la fiche « Ariane »).",
     "Thésée tua le monstre au cœur du dédale et en ressortit en suivant le fil à rebours — mais le labyrinthe garda une dernière victime : son propre architecte. Dédale, enfermé par Minos avec son fils Icare pour avoir aidé Ariane, ne put s'en échapper qu'en fabriquant des ailes de plumes et de cire, un vol dont Icare, monté trop près du soleil, ne revint jamais.",
     "Le labyrinthe est ainsi devenu un symbole d'épreuve complexe, de chemin qui s'égare avant de se retrouver, de piège qu'on peut créer soi-même sans pouvoir toujours s'en libérer, et de guidage indispensable — le fil — pour traverser ce qu'on ne peut affronter seul.",
@@ -968,8 +968,9 @@ const SYMBOL_LIBRARY = {
     "Elle est devenue un symbole de plaisir, d'abondance, de transformation, d'extase, de fête et de vitalité.",
     "La vigne est particulièrement associée à Dionysos.",
   ]},
-  "grenade":{icon:"🔴",label:"Grenade",category:"Mythologie",desc:"Le fruit aux innombrables graines : fertilité, abondance, cycle, attachement, ce qui relie au monde souterrain — associée à Perséphone et Hadès.",links:["perséphone","hadès"],lore:[
+  "grenade":{icon:"🔴",label:"Grenade",category:"Mythologie",desc:"Le fruit aux innombrables graines : fertilité, abondance, cycle, attachement, ce qui relie au monde souterrain — associée à Perséphone et Hadès.",links:["perséphone","hadès","ascalaphos"],lore:[
     "Lorsque Perséphone fut enlevée par Hadès et conduite aux Enfers, elle y mangea quelques grains de grenade. Dans la mythologie grecque, manger la nourriture des morts crée un lien avec le monde souterrain. Perséphone ne pouvait donc plus simplement quitter les Enfers pour toujours.",
+    "C'est Ascalaphos, gardien du jardin des Enfers, qui la vit cueillir ce fruit et le rapporta aux autres dieux — un témoignage qui scella son sort, et qui lui valut d'être changé en chouette une fois sa vengeance venue (voir la fiche « Ascalaphos »).",
     "Elle fut finalement autorisée à retourner auprès de sa mère Déméter pendant une partie de l'année, mais devait revenir auprès d'Hadès pour l'autre partie. Son départ vers les Enfers correspond à l'automne, tandis que son retour sur terre accompagne le renouveau du printemps.",
     "Au-delà de ce mythe, la grenade était aussi offerte lors des mariages grecs comme symbole de fécondité : ses innombrables graines rassemblées sous une même écorce évoquaient la promesse d'une descendance abondante.",
     "Elle est ainsi devenue un symbole de fertilité, d'abondance, de cycle, d'attachement et de ce qui relie irréversiblement au monde souterrain.",
@@ -1167,15 +1168,15 @@ const SYMBOL_LIBRARY = {
     "L'aigle est donc devenu un symbole de pouvoir, de souveraineté, de hauteur, de vision, de force et de message divin.",
     "L'aigle est particulièrement associé à Zeus.",
   ]},
-  "serpent":{icon:"🐍",label:"Serpent",category:"Animaux",desc:"Transformation, connaissance, guérison, lien avec le monde souterrain.",links:[],lore:[
+  "serpent":{icon:"🐍",label:"Serpent",category:"Animaux",desc:"Transformation, connaissance, guérison, lien avec le monde souterrain.",links:["hygie"],lore:[
     "Le serpent possède une symbolique beaucoup plus ancienne et plus complexe que celle d'un simple animal associé au mal.",
     "Il change de peau et semble ainsi mourir puis renaître. Cette capacité a nourri son association avec la transformation et le renouvellement.",
     "Il vit également dans les fissures du sol, les grottes et les lieux cachés. Il appartient donc symboliquement à ce qui se trouve sous la surface : la terre, les profondeurs et le monde souterrain.",
-    "Le serpent est aussi associé à Asclépios, dieu de la médecine. Son image enroulée autour du bâton du dieu est devenue un symbole de guérison.",
+    "Le serpent est aussi associé à Asclépios, dieu de la médecine. Son image enroulée autour du bâton du dieu est devenue un symbole de guérison — sa fille Hygie (voir la fiche « Hygie ») en tient elle aussi un, enroulé autour d'une coupe plutôt qu'un bâton : cette variante précise est restée le symbole international de la pharmacie.",
     "À Delphes, c'est un serpent, Python, gardien de l'ancien oracle de la Terre, qu'Apollon dut vaincre pour s'emparer du sanctuaire et y installer le sien — la prêtresse qui y rendait ensuite les oracles, la Pythie, tenait son nom de ce combat fondateur.",
     "Enfin, dans de nombreux mythes grecs, les serpents gardent des lieux ou des secrets : ils deviennent ainsi des créatures placées entre le monde visible et ce qui est caché.",
     "Le serpent est donc devenu un symbole de transformation, de guérison, de connaissance cachée, de régénération et du monde souterrain.",
-    "Le serpent est associé à plusieurs divinités, notamment Asclépios, Athéna, Apollon et les puissances chthoniennes.",
+    "Le serpent est associé à plusieurs divinités, notamment Asclépios et sa fille Hygie, Athéna, Apollon et les puissances chthoniennes.",
   ]},
   "chien":{icon:"🐕",label:"Chien",category:"Animaux",desc:"Gardien des seuils, protection, instinct fidèle — lié à Hécate.",links:["hécate"],lore:[
     "Le chien est particulièrement lié à Hécate.",
@@ -1255,12 +1256,12 @@ const SYMBOL_LIBRARY = {
     "Le cerf est devenu un symbole de nature sauvage, d'instinct, d'intuition, de vigilance, de sensibilité et de passage entre le monde humain et le monde naturel.",
     "Le cerf est particulièrement associé à Artémis.",
   ]},
-  "taureau":{icon:"🐂",label:"Taureau",category:"Animaux",desc:"Puissance brute, désir irrésistible — et, parfois, ce qu'elle engendre de monstrueux.",links:["zeus","poséidon","minos"],lore:[
+  "taureau":{icon:"🐂",label:"Taureau",category:"Animaux",desc:"Puissance brute, désir irrésistible — et, parfois, ce qu'elle engendre de monstrueux.",links:["zeus","poséidon","minos","pasiphaé"],lore:[
     "Le taureau intervient dans plusieurs métamorphoses parmi les plus célèbres de la mythologie grecque. Zeus, épris de la princesse phénicienne Europe, se changea en taureau d'une blancheur et d'une douceur telles qu'elle grimpa sur son dos sans crainte — avant qu'il ne s'élance dans la mer et l'emporte jusqu'en Crète, où elle lui donna plusieurs fils, dont Minos (voir la fiche « Minos »).",
-    "Un autre taureau, offert par Poséidon à ce même Minos devenu roi de Crète pour qu'il le lui sacrifie, était si beau que Minos, incapable de s'en séparer, le garda pour lui et sacrifia un animal ordinaire à la place. En punition, Poséidon rendit folle d'amour pour ce taureau l'épouse de Minos, Pasiphaé — de leur union naquit le Minotaure, tête de taureau et corps d'homme, enfermé plus tard dans le Labyrinthe (voir la fiche « Labyrinthe »).",
+    "Un autre taureau, offert par Poséidon à ce même Minos devenu roi de Crète pour qu'il le lui sacrifie, était si beau que Minos, incapable de s'en séparer, le garda pour lui et sacrifia un animal ordinaire à la place. En punition, Poséidon rendit folle d'amour pour ce taureau l'épouse de Minos, Pasiphaé (voir la fiche « Pasiphaé ») — de leur union naquit le Minotaure, tête de taureau et corps d'homme, enfermé plus tard dans le Labyrinthe (voir la fiche « Labyrinthe »).",
     "Ce même taureau, devenu incontrôlable, ravagea ensuite la campagne crétoise jusqu'à ce qu'Héraclès le capture vivant lors de son septième travail et le ramène en Grèce continentale — où, relâché, il finira par causer la mort du prince Androgée, déclenchant la guerre entre Athènes et la Crète qui est à l'origine du tribut envoyé au Minotaure.",
     "Le taureau est ainsi devenu un symbole de puissance brute, de désir irrésistible, de fécondité et, selon le contexte, de ce que cette puissance peut engendrer de monstrueux lorsqu'elle échappe à tout contrôle.",
-    "Le taureau est particulièrement associé à Zeus, à Poséidon et, par le Minotaure, à Minos.",
+    "Le taureau est particulièrement associé à Zeus, à Poséidon et, par le Minotaure, à Minos et à Pasiphaé.",
   ]},
   "cygne":{icon:"🦢",label:"Cygne",category:"Animaux",desc:"Métamorphose séduisante, beauté qui dissimule un dessein — lié à Zeus.",links:["zeus"],lore:[
     "Le cygne est la forme que prend Zeus pour séduire Léda, reine de Sparte : sous cette apparence trompeusement paisible, il s'unit à elle le même jour que son propre époux, Tyndare.",
@@ -1508,13 +1509,14 @@ const SYMBOL_LIBRARY = {
     "Elle est devenue un symbole d'inconscient, d'intuition, de cycles et d'incertitude qui n'empêche pas d'avancer.",
     "La lune est particulièrement associée à Séléné et à Métis.",
   ]},
-  "étoiles":{icon:"✦",label:"Étoile",category:"Astres & phénomènes",desc:"Orientation, espoir, inspiration retrouvée après l'épreuve.",links:["hécate","astéria","éos"],lore:[
+  "étoiles":{icon:"✦",label:"Étoile",category:"Astres & phénomènes",desc:"Orientation, espoir, inspiration retrouvée après l'épreuve.",links:["hécate","astéria","éos","cassiopée"],lore:[
     "Les étoiles se rattachent à Hécate par sa mère, Astéria, titanide dont le nom signifie littéralement « étoilée ».",
     "Pour échapper aux avances de Zeus, Astéria se jeta dans la mer et fut changée en île — Délos, selon certaines traditions — après avoir été un temps assimilée aux étoiles filantes. Sa fille Hécate hérita de cette proximité avec le ciel nocturne et l'orientation qu'il offre à qui sait le lire.",
     "Contrairement au soleil qui révèle tout d'un coup, les étoiles n'éclairent que faiblement — mais elles suffisent à orienter celui qui a perdu son chemin dans l'obscurité.",
     "Le chasseur Orion, aimé un temps par Éos (voir la fiche « Éos »), fut lui aussi placé parmi les étoiles après sa mort, sous la forme d'une des constellations les plus reconnaissables du ciel nocturne — un ceinturon de trois étoiles alignées que l'on retrouve, presque inchangé, sur toutes les cartes du ciel depuis l'Antiquité.",
-    "Elles sont devenues un symbole d'orientation, d'espoir et d'inspiration retrouvée après l'épreuve.",
-    "Les étoiles sont particulièrement associées à Hécate, par sa mère Astéria.",
+    "Toutes les constellations ne sont pas des récompenses : la reine Cassiopée, punie pour s'être vantée d'une beauté supérieure à celle des Néréides, fut elle aussi placée parmi les étoiles, mais condamnée à y tourner la tête en bas une bonne partie de l'année (voir la fiche « Cassiopée »).",
+    "Elles sont devenues un symbole d'orientation, d'espoir et d'inspiration retrouvée après l'épreuve — mais aussi, parfois, de mémoire durable d'une faute qu'on continue de porter.",
+    "Les étoiles sont particulièrement associées à Hécate, par sa mère Astéria, et servent aussi de sanction éternelle à Cassiopée.",
   ]},
   "aurore":{icon:"🌅",label:"Aurore",category:"Astres & phénomènes",desc:"Commencement, renaissance, ce qui redémarre après l'obscurité.",links:["éos","hélios"],lore:[
     "L'aurore est le corps d'Éos, déesse aux doigts de rose qui ouvre chaque jour les portes du ciel pour annoncer le passage d'Hélios.",
@@ -1673,6 +1675,15 @@ const DEITY_NOTES = {
   "techné":"Personnification du savoir-faire artisanal — figure mineure et tardive, jamais dotée d'un mythe propre comme les grands Olympiens.",
   "aglaé":"La plus jeune des trois Charites, personnifiant l'éclat et la splendeur — selon certaines traditions, l'épouse d'Héphaïstos.",
   "euthénie":"Personnification de la Prospérité et de l'Abondance durable — figure tardive et allégorique, jamais dotée d'un mythe propre comme les grands Olympiens.",
+
+  /* ----- Figures ajoutées à la demande directe de l'utilisatrice ----- */
+  "hygie":"Déesse de la santé et de l'hygiène, fille d'Asclépios.",
+  "médée":"Magicienne petite-fille d'Hélios, alliée puis ennemie jurée de Jason.",
+  "calliope":"Muse de la poésie épique, la plus vénérée des neuf Muses.",
+  "cassiopée":"Reine vaniteuse d'Éthiopie, mère d'Andromède, changée en constellation.",
+  "mélinoé":"Déesse des fantômes et des terreurs nocturnes, fille de Perséphone.",
+  "ascalaphos":"Gardien des Enfers changé en chouette pour avoir trahi le secret de Perséphone.",
+  "pasiphaé":"Reine de Crète, épouse de Minos et mère du Minotaure.",
 };
 
 // Textes mythologiques développés pour les figures listées ci-dessus (voir showDeityDetail() /
@@ -1760,6 +1771,7 @@ const DEITY_LORE = {
   "perséphone": [
     "Fille de Zeus et de Déméter, Perséphone cueillait des fleurs dans un pré lorsque la terre s'ouvrit sous elle et qu'Hadès l'emporta sur son char vers son royaume souterrain.",
     "Ayant mangé quelques grains de grenade offerts par Hadès (voir la fiche « Grenade »), elle se lia irrévocablement aux Enfers et dut, par un accord négocié par Zeus, y passer une partie de chaque année, devenant reine des morts autant que fille de la déesse des moissons.",
+    "C'est Ascalaphos, gardien du jardin des Enfers, qui rapporta l'avoir vue manger ce fruit — un témoignage qu'elle ne lui pardonna jamais, et qui lui valut, une fois devenue reine, d'être changé en chouette (voir la fiche « Ascalaphos »).",
     "Son passage entre les deux mondes en fait la figure même de la transformation qui n'efface jamais totalement ce qu'on était avant.",
     "Dans le Tarot, Perséphone est la Reine de Deniers, qui tient son denier avec douceur au milieu d'une abondance discrète : cette carte est cette même alternance féconde, la certitude que la croissance a besoin de ses saisons de repli pour revenir plus sûrement encore.",
   ],
@@ -1788,13 +1800,14 @@ const DEITY_LORE = {
   "hélios": [
     "Dieu du soleil, Hélios traverse chaque jour le ciel sur un char de feu, de l'orient à l'occident, avant de regagner l'Océan pendant la nuit pour reprendre sa course au matin suivant (voir la fiche « Soleil »). Voyant tout depuis cette hauteur, rien ne lui échappe jamais tout à fait — c'est lui qui révélera un jour à Héphaïstos les amours cachées d'Aphrodite (voir la fiche « Aphrodite »).",
     "Son fils Phaéton, voulant prouver sa filiation, obtint un jour de conduire le char à sa place — incapable d'en maîtriser les chevaux, il faillit embraser la terre entière avant que Zeus ne le foudroie pour l'arrêter. Ses sœurs, les Héliades, le pleurèrent si longtemps sur les rives du fleuve où il était tombé qu'elles furent changées en peupliers, leurs larmes durcissant en gouttes d'ambre.",
-    "De l'Océanide Persé, Hélios eut plusieurs autres enfants restés célèbres : Aiétès, roi de Colchide, la magicienne Circé (voir la fiche « Circé »), et Pasiphaé, épouse du roi Minos et mère du Minotaure (voir la fiche « Minos ») — trois destins bien différents, mais tous marqués par une même maîtrise redoutable de la magie ou du pouvoir.",
+    "De l'Océanide Persé, Hélios eut plusieurs autres enfants restés célèbres : Aiétès, roi de Colchide, la magicienne Circé (voir la fiche « Circé »), et Pasiphaé, épouse du roi Minos et mère du Minotaure (voir les fiches « Minos » et « Pasiphaé ») — trois destins bien différents, mais tous marqués par une même maîtrise redoutable de la magie ou du pouvoir.",
+    "Sa petite-fille Médée, fille d'Aiétès, hérita elle aussi de ce sang — et de bien plus qu'un simple don pour les sortilèges : lorsqu'elle dut fuir Corinthe après s'être vengée de Jason, c'est un char ailé tiré par des dragons, prêté par Hélios lui-même, qui l'emporta hors d'atteinte (voir la fiche « Médée »).",
     "Il aima aussi la mortelle Leucothoé, changée en arbuste à encens après avoir été enterrée vivante par son propre père, et la nymphe Clytie, qui se consuma de jalousie à l'idée de l'avoir perdu : restée à le fixer sans relâche, elle finit par s'enraciner et devenir cette fleur qui, encore aujourd'hui, tourne son visage vers le soleil tout au long du jour.",
     "Dans le Tarot, Hélios est la figure du Soleil (XIX), où deux enfants jouent sous une lumière si éclatante que rien ne peut y rester dissimulé — la même clarté qui, dans ses mythes, révèle toujours ce que d'autres voudraient cacher, qu'il s'agisse d'un secret d'alcôve ou d'un chagrin transformé en fleur tournée vers la lumière.",
   ],
   "minos": [
     "Roi légendaire de Crète de son vivant, Minos devint après sa mort l'un des trois juges des Enfers, réputé pour la rigueur impartiale de ses jugements — une réputation acquise du temps où il régnait déjà avec une justice sans complaisance.",
-    "Sur terre, il fit construire par Dédale le Labyrinthe pour y enfermer le Minotaure, fruit d'une union contre nature de son épouse — un épisode qui n'entacha jamais, dans les Enfers, la légitimité de son jugement sur les autres âmes. C'est sa propre fille Ariane qui, en secret, permit à Thésée d'en ressortir vivant (voir la fiche « Ariane »).",
+    "Sur terre, il fit construire par Dédale le Labyrinthe pour y enfermer le Minotaure, fruit d'une union contre nature de son épouse Pasiphaé (voir la fiche « Pasiphaé ») — un épisode qui n'entacha jamais, dans les Enfers, la légitimité de son jugement sur les autres âmes. C'est sa propre fille Ariane qui, en secret, permit à Thésée d'en ressortir vivant (voir la fiche « Ariane »).",
   ],
   "gaïa": [
     "Déesse primordiale, Gaïa est la Terre elle-même, apparue au tout début du monde depuis le Chaos originel — mère de toutes choses, des Titans aux Cyclopes en passant par les monstres les plus redoutables.",
@@ -1879,7 +1892,7 @@ const DEITY_LORE = {
   ],
   "jason": [
     "Héritier légitime du trône d'Iolcos, spolié par son oncle Pélias, Jason reçut de ce dernier une mission jugée impossible en échange de la couronne : ramener la Toison d'or, gardée par un dragon ne dormant jamais, aux confins du monde connu.",
-    "Il rassembla pour ce voyage les plus grands héros grecs de sa génération à bord du navire Argo, les Argonautes, et ne parvint à ses fins qu'avec l'aide de Médée, magicienne éprise de lui qui trahit son propre père pour l'aider à s'emparer de la Toison.",
+    "Il rassembla pour ce voyage les plus grands héros grecs de sa génération à bord du navire Argo, les Argonautes, et ne parvint à ses fins qu'avec l'aide de Médée, magicienne éprise de lui qui trahit son propre père pour l'aider à s'emparer de la Toison (voir la fiche « Médée »).",
   ],
   "achille": [
     "Fils de la Néréide Thétis (voir la fiche « Thétis ») et d'un mortel, Achille fut plongé enfant dans le Styx par sa mère pour le rendre invulnérable — seul son talon, par lequel elle le tenait, resta vulnérable.",
@@ -1912,7 +1925,7 @@ const DEITY_LORE = {
     "Éprise de Narcisse, elle ne put jamais lui déclarer son amour autrement qu'en répétant ses propres paroles, et se consuma de chagrin après son rejet jusqu'à ne plus laisser d'elle qu'une voix, dit-on, résonnant encore dans les montagnes.",
   ],
   "circé": [
-    "Fille d'Hélios (voir la fiche « Hélios ») et magicienne experte en herbes et en breuvages, Circé vit sur une île isolée où elle transforme en animaux les voyageurs qui s'y aventurent sans méfiance — c'est ainsi qu'elle changea en pourceaux une partie de l'équipage d'Ulysse.",
+    "Fille d'Hélios (voir la fiche « Hélios ») et magicienne experte en herbes et en breuvages, Circé vit sur une île isolée où elle transforme en animaux les voyageurs qui s'y aventurent sans méfiance — c'est ainsi qu'elle changea en pourceaux une partie de l'équipage d'Ulysse. Sa nièce Médée, fille de son frère Aiétès, hérita d'un don comparable pour la magie, mais tourné vers un tout autre destin (voir la fiche « Médée »).",
     "Ulysse, protégé par une plante magique offerte par Hermès, résista à son sortilège et la contraignit à rendre à ses hommes leur forme humaine. Il resta ensuite une année entière sur son île, dont naquit un fils, Télégonos — qui, des années plus tard et sans le reconnaître, tuera son propre père, achevant malgré lui une prophétie qui pesait sur Ulysse depuis son retour à Ithaque.",
     "Sa magie ne sert pas qu'à punir les intrus : par jalousie, elle change aussi la nymphe Scylla en monstre. Éprise du dieu marin Glaucos, lui-même épris de Scylla, Circé empoisonne la source où celle-ci se baigne — la nymphe en ressort affublée d'une ceinture de têtes de chiens hurlants, condamnée à hanter pour toujours un détroit périlleux, face au tourbillon de Charybde (voir la fiche « Mer »).",
     "Elle inflige un sort semblable à Picus, roi du Latium déjà marié à la nymphe Canens : le voyant refuser ses avances par fidélité, elle le change en pic — l'oiseau porte encore aujourd'hui son nom latin, picus. Deux amours contrariés, deux métamorphoses : la magie de Circé transforme aussi souvent qu'elle punit.",
@@ -1941,7 +1954,7 @@ const DEITY_LORE = {
     "Dans le Tarot, Ulysse est la figure du 8 de Coupes, où un personnage s'éloigne de nuit, laissant des coupes soigneusement empilées derrière lui : après une année entière passée sur l'île de Circé (voir la fiche « Circé »), c'est bien lui qui choisit de reprendre la mer vers Ithaque plutôt que de s'installer dans un confort déjà acquis.",
   ],
   "andromède": [
-    "Princesse éthiopienne, Andromède fut enchaînée à un rocher au bord de la mer en offrande expiatoire à un monstre marin, envoyé par Poséidon pour punir sa mère Cassiopée de s'être vantée d'une beauté supérieure à celle des Néréides.",
+    "Princesse éthiopienne, Andromède fut enchaînée à un rocher au bord de la mer en offrande expiatoire à un monstre marin, envoyé par Poséidon pour punir sa mère Cassiopée de s'être vantée d'une beauté supérieure à celle des Néréides (voir la fiche « Cassiopée »).",
     "Persée, revenant de sa victoire sur la Gorgone Méduse, la découvrit ainsi exposée et la sauva du monstre avant de l'épouser — un couple que les Grecs placèrent ensuite parmi les étoiles (voir la fiche « Étoile »).",
   ],
   "persée": [
@@ -1979,7 +1992,7 @@ const DEITY_LORE = {
     "Iphigénie est particulièrement associée à Artémis.",
   ],
   "ariane": [
-    "Fille de Minos, roi de Crète (voir la fiche « Minos »), et de Pasiphaé, Ariane tomba amoureuse de Thésée le jour où il arriva parmi les jeunes gens envoyés en tribut au Minotaure, enfermé au cœur du Labyrinthe.",
+    "Fille de Minos, roi de Crète (voir la fiche « Minos »), et de Pasiphaé (voir la fiche « Pasiphaé »), Ariane tomba amoureuse de Thésée le jour où il arriva parmi les jeunes gens envoyés en tribut au Minotaure, enfermé au cœur du Labyrinthe.",
     "Pour lui permettre d'en ressortir vivant après avoir affronté le monstre, elle lui confia une pelote de fil à dérouler en avançant — le fameux « fil d'Ariane », resté depuis l'expression même de ce qui permet de retrouver son chemin dans ce qui semblait inextricable.",
     "Thésée l'emmena avec lui en fuyant la Crète, mais l'abandonna endormie sur l'île de Naxos. C'est là que Dionysos la trouva, en tomba amoureux et l'épousa, lui offrant l'immortalité et une couronne d'or que l'on retrouve, dit-on, parmi les étoiles sous la forme d'une constellation (voir la fiche « Dionysos »).",
     "Une tradition tardive veut que ce mariage n'ait pas été sans conséquence pour tout le monde : le jeune dieu Hyménée, invité à chanter pour l'occasion avec une voix aussi belle que celle de son père Apollon, l'y aurait perdue (voir la fiche « Hyménée ») — la plus heureuse des fêtes coûtant cher à quelqu'un d'autre.",
@@ -2183,7 +2196,7 @@ const DEITY_LORE = {
     "Dans le Tarot, Hypnos est la figure du 4 de Coupes, où un dormeur assis sous un arbre reste indifférent aux coupes qui l'entourent, jusqu'à ce qu'une main lui tende depuis un nuage une quatrième offrande qu'il ne voit pas non plus : son sommeil n'est jamais malveillant, mais il peut, comme ici, faire manquer ce qui est pourtant offert.",
   ],
   "orphée": [
-    "Orphée fut le plus grand musicien jamais né, fils du roi thrace Œagre et de la Muse Calliope — certaines traditions le disent plutôt fils d'Apollon lui-même, qui lui offrit une lyre d'or et lui enseigna à en jouer (voir la fiche « Lyre »). Son chant, dit-on, charmait aussi bien les bêtes sauvages que les arbres et les rochers, qui se déplaçaient pour venir l'entendre.",
+    "Orphée fut le plus grand musicien jamais né, fils du roi thrace Œagre et de la Muse Calliope (voir la fiche « Calliope ») — certaines traditions le disent plutôt fils d'Apollon lui-même, qui lui offrit une lyre d'or et lui enseigna à en jouer (voir la fiche « Lyre »). Son chant, dit-on, charmait aussi bien les bêtes sauvages que les arbres et les rochers, qui se déplaçaient pour venir l'entendre.",
     "Le jour de son mariage avec la nymphe Eurydice — cérémonie que le dieu Hyménée lui-même présida, sa torche ne cessant de fumer sans jamais prendre flamme, mauvais présage resté sans réponse (voir la fiche « Hyménée ») —, celle-ci fut mordue par un serpent en fuyant un satyr et mourut sur le coup : la joie des noces basculant en un instant dans le deuil.",
     "Fou de chagrin, Orphée descendit aux Enfers avec sa seule lyre : son chant adoucit le cœur inflexible d'Hadès et de Perséphone (voir les fiches « Hadès » et « Perséphone »), qui consentirent à lui rendre Eurydice, à une condition — marcher devant elle sans se retourner avant d'avoir atteint la lumière du jour. Presque arrivé, incapable de résister au doute, il se retourna un instant trop tôt : elle disparut une seconde fois, cette fois pour toujours.",
     "Dans le Tarot, Orphée est la figure du 5 de Coupes, où une silhouette en deuil contemple trois coupes renversées sans voir les deux qui tiennent encore debout derrière elle : son regard, comme le sien vers Eurydice au sortir des Enfers, se fixe sur la perte au moment précis où il ne fallait plus se retourner.",
@@ -2256,6 +2269,45 @@ const DEITY_LORE = {
     "Elle appartient à cette même famille de figures allégoriques que Techné ou Éléos (voir les fiches « Techné » et « Éléos ») : des personnifications sans mythe développé, honorées pour la qualité qu'elles incarnent plutôt que pour des exploits qui leur seraient propres.",
     "Elle partage avec Ctésios, gardien du garde-manger domestique (voir la fiche « Ctésios »), ce même terrain : non la richesse conquise ou héritée d'un seul coup, mais celle qui s'accumule patiemment, génération après génération, jusqu'à devenir un bien commun plutôt qu'individuel.",
     "Dans le Tarot, Euthénie est la figure du 10 de Deniers, où trois générations d'une même famille se retrouvent réunies dans une cour prospère, entourées de dix deniers : cette carte est cet aboutissement qui ne s'arrête jamais à une seule personne, mais se transmet et se partage.",
+  ],
+
+  /* ----- Figures ajoutées à la demande directe de l'utilisatrice ----- */
+  "hygie": [
+    "Fille d'Asclépios, dieu de la médecine, Hygie personnifie la santé elle-même — non pas le remède qui traite un mal déjà présent, mais la propreté et les bonnes pratiques qui l'empêchent de survenir.",
+    "On la représente tenant un serpent (voir la fiche « Serpent ») qui boit dans une coupe qu'elle tient à la main : cette image, la « coupe d'Hygie », reste aujourd'hui encore le symbole international de la pharmacie dans de nombreux pays.",
+    "Son nom grec, hugieia, a donné directement le mot français « hygiène » — rare privilège pour une figure mythologique secondaire, dont le souvenir survit ainsi jusque dans le langage courant, bien au-delà de son propre culte antique.",
+  ],
+  "médée": [
+    "Petite-fille d'Hélios (voir la fiche « Hélios ») et nièce de la magicienne Circé (voir la fiche « Circé »), Médée maîtrisait déjà les herbes et les sortilèges lorsque Jason arriva en Colchide à la recherche de la Toison d'or.",
+    "Éprise de lui, elle trahit son propre père le roi Aiétès pour l'aider à accomplir les épreuves jugées impossibles qu'il lui avait fixées, puis découpa même son frère Absyrtos en morceaux jetés à la mer pour retarder leurs poursuivants, le temps que Jason s'échappe avec la Toison (voir la fiche « Jason »).",
+    "Des années plus tard, installés à Corinthe et parents de deux fils, Jason l'abandonna pour épouser la fille du roi Créon. Médée se vengea en offrant à sa rivale une robe empoisonnée qui la consuma vivante, puis, selon la version la plus sombre du mythe — celle d'Euripide —, tua ses propres enfants pour priver Jason de toute descendance.",
+    "Elle s'échappa de Corinthe sur un char ailé tiré par des dragons, prêté par son grand-père Hélios (voir la fiche « Hélios ») — le même astre qui, chaque jour, traverse le ciel sans jamais se soucier de ce qui se passe en dessous.",
+  ],
+  "calliope": [
+    "Fille de Zeus et de la Titanide Mnémosyne, la Mémoire elle-même, Calliope est l'aînée et la plus vénérée des neuf Muses : celle qui préside à la poésie épique, le grand récit des exploits héroïques que les aèdes chantaient de génération en génération.",
+    "On la représente une tablette et un stylet à la main, prête à consigner ce qui mérite de ne jamais être oublié — un rôle qui prolonge directement l'origine de sa mère, la Mémoire.",
+    "Unie à Apollon ou, selon d'autres traditions, au roi thrace Œagre, elle mit au monde Orphée, dont le chant devait plus tard surpasser celui de tous les mortels (voir la fiche « Orphée »).",
+  ],
+  "cassiopée": [
+    "Reine d'Éthiopie, épouse du roi Céphée, Cassiopée commit l'erreur de se vanter que sa propre beauté — ou, selon d'autres versions, celle de sa fille Andromède — surpassait celle des Néréides, les nymphes de la mer.",
+    "Offensées, celles-ci obtinrent de Poséidon qu'il envoie un monstre marin ravager les côtes du royaume ; seul le sacrifice d'Andromède, enchaînée à un rocher en offrande expiatoire, put apaiser sa colère — jusqu'à ce que Persée, de retour avec la tête de Méduse, la sauve et l'épouse (voir la fiche « Andromède »).",
+    "Après sa mort, Cassiopée fut placée elle aussi parmi les étoiles (voir la fiche « Étoile ») — mais comme punition plutôt que récompense : sa constellation tourne autour du pôle céleste de telle sorte qu'elle se retrouve, une bonne partie de l'année, suspendue la tête en bas sur son propre trône.",
+  ],
+  "mélinoé": [
+    "Selon l'hymne orphique qui lui est consacré, Mélinoé est née d'une ruse de Zeus : pour s'unir à Perséphone (voir la fiche « Perséphone »), déjà reine des Enfers, il aurait pris l'apparence de son propre époux Hadès (voir la fiche « Hadès ») — une tromperie qui explique le caractère trouble, à la fois divin et infernal, de la fille née de cette union.",
+    "On la décrit avec un corps mi-noir, mi-couleur safran, errant la nuit parmi les tombes à la tête d'un cortège de fantômes, semant chez les mortels endormis des visions terrifiantes et une folie passagère.",
+    "Des offrandes lui étaient adressées pour apaiser les âmes errantes et détourner les cauchemars qu'elle pouvait envoyer — une déesse mineure et tardive, mais qui incarne à elle seule ce que le monde souterrain a de plus troublant : ni tout à fait vivante, ni tout à fait morte, ni tout à fait d'un seul camp.",
+  ],
+  "ascalaphos": [
+    "Fils du fleuve infernal Achéron, Ascalaphos veillait sur le jardin des Enfers lorsqu'il vit Perséphone (voir la fiche « Perséphone ») cueillir et manger quelques grains de la grenade d'Hadès (voir la fiche « Grenade ») — un geste qui, une fois rapporté aux autres dieux, la liait irrévocablement au monde souterrain.",
+    "Furieuse d'avoir ainsi perdu tout espoir de récupérer sa fille en entier, Déméter (voir la fiche « Déméter ») l'écrasa sous un énorme rocher aux Enfers ; il n'en fut délivré que des générations plus tard, lorsqu'Héraclès, venu y chercher le chien Cerbère pour son douzième travail, souleva la pierre à sa place (voir la fiche « Héraclès »).",
+    "Sa punition ne s'arrêta pas là : selon Ovide, une fois libéré, il fut changé en une chouette au corps couvert de plumes grises et au bec crochu — un oiseau de mauvais augure, dont le cri annonce depuis un malheur à venir.",
+    "Ce mythe est parfois confondu avec celui, distinct, de Nyctimène : changée en chouette par Athéna par compassion plutôt que par punition, celle-ci fut recueillie parmi les oiseaux sacrés de la déesse — un sort autrement plus clément que celui d'Ascalaphos, mais souvent mêlé au sien dans la mémoire populaire, les deux histoires ne se rejoignant en réalité que par l'oiseau qu'elles ont en commun.",
+  ],
+  "pasiphaé": [
+    "Fille d'Hélios (voir la fiche « Hélios ») et épouse du roi Minos de Crète (voir la fiche « Minos »), Pasiphaé fut frappée par Poséidon d'un désir irrépressible pour un taureau d'une blancheur éclatante que le dieu avait offert à Minos, et que celui-ci avait refusé de sacrifier comme convenu (voir la fiche « Taureau »).",
+    "Pour assouvir cette passion contre nature, elle demanda à l'architecte Dédale (voir la fiche « Dédale ») de lui construire une vache de bois creuse, dans laquelle elle se glissa pour s'unir à l'animal — de cette union naquit le Minotaure, monstre à tête de taureau et corps d'homme.",
+    "Minos, honteux, fit enfermer la créature dans le Labyrinthe que Dédale construisit à cet effet (voir la fiche « Labyrinthe »), où elle fut nourrie de tributs humains jusqu'à sa mort face à Thésée. Pasiphaé eut par ailleurs plusieurs enfants légitimes avec Minos, dont Ariane (voir la fiche « Ariane »).",
   ],
 };
 
