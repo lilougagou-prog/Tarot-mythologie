@@ -1719,6 +1719,7 @@ const DEITY_LORE = {
   "dionysos": [
     "Dionysos est le fils de Zeus et d'une mortelle, Sémélé, morte foudroyée en voulant contempler son amant divin dans toute sa splendeur — Zeus dut alors coudre l'enfant à naître dans sa propre cuisse pour le mener à terme, d'où son surnom de « deux fois né » (voir la fiche « Sémélé »).",
     "Contrairement aux autres Olympiens, il parcourut le monde des mortels, leur enseignant la culture de la vigne et provoquant sur son passage des scènes de folie collective chez ceux qui refusaient de le reconnaître comme dieu — comme le roi Penthée, déchiré par sa propre mère en plein délire bachique.",
+    "Où qu'il aille, il ne voyage jamais seul : son cortège, le thiase, rassemble les Ménades, femmes prises d'une transe sacrée qui dansent échevelées au son des tambourins et des flûtes, les satyres mi-hommes mi-boucs toujours en quête de vin et de plaisir, et le vieux Silène, son précepteur ivre porté à dos d'âne faute de pouvoir tenir debout — une procession bruyante et débridée, char tiré par des panthères, qui incarne à elle seule la libération que le dieu apporte partout où il passe.",
     "Sur l'île de Naxos, il trouva Ariane abandonnée par Thésée et l'épousa, lui offrant l'immortalité (voir les fiches « Ariane » et « Thésée ») — et, une fois adulte, il n'oublia jamais sa mère : il descendit jusqu'aux Enfers pour la ramener parmi les dieux de l'Olympe.",
     "Une réconciliation passagère avec Aphrodite, après qu'elle se fut un temps éprise d'Adonis, lui donna aussi un fils, Priape — un enfant que la jalousie d'Héra frappa dès sa naissance d'une laideur difforme (voir les fiches « Aphrodite » et « Priape »).",
     "Dieu de la métamorphose autant que de l'ivresse, il incarne ce qui échappe à la raison et à l'ordre établi.",
@@ -2557,6 +2558,9 @@ const DEITY_PORTRAITS = {
   "thisbé": "assets/deity-pyrame-thisbe.jpg",
   "hermès": "assets/deity-hermes.jpg",
   "andromède": "assets/deity-andromede.jpg",
+  "apollon": "assets/deity-apollon.jpg",
+  "arès": "assets/deity-ares.jpg",
+  "enyo": "assets/deity-enyo.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
@@ -2572,6 +2576,7 @@ const DEITY_PORTRAIT_WIDE = new Set(["muses"]);
 // largeur au milieu du texte (voir showDeityDetail() et la classe .deity-portrait-inline).
 const DEITY_INLINE_PORTRAITS = {
   "dionysos": [
+    { match: "Ménades", src: "assets/deity-dionysos-cortege.jpg", alt: "Le cortège de Dionysos" },
     { match: "Ariane", src: "assets/deity-dionysos-ariane.jpg", alt: "Dionysos et Ariane" },
   ],
   "apollon": [
@@ -2587,6 +2592,9 @@ const DEITY_INLINE_PORTRAITS = {
   ],
   "andromède": [
     { match: "Persée", src: "assets/deity-persee-andromede.jpg", alt: "Persée volant au secours d'Andromède" },
+  ],
+  "arès": [
+    { match: "Phobos et Deimos", src: "assets/deity-deimos-phobos.jpg", alt: "Phobos et Deimos" },
   ],
 };
 
