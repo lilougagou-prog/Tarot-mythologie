@@ -2005,7 +2005,7 @@ const DEITY_LORE = {
   ],
   "andromède": [
     "Princesse éthiopienne, Andromède fut enchaînée à un rocher au bord de la mer en offrande expiatoire à un monstre marin, envoyé par Poséidon pour punir sa mère Cassiopée de s'être vantée d'une beauté supérieure à celle des Néréides (voir la fiche « Cassiopée »).",
-    "Persée, revenant de sa victoire sur la Gorgone Méduse, la découvrit ainsi exposée et la sauva du monstre avant de l'épouser — un couple que les Grecs placèrent ensuite parmi les étoiles (voir la fiche « Étoile »).",
+    "Persée (voir la fiche « Persée »), revenant de sa victoire sur la Gorgone Méduse, la découvrit ainsi exposée et la sauva du monstre avant de l'épouser — porté par ses seules sandales ailées, et non par Pégase, né du sang de Méduse à sa mort seulement et donc encore inexistant à cet instant, malgré une image plus tardive qui les associe volontiers. Les Grecs placèrent ensuite ce couple parmi les étoiles (voir la fiche « Étoile »).",
   ],
   "persée": [
     "Fils de Zeus et de la mortelle Danaé, Persée naquit d'une pluie d'or : le roi Acrisios, son grand-père, avait enfermé sa fille dans une chambre de bronze après qu'un oracle lui eut prédit la mort de sa propre main par un futur petit-fils — mais Zeus s'unit à elle sous cette forme, déjouant sans effort la précaution. Acrisios, découvrant l'enfant, jeta mère et fils à la mer dans un coffre de bois, que les flots portèrent jusqu'à l'île de Sériphos, où un pêcheur nommé Dictys les recueillit et les éleva.",
@@ -2556,6 +2556,7 @@ const DEITY_PORTRAITS = {
   "pyrame": "assets/deity-pyrame-thisbe.jpg",
   "thisbé": "assets/deity-pyrame-thisbe.jpg",
   "hermès": "assets/deity-hermes.jpg",
+  "andromède": "assets/deity-andromede.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
@@ -2583,6 +2584,9 @@ const DEITY_INLINE_PORTRAITS = {
   "énée": [
     { match: "porta sur son dos son père âgé", src: "assets/deity-enee-fuite-troie.jpg", alt: "Énée fuyant Troie avec son père et son fils" },
     { match: "où règne la reine Didon", src: "assets/deity-enee-didon.jpg", alt: "Énée et Didon" },
+  ],
+  "andromède": [
+    { match: "Persée", src: "assets/deity-persee-andromede.jpg", alt: "Persée volant au secours d'Andromède" },
   ],
 };
 
