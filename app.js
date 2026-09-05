@@ -2515,13 +2515,23 @@ const DEITY_PORTRAITS = {
   "cadmos": "assets/deity-harmonie-cadmos.jpg",
   "heures": "assets/deity-heures.jpg",
   "parques": "assets/deity-parques.jpg",
-  // Actéon : image d'origine reçue montrant aussi Artémis et ses nymphes au bain (la scène même
-  // du mythe), recadrée pour ne garder qu'Actéon lui-même, en tenue, épiant depuis son arbre —
-  // aucune figure dénudée de la scène originale n'est reprise dans cette fiche publique.
+  // Actéon : la première image reçue montrait aussi Artémis et ses nymphes au bain (la scène même
+  // du mythe) — remplacée ensuite par l'utilisatrice par cette image-ci, qui ne montre plus que
+  // lui-même, en tenue de chasse avec ses chiens et le cerf qu'il deviendra en arrière-plan.
   "actéon": "assets/deity-acteon.jpg",
   "achille": "assets/deity-achille.jpg",
   "hygie": "assets/deity-hygie.jpg",
+  "charites": "assets/deity-charites.jpg",
+  // Portrait de groupe (les 9 Muses ensemble) : image large, jamais recadrée en 4:5 comme les
+  // portraits individuels — voir .deity-portrait-wide dans styles.css, qui lui laisse son propre
+  // format plutôt que de sacrifier certaines des neuf sur les bords à un recadrage trop serré.
+  "muses": "assets/deity-muses.jpg",
 };
+
+// Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
+// afficher tels quels (.deity-portrait-wide, styles.css) plutôt que de forcer un recadrage
+// serré qui sacrifierait certaines des figures représentées sur les bords de l'image.
+const DEITY_PORTRAIT_WIDE = new Set(["muses"]);
 
 // Portraits insérés à l'intérieur même du mythe, juste au-dessus du paragraphe qui mentionne la
 // figure représentée dessus — contrairement à DEITY_PORTRAITS ci-dessus, affiché une seule fois
@@ -5399,12 +5409,13 @@ function showDeityDetail(id, backTo = cardDetailReturnTo){
     : NUMBER_CARD_DEITY[c[0]]===id); // cartes numérales dotées d'une figure propre (voir NUMBER_CARD_DEITY)
   const lore = DEITY_LORE[id];
   const portrait = DEITY_PORTRAITS[id];
+  const portraitClass = DEITY_PORTRAIT_WIDE.has(id) ? "deity-portrait deity-portrait-wide" : "deity-portrait";
   const inlinePortraits = DEITY_INLINE_PORTRAITS[id] || [];
   document.getElementById("screen").innerHTML = `<div class="detail">
     ${wasNew ? discoveryFX() : ""}
     <div class="symbol-hero">✦</div>
     <h2>${escapeHTML(name)}</h2>
-    ${portrait ? `<img class="deity-portrait" src="${portrait}" alt="${escapeHTML(name)}" loading="lazy">` : ""}
+    ${portrait ? `<img class="${portraitClass}" src="${portrait}" alt="${escapeHTML(name)}" loading="lazy">` : ""}
     <p>${escapeHTML(note)}</p>
     ${lore && lore.length ? (
       (isPremiumEnabled() || isFigureLoreFree(id))
