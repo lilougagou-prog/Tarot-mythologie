@@ -1606,7 +1606,7 @@ const DEITY_NOTES = {
 
   /* ----- Autres figures mentionnées dans les lectures des cartes numérales ----- */
   "jason":"Chef des Argonautes, parti à la conquête de la Toison d'or à bord de l'Argo.",
-  "achille":"Le plus grand guerrier de la guerre de Troie, connu pour sa bravoure et sa colère.",
+  "achille":"Le plus grand guerrier de la guerre de Troie, chef des Myrmidons, vulnérable au seul talon que le Styx n'avait jamais pu atteindre.",
   "thétis":"Néréide insaisissable, mère d'Achille, dont la ténacité et le don de métamorphose défièrent le destin annoncé pour son fils.",
   "atlas":"Titan condamné à porter le poids du ciel sur ses épaules pour l'éternité.",
   "psyché":"Mortelle aimée d'Éros, unie à lui après avoir traversé de nombreuses épreuves.",
@@ -1937,8 +1937,12 @@ const DEITY_LORE = {
     "Il rassembla pour ce voyage les plus grands héros grecs de sa génération à bord du navire Argo, les Argonautes, et ne parvint à ses fins qu'avec l'aide de Médée, magicienne éprise de lui qui trahit son propre père pour l'aider à s'emparer de la Toison (voir la fiche « Médée »).",
   ],
   "achille": [
-    "Fils de la Néréide Thétis (voir la fiche « Thétis ») et d'un mortel, Achille fut plongé enfant dans le Styx par sa mère pour le rendre invulnérable — seul son talon, par lequel elle le tenait, resta vulnérable.",
-    "Le plus grand guerrier de la guerre de Troie, il se retira des combats après une querelle avec Agamemnon, laissant les Grecs perdre du terrain, jusqu'à ce que la mort de son ami Patrocle le pousse à revenir se battre dans une colère qui ne s'éteignit qu'avec la mort d'Hector.",
+    "Fils de la Néréide Thétis et du roi mortel Pélée (voir la fiche « Thétis »), Achille fut plongé enfant dans le Styx, la rivière infernale (voir la fiche « Rivière »), par une mère qui espérait ainsi le rendre invulnérable — seul son talon, par lequel elle le tenait, échappa aux eaux, et devait bien plus tard causer sa perte.",
+    "Confié au centaure Chiron (voir la fiche « Chiron ») sur le mont Pélion pour y apprendre la médecine, la musique et le maniement des armes, Achille grandit sous une prophétie sans appel : une vie longue mais sans gloire, ou une vie brève mais immortalisée par l'exploit. Pour tenter d'échapper à ce second destin, Thétis le déguisa en jeune fille à la cour du roi Lycomède, sur l'île de Skyros — où il devint pourtant l'amant de la princesse Déidamie, avec qui il eut un fils, Néoptolème, avant qu'Ulysse (voir la fiche « Ulysse ») ne le démasque en dissimulant une épée parmi des présents destinés aux jeunes filles du palais : seule la nouvelle venue s'en saisit aussitôt.",
+    "Une fois recruté pour la guerre de Troie, Achille y mena son propre peuple, les Myrmidons de Phthie — selon la légende, d'anciennes fourmis changées en hommes par Zeus pour repeupler l'île d'Égine, au service de son grand-père Éaque. Le plus fameux conflit de l'Iliade éclate pourtant loin du champ de bataille : contraint de rendre sa propre captive pour apaiser la colère d'Apollon, Agamemnon s'empare en représailles de Briséis, la captive d'Achille — une humiliation qui le pousse à se retirer des combats et laisse les Grecs perdre du terrain.",
+    "Seule la mort de Patrocle, son compagnon le plus cher, tombé sous les coups d'Hector alors qu'il portait les propres armes d'Achille pour rallier les Grecs en déroute, le fait reprendre les armes. Fou de chagrin, Achille tue Hector en duel sous les murs de Troie puis traîne son corps derrière son char plusieurs jours durant, jusqu'à ce que le vieux roi Priam vienne en personne, de nuit et sans escorte, franchir la porte Scée (voir la fiche « Porte ») pour le supplier de lui rendre la dépouille de son fils.",
+    "Peu après, une reine des Amazones venue prêter main-forte à Troie, Penthésilée, l'affronte à son tour : Achille la tue en duel et, dit-on, pleure en découvrant la beauté de celle qu'il vient d'abattre — seule Amazone reconnue par les textes anciens comme véritable fille d'Arès (voir la fiche « Arès »).",
+    "Invincible en apparence, Achille tombe pourtant devant cette même porte Scée, tué d'une flèche que Pâris décoche mais qu'Apollon guide lui-même jusqu'à son unique point faible, le talon. Son fils Néoptolème, resté caché sur Skyros pendant toute la guerre, est appelé à Troie après cette mort — un oracle affirme que la ville ne peut tomber sans lui —, où il se révèle aussi impitoyable que farouche, jusqu'à tuer le vieux Priam au pied même d'un autel lors de la prise de la ville.",
   ],
   "atlas": [
     "Titan ayant combattu aux côtés de ses frères contre Zeus, Atlas fut condamné, à leur défaite, à porter la voûte céleste sur ses épaules pour l'éternité — non la Terre, comme on le croit souvent, mais le ciel lui-même.",
@@ -1955,7 +1959,7 @@ const DEITY_LORE = {
     "Chacune de ces épreuves se résout non par la force, mais par la patience, l'humilité à accepter une aide extérieure et, à l'inverse, la rechute dans l'impulsivité qui l'avait perdue une première fois : le nom même de Psyché signifie « âme » en grec, et son parcours est resté la figure même de l'âme qui doit traverser l'épreuve et la tentation pour atteindre l'union complète.",
   ],
   "charites": [
-    "Trois déesses de la grâce et de la joie — le plus souvent nommées Aglaé (voir la fiche « Aglaé »), Euphrosyne et Thalie —, les Charites ne sont jamais représentées seules : elles dansent toujours ensemble, indissociables les unes des autres.",
+    "Trois déesses de la grâce et de la joie — le plus souvent nommées Aglaé (voir la fiche « Aglaé »), Euphrosyne et Thalia —, les Charites ne sont jamais représentées seules : elles dansent toujours ensemble, indissociables les unes des autres.",
     "Compagnes d'Aphrodite et des Muses, elles président à tout ce qui rend la vie belle sans nécessité — la beauté, la fête, la reconnaissance — plutôt qu'à ce qui est simplement utile. Les Heures (voir la fiche « Heures ») se joignent souvent à elles dans les cortèges divins, deux groupes de déesses toujours dansantes qu'on associe volontiers l'un à l'autre.",
   ],
   "narcisse": [
