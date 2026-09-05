@@ -2515,6 +2515,12 @@ const DEITY_PORTRAITS = {
   "cadmos": "assets/deity-harmonie-cadmos.jpg",
   "heures": "assets/deity-heures.jpg",
   "parques": "assets/deity-parques.jpg",
+  // Actéon : image d'origine reçue montrant aussi Artémis et ses nymphes au bain (la scène même
+  // du mythe), recadrée pour ne garder qu'Actéon lui-même, en tenue, épiant depuis son arbre —
+  // aucune figure dénudée de la scène originale n'est reprise dans cette fiche publique.
+  "actéon": "assets/deity-acteon.jpg",
+  "achille": "assets/deity-achille.jpg",
+  "hygie": "assets/deity-hygie.jpg",
 };
 
 // Portraits insérés à l'intérieur même du mythe, juste au-dessus du paragraphe qui mentionne la
