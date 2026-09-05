@@ -2440,6 +2440,19 @@ const DEITY_LORE = {
   ],
 };
 
+// Portraits illustrés pour certaines figures (voir showDeityDetail()) : affichés juste sous le
+// nom, avant même la note courte — demande directe de l'utilisatrice, qui a fourni les 5
+// premières images. Volontairement partiel plutôt qu'exhaustif : seules les figures pour
+// lesquelles une illustration a été fournie apparaissent ici, le reste continue de s'afficher
+// sans image (symbol-hero "✦" seul), exactement comme avant.
+const DEITY_PORTRAITS = {
+  "hécate": "assets/deity-hecate.jpg",
+  "artémis": "assets/deity-artemis.jpg",
+  "aphrodite": "assets/deity-aphrodite.jpg",
+  "perséphone": "assets/deity-persephone.jpg",
+  "déméter": "assets/deity-demeter.jpg",
+};
+
 /* ===================== ÉTAT ===================== */
 
 let journal = JSON.parse(localStorage.getItem("arcanes-journal") || "[]");
@@ -5181,10 +5194,12 @@ function showDeityDetail(id, backTo = cardDetailReturnTo){
     ? (c[1]||"").toLowerCase()===id
     : NUMBER_CARD_DEITY[c[0]]===id); // cartes numérales dotées d'une figure propre (voir NUMBER_CARD_DEITY)
   const lore = DEITY_LORE[id];
+  const portrait = DEITY_PORTRAITS[id];
   document.getElementById("screen").innerHTML = `<div class="detail">
     ${wasNew ? discoveryFX() : ""}
     <div class="symbol-hero">✦</div>
     <h2>${escapeHTML(name)}</h2>
+    ${portrait ? `<img class="deity-portrait" src="${portrait}" alt="${escapeHTML(name)}" loading="lazy">` : ""}
     <p class="symbol-cat-big">Figure mythologique</p>
     <p>${escapeHTML(note)}</p>
     ${lore && lore.length ? (
