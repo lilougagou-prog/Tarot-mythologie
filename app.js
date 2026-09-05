@@ -1053,7 +1053,7 @@ const SYMBOL_LIBRARY = {
     "Le denier est une pièce de monnaie. C'est le seul des quatre emblèmes du Tarot qui représente directement quelque chose de matériel et de tangible.",
     "La monnaie représente ce qui possède une valeur mesurable : richesse, ressources, travail, échange et possession.",
     "Mais dans le Tarot, le denier ne se limite pas à l'argent. Il représente plus largement le monde concret : le corps, la matière, la maison, le travail, les ressources et tout ce que l'on construit dans le monde réel.",
-    "Une seule pièce, minuscule, franchit pourtant la frontière entre les deux mondes : l'obole que l'on plaçait dans la bouche du défunt pour payer Charon, le passeur qui faisait traverser le Styx aux âmes des morts (voir la fiche « Rivière ») — sans cette pièce, disait-on, l'âme restait errante sur la rive, incapable de payer son dernier voyage.",
+    "Une seule pièce, minuscule, franchit pourtant la frontière entre les deux mondes : l'obole que l'on plaçait dans la bouche du défunt pour payer Charon, le passeur qui faisait traverser la rivière du Styx aux âmes des morts (voir la fiche « Rivière ») — sans cette pièce, disait-on, l'âme restait errante sur la rive, incapable de payer son dernier voyage.",
     "Sa forme ronde peut également évoquer le cycle, la terre, le soleil et ce qui se matérialise.",
     "Le denier est ainsi devenu un symbole de matière, de richesse, de travail, de ressources, de sécurité, de prospérité, de corps et d'ancrage : ce qui prend forme dans la matière.",
   ]},
@@ -1128,10 +1128,10 @@ const SYMBOL_LIBRARY = {
   ]},
   "chaîne":{icon:"⛓",label:"Chaîne",category:"Objets mythologiques",desc:"Attachement, dépendance, lien — la question est toujours de savoir s'il enferme ou s'il peut être dénoué.",links:["pan","prométhée"],lore:[
     "La chaîne la plus célèbre de la mythologie grecque est celle qui retint Prométhée sur un rocher du Caucase, en punition d'avoir donné le feu aux hommes contre la volonté de Zeus.",
-    "Chaque jour, un aigle venait dévorer son foie, qui repoussait chaque nuit, prolongeant son supplice sans fin — jusqu'à ce que Chiron accepte de mourir à sa place et qu'Héraclès mette fin à son calvaire (voir la fiche « Prométhée »).",
+    "Chaque jour, un aigle venait dévorer son foie, qui repoussait chaque nuit, prolongeant son supplice sans fin — jusqu'à ce que Chiron accepte de mourir à sa place et qu'Héraclès mette fin au calvaire de Prométhée (voir la fiche « Prométhée »).",
     "La chaîne de Prométhée dit quelque chose de plus large que la simple punition : elle montre qu'un don fait sans autorisation a toujours un prix, et que l'attachement qui en résulte peut aussi bien enfermer que devenir, avec le temps, la preuve de ce qu'on a osé offrir.",
     "Dans le Tarot, la chaîne est aussi l'attribut du Diable, associé à Pan : elle n'y figure plus une punition méritée mais un attachement à l'instinct, moins imposé de l'extérieur qu'accepté de l'intérieur (voir la fiche « Pan »).",
-    "Une autre chaîne, tout aussi célèbre, retint Andromède à un rocher battu par les flots, livrée en sacrifice à un monstre marin pour expier l'orgueil de sa mère Cassiopée — jusqu'à ce que Persée, de retour avec la tête de Méduse, la délivre et l'épouse (voir la fiche « Étoile »). Contrairement à celle de Prométhée, cette chaîne-là ne punit aucune faute : elle ne fait que retenir une victime innocente, en attendant qu'un sauveur se présente.",
+    "Une autre chaîne, tout aussi célèbre, retint Andromède à un rocher battu par les flots, livrée en sacrifice à un monstre marin pour expier l'orgueil de sa mère Cassiopée — jusqu'à ce que Persée, de retour avec la tête de Méduse, la délivre et l'épouse — tous deux changés plus tard en étoiles (voir la fiche « Étoile »). Contrairement à celle de Prométhée, cette chaîne-là ne punit aucune faute : elle ne fait que retenir une victime innocente, en attendant qu'un sauveur se présente.",
     "Elle est devenue un symbole d'attachement, de dépendance et de lien — la question étant toujours de savoir s'il enferme ou s'il peut être dénoué.",
     "La chaîne est particulièrement associée à Prométhée et à Pan — deux attachements de nature très différente.",
   ]},
@@ -1164,7 +1164,7 @@ const SYMBOL_LIBRARY = {
     "Devenu l'échanson des dieux sur l'Olympe, Ganymède est à son tour placé parmi les étoiles par Zeus : il devient la constellation, puis le signe, du Verseau — l'aigle qui l'a porté jusque-là reste associé à ce voyage entre le ciel et la terre.",
     "L'aigle est aussi celui qui s'élève plus haut que les autres oiseaux et qui semble pouvoir regarder le monde depuis les hauteurs du ciel. Il devient ainsi l'image parfaite de Zeus, maître de l'Olympe et dieu du ciel.",
     "Dans une autre tradition, l'aigle apparaît comme un signe favorable envoyé par Zeus. Il peut alors être interprété comme un messager venu du ciel.",
-    "L'aigle est aussi l'instrument de la punition de Zeus : c'est un aigle qu'il envoie chaque jour dévorer le foie de Prométhée enchaîné sur son rocher, un foie qui repousse chaque nuit pour que le châtiment ne s'achève jamais (voir la fiche « Chaîne ») — preuve que l'oiseau qui élève peut aussi, sur ordre du même dieu, devenir l'instrument d'un tourment sans fin.",
+    "L'aigle est aussi l'instrument de la punition de Zeus : c'est un aigle qu'il envoie chaque jour dévorer le foie de Prométhée, retenu par une chaîne sur son rocher, un foie qui repousse chaque nuit pour que le châtiment ne s'achève jamais (voir la fiche « Chaîne ») — preuve que l'oiseau qui élève peut aussi, sur ordre du même dieu, devenir l'instrument d'un tourment sans fin.",
     "L'aigle est donc devenu un symbole de pouvoir, de souveraineté, de hauteur, de vision, de force et de message divin.",
     "L'aigle est particulièrement associé à Zeus.",
   ]},
@@ -1271,7 +1271,7 @@ const SYMBOL_LIBRARY = {
   ]},
   "araignée":{icon:"🕷",label:"Araignée",category:"Animaux",desc:"Habileté sans limite, orgueil qui défie trop haut — la punition d'Arachné.",links:["athéna"],lore:[
     "Arachné était une jeune tisserande d'une habileté si extraordinaire qu'elle osa prétendre surpasser Athéna elle-même, déesse du tissage autant que de la sagesse.",
-    "Athéna, déguisée en vieille femme, la mit d'abord en garde — en vain. Les deux rivales tissèrent alors chacune une tapisserie : celle d'Athéna glorifiait les dieux de l'Olympe, celle d'Arachné représentait sans détour leurs tromperies et leurs scandales, dont les métamorphoses de Zeus lui-même pour séduire des mortelles (voir la fiche « Taureau »).",
+    "Athéna, déguisée en vieille femme, la mit d'abord en garde — en vain. Les deux rivales tissèrent alors chacune une tapisserie : celle d'Athéna glorifiait les dieux de l'Olympe, celle d'Arachné représentait sans détour leurs tromperies et leurs scandales, dont les métamorphoses de Zeus lui-même — changé en taureau ou sous d'autres formes — pour séduire des mortelles (voir la fiche « Taureau »).",
     "Le travail d'Arachné, techniquement parfait, ne laissait rien à reprocher — ce qui rendit la déesse plus furieuse encore. Athéna déchira la tapisserie et frappa la jeune femme, qui, de honte, tenta de se pendre. Prise de pitié au dernier instant, Athéna la sauva de la mort mais la changea en araignée, la condamnant à tisser sans fin, suspendue à son propre fil.",
     "L'araignée est ainsi devenue un symbole d'habileté sans limite, de création patiente, mais aussi d'orgueil qui défie trop haut et de talent qui, pour n'avoir pas su se taire, se retrouve puni jusque dans sa propre perfection.",
     "L'araignée est particulièrement associée à Athéna, par le mythe d'Arachné.",
@@ -1356,7 +1356,7 @@ const SYMBOL_LIBRARY = {
     "Le blé et l'épi sont particulièrement associés à Déméter.",
   ]},
   "cyprès":{icon:"🌲",label:"Cyprès",category:"Plantes",desc:"Mort, mémoire, passage — arbre funéraire qui reste vert toute l'année.",links:["hadès","apollon"],lore:[
-    "Le cyprès possède une association très forte avec la mort et le monde funéraire dans l'Antiquité grecque : planté aux abords des tombeaux, son feuillage qui ne tombe jamais en fit l'arbre de la permanence du deuil, dressé à la frontière entre le monde des vivants et celui d'Hadès (voir la fiche « Enfer / monde souterrain »).",
+    "Le cyprès possède une association très forte avec la mort et le monde funéraire dans l'Antiquité grecque : planté aux abords des tombeaux, son feuillage qui ne tombe jamais en fit l'arbre de la permanence du deuil, dressé à la frontière entre le monde des vivants et celui d'Hadès (voir la fiche « Hadès »).",
     "Un des récits les plus célèbres est celui de Cyparisse, un jeune homme aimé d'Apollon. Il possédait un cerf qu'il aimait profondément. Après avoir tué accidentellement l'animal, Cyparisse fut inconsolable et demanda à pouvoir pleurer éternellement.",
     "Apollon le transforma alors en cyprès.",
     "Le cyprès devint ainsi l'arbre du deuil et du souvenir. Son feuillage persistant et sa silhouette qui s'élève vers le ciel renforcèrent encore cette association avec la mort, la mémoire et le passage vers l'au-delà.",
@@ -1465,7 +1465,7 @@ const SYMBOL_LIBRARY = {
   // Éléments
   "feu":{icon:"🔥",label:"Feu",category:"Éléments",desc:"Flamme, étincelle, soleil, fumée : action, volonté, élan.",links:["prométhée","hestia"],lore:[
     "Le feu occupe une place unique dans la mythologie grecque : c'est le seul élément que les dieux ont d'abord refusé aux hommes.",
-    "Prométhée le déroba à l'Olympe, caché dans une tige de fenouil, pour l'offrir à l'humanité — un geste qui lui valut d'être enchaîné pour l'éternité (voir la fiche « Chaîne »). Le feu devint ainsi le premier outil véritablement humain, celui qui permit la technique, la cuisson, la métallurgie et la civilisation elle-même.",
+    "Prométhée le déroba à l'Olympe, caché dans une tige de fenouil, pour l'offrir à l'humanité — un geste qui lui valut d'être retenu par une chaîne pour l'éternité (voir la fiche « Chaîne »). Le feu devint ainsi le premier outil véritablement humain, celui qui permit la technique, la cuisson, la métallurgie et la civilisation elle-même.",
     "Le philosophe Empédocle en fit plus tard l'une des quatre racines de toute matière, aux côtés de l'eau, de l'air et de la terre — une théorie qui a nourri toute la pensée grecque sur la nature du monde, bien après les mythes qui l'avaient d'abord racontée.",
     "Ce feu volé devait aussi être entretenu sans jamais s'éteindre : dans chaque cité grecque, une flamme perpétuelle brûlait au prytanée, sous la garde d'Hestia (voir la fiche « Hestia »), et les colons qui partaient fonder une nouvelle ville emportaient toujours un peu de cette braise pour allumer le premier feu de leur nouveau foyer.",
     "Le feu est devenu un symbole d'action, de volonté, d'élan — et du prix qu'il faut parfois payer pour ce qu'on ose transmettre.",
@@ -1765,12 +1765,12 @@ const DEITY_LORE = {
   "thémis": [
     "Titanide antérieure aux dieux de l'Olympe, Thémis personnifie la loi divine et l'ordre juste du monde — non pas la justice humaine, changeante et discutée, mais un principe plus ancien que les dieux eux-mêmes.",
     "Elle rendit elle-même des oracles à Delphes avant qu'Apollon n'y installe son propre sanctuaire, et resta la conseillère de Zeus, assise à ses côtés sur l'Olympe pour veiller à ce qu'aucune décision divine ne s'écarte de l'ordre juste.",
-    "Unie à Zeus, elle mit au monde les Heures (voir la fiche « Heures »), gardiennes de l'ordre saisonnier et moral du monde, et, selon une tradition parallèle à celle qui les dit plutôt filles de la Nuit, les Moires elles-mêmes (voir la fiche « Parques »), qui filent le destin de chaque mortel.",
+    "Unie à Zeus, elle mit au monde les Heures (voir la fiche « Heures »), gardiennes de l'ordre saisonnier et moral du monde, et, selon une tradition parallèle à celle qui les dit plutôt filles de la Nuit, les Parques elles-mêmes (voir la fiche « Parques »), qui filent le destin de chaque mortel.",
   ],
   "déméter": [
-    "Déesse des moissons, Déméter enseigna aux hommes l'art de l'agriculture — un don qu'elle retira au monde entier de rage et de chagrin lorsque sa fille Perséphone fut enlevée par Hadès (voir la fiche « Enfer / monde souterrain »).",
+    "Déesse des moissons, Déméter enseigna aux hommes l'art de l'agriculture — un don qu'elle retira au monde entier de rage et de chagrin lorsque sa fille Perséphone fut enlevée par Hadès (voir la fiche « Hadès »).",
     "La terre entière resta stérile jusqu'à ce que Zeus négocie un compromis : Perséphone passerait une partie de l'année aux Enfers et l'autre auprès de sa mère — un partage qui, depuis, rythme les saisons, l'hiver au deuil de Déméter et le printemps à ses retrouvailles.",
-    "À Athènes et dans une grande partie de la Grèce, on la fêtait sous le nom de Thesmophoros, « celle qui apporte les lois », lors des Thesmophories réservées aux femmes mariées ; son titre le plus solennel restait Éleusinia, en l'honneur d'Éleusis et des Mystères qui portent son nom. Un mythe arcadien plus sombre, propre à la ville de Thelpusa, raconte comment Poséidon la poursuivit alors qu'elle errait à la recherche de sa fille disparue : changée en jument pour lui échapper, elle ne put empêcher le dieu de prendre lui-même la forme d'un étalon pour s'unir à elle malgré tout — de cette union naquirent le cheval Arion et une fille dont le nom véritable ne se révélait qu'aux initiés (voir la fiche « Perséphone »). L'épisode valut à Déméter, sur ce seul lieu, les surnoms d'Erinys, « la Furieuse », et de Lousia, « la Baigneuse », pour le bain purificateur qu'elle prit ensuite dans le fleuve Ladon.",
+    "À Athènes et dans une grande partie de la Grèce, on la fêtait sous le nom de Thesmophoros, « celle qui apporte les lois », lors des Thesmophories réservées aux femmes mariées ; son titre le plus solennel restait Éleusinia, en l'honneur d'Éleusis et des Mystères qui portent son nom. Un mythe arcadien plus sombre, propre à la ville de Thelpusa, raconte comment Poséidon la poursuivit alors qu'elle errait à la recherche de sa fille disparue : changée en jument pour lui échapper, elle ne put empêcher le dieu de prendre lui-même la forme d'un étalon pour s'unir à elle malgré tout — de cette union naquirent le cheval Arion et une fille que la tradition plus tardive a fini par identifier à Perséphone elle-même (voir la fiche « Perséphone »), bien que son nom véritable, sur ce seul lieu, ne se révélât qu'aux initiés. L'épisode valut par ailleurs à Déméter, sur ce seul lieu, les surnoms d'Erinys, « la Furieuse », et de Lousia, « la Baigneuse », pour le bain purificateur qu'elle prit ensuite dans le fleuve Ladon.",
   ],
   "tyché": [
     "Déesse de la fortune et du hasard, Tyché échappe à toute généalogie fixe selon les auteurs — tantôt fille de Zeus, tantôt de l'Océan — comme si le hasard lui-même refusait de se laisser enfermer dans une origine unique.",
@@ -1853,7 +1853,7 @@ const DEITY_LORE = {
     "Née tout armée du crâne de Zeus, après qu'il eut avalé sa mère Métis enceinte (voir la fiche « Métis »), Athéna hérita à la fois de la puissance de son père et de la ruse de sa mère.",
     "Déesse de la sagesse stratégique plutôt que de la guerre brutale, elle protège les héros rusés — Ulysse, Persée, Bellérophon — en leur offrant conseils et objets plutôt qu'en combattant à leur place, et devint la patronne d'Athènes après avoir offert à la ville l'olivier, symbole de paix durable.",
     "Il lui arrive aussi d'endosser un rôle plus maternel malgré elle : lorsque Héphaïstos, épris d'elle, la poursuit et se voit repoussé, Gaïa recueille de cette rencontre manquée l'enfant Érichthonios et le confie à Athéna pour qu'elle l'élève (voir les fiches « Héphaïstos » et « Érichthonios ») — un enfant qu'elle n'a pas conçu, mais qu'elle protège avec la même rigueur qu'elle réserve à ses héros favoris.",
-    "On l'honorait sous plusieurs noms selon la part de sa protection invoquée : Parthénos, « la Vierge », a donné son nom au Parthénon qui la représente sur l'Acropole ; Polias, « gardienne de la cité », désignait son rôle de protectrice d'Athènes elle-même ; et Ergané, « l'Ouvrière », présidait aux travaux des artisans et des tisserandes — un titre qui résonne particulièrement face au destin d'Arachné (voir la fiche « Araignée »).",
+    "On l'honorait sous plusieurs noms selon la part de sa protection invoquée : Parthénos, « la Vierge », a donné son nom au Parthénon qui la représente sur l'Acropole ; Polias, « gardienne de la cité », désignait son rôle de protectrice d'Athènes elle-même ; et Ergané, « l'Ouvrière », présidait aux travaux des artisans et des tisserandes — un titre qui résonne particulièrement face au destin d'Arachné, changée en araignée pour son insolence (voir la fiche « Araignée »).",
   ],
   "aphrodite": [
     "Déesse de l'amour et de la beauté, Aphrodite naquit, selon le récit le plus ancien, de l'écume de mer formée autour des membres tranchés d'Ouranos — un mythe plus ancien que la naissance de la plupart des autres Olympiens. Accueillie sur le rivage de Chypre par les Heures (voir la fiche « Heures »), elle en fut parée avant d'être conduite devant les autres dieux.",
@@ -1969,14 +1969,14 @@ const DEITY_LORE = {
   "circé": [
     "Fille d'Hélios (voir la fiche « Hélios ») et magicienne experte en herbes et en breuvages, Circé vit sur une île isolée où elle transforme en animaux les voyageurs qui s'y aventurent sans méfiance — c'est ainsi qu'elle changea en pourceaux une partie de l'équipage d'Ulysse. Sa nièce Médée, fille de son frère Aiétès, hérita d'un don comparable pour la magie, mais tourné vers un tout autre destin (voir la fiche « Médée »).",
     "Ulysse, protégé par une plante magique offerte par Hermès, résista à son sortilège et la contraignit à rendre à ses hommes leur forme humaine. Il resta ensuite une année entière sur son île, dont naquit un fils, Télégonos — qui, des années plus tard et sans le reconnaître, tuera son propre père, achevant malgré lui une prophétie qui pesait sur Ulysse depuis son retour à Ithaque.",
-    "Sa magie ne sert pas qu'à punir les intrus : par jalousie, elle change aussi la nymphe Scylla en monstre. Éprise du dieu marin Glaucos, lui-même épris de Scylla, Circé empoisonne la source où celle-ci se baigne — la nymphe en ressort affublée d'une ceinture de têtes de chiens hurlants, condamnée à hanter pour toujours un détroit périlleux, face au tourbillon de Charybde (voir la fiche « Mer »).",
+    "Sa magie ne sert pas qu'à punir les intrus : par jalousie, elle change aussi la nymphe Scylla en monstre. Éprise du dieu marin Glaucos, lui-même épris de Scylla, Circé empoisonne la source où celle-ci se baigne — la nymphe en ressort affublée d'une ceinture de têtes de chiens hurlants, condamnée à hanter pour toujours un détroit périlleux de la mer, face au tourbillon de Charybde (voir la fiche « Mer »).",
     "Elle inflige un sort semblable à Picus, roi du Latium déjà marié à la nymphe Canens : le voyant refuser ses avances par fidélité, elle le change en pic — l'oiseau porte encore aujourd'hui son nom latin, picus. Deux amours contrariés, deux métamorphoses : la magie de Circé transforme aussi souvent qu'elle punit.",
     "Dans le Tarot, Circé est la figure du 7 de Coupes, où sept coupes flottent dans les nuages, chacune montrant une image différente — trésor, serpent, couronne : ces reflets multiples et trompeurs sont exactement ce que promettent ses breuvages, séduisants mais rarement ce qu'ils semblent être.",
   ],
   "thétis": [
     "Fille de Nérée (voir la fiche « Nérée »), Thétis est une Néréide capable de se métamorphoser à volonté — feu, eau, lion, serpent — pour échapper à qui cherche à la retenir. Zeus et Poséidon la convoitèrent tous deux, jusqu'à ce qu'une prophétie annonce que le fils de Thétis surpasserait son père : par prudence, les deux dieux renoncèrent et la marièrent à un simple mortel, Pélée.",
     "Pélée ne put l'épouser qu'en la maintenant de force à travers toutes ses métamorphoses, sur les conseils de Chiron (voir la fiche « Chiron ») — une lutte que Thétis finit par accepter sans jamais renoncer à sa propre nature changeante. Leurs noces, auxquelles Éris, déesse de la Discorde, ne fut pas conviée (voir la fiche « Éris »), déclenchèrent l'épisode de la pomme d'or qui mènera plus tard au jugement de Pâris.",
-    "De cette union naquit Achille (voir la fiche « Achille »), qu'elle tenta de rendre invulnérable en le plongeant dans le Styx (voir la fiche « Rivière »), puis de soustraire à son destin en le déguisant en jeune fille à la cour du roi Lycomède — une ruse qu'Ulysse finit par déjouer. Jusqu'au bout, Thétis lutta avec une ténacité sans faille contre une prophétie qu'elle savait pourtant ne jamais pouvoir empêcher.",
+    "De cette union naquit Achille (voir la fiche « Achille »), qu'elle tenta de rendre invulnérable en le plongeant dans le Styx, la rivière infernale (voir la fiche « Rivière »), puis de soustraire à son destin en le déguisant en jeune fille à la cour du roi Lycomède — une ruse qu'Ulysse finit par déjouer. Jusqu'au bout, Thétis lutta avec une ténacité sans faille contre une prophétie qu'elle savait pourtant ne jamais pouvoir empêcher.",
   ],
   "pythie": [
     "Prêtresse d'Apollon au temple de Delphes (voir la fiche « Temple »), la Pythie rendait ses oracles assise sur un trépied placé au-dessus d'une faille d'où s'échappaient, croyait-on, des vapeurs inspirant ses transes prophétiques.",
@@ -1987,7 +1987,7 @@ const DEITY_LORE = {
     "Pour pouvoir le contempler chaque nuit sans jamais le voir vieillir ni mourir, elle obtint de Zeus qu'il reste plongé dans un sommeil éternel — un amour figé dans l'instant, préservé au prix de tout le reste.",
   ],
   "charon": [
-    "Passeur des Enfers, Charon fait traverser aux âmes des morts le fleuve Styx (voir la fiche « Rivière ») à bord de sa barque, à condition qu'elles puissent lui payer l'obole traditionnellement placée sous la langue des défunts.",
+    "Passeur des Enfers, Charon fait traverser aux âmes des morts la rivière infernale du Styx (voir la fiche « Rivière ») à bord de sa barque, à condition qu'elles puissent lui payer l'obole traditionnellement placée sous la langue des défunts.",
     "Les âmes qui n'ont pas reçu de sépulture ni de pièce pour le passeur restent condamnées à errer sur la rive sans jamais pouvoir traverser — un détail qui rappelle que, dans la Grèce antique, le rite funéraire compte autant que la mort elle-même.",
   ],
   "ulysse": [
@@ -2044,7 +2044,7 @@ const DEITY_LORE = {
   ],
   "sémélé": [
     "Fille de Cadmos, roi de Thèbes (voir la fiche « Cadmos »), Sémélé fut aimée de Zeus — une liaison qui attira aussitôt la jalousie d'Héra, toujours prompte à se venger d'une rivale mortelle.",
-    "Déguisée en vieille nourrice, Héra convainquit Sémélé de demander à son amant de se montrer à elle dans toute sa splendeur divine. Zeus, lié par une promesse qu'il ne pouvait rompre, dut s'exécuter — et la vision foudroya Sémélé sur-le-champ. Il sauva l'enfant qu'elle portait en le cousant dans sa propre cuisse jusqu'à son terme (voir la fiche « Dionysos »).",
+    "Déguisée en vieille nourrice, Héra convainquit Sémélé de demander à son amant de se montrer à elle dans toute sa splendeur divine. Zeus, lié par une promesse qu'il ne pouvait rompre, dut s'exécuter — et la vision foudroya Sémélé sur-le-champ. Il sauva l'enfant qu'elle portait, le futur Dionysos, en le cousant dans sa propre cuisse jusqu'à son terme (voir la fiche « Dionysos »).",
     "Devenu adulte, Dionysos n'oublia jamais sa mère : il descendit jusqu'aux Enfers pour l'en faire remonter, et obtint qu'elle soit accueillie parmi les dieux de l'Olympe sous un nouveau nom, Thyoné — la seule mortelle jamais divinisée pour avoir simplement été aimée d'un dieu.",
     "Sémélé est particulièrement associée à Dionysos.",
   ],
@@ -2070,13 +2070,13 @@ const DEITY_LORE = {
     "Léto est particulièrement associée à Apollon, à Artémis et à Astéria.",
   ],
   "astéria": [
-    "Titanide, fille de Coéos et de Phoebé, Astéria — dont le nom signifie littéralement « étoilée » (voir la fiche « Étoile ») — est la sœur de Léto (voir la fiche « Léto »).",
+    "Titanide, fille de Coéos et de Phoebé, Astéria — dont le nom signifie littéralement « étoilée », en écho au mot étoile lui-même (voir la fiche « Étoile ») — est la sœur de Léto (voir la fiche « Léto »).",
     "Poursuivie par les avances de Zeus, elle refusa de se laisser posséder et se jeta dans la mer plutôt que de céder, se changeant en île errante, un temps assimilée aux étoiles filantes avant de se fixer sous le nom de Délos.",
     "C'est sur cette même île qu'elle offrit, sans le savoir encore, un refuge à sa sœur Léto, venue y accoucher d'Apollon et d'Artémis après avoir été rejetée de partout ailleurs. Avec le dieu marin Persès, Astéria est aussi mère d'Hécate (voir la fiche « Hécate »), qui hérita de sa proximité avec le ciel nocturne.",
     "Astéria est particulièrement associée à Léto et à Hécate.",
   ],
   "cadmos": [
-    "Fils du roi Agénor de Phénicie et frère d'Europe — enlevée par Zeus changé en taureau —, Cadmos partit à la recherche de sa sœur sans jamais la retrouver. L'oracle de Delphes (voir la fiche « Temple ») lui conseilla d'abandonner cette quête et de suivre à la place une vache marquée d'un croissant de lune jusqu'à ce qu'elle s'arrête d'elle-même : à cet endroit précis, il devrait fonder une ville.",
+    "Fils du roi Agénor de Phénicie et frère d'Europe — enlevée par Zeus changé en taureau —, Cadmos partit à la recherche de sa sœur sans jamais la retrouver. L'oracle du temple de Delphes (voir la fiche « Temple ») lui conseilla d'abandonner cette quête et de suivre à la place une vache marquée d'un croissant de lune jusqu'à ce qu'elle s'arrête d'elle-même : à cet endroit précis, il devrait fonder une ville.",
     "La vache s'arrêta sur le site de la future Thèbes. Pour un sacrifice, Cadmos envoya ses compagnons chercher de l'eau à une source voisine, gardée par un dragon consacré à Arès (voir la fiche « Arès »), qui les tua tous. Cadmos vainquit à son tour le dragon puis, sur les conseils d'Athéna, sema ses dents dans le sol : des guerriers tout armés en surgirent aussitôt et s'entretuèrent jusqu'à ce qu'il n'en reste que cinq, devenus les ancêtres des plus grandes familles de Thèbes.",
     "Pour avoir tué un être consacré à Arès, Cadmos dut servir le dieu pendant huit années. Sa peine achevée, il fut réconcilié avec lui et reçut pour épouse Harmonie, fille d'Arès et d'Aphrodite (voir la fiche « Harmonie ») — des noces où tous les dieux de l'Olympe vinrent en personne, chose presque jamais accordée à des mortels.",
     "Devenus vieux, Cadmos et Harmonie furent changés ensemble en serpents et menés vers les Champs Élysées plutôt que vers une fin funeste — une métamorphose vécue comme une grâce plutôt qu'une punition, pour avoir traversé côte à côte tant d'épreuves. La tradition grecque attribue aussi à Cadmos l'introduction de l'alphabet en Grèce.",
@@ -2111,14 +2111,14 @@ const DEITY_LORE = {
   /* ----- Personnifications des cartes numérales illustrées d'Épées (voir NUMBER_CARD_DEITY) ----- */
   "aletheia": [
     "Aletheia personnifie la Vérité elle-même. Les traditions varient sur son origine : fille de Zeus pour les uns, née de Chronos, le temps primordial, pour les autres — un lien qui a donné naissance à l'adage selon lequel le temps finit toujours par révéler ce qui a été caché.",
-    "Son nom grec, alètheia, signifie littéralement « ce qui n'est plus caché » — la négation de lèthè, l'oubli (voir la fiche « Lethée »). Les deux figures se répondent ainsi comme deux pôles opposés : l'une dévoile, l'autre efface.",
+    "Son nom grec, alètheia, signifie littéralement « ce qui n'est plus caché » — la négation de lèthè, l'oubli, qui donne aussi son nom au fleuve Lethée (voir la fiche « Lethée »). Les deux figures se répondent ainsi comme deux pôles opposés : l'une dévoile, l'autre efface.",
     "Elle a pour rivale Apaté (voir la fiche « Apaté »), l'esprit de la tromperie. Lassée de voir sa parole détournée et travestie par les hommes, Aletheia se serait retirée au fond d'un puits, loin de la surface où la vérité se déforme si facilement — origine de l'adage antique selon lequel « la vérité est au fond du puits ».",
     "Dans le Tarot, Aletheia est la figure de l'As d'Épées, où une lame se dresse, nette et couronnée de laurier : la lecture traditionnelle de cette carte — une idée qui perce, une décision prise sans l'ombre d'un doute — est exactement ce que personnifie Aletheia, la vérité qui ne négocie jamais avec ce qui l'entoure.",
   ],
   "ananké": [
     "Ananké personnifie la Nécessité — non pas un simple besoin, mais la contrainte absolue à laquelle rien, pas même les dieux, ne peut se soustraire.",
     "Les récits orphiques la font naître aux tout premiers instants du monde, enlacée à Chronos, le temps primordial, autour de l'œuf cosmique dont naîtra l'univers entier : ensemble, ils mettent la création en mouvement selon un ordre qu'aucune volonté ne peut ensuite défaire.",
-    "De cette union naissent, selon certains récits, les Moires elles-mêmes (voir la fiche « Parques »), filant le fil de chaque destinée sur le fuseau que Platon décrit tournant sur les genoux d'Ananké — l'axe même autour duquel tourne le monde. Zeus lui-même, dit-on, s'incline devant ses décrets : la nécessité gouverne jusqu'au roi des dieux.",
+    "De cette union naissent, selon certains récits, les Parques elles-mêmes (voir la fiche « Parques »), filant le fil de chaque destinée sur le fuseau que Platon décrit tournant sur les genoux d'Ananké — l'axe même autour duquel tourne le monde. Zeus lui-même, dit-on, s'incline devant ses décrets : la nécessité gouverne jusqu'au roi des dieux.",
     "Dans le Tarot, Ananké est la figure du 2 d'Épées, où une silhouette aux yeux bandés retient deux épées croisées, refusant encore de trancher : cet équilibre suspendu ne dure jamais éternellement, chez elle moins que quiconque — la nécessité finit toujours par imposer un choix, qu'on y consente ou non.",
   ],
   "éris": [
@@ -2152,7 +2152,7 @@ const DEITY_LORE = {
     "Dans le Tarot, Apaté est la figure du 7 d'Épées, où une silhouette s'éloigne en emportant plusieurs lames, en laissant sciemment les autres derrière elle : une stratégie qui n'est pas un vol pur et simple, mais qui flirte sciemment avec la limite de l'honnêteté — exactement le territoire qu'Apaté ne quitte jamais.",
   ],
   "phobos": [
-    "Phobos personnifie la Peur qui saisit avant tout raisonnement — fils d'Arès (voir la fiche « Arès ») et d'Aphrodite, jumeau de Deimos, la Terreur, avec qui il escorte son père au combat (voir la fiche « Palioxis » pour ce même cortège).",
+    "Phobos personnifie la Peur qui saisit avant tout raisonnement — fils d'Arès (voir la fiche « Arès ») et d'Aphrodite, jumeau de Deimos, la Terreur, avec qui il escorte son père au combat, aux côtés de Palioxis, qui incarne le repli de ce même cortège (voir la fiche « Palioxis »).",
     "Homère le place, aux côtés de la tête de la Gorgone, sur le bouclier d'Agamemnon comme sur l'égide d'Athéna : son image seule, brandie face à l'ennemi, suffisait à faire vaciller des rangs entiers avant qu'une seule lame ne soit levée.",
     "Les Spartiates lui vouaient un culte à part, non pour la bannir, mais pour l'apprivoiser : une peur reconnue et maîtrisée, croyaient-ils, forge une discipline plus sûre qu'une bravoure aveugle qui ignore le danger.",
     "Dans le Tarot, Phobos est la figure du 8 d'Épées, où une silhouette entravée et les yeux bandés se tient debout, cernée d'épées qui laissent pourtant un passage : sa peur, comme la sienne, retient bien plus l'esprit que le corps.",
@@ -2179,7 +2179,7 @@ const DEITY_LORE = {
     "Son opposée naturelle est Athéna (voir la fiche « Athéna »), déesse d'une guerre pensée et disciplinée : les deux s'affrontent directement sur le champ de bataille de Troie, où Athéna prend systématiquement le dessus sur lui.",
     "Deux géants jumeaux, Otos et Éphialtès, parvinrent un jour à le capturer et à l'enfermer treize mois durant dans une jarre de bronze — une humiliation dont seul Hermès (voir la fiche « Hermès ») réussit à le délivrer. Même le dieu de la guerre, apprit-on ce jour-là, pouvait être réduit à l'impuissance.",
     "Son amour pour Aphrodite (voir la fiche « Aphrodite »), mariée à Héphaïstos, leur valut d'être surpris nus dans un filet d'or tissé par l'époux trompé — mais leur union donna aussi naissance à Harmonie (voir la fiche « Harmonie ») et aux jumeaux Phobos et Deimos (voir la fiche « Phobos »), qui l'escortent au combat.",
-    "Sa figure inspire aussi tout un peuple : les Amazones voient dans leur première reine, Otrera, une épouse mortelle d'Arès, qui aurait fondé en son honneur le sanctuaire d'Artémis à Éphèse — il devient ainsi, à travers elle, le père spirituel de la nation guerrière tout entière plutôt que le père littéral de chacune de ses reines (voir les fiches « Antiope » et « Hippolyte »). Une seule d'entre elles porte pourtant, dans les textes anciens, le titre exact de « fille d'Arès » : Penthésilée, venue prêter main-forte à Troie après la mort d'Hector, tuée en duel par Achille qui, dit-on, pleura en découvrant la beauté de celle qu'il venait d'abattre.",
+    "Sa figure inspire aussi tout un peuple : les Amazones voient dans leur première reine, Otrera, une épouse mortelle d'Arès, qui aurait fondé en son honneur le sanctuaire d'Artémis à Éphèse — il devient ainsi, à travers elle, le père spirituel de la nation guerrière tout entière plutôt que le père littéral de chacune de ses reines, Antiope et Hippolyte parmi elles (voir les fiches « Antiope » et « Hippolyte »). Une seule d'entre elles porte pourtant, dans les textes anciens, le titre exact de « fille d'Arès » : Penthésilée, venue prêter main-forte à Troie après la mort d'Hector, tuée en duel par Achille qui, dit-on, pleura en découvrant la beauté de celle qu'il venait d'abattre.",
     "Une autre de ses filles, mortelle celle-là, marqua durablement Athènes : Alcippé, née d'une liaison avec la princesse Aglauros, fut agressée par Halirrhothios, fils de Poséidon, qu'Arès tua sur-le-champ pour la défendre — un geste qui lui valut son tout premier procès, jugé par les autres dieux eux-mêmes sur une colline d'Athènes qui garda depuis son nom (voir la fiche « Alcippé »).",
     "Chez Homère, il porte aussi le nom d'Enyalios, employé comme un simple équivalent du sien — Brotoloigos, « fléau des mortels », et Miaiphonos, « souillé de sang », en résument le tempérament plus brutalement encore. Une tradition plus tardive fit toutefois d'Enyalios une figure distincte, devenue le fils d'Arès et d'Enyo (voir la fiche « Enyo »). À Tégée, en Arcadie, on l'honorait sous un nom plus surprenant, Gynaikothoinas, « celui que festoient les femmes » : les Tégéates, leur garnison masculine absente, auraient repoussé seuls un assaut spartiate mené en réalité par leurs propres femmes armées en secret — celles-ci célébrèrent leur victoire par un banquet dont les hommes furent exclus, un rite rendu depuis à Arès en souvenir du jour où la guerre échappa entièrement aux hommes.",
     "Dans le Tarot, Arès est la figure du 3 de Bâtons, où l'on regarde déjà au loin ce qu'une décision engagée va produire : chez lui, une fois la guerre déclarée, plus rien ne l'arrête ni ne se négocie — l'élan brut, sans retour possible, jusqu'à ce que l'issue se révèle d'elle-même.",
@@ -2187,7 +2187,7 @@ const DEITY_LORE = {
   "thalia": [
     "Thalia, dont le nom signifie « celle qui fleurit », est l'une des trois Charites — les déesses de la grâce et de la joie que la tradition ne représente jamais seules, toujours dansant ensemble (voir la fiche « Charites »).",
     "Parmi ses deux sœurs, elle personnifie plus particulièrement la fête, l'abondance et tout ce qui s'épanouit sans nécessité — les banquets, la parure, la beauté qui n'a besoin de rien justifier d'autre qu'elle-même.",
-    "Une autre figure du même nom existe dans la mythologie grecque, l'une des neuf Muses, protectrice de la comédie et de la poésie pastorale (voir la fiche « Thalie ») : les deux Thalia restent distinctes, même si leur nom commun — et leur joie partagée — les rapproche.",
+    "Une autre Thalie existe dans la mythologie grecque, l'une des neuf Muses, protectrice de la comédie et de la poésie pastorale (voir la fiche « Thalie ») : les deux Thalia restent distinctes, même si leur nom commun — et leur joie partagée — les rapproche.",
     "Dans le Tarot, Thalia est la figure du 4 de Bâtons, où des guirlandes de fleurs relient quatre bâtons au-dessus d'une fête déjà commencée : la stabilité heureuse et le répit mérité après l'effort sont exactement son domaine.",
   ],
   "zelos": [
@@ -2230,7 +2230,7 @@ const DEITY_LORE = {
     "Dans le Tarot, Philotès est la figure de l'As de Coupes, où une main tendue depuis les nuages offre une coupe débordante d'eau vive : ce premier élan qui donne sans calcul ni condition, avant même de savoir ce qu'il en coûtera, est exactement ce qu'elle personnifie.",
   ],
   "euphrosyne": [
-    "Euphrosyne, dont le nom signifie « joie » ou « bonne humeur », est l'une des trois Charites — les déesses de la grâce que la tradition ne représente jamais seules, toujours dansant ensemble aux côtés d'Aglaé et de Thalie (voir les fiches « Charites », « Aglaé » et « Thalia »).",
+    "Euphrosyne, dont le nom signifie « joie » ou « bonne humeur », est l'une des trois Charites — les déesses de la grâce que la tradition ne représente jamais seules, toujours dansant ensemble aux côtés d'Aglaé et de Thalia (voir les fiches « Charites », « Aglaé » et « Thalia »).",
     "Selon Hésiode, elle est fille de Zeus et de l'Océanide Eurynomé, même si les sources antiques varient sur le nombre exact et la généalogie des Charites. Compagnes d'Aphrodite et des Muses, les trois sœurs président aux fêtes et aux banquets de l'Olympe — tout ce qui rend la vie belle sans nécessité.",
     "Parmi ses sœurs, elle personnifie plus particulièrement la joie elle-même — non l'abondance ou la fête que représente Thalia (voir la fiche « Thalia »), mais l'allégresse qui ne naît que du partage, le plaisir simple d'être ensemble.",
     "Dans le Tarot, Euphrosyne est la figure du 3 de Coupes, où trois femmes lèvent leurs coupes ensemble vers le ciel : cette joie-là ne se vit jamais seule — inutile de la chercher dans la solitude, elle n'existe qu'à plusieurs.",
@@ -2248,7 +2248,7 @@ const DEITY_LORE = {
     "Dans le Tarot, Orphée est la figure du 5 de Coupes, où une silhouette en deuil contemple trois coupes renversées sans voir les deux qui tiennent encore debout derrière elle : son regard, comme le sien vers Eurydice au sortir des Enfers, se fixe sur la perte au moment précis où il ne fallait plus se retourner.",
   ],
   "hyménée": [
-    "Hyménée personnifie le chant et le rite du mariage. La tradition la plus répandue en fait le fils d'Apollon et d'une Muse — Clio, Calliope, Uranie ou Terpsichore selon les versions —, même si d'autres récits le disent plutôt fils de Dionysos, ou de Dionysos et d'Aphrodite. On le représente jeune, une couronne de fleurs sur la tête et une torche allumée à la main, celle-là même qui éclaire le cortège nocturne menant la mariée jusqu'à son nouvel époux (voir la fiche « Torches »).",
+    "Hyménée personnifie le chant et le rite du mariage. La tradition la plus répandue en fait le fils d'Apollon et d'une Muse — Clio, Calliope, Uranie ou Terpsichore selon les versions —, même si d'autres récits le disent plutôt fils de Dionysos, ou de Dionysos et d'Aphrodite. On le représente jeune, une couronne de fleurs sur la tête et une torche allumée à la main, celle-là même qui éclaire, avec les autres torches du cortège nocturne, le passage de la mariée jusqu'à son nouvel époux (voir la fiche « Torches »).",
     "Les Grecs croyaient sa présence indispensable à toute noce : sans lui, le mariage était voué au malheur — on l'invoquait donc à voix haute pendant la cérémonie, dans un chant qui portait justement son nom, l'hyménée, entonné tout au long du cortège menant l'épousée à sa nouvelle maison.",
     "Sa présence, pourtant, ne garantit pas toujours un présage favorable. Ovide raconte qu'appelé aux noces d'Orphée et Eurydice, Hyménée s'y rendit bien, mais sans prononcer les paroles rituelles ni afficher son visage joyeux : sa torche ne fit que fumer sans jamais vouloir prendre, quels que soient les efforts pour l'agiter — un présage qui, dans les faits, se révéla en dessous de la vérité (voir la fiche « Orphée »).",
     "Une tradition plus tardive veut aussi qu'il ait perdu, aux noces de Dionysos et d'Ariane sur l'île de Naxos, une voix pourtant réputée aussi belle que celle de son père Apollon (voir la fiche « Ariane ») — comme si présider aux noces des autres avait, plus d'une fois, un prix pour lui-même.",
@@ -2288,7 +2288,7 @@ const DEITY_LORE = {
   ],
   "éléos": [
     "Éléos personnifie la Pitié et la compassion envers le malheur d'autrui — un sentiment si estimé par les Athéniens qu'ils lui élevèrent, sur l'Agora, un autel unique en son genre : dédié non à un dieu de l'Olympe, mais à cette seule vertu.",
-    "Selon Pausanias, cet autel servait de refuge aux suppliants — esclaves en fuite, exilés, vaincus de toute origine — car nulle part ailleurs en Grèce une cité n'honorait ainsi la clémence elle-même plutôt qu'un dieu censé l'accorder (voir la fiche « Hormos », dont l'autel se trouvait tout près).",
+    "Selon Pausanias, cet autel servait de refuge aux suppliants — esclaves en fuite, exilés, vaincus de toute origine — car nulle part ailleurs en Grèce une cité n'honorait ainsi la clémence elle-même plutôt qu'un dieu censé l'accorder. Hormos avait lui aussi son autel tout près, sur cette même Agora (voir la fiche « Hormos »).",
     "Contrairement à Némésis, qui rétablit un équilibre par la sanction (voir la fiche « Némésis »), Éléos agit dans l'autre sens : elle ne punit jamais, elle épargne — un geste que même les puissants pouvaient recevoir sans y perdre leur rang.",
     "Dans le Tarot, Éléos est la figure du 6 de Deniers, où un homme richement vêtu partage ses pièces entre deux mendiants à genoux, une balance à la main : cette carte est ce même geste — mesuré, mais réel — qui redistribue sans jamais humilier celui qui reçoit.",
   ],
@@ -2305,7 +2305,7 @@ const DEITY_LORE = {
     "Dans le Tarot, Techné est la figure du 8 de Deniers, où une artisane burine un denier après l'autre dans un atelier ordonné : cette carte est exactement ce savoir-faire qui ne s'acquiert que par la répétition, geste après geste, jusqu'à devenir une seconde nature.",
   ],
   "aglaé": [
-    "Aglaé, dont le nom signifie « splendeur » ou « éclat », est la plus jeune des trois Charites — les déesses de la grâce que la tradition ne représente jamais seules, toujours dansant aux côtés d'Euphrosyne et de Thalie (voir les fiches « Charites », « Euphrosyne » et « Thalia »).",
+    "Aglaé, dont le nom signifie « splendeur » ou « éclat », est la plus jeune des trois Charites — les déesses de la grâce que la tradition ne représente jamais seules, toujours dansant aux côtés d'Euphrosyne et de Thalia (voir les fiches « Charites », « Euphrosyne » et « Thalia »).",
     "Homère, dans l'Iliade, en fait l'épouse d'Héphaïstos (voir la fiche « Héphaïstos ») — une union surprenante entre le dieu forgeron, boiteux et disgracié par les autres Olympiens, et celle qui personnifie justement l'éclat et la beauté rayonnante.",
     "Parmi ses sœurs, elle incarne plus particulièrement la splendeur qui couronne un accomplissement déjà réussi — non plus l'effort ou le partage, mais le rayonnement tranquille de ce qui n'a plus rien à prouver.",
     "Dans le Tarot, Aglaé est la figure du 9 de Deniers, où une femme élégante se tient seule dans un jardin abondant, un oiseau posé sur la main : cette carte est exactement cet éclat assumé, l'aisance de celle qui profite enfin, sans plus rien devoir démontrer, de ce qu'elle a bâti seule.",
@@ -2377,7 +2377,7 @@ const DEITY_LORE = {
   "thésée": [
     "Fils du roi Égée d'Athènes — ou, selon une tradition parallèle, de Poséidon lui-même, les deux s'étant unis la même nuit à sa mère Éthra —, Thésée grandit loin de son père, élevé secrètement à Trézène. Avant de repartir pour Athènes, Égée avait caché sous un rocher son épée et ses sandales, ne laissant à son fils que la promesse de venir le rejoindre une fois assez fort pour les soulever seul.",
     "Devenu adulte, Thésée souleva le rocher sans peine et choisit, pour rejoindre Athènes, la route terrestre la plus périlleuse plutôt que la voie maritime, plus sûre : il vainquit en chemin toute une série de brigands, arrivant à la cour de son père déjà couvert de gloire, avant même d'y être reconnu (voir la fiche « Chemin »).",
-    "Peu après, il se porta volontaire pour affronter le Minotaure enfermé dans le Labyrinthe de Crète, et n'en réchappa que grâce au fil qu'Ariane, fille de Minos éprise de lui, lui confia en secret (voir la fiche « Ariane »). Il l'abandonna pourtant endormie sur l'île de Naxos au retour — un oubli qui coûta cher à son propre père : ayant lui-même oublié de hisser les voiles blanches convenues en signe de victoire, Égée, apercevant au loin les voiles noires du deuil, se jeta du haut d'une falaise, croyant son fils mort (voir la fiche « Labyrinthe »).",
+    "Peu après, il se porta volontaire pour affronter le Minotaure enfermé dans le Labyrinthe de Crète (voir la fiche « Labyrinthe »), et n'en réchappa que grâce au fil qu'Ariane, fille de Minos éprise de lui, lui confia en secret (voir la fiche « Ariane »). Il l'abandonna pourtant endormie sur l'île de Naxos au retour — un oubli qui coûta cher à son propre père : ayant lui-même oublié de hisser les voiles blanches convenues en signe de victoire, Égée, apercevant au loin les voiles noires du deuil, se jeta du haut d'une falaise, croyant son fils mort.",
     "Devenu roi d'Athènes, il participa selon certaines versions à l'expédition d'Héraclès contre les Amazones (voir la fiche « Héraclès ») et en ramena une reine amazone pour l'épouser — Antiope, dont il eut un fils, Hippolyte (voir les fiches « Antiope » et « Hippolyte ») ; l'enlèvement déclencha une invasion de l'Attique par les Amazones furieuses, qu'Athènes parvint de justesse à repousser.",
     "Il épousa ensuite Phèdre, sœur d'Ariane, dont la passion malheureuse pour Hippolyte, son propre beau-fils, causa la mort du jeune homme et la disgrâce de Thésée lui-même (voir la fiche « Hippolyte ») — un roi dont chaque grand amour, Ariane, Antiope, puis Phèdre, se solda finalement par une perte plutôt qu'un bonheur durable.",
   ],
@@ -2438,7 +2438,7 @@ const DEITY_LORE = {
   "thalie": [
     "Thalie préside à la comédie et à la poésie pastorale — son nom signifie « celle qui fleurit » ou « l'abondance joyeuse ». On la représente tenant un masque comique et une houlette de berger, symbole de la vie champêtre que chante ce genre léger.",
     "Elle appartient aux neuf Muses (voir la fiche « Muses »), et forme avec Melpomène, muse de la tragédie (voir la fiche « Melpomène »), le couple de masques — l'un riant, l'autre pleurant — resté depuis le symbole universel du théâtre.",
-    "Une autre figure du même nom existe parmi les trois Charites (voir la fiche « Thalia ») : les deux Thalie restent distinctes malgré ce nom commun.",
+    "Une autre Thalia existe parmi les trois Charites (voir la fiche « Thalia ») : les deux Thalie restent distinctes malgré ce nom commun.",
   ],
   "melpomène": [
     "Melpomène préside à la tragédie — son nom, dérivé du verbe grec « melpein », chanter ou célébrer par le chant, rappelle qu'à l'origine la tragédie grecque se chantait autant qu'elle se jouait. On la représente tenant un masque tragique et parfois une massue ou un poignard, attributs empruntés aux grands destins funestes qu'elle inspire.",
@@ -2530,6 +2530,122 @@ const DEITY_INLINE_PORTRAITS = {
     { match: "Diomède", src: "assets/deity-aphrodite-enee.jpg", alt: "Aphrodite qui sauve Énée" },
   ],
 };
+
+/* ===================== LIENS CLIQUABLES DANS LE MYTHE (linkifyLore) ===================== */
+// Retour direct d'utilisatrice : au lieu du texte "(voir la fiche « X »)" qui alourdissait
+// chaque paragraphe, le nom déjà mentionné dans la phrase devient lui-même cliquable, et la
+// citation entre parenthèses disparaît — "ça allègera le texte, et ça facilitera les
+// recherches". Fonctionne sur TOUT le texte de mythe déjà écrit (aucune des ~360 citations
+// existantes n'a eu besoin d'être réécrite à la main, à deux exceptions près où la citation
+// portait sur une clause descriptive plutôt que sur un nom cité juste avant — voir Hormos et
+// Palioxis, retouchés séparément) : les futures fiches écrites avec la même convention
+// "(voir la fiche « X »)" profiteront donc automatiquement du même traitement, sans rien changer
+// à la façon d'écrire.
+
+// Table de résolution "nom affiché" -> cible cliquable (figure mythologique ou symbole),
+// construite une seule fois à partir des données déjà là : DEITY_NOTES (id -> nom, simple
+// majuscule initiale) et SYMBOL_LIBRARY (id -> label, qui peut différer de l'id — ex. « Enfer /
+// monde souterrain » pour l'id "monde souterrain"). En cas de collision improbable entre un nom
+// de figure et un label de symbole, la figure garde la priorité (déjà insérée en premier).
+const LORE_LINK_TARGETS = (() => {
+  const map = {};
+  for(const id of Object.keys(DEITY_NOTES)){
+    map[id.charAt(0).toUpperCase()+id.slice(1)] = { type:"deity", id };
+  }
+  for(const [id, s] of Object.entries(SYMBOL_LIBRARY)){
+    if(!(s.label in map)) map[s.label] = { type:"symbol", id };
+  }
+  return map;
+})();
+
+// Un caractère "de mot" au sens large (lettres et chiffres Unicode, donc les accents français
+// comptent) — sert à vérifier qu'une occurrence trouvée est bien un mot isolé plutôt qu'une
+// coïncidence à l'intérieur d'un autre mot (ex. ne jamais confondre le symbole « Mer » avec
+// une occurrence à l'intérieur de « commercer » ou « amer »).
+function isWordChar(ch){
+  return !!ch && /[\p{L}\p{N}]/u.test(ch);
+}
+
+// Cherche la DERNIÈRE occurrence de `needle` comme mot (ou groupe de mots) isolé dans `text`,
+// insensible à la casse, en ne regardant qu'entre les indices [lowerBoundIdx, upperBoundIdx].
+// Renvoie -1 si aucune occurrence valide n'existe dans cette fenêtre.
+// Renvoie {idx, len} de la dernière occurrence valide, ou null. `len` peut dépasser
+// needle.length d'un caractère lorsqu'un simple "s" de pluriel français a été toléré juste
+// après (ex. needle "Forêt" trouvé dans "forêts") — inclus dans le lien pour souligner le mot
+// entier plutôt que de laisser le "s" final en dehors, seul, juste après le lien.
+function lastWordIndexCI(text, needle, upperBoundIdx, lowerBoundIdx){
+  const hayLower = text.toLowerCase();
+  const needleLower = needle.toLowerCase();
+  let fromIndex = upperBoundIdx;
+  while(fromIndex >= lowerBoundIdx){
+    const idx = hayLower.lastIndexOf(needleLower, fromIndex);
+    if(idx === -1 || idx < lowerBoundIdx) return null;
+    const beforeCh = idx > 0 ? text[idx-1] : "";
+    let len = needle.length;
+    if(text[idx+len] === "s" || text[idx+len] === "S") len++;
+    const afterCh = idx+len < text.length ? text[idx+len] : "";
+    if(!isWordChar(beforeCh) && !isWordChar(afterCh)) return { idx, len };
+    fromIndex = idx - 1;
+  }
+  return null;
+}
+
+// Repère chaque citation "(voir la fiche/les fiches « A »[, « B »][ et « C »])", et pour
+// CHACUNE : ne la remplace que si TOUS les noms qu'elle cite se résolvent à la fois vers une
+// cible connue (LORE_LINK_TARGETS) ET vers une occurrence littérale antérieure dans le texte
+// (recherchée entre la fin de la citation précédente et le début de celle-ci, pour ne jamais
+// relier deux fois le même mot). Tout ou rien par citation : si un seul des noms cités ne se
+// résout pas, la citation entière reste intacte plutôt que de risquer de perdre un renvoi en
+// silence — mieux vaut un renvoi non cliquable qu'un renvoi disparu.
+function linkifyLore(text){
+  const citationRe = /\(voir (?:la fiche|les fiches) («[^»]+»(?:\s*(?:,|et)\s*«[^»]+»)*)\)/g;
+  const edits = []; // {start, end, html} — remplace text.slice(start,end) par html (vide = suppression)
+  let m;
+  let consumedUntil = 0;
+  while((m = citationRe.exec(text))){
+    const citationStart = m.index;
+    const citationEnd = citationStart + m[0].length;
+    const names = [...m[1].matchAll(/«\s*([^»]+?)\s*»/g)].map(x => x[1]);
+    const resolved = [];
+    let ok = true;
+    for(const name of names){
+      const target = LORE_LINK_TARGETS[name];
+      if(!target){ ok = false; break; }
+      const found = lastWordIndexCI(text, name, citationStart - 1, consumedUntil);
+      if(!found){ ok = false; break; }
+      resolved.push({ idx: found.idx, len: found.len, target });
+    }
+    if(ok){
+      for(const r of resolved){
+        const shown = text.slice(r.idx, r.idx + r.len); // garde la casse réelle du texte (et le "s" pluriel toléré, s'il y en a un)
+        const attr = r.target.type === "deity" ? "data-deity" : "data-symbol";
+        const cls = r.target.type === "deity" ? "clickable-deity" : "clickable-symbol";
+        const html = `<span class="${cls}" ${attr}="${escapeHTML(r.target.id)}">${escapeHTML(shown)}</span>`;
+        edits.push({ start:r.idx, end:r.idx+r.len, html });
+      }
+      let delStart = citationStart;
+      if(text[delStart-1] === " ") delStart--;
+      edits.push({ start: delStart, end: citationEnd, html: "" });
+    }
+    consumedUntil = citationEnd;
+  }
+  edits.sort((a,b)=>a.start-b.start);
+  const cleaned = [];
+  let cursor = 0;
+  for(const e of edits){
+    if(e.start < cursor) continue; // chevauchement rare : on garde le premier, ignore le suivant
+    cleaned.push(e);
+    cursor = e.end;
+  }
+  let out = "", pos = 0;
+  for(const e of cleaned){
+    out += escapeHTML(text.slice(pos, e.start));
+    out += e.html;
+    pos = e.end;
+  }
+  out += escapeHTML(text.slice(pos));
+  return out;
+}
 
 /* ===================== ÉTAT ===================== */
 
@@ -4778,7 +4894,7 @@ function home(){
   <div class="section-title centered"><h3>Carte du jour</h3></div>
   <div class="day-card" data-card="${encodeURIComponent(JSON.stringify(day))}">${cardHTML(day,"major")}</div>
   ${resonates ? `<p class="note" style="text-align:center">✦ Cette carte résonne avec ton profil astral.</p>` : ""}
-  ${lore ? `<p class="lore-text" style="max-width:560px;margin:14px auto 0;text-align:center;opacity:.85">${escapeHTML(lore.myth.length > 220 ? lore.myth.slice(0,220).trim()+"…" : lore.myth)}</p>` : ""}
+  ${lore ? `<p class="lore-text" style="max-width:560px;margin:14px auto 0;text-align:center;opacity:.85">${linkifyLore(lore.myth.length > 220 ? lore.myth.slice(0,220).trim()+"…" : lore.myth)}</p>` : ""}
   <p class="tap-hint">touche la carte pour en découvrir la lecture complète</p>
   <div class="grid" style="margin-top:30px">
     <div class="tile" data-go="tirage"><strong>✦ Tirer les cartes</strong><span>Pose ta question, choisis le tirage qui lui correspond.</span></div>
@@ -5211,7 +5327,7 @@ function showSymbolDetail(id, backTo = cardDetailReturnTo){
     <p>${escapeHTML(s.desc)}</p>
     ${s.lore && s.lore.length ? (
       (isPremiumEnabled() || isSymbolLoreFree(id))
-        ? `<div class="section-title"><h3>Aux origines du symbole</h3></div>${s.lore.map(p=>`<p class="lore-text">${escapeHTML(p)}</p>`).join("")}`
+        ? `<div class="section-title"><h3>Aux origines du symbole</h3></div>${s.lore.map(p=>`<p class="lore-text">${linkifyLore(p)}</p>`).join("")}`
         : `<div class="section-title"><h3>Aux origines du symbole</h3></div>${premiumLockHTML("Le texte mythologique détaillé de ce symbole fait partie du contenu premium.")}`
     ) : ""}
     ${linkedDeities.length ? `<div class="section-title"><h3>Figures liées</h3></div>
@@ -5284,7 +5400,7 @@ function showDeityDetail(id, backTo = cardDetailReturnTo){
       (isPremiumEnabled() || isFigureLoreFree(id))
         ? `<div class="section-title"><h3>Le mythe</h3></div>${lore.map(p=>{
             const inline = inlinePortraits.find(cfg => p.includes(cfg.match));
-            return `${inline ? `<img class="deity-portrait-inline" src="${inline.src}" alt="${escapeHTML(inline.alt)}" loading="lazy">` : ""}<p class="lore-text">${escapeHTML(p)}</p>`;
+            return `${inline ? `<img class="deity-portrait-inline" src="${inline.src}" alt="${escapeHTML(inline.alt)}" loading="lazy">` : ""}<p class="lore-text">${linkifyLore(p)}</p>`;
           }).join("")}`
         : `<div class="section-title"><h3>Le mythe</h3></div>${premiumLockHTML("Le mythe complet de cette figure fait partie du contenu premium.")}`
     ) : ""}
@@ -6834,7 +6950,7 @@ function showDetail(c, backTo = cardDetailReturnTo, list){
       <p class="lore-text">${escapeHTML(lore.marseille)}</p>
       ${(isPremiumEnabled() || isCardMythFree(c)) ? `
         <div class="section-title"><h3>Éclairage mythologique — ${escapeHTML(deityLabel)}</h3></div>
-        <p class="lore-text">${escapeHTML(lore.myth)}</p>
+        <p class="lore-text">${linkifyLore(lore.myth)}</p>
       ` : `
         <div class="section-title"><h3>Éclairage mythologique</h3></div>
         ${premiumLockHTML("L'éclairage mythologique de cette carte fait partie du contenu premium.")}
@@ -6895,6 +7011,9 @@ function bindChips(){
   });
   document.querySelectorAll(".clickable-deity[data-deity]").forEach(el=>{
     el.onclick = ()=> showDeityDetail(el.dataset.deity);
+  });
+  document.querySelectorAll(".clickable-symbol[data-symbol]").forEach(el=>{
+    el.onclick = ()=> showSymbolDetail(el.dataset.symbol);
   });
 }
 
