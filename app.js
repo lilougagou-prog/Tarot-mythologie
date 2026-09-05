@@ -2496,6 +2496,18 @@ const DEITY_PORTRAITS = {
   "cadmos": "assets/deity-harmonie-cadmos.jpg",
 };
 
+// Portraits insérés à l'intérieur même du mythe, juste au-dessus du paragraphe qui mentionne la
+// figure représentée dessus — contrairement à DEITY_PORTRAITS ci-dessus, affiché une seule fois
+// en tête de fiche. Demande directe de l'utilisatrice pour Dionysos/Ariane : le portrait de
+// couple (déjà utilisé sur la fiche d'Ariane) apparaît aussi sur celle de Dionysos, mais en plus
+// petit et juste avant le paragraphe où Ariane est mentionnée, pour ne pas prendre toute la
+// largeur au milieu du texte (voir showDeityDetail() et la classe .deity-portrait-inline).
+const DEITY_INLINE_PORTRAITS = {
+  "dionysos": [
+    { match: "Ariane", src: "assets/deity-dionysos-ariane.jpg", alt: "Dionysos et Ariane" },
+  ],
+};
+
 /* ===================== ÉTAT ===================== */
 
 let journal = JSON.parse(localStorage.getItem("arcanes-journal") || "[]");
@@ -5238,6 +5250,7 @@ function showDeityDetail(id, backTo = cardDetailReturnTo){
     : NUMBER_CARD_DEITY[c[0]]===id); // cartes numérales dotées d'une figure propre (voir NUMBER_CARD_DEITY)
   const lore = DEITY_LORE[id];
   const portrait = DEITY_PORTRAITS[id];
+  const inlinePortraits = DEITY_INLINE_PORTRAITS[id] || [];
   document.getElementById("screen").innerHTML = `<div class="detail">
     ${wasNew ? discoveryFX() : ""}
     <div class="symbol-hero">✦</div>
@@ -5246,7 +5259,10 @@ function showDeityDetail(id, backTo = cardDetailReturnTo){
     <p>${escapeHTML(note)}</p>
     ${lore && lore.length ? (
       (isPremiumEnabled() || isFigureLoreFree(id))
-        ? `<div class="section-title"><h3>Le mythe</h3></div>${lore.map(p=>`<p class="lore-text">${escapeHTML(p)}</p>`).join("")}`
+        ? `<div class="section-title"><h3>Le mythe</h3></div>${lore.map(p=>{
+            const inline = inlinePortraits.find(cfg => p.includes(cfg.match));
+            return `${inline ? `<img class="deity-portrait-inline" src="${inline.src}" alt="${escapeHTML(inline.alt)}" loading="lazy">` : ""}<p class="lore-text">${escapeHTML(p)}</p>`;
+          }).join("")}`
         : `<div class="section-title"><h3>Le mythe</h3></div>${premiumLockHTML("Le mythe complet de cette figure fait partie du contenu premium.")}`
     ) : ""}
     ${related.length ? `<div class="section-title"><h3>Carte${related.length>1?"s":""} associée${related.length>1?"s":""}</h3></div>
