@@ -2483,6 +2483,17 @@ const DEITY_PORTRAITS = {
   "uranie": "assets/deity-uranie.jpg",
   "melpomène": "assets/deity-melpomene.jpg",
   "euterpe": "assets/deity-euterpe.jpg",
+  "calliope": "assets/deity-calliope.jpg",
+  // Éros et Psyché, Harmonie et Cadmos : un même portrait de couple pour les deux figures
+  // (demande explicite « à mettre dans les deux »). Dionysos et Ariane : le même principe de
+  // couple, mais réservé à la seule fiche d'Ariane cette fois (demande explicite « à mettre
+  // dans Ariane »), Dionysos n'en hérite pas.
+  "éros": "assets/deity-eros-psyche.jpg",
+  "psyché": "assets/deity-eros-psyche.jpg",
+  "énée": "assets/deity-enee.jpg",
+  "ariane": "assets/deity-dionysos-ariane.jpg",
+  "harmonie": "assets/deity-harmonie-cadmos.jpg",
+  "cadmos": "assets/deity-harmonie-cadmos.jpg",
 };
 
 /* ===================== ÉTAT ===================== */
