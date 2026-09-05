@@ -1695,6 +1695,9 @@ const DEITY_NOTES = {
   "enyo":"Déesse de la frénésie et du vacarme de la bataille, compagne de combat d'Arès, identifiée à Bellone par les Romains.",
   "hespérides":"Nymphes gardiennes du jardin aux pommes d'or, aux confins occidentaux du monde.",
   "hersé":"Fille de Cécrops aimée d'Hermès, dont la sœur Aglauros fut changée en pierre par jalousie.",
+  "cécrops":"Premier roi d'Athènes, mi-homme mi-serpent, né de la terre elle-même, père d'Aglauros, Hersé et Pandrosos.",
+  "pyrame":"Jeune Babylonien épris de Thisbé malgré l'interdit de leurs familles, mort par erreur à ses côtés sous un mûrier.",
+  "thisbé":"Jeune Babylonienne éprise de Pyrame, dont la fuite devant une lionne provoqua leur double mort tragique.",
   "muses":"Neuf déesses des arts et de la mémoire, filles de Zeus et de Mnémosyne, jamais représentées séparément.",
   "clio":"Muse de l'Histoire, celle qui proclame la gloire des actes dignes d'être retenus.",
   "euterpe":"Muse de la musique et de l'aulos, dont le nom signifie « celle qui réjouit ».",
@@ -1947,6 +1950,7 @@ const DEITY_LORE = {
   "atlas": [
     "Titan ayant combattu aux côtés de ses frères contre Zeus, Atlas fut condamné, à leur défaite, à porter la voûte céleste sur ses épaules pour l'éternité — non la Terre, comme on le croit souvent, mais le ciel lui-même.",
     "Héraclès, venu chercher les pommes d'or du jardin des Hespérides (voir la fiche « Hespérides »), proposa un temps de porter le ciel à sa place pendant qu'Atlas allait chercher les pommes — un répit que le Titan dut abandonner, ruse d'Héraclès à l'appui, pour reprendre son fardeau.",
+    "Une tradition plus tardive raconte aussi comment Atlas devint la chaîne de montagnes qui porte aujourd'hui son nom : ayant refusé l'hospitalité à Persée de passage, il fut pétrifié d'un seul regard par la tête de la Gorgone Méduse que le héros rapportait (voir la fiche « Persée »).",
   ],
   "psyché": [
     "Mortelle d'une beauté si extraordinaire qu'elle suscita la jalousie d'Aphrodite (voir la fiche « Aphrodite »), Psyché fut aimée en secret par Éros, qui lui interdit de jamais chercher à voir son visage.",
@@ -2004,8 +2008,12 @@ const DEITY_LORE = {
     "Persée, revenant de sa victoire sur la Gorgone Méduse, la découvrit ainsi exposée et la sauva du monstre avant de l'épouser — un couple que les Grecs placèrent ensuite parmi les étoiles (voir la fiche « Étoile »).",
   ],
   "persée": [
-    "Fils de Zeus et de la mortelle Danaé, Persée reçut pour mission de rapporter la tête de la Gorgone Méduse, dont le regard pétrifiait quiconque le croisait.",
-    "Guidé par Athéna et muni d'objets magiques — sandales ailées, casque d'invisibilité, bouclier poli comme un miroir —, il trancha la tête de Méduse sans jamais la regarder directement, puis s'en servit comme d'une arme redoutable, notamment pour sauver Andromède (voir la fiche « Andromède »).",
+    "Fils de Zeus et de la mortelle Danaé, Persée naquit d'une pluie d'or : le roi Acrisios, son grand-père, avait enfermé sa fille dans une chambre de bronze après qu'un oracle lui eut prédit la mort de sa propre main par un futur petit-fils — mais Zeus s'unit à elle sous cette forme, déjouant sans effort la précaution. Acrisios, découvrant l'enfant, jeta mère et fils à la mer dans un coffre de bois, que les flots portèrent jusqu'à l'île de Sériphos, où un pêcheur nommé Dictys les recueillit et les éleva.",
+    "Devenu adulte, Persée dut affronter le frère de Dictys, le roi Polydectès, épris de Danaé et désireux de se débarrasser de son fils encombrant : il le mit au défi de lui rapporter la tête de la Gorgone Méduse, dont le seul regard pétrifiait quiconque le croisait — une mission pensée comme un aller sans retour.",
+    "Guidé par Athéna et Hermès, il commença par arracher aux Grées, trois sœurs nées vieilles et ne partageant à elles trois qu'un seul œil, le secret du repaire des Nymphes en subtilisant cet œil unique le temps qu'elles le lui échangent contre sa restitution. Les Nymphes lui remirent alors des sandales ailées, un casque d'invisibilité emprunté à Hadès lui-même, et une besace magique, tandis qu'Hermès lui offrit une serpe et Athéna un bouclier poli comme un miroir : ainsi équipé, il put trancher la tête de Méduse sans jamais la regarder directement, se guidant sur son seul reflet.",
+    "Du sang jailli de la blessure naquirent d'un coup Pégase, le cheval ailé que domptera plus tard le héros Bellérophon (voir la fiche « Bellérophon »), et le géant Chrysaor — tous deux déjà conçus en elle par Poséidon avant sa mise à mort. Sur le chemin du retour, Persée se servit une première fois de sa terrible prise pour punir le Titan Atlas, qui lui avait refusé l'hospitalité : pétrifié d'un seul regard, celui-ci devint la chaîne de montagnes qui porte encore son nom (voir la fiche « Atlas »).",
+    "C'est là qu'il découvrit Andromède enchaînée à un rocher, offerte à un monstre marin, et la sauva avant de l'épouser (voir la fiche « Andromède »). De retour à Sériphos, il trouva sa mère persécutée par Polydectès et le pétrifia à son tour, lui et toute sa cour, d'un dernier geste de la tête de Méduse — qu'il remit ensuite à Athéna, qui la fixa pour toujours sur son égide.",
+    "La prophétie qu'Acrisios avait cru déjouer se réalisa pourtant sans que Persée ne le veuille jamais : de passage à des jeux funéraires, un disque qu'il lança dévia de sa trajectoire et frappa mortellement un vieillard dans la foule — son propre grand-père, venu incognito. Trop marqué par ce meurtre involontaire pour régner sur son royaume, Persée l'échangea contre celui de Tirynthe, où il fonda plus tard la cité de Mycènes.",
   ],
   "érinyes": [
     "Divinités vengeresses nées, selon un récit, du sang d'Ouranos mutilé, les Érinyes poursuivent sans relâche ceux qui ont commis des crimes contre leur propre famille — matricide, parricide, parjure envers les siens.",
@@ -2419,11 +2427,27 @@ const DEITY_LORE = {
     "C'est ce jardin qu'Héraclès dut atteindre pour son onzième travail (voir la fiche « Héraclès ») : plutôt que d'affronter lui-même le dragon, il chargea Atlas d'aller cueillir les pommes à sa place, le temps de porter le ciel sur ses propres épaules — un répit que le Titan tenta de prolonger indéfiniment, avant qu'Héraclès ne le pousse par ruse à reprendre son fardeau.",
     "Réputées pour la douceur de leur chant, au point que certains poètes les surnomment les « chanteuses », les Hespérides restent des figures discrètes : aucun mythe ne leur attribue de destin propre en dehors de cette garde silencieuse, à l'écart de l'Olympe, aux confins d'un monde dont même les auteurs anciens ne savaient plus très bien situer le bord.",
   ],
+  "cécrops": [
+    "Né de la terre attique elle-même plutôt que d'un père et d'une mère, Cécrops fut le tout premier roi d'Athènes — mi-homme, mi-serpent à partir de la taille, comme il convient à un être surgi directement du sol qu'il allait gouverner. On lui attribue aussi, dans une tradition plus tardive, d'avoir institué le mariage monogame et le culte des morts, à une époque où les hommes vivaient encore, dit-on, sans connaître leur propre père.",
+    "C'est sous son règne qu'Athéna et Poséidon se disputèrent le patronage de la cité naissante : Poséidon frappa le rocher de l'Acropole de son trident et en fit jaillir une source, mais son eau se révéla salée, impropre à toute vie ; Athéna, elle, planta un olivier, source de nourriture, d'huile et de bois. Cécrops, témoin du duel, atteste que l'olivier d'Athéna avait poussé le premier — un jugement qui fit pencher la balance en sa faveur, et donna son nom à la ville tout entière : Athènes.",
+    "De son épouse Aglauros l'aînée (une nymphe portant le même nom que la première de ses trois filles), Cécrops eut Aglauros, Hersé et Pandrosos (voir la fiche « Hersé ») — les trois sœurs à qui Athéna confia plus tard le coffre contenant le jeune Érichthonios, en leur interdisant formellement de l'ouvrir (voir la fiche « Érichthonios »). C'est ce même Érichthonios qui recueillera un jour sa couronne, poursuivant sur le trône d'Athènes la lignée que Cécrops, sorti de la terre, avait la première fait régner sur elle.",
+  ],
   "hersé": [
-    "Fille du roi Cécrops d'Athènes, Hersé est l'une des trois sœurs — avec Aglauros et Pandrosos — à qui Athéna confia le coffre contenant le jeune Érichthonios, en leur interdisant de l'ouvrir (voir la fiche « Érichthonios »). Contrairement à ses deux sœurs, elle n'ouvrit jamais le coffre elle-même, et resta étrangère à la punition qui s'ensuivit.",
+    "Fille du roi Cécrops d'Athènes (voir la fiche « Cécrops »), Hersé est l'une des trois sœurs — avec Aglauros et Pandrosos — à qui Athéna confia le coffre contenant le jeune Érichthonios, en leur interdisant de l'ouvrir (voir la fiche « Érichthonios »). Avec Aglauros, elle céda à la curiosité et l'ouvrit malgré l'interdit — seule Pandrosos s'y refusa —, mais elle survécut à la frayeur sans être elle-même inquiétée : c'est sa sœur seule qui, plus tard et pour une tout autre raison, paiera le prix fort.",
     "Lors de la procession des Panathénées, où les jeunes filles d'Athènes portaient en cortège les offrandes destinées à Athéna, Hersé se distingua par sa beauté au point qu'Hermès, la voyant passer, s'en éprit aussitôt (voir la fiche « Hermès »). Il entra dans la maison et se heurta à Aglauros, postée au seuil, qui exigea de l'or en échange de son aide.",
     "Athéna, qui n'avait pas oublié la désobéissance d'Aglauros au sujet du coffre, envoya l'Envie elle-même s'insinuer dans son cœur : rongée de jalousie envers le bonheur de sa propre sœur, Aglauros se posta alors devant la porte de la chambre d'Hersé pour empêcher Hermès d'entrer. Le dieu, qu'aucun obstacle mortel n'arrête, la changea sur place en statue de pierre — assise, telle qu'elle avait voulu barrer le passage, pour l'éternité.",
     "De l'union d'Hermès et d'Hersé serait né un fils du nom de Céphale — à ne pas confondre avec l'autre Céphale, plus connu, fils de Déion et époux de Procris, lui aussi aimé de l'Aurore : la tradition antique elle-même semble avoir mêlé les deux figures sans jamais vraiment les démêler.",
+  ],
+  "pyrame": [
+    "À Babylone, Pyrame et Thisbé (voir la fiche « Thisbé ») grandirent dans deux maisons voisines, séparées par un simple mur mitoyen — et s'éprirent l'un de l'autre malgré l'interdiction formelle de leurs deux familles, rivales sans que le mythe n'en précise jamais la raison.",
+    "Une fissure dans ce mur leur permit d'échanger des mots à voix basse, seul refuge de leur amour interdit, jusqu'à ce qu'ils décident de fuir ensemble et de se retrouver, de nuit, près du tombeau de Ninos, sous un mûrier chargé de fruits blancs, aux portes de la ville.",
+    "Thisbé, arrivée la première, s'enfuit terrifiée à l'approche d'une lionne à la gueule encore rouge d'une proie récente, et perdit dans sa fuite son voile, que la bête déchira et macula de sang. Pyrame, survenu peu après, ne trouva que ce voile ensanglanté et, croyant sa bien-aimée dévorée, se transperça de son épée au pied de l'arbre — son sang jaillissant jusqu'aux fruits du mûrier, blancs jusqu'alors.",
+    "Revenue sur ses pas, Thisbé découvrit Pyrame agonisant et se donna la mort à son tour avec la même épée, sous les yeux des deux familles accourues trop tard pour les sauver, mais à temps pour réconcilier leur haine sur la tombe commune de leurs enfants. Depuis ce jour, dit la légende, les fruits du mûrier mûrissent toujours du blanc au rouge sombre, teints pour toujours par ce sang mêlé — un récit que Shakespeare reprendra, des siècles plus tard, pour Roméo et Juliette.",
+  ],
+  "thisbé": [
+    "Jeune Babylonienne éprise de Pyrame (voir la fiche « Pyrame ») malgré l'opposition de leurs deux familles, Thisbé communiquait avec lui à travers la fissure d'un mur séparant leurs maisons, avant de convenir avec lui d'un rendez-vous nocturne près du tombeau de Ninos.",
+    "Arrivée la première sous le mûrier convenu, elle prit la fuite à l'approche d'une lionne repue d'une proie récente, abandonnant dans sa hâte un voile que la bête déchiqueta, le maculant de sang. En le retrouvant, croyant Thisbé tuée, Pyrame se donna la mort — et Thisbé, revenue le trouver mourant, se transperça à son tour de la même épée plutôt que de lui survivre.",
+    "Son nom reste depuis attaché à ce malentendu tragique né d'un simple voile ensanglanté : un amour empêché par des familles ennemies, une méprise fatale, une mort partagée — le schéma même que Shakespeare reprendra pour Roméo et Juliette, des siècles plus tard.",
   ],
   "muses": [
     "Filles de Zeus et de la Titanide Mnémosyne, la Mémoire elle-même, les neuf Muses naquirent au terme de neuf nuits consécutives où le roi des dieux s'unit à elle. Hésiode, la source la plus ancienne à les nommer toutes ensemble, se contente de les énumérer sans leur attribuer de domaine particulier — la répartition en neuf arts bien distincts, aujourd'hui la plus connue, ne s'est fixée que plus tard, à l'époque hellénistique et romaine (voir les fiches consacrées à chacune).",
@@ -2526,6 +2550,11 @@ const DEITY_PORTRAITS = {
   // portraits individuels — voir .deity-portrait-wide dans styles.css, qui lui laisse son propre
   // format plutôt que de sacrifier certaines des neuf sur les bords à un recadrage trop serré.
   "muses": "assets/deity-muses.jpg",
+  // Pyrame et Thisbé : même portrait de couple partagé entre les deux fiches, comme pour
+  // Éros/Psyché et Harmonie/Cadmos plus haut.
+  "pyrame": "assets/deity-pyrame-thisbe.jpg",
+  "thisbé": "assets/deity-pyrame-thisbe.jpg",
+  "hermès": "assets/deity-hermes.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
@@ -2547,7 +2576,12 @@ const DEITY_INLINE_PORTRAITS = {
     { match: "Daphné", src: "assets/deity-apollon-daphne.jpg", alt: "Apollon et Daphné" },
   ],
   "aphrodite": [
+    { match: "dieu de la guerre", src: "assets/deity-ares-aphrodite.jpg", alt: "Arès et Aphrodite" },
     { match: "Diomède", src: "assets/deity-aphrodite-enee.jpg", alt: "Aphrodite qui sauve Énée" },
+  ],
+  "énée": [
+    { match: "porta sur son dos son père âgé", src: "assets/deity-enee-fuite-troie.jpg", alt: "Énée fuyant Troie avec son père et son fils" },
+    { match: "où règne la reine Didon", src: "assets/deity-enee-didon.jpg", alt: "Énée et Didon" },
   ],
 };
 
