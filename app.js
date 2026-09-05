@@ -2457,16 +2457,21 @@ const DEITY_LORE = {
 };
 
 // Portraits illustrés pour certaines figures (voir showDeityDetail()) : affichés juste sous le
-// nom, avant même la note courte — demande directe de l'utilisatrice, qui a fourni les 5
-// premières images. Volontairement partiel plutôt qu'exhaustif : seules les figures pour
-// lesquelles une illustration a été fournie apparaissent ici, le reste continue de s'afficher
-// sans image (symbol-hero "✦" seul), exactement comme avant.
+// nom, avant même la note courte — demande directe de l'utilisatrice, qui a fourni les images au
+// fil de plusieurs séries (5 puis 5 autres). Volontairement partiel plutôt qu'exhaustif : seules
+// les figures pour lesquelles une illustration a été fournie apparaissent ici, le reste continue
+// de s'afficher sans image (symbol-hero "✦" seul), exactement comme avant.
 const DEITY_PORTRAITS = {
   "hécate": "assets/deity-hecate.jpg",
   "artémis": "assets/deity-artemis.jpg",
   "aphrodite": "assets/deity-aphrodite.jpg",
   "perséphone": "assets/deity-persephone.jpg",
   "déméter": "assets/deity-demeter.jpg",
+  "mélinoé": "assets/deity-melinoe.jpg",
+  "hestia": "assets/deity-hestia.jpg",
+  "héra": "assets/deity-hera.jpg",
+  "athéna": "assets/deity-athena.jpg",
+  "dionysos": "assets/deity-dionysos.jpg",
 };
 
 /* ===================== ÉTAT ===================== */
