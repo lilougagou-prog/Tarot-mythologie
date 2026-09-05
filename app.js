@@ -2561,6 +2561,11 @@ const DEITY_PORTRAITS = {
   "apollon": "assets/deity-apollon.jpg",
   "arès": "assets/deity-ares.jpg",
   "enyo": "assets/deity-enyo.jpg",
+  // Phobos réutilise le même portrait de couple que la fiche d'Arès (demande explicite,
+  // en plus de celle d'Arès plutôt qu'à sa place) — voir DEITY_INLINE_PORTRAITS["arès"].
+  "phobos": "assets/deity-deimos-phobos.jpg",
+  "médée": "assets/deity-medee.jpg",
+  "circé": "assets/deity-circe.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
@@ -2595,6 +2600,13 @@ const DEITY_INLINE_PORTRAITS = {
   ],
   "arès": [
     { match: "Phobos et Deimos", src: "assets/deity-deimos-phobos.jpg", alt: "Phobos et Deimos" },
+  ],
+  "persée": [
+    { match: "un pêcheur nommé Dictys les recueillit", src: "assets/deity-persee-danae-dictys.jpg", alt: "Dictys découvre Danaé et le bébé Persée" },
+    { match: "Andromède", src: "assets/deity-persee-andromede-combat.jpg", alt: "Persée délivre Andromède" },
+  ],
+  "circé": [
+    { match: "protégé par une plante magique", src: "assets/deity-circe-ulysse.jpg", alt: "Circé qui tente de transformer Ulysse" },
   ],
 };
 
