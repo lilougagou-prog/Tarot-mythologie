@@ -2478,6 +2478,11 @@ const DEITY_PORTRAITS = {
   "thalie": "assets/deity-thalie.jpg",
   "terpsichore": "assets/deity-terpsichore.jpg",
   "clio": "assets/deity-clio.jpg",
+  "érato": "assets/deity-erato.jpg",
+  "polymnie": "assets/deity-polymnie.jpg",
+  "uranie": "assets/deity-uranie.jpg",
+  "melpomène": "assets/deity-melpomene.jpg",
+  "euterpe": "assets/deity-euterpe.jpg",
 };
 
 /* ===================== ÉTAT ===================== */
