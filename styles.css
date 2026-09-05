@@ -240,6 +240,11 @@ main{max-width:900px;margin:auto;padding:22px 18px}
    place réservée pour les autres : l'image n'apparaît que si elle existe. */
 .deity-portrait{display:block;max-width:280px;width:100%;margin:14px auto 18px;border-radius:18px;
   border:2px solid rgba(201,163,90,.65);box-shadow:var(--shadow);object-fit:cover;aspect-ratio:4/5}
+/* Portrait plus petit, inséré au fil du mythe juste au-dessus du paragraphe qui mentionne la
+   figure qu'il représente (voir DEITY_INLINE_PORTRAITS/showDeityDetail()) — même style que
+   .deity-portrait mais réduit, pour ne pas prendre toute la largeur au milieu du texte. */
+.deity-portrait-inline{display:block;max-width:150px;width:55%;margin:16px auto 8px;border-radius:14px;
+  border:2px solid rgba(201,163,90,.65);box-shadow:var(--shadow);object-fit:cover;aspect-ratio:4/5}
 .detail p{line-height:1.75}
 .lore-text{font-size:16px}
 .symbol-list{display:grid;gap:10px;margin-top:10px}
