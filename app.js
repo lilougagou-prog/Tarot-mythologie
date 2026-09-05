@@ -1692,7 +1692,18 @@ const DEITY_NOTES = {
   "didon":"Reine fondatrice de Carthage, unie un temps à Énée, morte par le fer après son départ.",
   "érichthonios":"Enfant né de la terre, mi-homme mi-serpent, élevé en secret par Athéna et devenu roi d'Athènes.",
   "alcippé":"Fille d'Arès dont l'agression subie provoqua le tout premier procès jugé par les dieux entre eux.",
-  "enyo":"Déesse de la guerre, compagne de combat d'Arès plutôt que sa fille, souvent confondue avec Éris.",
+  "enyo":"Déesse de la frénésie et du vacarme de la bataille, compagne de combat d'Arès, identifiée à Bellone par les Romains.",
+  "hespérides":"Nymphes gardiennes du jardin aux pommes d'or, aux confins occidentaux du monde.",
+  "hersé":"Fille de Cécrops aimée d'Hermès, dont la sœur Aglauros fut changée en pierre par jalousie.",
+  "muses":"Neuf déesses des arts et de la mémoire, filles de Zeus et de Mnémosyne, jamais représentées séparément.",
+  "clio":"Muse de l'Histoire, celle qui proclame la gloire des actes dignes d'être retenus.",
+  "euterpe":"Muse de la musique et de l'aulos, dont le nom signifie « celle qui réjouit ».",
+  "thalie":"Muse de la comédie et de la poésie pastorale, homonyme sans lien de parenté d'une des trois Charites.",
+  "melpomène":"Muse de la tragédie, représentée avec un masque tragique.",
+  "terpsichore":"Muse de la danse et du chant choral, parfois dite mère des Sirènes.",
+  "érato":"Muse de la poésie lyrique et amoureuse, invoquée par Virgile pour chanter la guerre.",
+  "polymnie":"Muse des hymnes sacrés, au domaine élargi avec le temps à la pantomime et à la géométrie.",
+  "uranie":"Muse de l'astronomie, homonyme d'une épiclèse d'Aphrodite sans lien de parenté.",
 };
 
 // Textes mythologiques développés pour les figures listées ci-dessus (voir showDeityDetail() /
@@ -1710,7 +1721,7 @@ const DEITY_LORE = {
   "hermès": [
     "Né dans une grotte du mont Cyllène (voir la fiche « Grotte »), Hermès manifesta son astuce dès le jour de sa naissance : il déroba le troupeau de son frère Apollon, puis inventa la lyre à partir d'une carapace de tortue et la lui offrit en échange de son pardon (voir la fiche « Lyre »).",
     "Messager officiel de Zeus et guide des âmes des morts vers l'autre monde, Hermès franchit sans entrave les frontières entre l'Olympe, la terre et les Enfers — un privilège qu'on lui prête souvent, à tort, comme exclusif : Iris relie elle aussi le ciel et la terre, et va jusqu'aux portes du Styx lorsqu'il faut y puiser l'eau du serment sacré (voir la fiche « Iris »), tandis qu'Hécate, de par sa nature triple, circule tout aussi librement entre les trois royaumes (voir la fiche « Hécate »). Ce qui distingue Hermès n'est donc pas l'exclusivité du passage, mais la diversité des rôles qu'il y joue : messager, psychopompe, patron des voyageurs, des marchands et des voleurs.",
-    "Sa vie amoureuse est aussi mouvementée que ses voyages. D'Aphrodite (voir la fiche « Aphrodite »), il eut un fils à la double nature, Hermaphrodite, fusionné plus tard avec la nymphe Salmacis en un seul être aux deux sexes (voir la fiche « Hermaphrodite »). De la nymphe Dryope, il eut Pan (voir la fiche « Pan »), né avec des cornes et des sabots de bouc, que sa propre mère fuit à sa naissance. D'une troisième union, avec Chioné, naquit Autolycos, voleur si habile qu'il pouvait changer à volonté la forme et la couleur de tout ce qu'il dérobait — un don hérité directement de son père, et qui fera de lui, plus tard, le grand-père maternel d'Ulysse (voir la fiche « Ulysse »).",
+    "Sa vie amoureuse est aussi mouvementée que ses voyages. D'Aphrodite (voir la fiche « Aphrodite »), il eut un fils à la double nature, Hermaphrodite, fusionné plus tard avec la nymphe Salmacis en un seul être aux deux sexes (voir la fiche « Hermaphrodite »). De la nymphe Dryope, il eut Pan (voir la fiche « Pan »), né avec des cornes et des sabots de bouc, que sa propre mère fuit à sa naissance. D'une troisième union, avec Chioné, naquit Autolycos, voleur si habile qu'il pouvait changer à volonté la forme et la couleur de tout ce qu'il dérobait — un don hérité directement de son père, et qui fera de lui, plus tard, le grand-père maternel d'Ulysse (voir la fiche « Ulysse »). Une quatrième liaison, avec Hersé, fille de Cécrops, l'entraîna un jour jusqu'au seuil de sa maison même, où sa sœur Aglauros tenta de lui barrer le passage (voir la fiche « Hersé »).",
     "Dans le Tarot, Hermès est le Bateleur (I), la carte du potentiel et de l'habileté à mettre en mouvement ce qui existe déjà : comme lui, le Bateleur ne crée rien à partir de rien — il détourne un troupeau en pardon, une carapace en instrument, un désir en descendance rusée, et fait de chaque passage une occasion plutôt qu'un simple trajet.",
   ],
   "métis": [
@@ -1741,6 +1752,7 @@ const DEITY_LORE = {
   "apollon": [
     "Fils de Zeus et de Léto (voir la fiche « Léto »), Apollon naquit avec sa sœur jumelle Artémis sur l'île flottante de Délos, seul lieu qui accepta de les accueillir après qu'Héra eut interdit à toute terre ferme de recevoir l'accouchement de sa rivale.",
     "Dieu de la lumière, de la musique et de la vérité, il conduit le char solaire et rend, depuis son temple de Delphes (voir la fiche « Temple »), des oracles par la voix de la Pythie — sa devise gravée sur le fronton du temple, « Connais-toi toi-même », résume son exigence de clarté.",
+    "Chef de chœur des Muses (voir la fiche « Muses »), qu'il conduit sous le nom d'Apollon Musagète, « guide des Muses », il partage avec elles le mont Parnasse et sa source Castalie, non loin de son propre sanctuaire de Delphes.",
   ],
   "thémis": [
     "Titanide antérieure aux dieux de l'Olympe, Thémis personnifie la loi divine et l'ordre juste du monde — non pas la justice humaine, changeante et discutée, mais un principe plus ancien que les dieux eux-mêmes.",
@@ -1760,7 +1772,7 @@ const DEITY_LORE = {
     "Rendu fou par Héra à l'âge adulte, il tua sa propre famille dans un accès de délire. Pour s'en purifier, l'oracle de Delphes lui ordonna de se mettre au service du roi Eurysthée pendant douze ans et de prendre un nouveau nom, Héraclès — « la gloire d'Héra » — comme pour retourner contre elle-même la persécution qu'elle lui infligeait : chaque exploit accompli sous ce nom deviendrait, malgré elle, un hommage à la déesse.",
     "Eurysthée lui imposa alors douze travaux jugés impossibles. Héraclès étouffa d'abord à mains nues le lion de Némée, dont la peau devint son armure, puis affronta l'hydre de Lerne, dont il fallait cautériser chaque cou pour empêcher deux têtes de repousser à la place d'une — son neveu Iolaos l'y aida, geste qui coûtera à ce travail d'être invalidé plus tard, faute d'avoir agi seul. Il captura ensuite vivante la biche de Cérynie, consacrée à Artémis, après une année entière de poursuite sans jamais la blesser, puis ramena vivant le sanglier d'Érymanthe en le forçant dans la neige profonde.",
     "Vinrent ensuite les écuries d'Augias, nettoyées en une seule journée en détournant le cours de deux fleuves — un travail lui aussi invalidé, cette fois pour avoir réclamé un salaire — puis les oiseaux du lac Stymphale, chassés à l'aide de castagnettes de bronze offertes par Athéna, le taureau de Crète maîtrisé à mains nues, et les juments de Diomède, dressées en leur faisant dévorer leur propre maître.",
-    "Il obtint ensuite la ceinture d'Hippolyte, reine des Amazones (voir la fiche « Hippolyte »), d'abord prête à la lui offrir de bon cœur — jusqu'à ce qu'Héra, semant la discorde parmi les Amazones, ne transforme la rencontre en bataille. Il ramena seul le troupeau de Géryon depuis les confins du monde connu, cueillit les pommes d'or des Hespérides en soulageant un temps Atlas de son fardeau céleste par la ruse, et descendit enfin aux Enfers pour en ramener vivant, à mains nues, le chien Cerbère, avant de le rendre à Hadès.",
+    "Il obtint ensuite la ceinture d'Hippolyte, reine des Amazones (voir la fiche « Hippolyte »), d'abord prête à la lui offrir de bon cœur — jusqu'à ce qu'Héra, semant la discorde parmi les Amazones, ne transforme la rencontre en bataille. Il ramena seul le troupeau de Géryon depuis les confins du monde connu, cueillit les pommes d'or des Hespérides (voir la fiche « Hespérides ») en soulageant un temps Atlas de son fardeau céleste par la ruse, et descendit enfin aux Enfers pour en ramener vivant, à mains nues, le chien Cerbère, avant de le rendre à Hadès.",
     "Deux travaux ayant été invalidés par Eurysthée, Héraclès dut en accomplir deux de plus pour atteindre le compte requis — quatorze épreuves au total pour douze travaux officiellement reconnus.",
     "Après sa mort, consumé par une tunique empoisonnée, il fut accueilli parmi les dieux de l'Olympe. C'est Héra elle-même, désormais réconciliée avec celui dont le nom entier célébrait sa gloire, qui lui donna pour épouse sa propre fille Hébé, déesse de la jeunesse éternelle (voir la fiche « Hébé ») — le pardon le plus complet qu'elle pouvait lui offrir, en l'accueillant dans sa propre famille.",
     "Dans le Tarot, Héraclès est la figure de la Force (XI), où l'on voit une femme ouvrir sans effort apparent la gueule d'un lion : ses travaux racontent la même leçon à plus grande échelle — la force qui compte n'est jamais celle du combat, mais celle qui transforme une punition en victoire répétée sur soi-même, jusqu'à faire de son propre nom un acte de réconciliation.",
@@ -1911,7 +1923,7 @@ const DEITY_LORE = {
   ],
   "atlas": [
     "Titan ayant combattu aux côtés de ses frères contre Zeus, Atlas fut condamné, à leur défaite, à porter la voûte céleste sur ses épaules pour l'éternité — non la Terre, comme on le croit souvent, mais le ciel lui-même.",
-    "Héraclès, venu chercher les pommes d'or du jardin des Hespérides gardé par les filles d'Atlas, proposa un temps de porter le ciel à sa place pendant qu'Atlas allait chercher les pommes — un répit que le Titan dut abandonner, ruse d'Héraclès à l'appui, pour reprendre son fardeau.",
+    "Héraclès, venu chercher les pommes d'or du jardin des Hespérides (voir la fiche « Hespérides »), proposa un temps de porter le ciel à sa place pendant qu'Atlas allait chercher les pommes — un répit que le Titan dut abandonner, ruse d'Héraclès à l'appui, pour reprendre son fardeau.",
   ],
   "psyché": [
     "Mortelle d'une beauté si extraordinaire qu'elle suscita la jalousie d'Aphrodite (voir la fiche « Aphrodite »), Psyché fut aimée en secret par Éros, qui lui interdit de jamais chercher à voir son visage.",
@@ -2154,7 +2166,7 @@ const DEITY_LORE = {
   "thalia": [
     "Thalia, dont le nom signifie « celle qui fleurit », est l'une des trois Charites — les déesses de la grâce et de la joie que la tradition ne représente jamais seules, toujours dansant ensemble (voir la fiche « Charites »).",
     "Parmi ses deux sœurs, elle personnifie plus particulièrement la fête, l'abondance et tout ce qui s'épanouit sans nécessité — les banquets, la parure, la beauté qui n'a besoin de rien justifier d'autre qu'elle-même.",
-    "Une autre figure du même nom existe dans la mythologie grecque, l'une des neuf Muses, protectrice de la comédie et de la poésie pastorale : les deux Thalia restent distinctes, même si leur nom commun — et leur joie partagée — les rapproche.",
+    "Une autre figure du même nom existe dans la mythologie grecque, l'une des neuf Muses, protectrice de la comédie et de la poésie pastorale (voir la fiche « Thalie ») : les deux Thalia restent distinctes, même si leur nom commun — et leur joie partagée — les rapproche.",
     "Dans le Tarot, Thalia est la figure du 4 de Bâtons, où des guirlandes de fleurs relient quatre bâtons au-dessus d'une fête déjà commencée : la stabilité heureuse et le répit mérité après l'effort sont exactement son domaine.",
   ],
   "zelos": [
@@ -2300,6 +2312,7 @@ const DEITY_LORE = {
     "Fille de Zeus et de la Titanide Mnémosyne, la Mémoire elle-même, Calliope est l'aînée et la plus vénérée des neuf Muses : celle qui préside à la poésie épique, le grand récit des exploits héroïques que les aèdes chantaient de génération en génération.",
     "On la représente une tablette et un stylet à la main, prête à consigner ce qui mérite de ne jamais être oublié — un rôle qui prolonge directement l'origine de sa mère, la Mémoire.",
     "Unie à Apollon ou, selon d'autres traditions, au roi thrace Œagre, elle mit au monde Orphée, dont le chant devait plus tard surpasser celui de tous les mortels (voir la fiche « Orphée »).",
+    "Lorsque les neuf filles de Piéros osèrent défier les Muses en un concours de chant, ce fut Calliope qui répondit en leur nom par le récit du rapt de Perséphone par Hadès — un chant qui l'emporta sans appel et valut aux Piérides d'être changées en pies bavardes pour avoir refusé leur défaite (voir la fiche « Muses »).",
   ],
   "cassiopée": [
     "Reine d'Éthiopie, épouse du roi Céphée, Cassiopée commit l'erreur de se vanter que sa propre beauté — ou, selon d'autres versions, celle de sa fille Andromède — surpassait celle des Néréides, les nymphes de la mer.",
@@ -2370,10 +2383,60 @@ const DEITY_LORE = {
     "Zeus convoqua un tribunal exceptionnel, composé des douze dieux de l'Olympe, sur une colline faisant face à l'Acropole : Arès y fut jugé et acquitté, son geste reconnu comme une défense légitime plutôt qu'un crime — le tout premier procès de l'histoire à opposer un dieu à un autre devant leurs pairs. La colline garda depuis le nom d'Aréopage, la « colline d'Arès », et devint plus tard le tribunal où l'on jugera Oreste, la première fois qu'un tribunal humain remplaça la vengeance sans fin des Érinyes (voir la fiche « Érinyes »).",
   ],
   "enyo": [
-    "Enyo personnifie la guerre dans ce qu'elle a de plus destructeur — non la bataille elle-même, mais le pillage et la dévastation des cités qui l'accompagnent ; Homère la qualifie, dans l'Iliade, de « pilleuse de villes ».",
-    "Elle accompagne Arès (voir la fiche « Arès ») sur le champ de bataille comme une compagne de combat plutôt qu'une descendante : aucune source antique n'en fait sa fille, contrairement à une confusion moderne assez répandue. Le lien de parenté le mieux attesté avec Arès revient plutôt à Éris, la Discorde, que l'Iliade appelle explicitement « sœur et compagne » du dieu de la guerre — un rôle si proche de celui d'Enyo que les deux déesses se confondent souvent, jusque dans les textes anciens eux-mêmes.",
-    "Un temps honorée d'un culte réel, elle possédait à Athènes une statue dans le sanctuaire même d'Arès, aux côtés d'Athéna et d'Aphrodite — une place qui confirme son rôle de compagne plutôt que d'enfant du dieu de la guerre.",
+    "Enyo personnifie moins l'affrontement lui-même que le vacarme, le sang et le chaos qui l'accompagnent lorsqu'une bataille bascule dans le pire : Homère lui donne, dans l'Iliade, l'épithète de « ptoliporthos », la « pilleuse de villes » — un titre qui la lie moins au combat singulier qu'à la chute d'une cité tout entière.",
+    "Elle accompagne Arès (voir la fiche « Arès ») en compagne de bataille plutôt qu'en descendante, et les auteurs la décrivent avec une crudité que le dieu de la guerre lui-même n'inspire pas toujours : chez Nonnos de Panopolis, elle attise la fureur des deux camps sans jamais favoriser l'un plus que l'autre, une frénésie impartiale plutôt qu'un parti pris ; chez Quintus de Smyrne, elle est « l'effroyable Enyo, aux membres tout éclaboussés de sang », de retour aux instants les plus sanglants d'un combat, comme si elle en incarnait le vacarme et l'horreur plutôt que la stratégie ou le courage.",
+    "Elle fit l'objet d'un culte réel : Pausanias mentionne une statue d'Enyo, œuvre des fils de Praxitèle, dressée dans le sanctuaire même d'Arès sur l'Agora d'Athènes, aux côtés d'Athéna et d'Aphrodite. Les Romains l'identifièrent à leur propre déesse Bellone, dont le culte tardif — marqué par des prêtres qui s'entaillaient rituellement la peau lors du « jour du sang » — devint plus sanglant encore que celui d'Enyo elle-même, et dont le temple, près du cirque Flaminius, servait de cadre officiel à la déclaration romaine de guerre.",
     "Une tout autre Enyo existe par ailleurs dans la mythologie grecque : l'une des trois Grées, filles de Phorcys et de Céto, nées déjà vieilles et ne partageant à elles trois qu'un seul œil et une seule dent, qu'elles se passent à tour de rôle — une créature marine archaïque sans aucun rapport avec la guerre, que seul le nom partagé relie à la compagne d'Arès.",
+  ],
+  "hespérides": [
+    "Selon Hésiode, la source la plus ancienne à leur sujet, les Hespérides sont filles de la Nuit seule — « qui ne s'unit à personne » —, nées sans père comme plusieurs des figures les plus anciennes et les plus sombres de sa Théogonie. Une tradition plus tardive, aujourd'hui la plus répandue, en fait plutôt les filles du Titan Atlas (voir la fiche « Atlas ») : un lien qui doit sans doute davantage à la géographie qu'à un mythe précis, puisque leur jardin se situe justement aux confins occidentaux du monde, près des montagnes qui portent son nom.",
+    "Aux côtés du dragon Ladon, né de Typhon et d'Échidna, elles gardent un pommier d'or planté au bout du monde connu — un cadeau de noces que Gaïa avait offert à Héra le jour de son mariage avec Zeus. Leur nombre même reste incertain selon les auteurs, tantôt trois, tantôt quatre, parfois sept, et leurs noms varient tout autant : Aiglé, Érythie et Hespéréthuse comptent parmi les plus souvent cités.",
+    "C'est ce jardin qu'Héraclès dut atteindre pour son onzième travail (voir la fiche « Héraclès ») : plutôt que d'affronter lui-même le dragon, il chargea Atlas d'aller cueillir les pommes à sa place, le temps de porter le ciel sur ses propres épaules — un répit que le Titan tenta de prolonger indéfiniment, avant qu'Héraclès ne le pousse par ruse à reprendre son fardeau.",
+    "Réputées pour la douceur de leur chant, au point que certains poètes les surnomment les « chanteuses », les Hespérides restent des figures discrètes : aucun mythe ne leur attribue de destin propre en dehors de cette garde silencieuse, à l'écart de l'Olympe, aux confins d'un monde dont même les auteurs anciens ne savaient plus très bien situer le bord.",
+  ],
+  "hersé": [
+    "Fille du roi Cécrops d'Athènes, Hersé est l'une des trois sœurs — avec Aglauros et Pandrosos — à qui Athéna confia le coffre contenant le jeune Érichthonios, en leur interdisant de l'ouvrir (voir la fiche « Érichthonios »). Contrairement à ses deux sœurs, elle n'ouvrit jamais le coffre elle-même, et resta étrangère à la punition qui s'ensuivit.",
+    "Lors de la procession des Panathénées, où les jeunes filles d'Athènes portaient en cortège les offrandes destinées à Athéna, Hersé se distingua par sa beauté au point qu'Hermès, la voyant passer, s'en éprit aussitôt (voir la fiche « Hermès »). Il entra dans la maison et se heurta à Aglauros, postée au seuil, qui exigea de l'or en échange de son aide.",
+    "Athéna, qui n'avait pas oublié la désobéissance d'Aglauros au sujet du coffre, envoya l'Envie elle-même s'insinuer dans son cœur : rongée de jalousie envers le bonheur de sa propre sœur, Aglauros se posta alors devant la porte de la chambre d'Hersé pour empêcher Hermès d'entrer. Le dieu, qu'aucun obstacle mortel n'arrête, la changea sur place en statue de pierre — assise, telle qu'elle avait voulu barrer le passage, pour l'éternité.",
+    "De l'union d'Hermès et d'Hersé serait né un fils du nom de Céphale — à ne pas confondre avec l'autre Céphale, plus connu, fils de Déion et époux de Procris, lui aussi aimé de l'Aurore : la tradition antique elle-même semble avoir mêlé les deux figures sans jamais vraiment les démêler.",
+  ],
+  "muses": [
+    "Filles de Zeus et de la Titanide Mnémosyne, la Mémoire elle-même, les neuf Muses naquirent au terme de neuf nuits consécutives où le roi des dieux s'unit à elle. Hésiode, la source la plus ancienne à les nommer toutes ensemble, se contente de les énumérer sans leur attribuer de domaine particulier — la répartition en neuf arts bien distincts, aujourd'hui la plus connue, ne s'est fixée que plus tard, à l'époque hellénistique et romaine (voir les fiches consacrées à chacune).",
+    "Elles résident traditionnellement sur le mont Hélicon, en Béotie, près de la source Hippocrène, née dit-on du sabot de Pégase frappant le rocher, ou sur le Parnasse, près de la source Castalie non loin de Delphes — deux lieux également associés à Apollon (voir la fiche « Apollon »), qui les conduit alors sous le nom d'Apollon Musagète, « guide des Muses ».",
+    "Leur talent leur valut un jour un défi : les neuf filles de Piéros, roi de Macédoine, se crurent leurs égales et les provoquèrent en un concours de chant, jugé par des nymphes. Les Piérides chantèrent un hymne impie glorifiant les Géants contre les dieux de l'Olympe ; Calliope (voir la fiche « Calliope »), au nom des Muses, leur répondit par le récit du rapt de Perséphone par Hadès. Les nymphes tranchèrent sans appel en faveur des Muses — et les Piérides, refusant leur défaite et multipliant les insultes, furent changées en pies bavardes, condamnées à conserver dans ce nouveau corps le seul don qu'elles n'avaient jamais su maîtriser : parler sans savoir se taire.",
+    "Chacune des neuf incarne aujourd'hui un art précis — l'épopée, l'histoire, la musique, la comédie, la tragédie, la danse, la poésie amoureuse, les hymnes sacrés et l'astronomie (voir les fiches individuelles) — mais leur légende commune reste celle d'un groupe inséparable, jamais représenté l'une sans les autres.",
+  ],
+  "clio": [
+    "Clio préside à l'Histoire — son nom, dérivé du verbe grec « kleiein », célébrer, désigne celle qui proclame la gloire des actes dignes d'être retenus. On la représente tenant un rouleau ou un livre ouvert, parfois une trompette à la main, comme pour annoncer ce qui mérite de traverser le temps.",
+    "Elle appartient aux neuf Muses, filles de Zeus et de Mnémosyne, la Mémoire elle-même (voir la fiche « Muses ») — une parenté qui prend tout son sens pour elle en particulier : que serait l'Histoire sans la mémoire qui la précède ?",
+  ],
+  "euterpe": [
+    "Euterpe préside à la musique, en particulier au son de l'aulos, une flûte double dont elle passe pour l'inventrice. Son nom signifie « celle qui réjouit », en écho au plaisir que procure son art.",
+    "Elle appartient aux neuf Muses (voir la fiche « Muses »), et son image — une jeune femme jouant de la flûte — a longtemps servi d'allégorie à la musique elle-même dans l'art occidental, bien après la disparition de son culte antique.",
+  ],
+  "thalie": [
+    "Thalie préside à la comédie et à la poésie pastorale — son nom signifie « celle qui fleurit » ou « l'abondance joyeuse », le même que porte, sans aucun lien de parenté, l'une des trois Charites (voir la fiche « Thalia »). On la représente tenant un masque comique et une houlette de berger, symbole de la vie champêtre que chante ce genre léger.",
+    "Elle appartient aux neuf Muses (voir la fiche « Muses »), et forme avec Melpomène, muse de la tragédie (voir la fiche « Melpomène »), le couple de masques — l'un riant, l'autre pleurant — resté depuis le symbole universel du théâtre.",
+  ],
+  "melpomène": [
+    "Melpomène préside à la tragédie — son nom, dérivé du verbe grec « melpein », chanter ou célébrer par le chant, rappelle qu'à l'origine la tragédie grecque se chantait autant qu'elle se jouait. On la représente tenant un masque tragique et parfois une massue ou un poignard, attributs empruntés aux grands destins funestes qu'elle inspire.",
+    "Elle appartient aux neuf Muses (voir la fiche « Muses »), et forme avec Thalie, muse de la comédie (voir la fiche « Thalie »), le couple de masques resté depuis le symbole universel du théâtre.",
+  ],
+  "terpsichore": [
+    "Terpsichore préside à la danse et au chant choral — son nom signifie littéralement « celle qui se réjouit de la danse ». On la représente une lyre à la main, guidant de son rythme les pas d'un chœur.",
+    "Elle appartient aux neuf Muses (voir la fiche « Muses »). Certaines traditions tardives lui prêtent, avec le dieu-fleuve Achéloos, la maternité des Sirènes — une ascendance que les auteurs anciens eux-mêmes hésitent à lui attribuer en propre, la donnant tour à tour à elle ou à sa sœur Melpomène.",
+  ],
+  "érato": [
+    "Érato préside à la poésie lyrique et amoureuse — son nom, dérivé d'Éros, signifie « la désirable » ou « celle qui inspire l'amour ». On la représente une lyre à la main, parfois accompagnée d'un petit Éros ailé.",
+    "Elle appartient aux neuf Muses (voir la fiche « Muses »). Ironie de son domaine : c'est elle que le poète latin Virgile invoque au début du chant guerrier de l'Énéide, bien loin de l'amour qu'elle inspire d'ordinaire — comme si même la muse la plus tendre pouvait prêter sa voix aux récits les plus rudes.",
+  ],
+  "polymnie": [
+    "Polymnie préside aux hymnes sacrés et à la poésie religieuse — son nom signifie littéralement « aux nombreux chants ». On la représente pensive, drapée, un doigt posé sur les lèvres ou un voile relevé, dans une attitude de recueillement plutôt que d'action.",
+    "Elle appartient aux neuf Muses (voir la fiche « Muses »). Les auteurs plus tardifs élargirent peu à peu son domaine à la pantomime, à la géométrie et même à la méditation philosophique — signe qu'une muse au domaine flou finit, avec le temps, par attirer tout ce qu'aucune autre ne réclame.",
+  ],
+  "uranie": [
+    "Uranie préside à l'astronomie — son nom signifie « la céleste », le même que celui d'une épiclèse d'Aphrodite elle-même, sans aucun lien de parenté entre les deux. On la représente un globe céleste et un compas à la main, le regard tourné vers les étoiles plutôt que vers la terre.",
+    "Elle appartient aux neuf Muses (voir la fiche « Muses »).",
   ],
 };
 
