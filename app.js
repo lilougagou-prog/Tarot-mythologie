@@ -1698,7 +1698,7 @@ const DEITY_NOTES = {
   "muses":"Neuf déesses des arts et de la mémoire, filles de Zeus et de Mnémosyne, jamais représentées séparément.",
   "clio":"Muse de l'Histoire, celle qui proclame la gloire des actes dignes d'être retenus.",
   "euterpe":"Muse de la musique et de l'aulos, dont le nom signifie « celle qui réjouit ».",
-  "thalie":"Muse de la comédie et de la poésie pastorale, homonyme sans lien de parenté d'une des trois Charites.",
+  "thalie":"Muse de la comédie et de la poésie pastorale, représentée avec un masque comique et une houlette de berger.",
   "melpomène":"Muse de la tragédie, représentée avec un masque tragique.",
   "terpsichore":"Muse de la danse et du chant choral, parfois dite mère des Sirènes.",
   "érato":"Muse de la poésie lyrique et amoureuse, invoquée par Virgile pour chanter la guerre.",
@@ -2431,8 +2431,9 @@ const DEITY_LORE = {
     "Elle appartient aux neuf Muses (voir la fiche « Muses »), et son image — une jeune femme jouant de la flûte — a longtemps servi d'allégorie à la musique elle-même dans l'art occidental, bien après la disparition de son culte antique.",
   ],
   "thalie": [
-    "Thalie préside à la comédie et à la poésie pastorale — son nom signifie « celle qui fleurit » ou « l'abondance joyeuse », le même que porte, sans aucun lien de parenté, l'une des trois Charites (voir la fiche « Thalia »). On la représente tenant un masque comique et une houlette de berger, symbole de la vie champêtre que chante ce genre léger.",
+    "Thalie préside à la comédie et à la poésie pastorale — son nom signifie « celle qui fleurit » ou « l'abondance joyeuse ». On la représente tenant un masque comique et une houlette de berger, symbole de la vie champêtre que chante ce genre léger.",
     "Elle appartient aux neuf Muses (voir la fiche « Muses »), et forme avec Melpomène, muse de la tragédie (voir la fiche « Melpomène »), le couple de masques — l'un riant, l'autre pleurant — resté depuis le symbole universel du théâtre.",
+    "Une autre figure du même nom existe parmi les trois Charites (voir la fiche « Thalia ») : les deux Thalie restent distinctes malgré ce nom commun.",
   ],
   "melpomène": [
     "Melpomène préside à la tragédie — son nom, dérivé du verbe grec « melpein », chanter ou célébrer par le chant, rappelle qu'à l'origine la tragédie grecque se chantait autant qu'elle se jouait. On la représente tenant un masque tragique et parfois une massue ou un poignard, attributs empruntés aux grands destins funestes qu'elle inspire.",
@@ -2458,9 +2459,9 @@ const DEITY_LORE = {
 
 // Portraits illustrés pour certaines figures (voir showDeityDetail()) : affichés juste sous le
 // nom, avant même la note courte — demande directe de l'utilisatrice, qui a fourni les images au
-// fil de plusieurs séries (5 puis 5 autres). Volontairement partiel plutôt qu'exhaustif : seules
-// les figures pour lesquelles une illustration a été fournie apparaissent ici, le reste continue
-// de s'afficher sans image (symbol-hero "✦" seul), exactement comme avant.
+// fil de plusieurs séries. Volontairement partiel plutôt qu'exhaustif : seules les figures pour
+// lesquelles une illustration a été fournie apparaissent ici, le reste continue de s'afficher
+// sans image (symbol-hero "✦" seul), exactement comme avant.
 const DEITY_PORTRAITS = {
   "hécate": "assets/deity-hecate.jpg",
   "artémis": "assets/deity-artemis.jpg",
@@ -2472,6 +2473,11 @@ const DEITY_PORTRAITS = {
   "héra": "assets/deity-hera.jpg",
   "athéna": "assets/deity-athena.jpg",
   "dionysos": "assets/deity-dionysos.jpg",
+  "thémis": "assets/deity-themis.jpg",
+  "héphaïstos": "assets/deity-hephaistos.jpg",
+  "thalie": "assets/deity-thalie.jpg",
+  "terpsichore": "assets/deity-terpsichore.jpg",
+  "clio": "assets/deity-clio.jpg",
 };
 
 /* ===================== ÉTAT ===================== */
@@ -5221,7 +5227,6 @@ function showDeityDetail(id, backTo = cardDetailReturnTo){
     <div class="symbol-hero">✦</div>
     <h2>${escapeHTML(name)}</h2>
     ${portrait ? `<img class="deity-portrait" src="${portrait}" alt="${escapeHTML(name)}" loading="lazy">` : ""}
-    <p class="symbol-cat-big">Figure mythologique</p>
     <p>${escapeHTML(note)}</p>
     ${lore && lore.length ? (
       (isPremiumEnabled() || isFigureLoreFree(id))
