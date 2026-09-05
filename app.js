@@ -1704,6 +1704,8 @@ const DEITY_NOTES = {
   "érato":"Muse de la poésie lyrique et amoureuse, invoquée par Virgile pour chanter la guerre.",
   "polymnie":"Muse des hymnes sacrés, au domaine élargi avec le temps à la pantomime et à la géométrie.",
   "uranie":"Muse de l'astronomie, homonyme d'une épiclèse d'Aphrodite sans lien de parenté.",
+  "heures":"Trois déesses filles de Zeus et de Thémis, gardiennes de l'ordre saisonnier et moral du monde.",
+  "parques":"Trois déesses du destin qui filent, mesurent et tranchent le fil de chaque existence.",
 };
 
 // Textes mythologiques développés pour les figures listées ci-dessus (voir showDeityDetail() /
@@ -1758,10 +1760,12 @@ const DEITY_LORE = {
     "Dieu de la lumière, de la musique et de la vérité, il conduit le char solaire et rend, depuis son temple de Delphes (voir la fiche « Temple »), des oracles par la voix de la Pythie — sa devise gravée sur le fronton du temple, « Connais-toi toi-même », résume son exigence de clarté.",
     "Chef de chœur des Muses (voir la fiche « Muses »), qu'il conduit sous le nom d'Apollon Musagète, « guide des Muses », il partage avec elles le mont Parnasse et sa source Castalie, non loin de son propre sanctuaire de Delphes.",
     "Plusieurs surnoms rappellent ses différents visages : Pythien, en souvenir du serpent Python vaincu à Delphes ; Phoibos, « le Brillant », pour son éclat solaire ; et Loxias, « l'Ambigu », pour la nature volontairement obscure de ses oracles, qu'il fallait savoir interpréter plutôt que prendre au pied de la lettre. Un autre surnom, Lycien, reste débattu depuis l'Antiquité même : lié au loup, à la lumière ou à la région de Lycie, sans qu'aucune des trois explications ne l'emporte vraiment sur les autres.",
+    "Il connut aussi un amour resté sans retour : vexé d'avoir raillé la petite flèche d'Éros (voir la fiche « Éros »), il fut lui-même frappé d'une flèche d'or qui l'éprit aussitôt de la nymphe Daphné, elle-même atteinte d'une flèche de plomb qui la rendit incapable de l'aimer en retour. Il la poursuivit sans relâche jusqu'aux rives de son père, le dieu-fleuve Pénée, qui la changea en laurier pour la soustraire à ses avances — Apollon en fit dès lors son arbre sacré, et la couronne de laurier devint le symbole même de la victoire qu'il n'avait pas obtenue ce jour-là (voir la fiche « Laurier »).",
   ],
   "thémis": [
     "Titanide antérieure aux dieux de l'Olympe, Thémis personnifie la loi divine et l'ordre juste du monde — non pas la justice humaine, changeante et discutée, mais un principe plus ancien que les dieux eux-mêmes.",
     "Elle rendit elle-même des oracles à Delphes avant qu'Apollon n'y installe son propre sanctuaire, et resta la conseillère de Zeus, assise à ses côtés sur l'Olympe pour veiller à ce qu'aucune décision divine ne s'écarte de l'ordre juste.",
+    "Unie à Zeus, elle mit au monde les Heures (voir la fiche « Heures »), gardiennes de l'ordre saisonnier et moral du monde, et, selon une tradition parallèle à celle qui les dit plutôt filles de la Nuit, les Moires elles-mêmes (voir la fiche « Parques »), qui filent le destin de chaque mortel.",
   ],
   "déméter": [
     "Déesse des moissons, Déméter enseigna aux hommes l'art de l'agriculture — un don qu'elle retira au monde entier de rage et de chagrin lorsque sa fille Perséphone fut enlevée par Hadès (voir la fiche « Enfer / monde souterrain »).",
@@ -1852,12 +1856,13 @@ const DEITY_LORE = {
     "On l'honorait sous plusieurs noms selon la part de sa protection invoquée : Parthénos, « la Vierge », a donné son nom au Parthénon qui la représente sur l'Acropole ; Polias, « gardienne de la cité », désignait son rôle de protectrice d'Athènes elle-même ; et Ergané, « l'Ouvrière », présidait aux travaux des artisans et des tisserandes — un titre qui résonne particulièrement face au destin d'Arachné (voir la fiche « Araignée »).",
   ],
   "aphrodite": [
-    "Déesse de l'amour et de la beauté, Aphrodite naquit, selon le récit le plus ancien, de l'écume de mer formée autour des membres tranchés d'Ouranos — un mythe plus ancien que la naissance de la plupart des autres Olympiens.",
+    "Déesse de l'amour et de la beauté, Aphrodite naquit, selon le récit le plus ancien, de l'écume de mer formée autour des membres tranchés d'Ouranos — un mythe plus ancien que la naissance de la plupart des autres Olympiens. Accueillie sur le rivage de Chypre par les Heures (voir la fiche « Heures »), elle en fut parée avant d'être conduite devant les autres dieux.",
     "Sa beauté suscite jalousies et rivalités jusque parmi les dieux : c'est elle qui remporte le jugement de Pâris en lui promettant l'amour de la plus belle femme du monde, Hélène — une promesse qui déclenchera la guerre de Troie.",
     "Mariée par Zeus à Héphaïstos, le forgeron boiteux de l'Olympe, elle ne l'aima jamais vraiment : son cœur allait à Arès, dieu de la guerre (voir la fiche « Arès »). Hélios, qui voit tout depuis son char (voir la fiche « Hélios »), surprit leur liaison et la révéla à Héphaïstos, qui tendit à sa femme et son amant un filet d'or invisible et incassable, les piégeant nus devant tous les dieux assemblés, plus amusés que scandalisés. De cette union naquirent Harmonie (voir la fiche « Harmonie ») et, selon les récits les plus tardifs, Éros lui-même (voir la fiche « Éros »).",
     "Elle aima aussi le jeune Adonis, né d'un arbre à myrrhe après une naissance elle-même née d'une faute funeste. Confié encore enfant à Perséphone pour être élevé en secret, il grandit si beau que les deux déesses se le disputèrent, jusqu'à ce que Zeus tranche : Adonis partagerait son temps entre l'une et l'autre. Il choisit de passer le plus clair de ses jours auprès d'Aphrodite — jusqu'à ce qu'un sanglier, lancé sur ses traces par la jalousie d'Arès selon certains récits, le blesse mortellement à la chasse. Accourue trop tard, Aphrodite se blessa elle-même à une épine en se précipitant vers lui ; là où leurs sangs mêlés touchèrent la terre, des anémones rouges jaillirent aussitôt.",
     "Deux liaisons plus brèves lui donnèrent chacune un enfant au destin singulier : unie à Hermès (voir la fiche « Hermès »), elle enfanta Hermaphrodite, promis à une tout autre métamorphose que la sienne (voir la fiche « Hermaphrodite ») ; unie à Dionysos (voir la fiche « Dionysos »), lors d'une réconciliation passagère après cette même passion pour Adonis, elle enfanta Priape, que la jalousie d'Héra frappa dès sa naissance d'une laideur difforme (voir la fiche « Priape »).",
     "Éprise plus tard du prince troyen Anchise, elle se présenta à lui déguisée en simple mortelle et lui interdit, sous peine de la foudre de Zeus, de jamais révéler qui l'avait aimé. De leur union naquit Énée (voir la fiche « Énée ») — mais Anchise, un jour ivre, se vanta malgré tout de sa conquête divine, et la foudre promise s'abattit sur lui, l'estropiant pour le reste de sa vie.",
+    "Devenue mère, elle ne cessa jamais de veiller sur Énée, jusque sur le champ de bataille de Troie : le voyant blessé par le héros grec Diomède, elle se précipita pour le soustraire aux coups en l'enveloppant de son propre voile. Diomède, encouragé par Athéna à ne pas craindre une déesse étrangère à la guerre, la blessa elle-même au poignet de sa lance, faisant jaillir l'ichor, le sang immortel des dieux, plutôt que du sang mortel. Blessée et en larmes, Aphrodite dut lâcher son fils — recueilli par Apollon, qui l'enveloppa d'un nuage et créa un fantôme à son image pour tromper les Grecs (voir la fiche « Apollon ») — et s'enfuit se réfugier sur l'Olympe auprès de sa mère Dioné, sous les moqueries d'Héra et d'Athéna : la guerre, lui rappela alors doucement Zeus, n'était pas son domaine.",
     "Deux épithètes résument à elles seules la tension entre ses visages : Ourania, « la Céleste », désignait selon Platon un amour plus spirituel, né d'Ouranos sans mère et honoré sans vin dans ses libations ; Pandémos, « de tout le peuple », son exact opposé, l'amour commun et partagé — un contraste que Platon développe dans son Banquet. Une autre facette, plus inattendue, l'associait directement à son amant : à Sparte, on la représentait en armes sous le nom d'Aphrodite Areia, « la Guerrière », semblable en tout point à Arès lui-même (voir la fiche « Arès »).",
     "Dans le Tarot, Aphrodite est la Reine de Coupes, où l'amour se vit avec réceptivité plutôt qu'avec conquête : ses trois amours racontent pourtant trois visages bien différents de ce même domaine — le mariage de devoir avec Héphaïstos, la passion assumée avec Arès jusqu'au scandale, et l'amour tendre ou tragique avec Adonis et Anchise, où le désir se paie toujours d'un prix, qu'il s'agisse d'une fleur née du sang ou d'un secret trahi.",
   ],
@@ -1899,7 +1904,7 @@ const DEITY_LORE = {
     "Dans le Tarot, Himeros est le Valet de Coupes, celui qui contemple sa coupe avec un étonnement encore neuf : ce même émoi qui saisit avant qu'on ait pu le nommer, sincère mais trop récent pour se savoir encore où il mène.",
   ],
   "énée": [
-    "Fils d'Aphrodite et du mortel Anchise (voir la fiche « Aphrodite »), Énée combattit du côté troyen pendant la guerre de Troie, protégé à plusieurs reprises par sa mère au cœur des combats.",
+    "Fils d'Aphrodite et du mortel Anchise, Énée combattit du côté troyen pendant la guerre de Troie, protégé à plusieurs reprises par sa mère au cœur des combats — jusqu'à ce qu'elle soit elle-même blessée par le héros grec Diomède en tentant de le soustraire aux coups (voir la fiche « Aphrodite »).",
     "À la chute de Troie, il porta sur son dos son père âgé et mena son fils par la main hors de la ville en flammes, fidèle jusque dans la ruine de sa cité — un périple qui, selon la légende romaine, le mènera à fonder la lignée dont naîtra Rome.",
     "Après des années d'errance en mer, sa flotte échoue à Carthage, où règne la reine Didon (voir la fiche « Didon »). Elle s'éprend de lui — un amour qu'Aphrodite favorise elle-même en secret, en envoyant son fils Éros attiser leur passion (voir la fiche « Éros ») — et Énée s'attarde à ses côtés, prêt à oublier sa mission pour y rester. Zeus, inquiet de le voir s'égarer de son destin, envoie Hermès (voir la fiche « Hermès ») lui rappeler qu'il ne lui appartient pas de choisir : il doit repartir fonder en Italie la lignée d'où naîtra Rome. Énée s'exécute et quitte Carthage sans un dernier adieu ; Didon, désespérée, se donne la mort sur un bûcher, non sans avoir maudit sa descendance — une malédiction que la tradition romaine lira plus tard comme l'origine mythique des guerres puniques entre Rome et Carthage.",
     "Dans le Tarot, Énée est le Cavalier de Coupes, celui qui avance porté par le cœur plus que par la stratégie — mais son passage à Carthage montre la limite de cette carte : l'amour vécu avec Didon était sincère, et pourtant il n'était pas son chemin. La vraie fidélité de ce Cavalier n'est donc pas seulement celle qu'il porte à qui il aime, mais celle qu'il garde envers ce qu'il doit accomplir, même au prix d'un cœur brisé derrière lui.",
@@ -1951,7 +1956,7 @@ const DEITY_LORE = {
   ],
   "charites": [
     "Trois déesses de la grâce et de la joie — le plus souvent nommées Aglaé (voir la fiche « Aglaé »), Euphrosyne et Thalie —, les Charites ne sont jamais représentées seules : elles dansent toujours ensemble, indissociables les unes des autres.",
-    "Compagnes d'Aphrodite et des Muses, elles président à tout ce qui rend la vie belle sans nécessité — la beauté, la fête, la reconnaissance — plutôt qu'à ce qui est simplement utile.",
+    "Compagnes d'Aphrodite et des Muses, elles président à tout ce qui rend la vie belle sans nécessité — la beauté, la fête, la reconnaissance — plutôt qu'à ce qui est simplement utile. Les Heures (voir la fiche « Heures ») se joignent souvent à elles dans les cortèges divins, deux groupes de déesses toujours dansantes qu'on associe volontiers l'un à l'autre.",
   ],
   "narcisse": [
     "Jeune homme d'une beauté remarquable, Narcisse repoussait sans exception tous ceux qui l'aimaient, dont la nymphe Écho (voir la fiche « Écho »), inconsolable de son rejet.",
@@ -2113,7 +2118,7 @@ const DEITY_LORE = {
   "ananké": [
     "Ananké personnifie la Nécessité — non pas un simple besoin, mais la contrainte absolue à laquelle rien, pas même les dieux, ne peut se soustraire.",
     "Les récits orphiques la font naître aux tout premiers instants du monde, enlacée à Chronos, le temps primordial, autour de l'œuf cosmique dont naîtra l'univers entier : ensemble, ils mettent la création en mouvement selon un ordre qu'aucune volonté ne peut ensuite défaire.",
-    "De cette union naissent, selon certains récits, les Moires elles-mêmes, filant le fil de chaque destinée sur le fuseau que Platon décrit tournant sur les genoux d'Ananké — l'axe même autour duquel tourne le monde. Zeus lui-même, dit-on, s'incline devant ses décrets : la nécessité gouverne jusqu'au roi des dieux.",
+    "De cette union naissent, selon certains récits, les Moires elles-mêmes (voir la fiche « Parques »), filant le fil de chaque destinée sur le fuseau que Platon décrit tournant sur les genoux d'Ananké — l'axe même autour duquel tourne le monde. Zeus lui-même, dit-on, s'incline devant ses décrets : la nécessité gouverne jusqu'au roi des dieux.",
     "Dans le Tarot, Ananké est la figure du 2 d'Épées, où une silhouette aux yeux bandés retient deux épées croisées, refusant encore de trancher : cet équilibre suspendu ne dure jamais éternellement, chez elle moins que quiconque — la nécessité finit toujours par imposer un choix, qu'on y consente ou non.",
   ],
   "éris": [
@@ -2455,6 +2460,16 @@ const DEITY_LORE = {
     "Uranie préside à l'astronomie — son nom signifie « la céleste », le même que celui d'une épiclèse d'Aphrodite elle-même, sans aucun lien de parenté entre les deux. On la représente un globe céleste et un compas à la main, le regard tourné vers les étoiles plutôt que vers la terre.",
     "Elle appartient aux neuf Muses (voir la fiche « Muses »).",
   ],
+  "heures": [
+    "Filles de Zeus et de Thémis (voir la fiche « Thémis »), les Heures — Eunomia, l'Ordre légitime, Dikè, la Justice, et Eiréné, la Paix — veillent selon Hésiode sur les travaux des mortels, garantes d'un monde où chaque chose se déroule à sa juste place et en son temps.",
+    "Chez Homère, elles tiennent un rôle plus concret encore : gardiennes des portes de l'Olympe, elles écartent ou referment le lourd nuage qui en tient lieu, laissant passer les dieux ou leur en interdisant l'accès selon ce que l'ordre du monde exige.",
+    "Une tradition plus tardive élargit leur nombre et leur rôle : associées aux saisons elles-mêmes, on les voit aussi parer Aphrodite (voir la fiche « Aphrodite ») à sa sortie des flots, ou accompagner les Charites (voir la fiche « Charites ») dans les cortèges divins — des figures discrètes, mais sans lesquelles rien, dans le monde comme sur l'Olympe, ne se déroulerait en son temps.",
+  ],
+  "parques": [
+    "Les Moires — en français plus couramment les Parques, du nom latin qui leur est resté — sont trois : Clotho, qui file le fil de chaque existence sur son fuseau ; Lachésis, qui en mesure la longueur et fixe la part de destin échue à chacun ; et Atropos, « celle qu'on ne peut détourner », qui tranche ce même fil au moment de la mort.",
+    "Hésiode lui-même les fait naître deux fois dans sa Théogonie, sans jamais harmoniser les deux versions : la plus ancienne les dit filles de la Nuit seule, nées aux côtés de la Mort et du Sommeil ; un passage plus tardif du même poème en fait plutôt les filles de Zeus et de Thémis (voir la fiche « Thémis »), sœurs des Heures (voir la fiche « Heures »).",
+    "Une tradition orphique en fait plutôt les filles d'Ananké, la Nécessité elle-même (voir la fiche « Ananké ») — Platon décrit leur fuseau tournant sur les genoux de leur mère, axe autour duquel le monde entier accomplit sa course. Même Zeus s'incline devant leurs décrets dans la tradition la plus ancienne ; une épiclèse plus tardive, Zeus Moiragète, « guide des Moires », suggère pourtant une relation plus nuancée qu'une simple soumission.",
+  ],
 };
 
 // Portraits illustrés pour certaines figures (voir showDeityDetail()) : affichés juste sous le
@@ -2494,6 +2509,8 @@ const DEITY_PORTRAITS = {
   "ariane": "assets/deity-dionysos-ariane.jpg",
   "harmonie": "assets/deity-harmonie-cadmos.jpg",
   "cadmos": "assets/deity-harmonie-cadmos.jpg",
+  "heures": "assets/deity-heures.jpg",
+  "parques": "assets/deity-parques.jpg",
 };
 
 // Portraits insérés à l'intérieur même du mythe, juste au-dessus du paragraphe qui mentionne la
@@ -2505,6 +2522,12 @@ const DEITY_PORTRAITS = {
 const DEITY_INLINE_PORTRAITS = {
   "dionysos": [
     { match: "Ariane", src: "assets/deity-dionysos-ariane.jpg", alt: "Dionysos et Ariane" },
+  ],
+  "apollon": [
+    { match: "Daphné", src: "assets/deity-apollon-daphne.jpg", alt: "Apollon et Daphné" },
+  ],
+  "aphrodite": [
+    { match: "Diomède", src: "assets/deity-aphrodite-enee.jpg", alt: "Aphrodite qui sauve Énée" },
   ],
 };
 
