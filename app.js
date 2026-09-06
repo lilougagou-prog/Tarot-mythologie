@@ -1619,6 +1619,7 @@ const DEITY_NOTES = {
   "endymion":"Berger plongé par Séléné dans un sommeil éternel pour rester à jamais jeune.",
   "charon":"Passeur des Enfers, il conduit les âmes à travers le Styx vers l'autre monde.",
   "ulysse":"Héros rusé de l'Odyssée, inventeur du stratagème du cheval de Troie.",
+  "pénélope":"Épouse fidèle d'Ulysse, qui tint vingt ans les prétendants à distance en défaisant chaque nuit le linceul qu'elle tissait le jour.",
   "andromède":"Princesse enchaînée à un rocher en offrande à un monstre marin, sauvée par Persée.",
   "hécube":"Reine de Troie, épouse de Priam et mère d'un très grand nombre de leurs enfants, dont Hector et Pâris.",
   "priam":"Dernier roi de Troie, père d'Hector, Pâris et Cassandre, tué par Néoptolème à la chute de la ville.",
@@ -2133,7 +2134,13 @@ const DEITY_LORE = {
   "ulysse": [
     "Roi d'Ithaque réputé pour sa ruse plus que pour sa force — une ruse qu'on dit héritée de son grand-père maternel Autolycos, fils d'Hermès et voleur incomparable (voir la fiche « Hermès ») —, Ulysse conçut le stratagème du cheval de bois qui permit enfin aux Grecs de s'emparer de Troie après dix années de siège infructueux.",
     "Son retour chez lui prit dix années supplémentaires, semées d'épreuves — le Cyclope Polyphème, les sirènes, Circé, Charybde et Scylla — durant lesquelles son intelligence lui permit chaque fois d'échapper à des périls que la seule force n'aurait pas surmontés.",
-    "Dans le Tarot, Ulysse est la figure du 8 de Coupes, où un personnage s'éloigne de nuit, laissant des coupes soigneusement empilées derrière lui : après une année entière passée sur l'île de Circé (voir la fiche « Circé »), c'est bien lui qui choisit de reprendre la mer vers Ithaque plutôt que de s'installer dans un confort déjà acquis.",
+    "Dans le Tarot, Ulysse est la figure du 8 de Coupes, où un personnage s'éloigne de nuit, laissant des coupes soigneusement empilées derrière lui : après une année entière passée sur l'île de Circé (voir la fiche « Circé »), c'est bien lui qui choisit de reprendre la mer vers Ithaque, vers son épouse Pénélope (voir la fiche « Pénélope »), plutôt que de s'installer dans un confort déjà acquis.",
+  ],
+  "pénélope": [
+    "Fille du roi Icarios et cousine d'Hélène et de Clytemnestre (voir les fiches « Hélène » et « Clytemnestre »), Pénélope épousa Ulysse (voir la fiche « Ulysse »), roi d'Ithaque, peu avant que celui-ci ne parte combattre à Troie — laissant derrière lui une épouse enceinte de leur fils Télémaque et un royaume qu'elle dut gouverner seule pendant vingt années.",
+    "Durant l'absence prolongée de son mari, présumé mort par beaucoup, une foule de prétendants envahit le palais d'Ithaque pour la contraindre à un nouveau mariage. Pénélope les tint à distance par la ruse : elle promit de choisir un époux dès qu'elle aurait terminé de tisser le linceul funéraire de son beau-père Laërte, mais défaisait chaque nuit, en secret, l'ouvrage du jour — un stratagème qui dura trois ans, jusqu'à ce qu'une servante infidèle la trahisse.",
+    "À son retour, Ulysse, déguisé en mendiant pour ne pas être reconnu, retrouva son palais livré aux prétendants ; Pénélope organisa alors l'épreuve de l'arc (voir la fiche « Arc ») — nul ne pouvant prétendre à sa main sans réussir à le bander et à tirer une flèche à travers douze anneaux alignés —, épreuve qu'aucun des prétendants ne put surmonter, et que le mendiant inconnu accomplit sans effort avant de révéler sa véritable identité et de massacrer les prétendants avec l'aide de son fils.",
+    "Même alors, Pénélope hésita à reconnaître son époux après vingt ans d'absence, et le mit à l'épreuve : elle ordonna qu'on déplace leur lit nuptial, construit autour du tronc d'un olivier vivant et donc impossible à déplacer sans le briser — un secret que seuls eux deux connaissaient. La réaction indignée d'Ulysse, découvrant le piège, lui apporta la preuve qu'elle cherchait, et les deux époux furent enfin réunis.",
   ],
   "andromède": [
     "Princesse éthiopienne, Andromède fut enchaînée à un rocher au bord de la mer en offrande expiatoire à un monstre marin, envoyé par Poséidon pour punir sa mère Cassiopée de s'être vantée d'une beauté supérieure à celle des Néréides (voir la fiche « Cassiopée »).",
@@ -3231,6 +3238,7 @@ const DEITY_PORTRAITS = {
   "hermione": "assets/deity-hermione.jpg",
   "castor": "assets/deity-castor-pollux.jpg",
   "pollux": "assets/deity-castor-pollux.jpg",
+  "pénélope": "assets/deity-penelope.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
