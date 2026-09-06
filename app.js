@@ -3170,6 +3170,11 @@ const DEITY_PORTRAITS = {
   // constellation à venir), format large plutôt que le recadrage 4:5 habituel — voir
   // DEITY_PORTRAIT_WIDE ci-dessous.
   "orion": "assets/deity-orion-mort.jpg",
+  // Admète et Alceste : deux images distinctes plutôt qu'un seul portrait de couple partagé —
+  // le char attelé (l'épreuve d'Admète, Apollon en retrait) devient celui d'Admète, les noces
+  // qui suivent celui d'Alceste.
+  "admète": "assets/deity-admete-char.jpg",
+  "alceste": "assets/deity-alceste-admete-noces.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
