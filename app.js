@@ -3184,6 +3184,10 @@ const DEITY_PORTRAITS = {
   "hippolyté": "assets/deity-hippolyte-amazone.jpg",
   "myrina": "assets/deity-myrina.jpg",
   "otrera": "assets/deity-otrera.jpg",
+  "antiope": "assets/deity-antiope.jpg",
+  // Les Amazones : portrait de groupe (cinq d'entre elles) — format large plutôt que le
+  // recadrage 4:5 habituel, voir DEITY_PORTRAIT_WIDE.
+  "amazones": "assets/deity-amazones.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
@@ -3195,7 +3199,7 @@ const DEITY_PORTRAITS = {
 // étaient donc restées, par oubli, recadrées en 4:5 comme un portrait individuel — coupant les
 // deux figures latérales de chaque triade. Ajoutées ici au même titre que les Muses, Pâris et
 // Orion.
-const DEITY_PORTRAIT_WIDE = new Set(["muses", "pâris", "orion", "heures", "parques", "hersé"]);
+const DEITY_PORTRAIT_WIDE = new Set(["muses", "pâris", "orion", "heures", "parques", "hersé", "amazones"]);
 
 // Portraits insérés à l'intérieur même du mythe, juste au-dessus du paragraphe qui mentionne la
 // figure représentée dessus — contrairement à DEITY_PORTRAITS ci-dessus, affiché une seule fois
