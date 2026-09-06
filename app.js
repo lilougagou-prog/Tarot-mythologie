@@ -2632,6 +2632,7 @@ const DEITY_LORE = {
   ],
   "médée": [
     "Petite-fille d'Hélios (voir la fiche « Hélios ») et nièce de la magicienne Circé (voir la fiche « Circé »), Médée maîtrisait déjà les herbes et les sortilèges lorsque Jason arriva en Colchide à la recherche de la Toison d'or.",
+    "Selon L'Argonautique d'Apollonios de Rhodes, cet amour ne naquit pas seul : inquiètes du sort de Jason, Héra et Athéna (voir les fiches « Héra » et « Athéna ») demandèrent secours à Aphrodite (voir la fiche « Aphrodite »), qui chargea son fils Éros (voir la fiche « Éros ») de décocher une flèche d'or dans le cœur de Médée dès qu'elle poserait les yeux sur Jason — un trait si soudain qu'elle en resta sans voix, foudroyée d'un amour qu'elle n'avait jamais cherché.",
     "Éprise de lui, elle trahit son propre père le roi Aiétès pour l'aider à accomplir les épreuves jugées impossibles qu'il lui avait fixées, puis découpa même son frère Absyrtos en morceaux jetés à la mer pour retarder leurs poursuivants, le temps que Jason s'échappe avec la Toison (voir la fiche « Jason »).",
     "Des années plus tard, installés à Corinthe et parents de deux fils, Jason l'abandonna pour épouser la fille du roi Créon. Médée se vengea en offrant à sa rivale une robe empoisonnée qui la consuma vivante, puis, selon la version la plus sombre du mythe — celle d'Euripide —, tua ses propres enfants pour priver Jason de toute descendance.",
     "Elle s'échappa de Corinthe sur un char ailé tiré par des dragons, prêté par son grand-père Hélios (voir la fiche « Hélios ») — le même astre qui, chaque jour, traverse le ciel sans jamais se soucier de ce qui se passe en dessous.",
@@ -3136,12 +3137,25 @@ const DEITY_PORTRAITS = {
   "médée": "assets/deity-medee.jpg",
   "circé": "assets/deity-circe.jpg",
   "amphitrite": "assets/deity-amphitrite.jpg",
+  // Le jugement de Pâris : portrait de groupe (les quatre protagonistes), format large plutôt
+  // que le recadrage 4:5 habituel, même traitement que les Muses plus haut — voir
+  // DEITY_PORTRAIT_WIDE ci-dessous.
+  "pâris": "assets/deity-jugement-paris.jpg",
+  // Séléné et Endymion : même portrait de couple partagé entre les deux fiches, comme pour
+  // Éros/Psyché, Harmonie/Cadmos et Pyrame/Thisbé plus haut.
+  "séléné": "assets/deity-selene-endymion.jpg",
+  "endymion": "assets/deity-selene-endymion.jpg",
+  "atalante": "assets/deity-atalante-pomme.jpg",
+  // Jason : même image que le portrait en ligne ajouté sur la fiche de Médée juste en dessous
+  // (la scène où Éros la frappe de sa flèche), réutilisée ici comme portrait principal — il
+  // n'en avait aucun jusqu'ici.
+  "jason": "assets/deity-jason-medee.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
 // afficher tels quels (.deity-portrait-wide, styles.css) plutôt que de forcer un recadrage
 // serré qui sacrifierait certaines des figures représentées sur les bords de l'image.
-const DEITY_PORTRAIT_WIDE = new Set(["muses"]);
+const DEITY_PORTRAIT_WIDE = new Set(["muses", "pâris"]);
 
 // Portraits insérés à l'intérieur même du mythe, juste au-dessus du paragraphe qui mentionne la
 // figure représentée dessus — contrairement à DEITY_PORTRAITS ci-dessus, affiché une seule fois
@@ -3158,8 +3172,12 @@ const DEITY_INLINE_PORTRAITS = {
     { match: "Daphné", src: "assets/deity-apollon-daphne.jpg", alt: "Apollon et Daphné" },
   ],
   "aphrodite": [
+    { match: "remporte le jugement de Pâris", src: "assets/deity-jugement-paris.jpg", alt: "Le jugement de Pâris" },
     { match: "dieu de la guerre", src: "assets/deity-ares-aphrodite.jpg", alt: "Arès et Aphrodite" },
     { match: "Diomède", src: "assets/deity-aphrodite-enee.jpg", alt: "Aphrodite qui sauve Énée" },
+  ],
+  "artémis": [
+    { match: "une meute de chiennes", src: "assets/deity-artemis-suite.jpg", alt: "Artémis et sa suite" },
   ],
   "énée": [
     { match: "porta sur son dos son père âgé", src: "assets/deity-enee-fuite-troie.jpg", alt: "Énée fuyant Troie avec son père et son fils" },
@@ -3181,6 +3199,9 @@ const DEITY_INLINE_PORTRAITS = {
   ],
   "thétis": [
     { match: "Leurs noces", src: "assets/deity-thetis-noces.jpg", alt: "Les noces de Thétis et Pélée" },
+  ],
+  "médée": [
+    { match: "décocher une flèche d'or dans le cœur de Médée", src: "assets/deity-jason-medee.jpg", alt: "Jason et Médée, sous la flèche d'Éros" },
   ],
   "éris": [
     { match: "jeta parmi les déesses assemblées une pomme d'or", src: "assets/deity-eris-pomme.jpg", alt: "Éris jette la pomme d'or aux noces de Thétis" },
