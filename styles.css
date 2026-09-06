@@ -248,6 +248,12 @@ main{max-width:900px;margin:auto;padding:22px 18px}
    .deity-portrait mais réduit, pour ne pas prendre toute la largeur au milieu du texte. */
 .deity-portrait-inline{display:block;max-width:150px;width:55%;margin:16px auto 8px;border-radius:14px;
   border:2px solid rgba(201,163,90,.65);box-shadow:var(--shadow);object-fit:cover;aspect-ratio:4/5}
+/* Même principe que .deity-portrait-wide, mais pour un portrait en ligne : retour direct
+   d'utilisatrice ("le jugement de Paris c'est coupé") — une scène de groupe réutilisée en
+   portrait en ligne (ex. le jugement de Pâris sur la fiche d'Aphrodite) perdait ses figures
+   latérales au même recadrage 4:5 forcé que le format inline habituel, sans qu'aucune
+   variante large n'existe pour ce cas jusqu'ici. */
+.deity-portrait-inline-wide{max-width:260px;width:80%;aspect-ratio:auto}
 .detail p{line-height:1.75}
 .lore-text{font-size:16px}
 .symbol-list{display:grid;gap:10px;margin-top:10px}
