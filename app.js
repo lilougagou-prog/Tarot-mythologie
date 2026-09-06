@@ -3179,6 +3179,8 @@ const DEITY_PORTRAITS = {
   // le recadrage 4:5 habituel, voir DEITY_PORTRAIT_WIDE, pour ne perdre aucune des quatre
   // figures sur les bords.
   "hersé": "assets/deity-herse-panathenees.jpg",
+  "pandrosos": "assets/deity-pandrosos.jpg",
+  "aglauros": "assets/deity-aglauros.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
@@ -3243,6 +3245,24 @@ const DEITY_INLINE_PORTRAITS = {
   ],
   "héphaïstos": [
     { match: "un bijou si redouté qu'Héra elle-même", src: "assets/deity-hephaistos-ceinture.jpg", alt: "Héphaïstos forgeant la ceinture magique d'Aphrodite" },
+  ],
+  // Le coffre d'Érichthonios : une même image (les trois sœurs découvrant l'enfant, format
+  // large pour ne perdre aucune des trois) réutilisée sur les 4 fiches qui racontent cette
+  // scène chacune à sa façon, comme pour Persée/Andromède plus haut.
+  "pandrosos": [
+    { match: "confia le coffre", src: "assets/deity-coffre-athena.jpg", alt: "Pandrosos reçoit le coffre d'Athéna" },
+    { match: "cédèrent à la curiosité", src: "assets/deity-coffre-ouvert.jpg", alt: "Aglauros et Hersé ouvrent le coffre, Pandrosos découvre", wide: true },
+  ],
+  "aglauros": [
+    { match: "céda à la curiosité et ouvrit le coffre", src: "assets/deity-coffre-ouvert.jpg", alt: "Aglauros et Hersé ouvrent le coffre, Pandrosos découvre", wide: true },
+    { match: "lui barra d'abord le passage", src: "assets/deity-aglauros-hermes.jpg", alt: "Aglauros bloque l'accès à Hermès" },
+  ],
+  "érichthonios": [
+    { match: "désobéirent et découvrirent l'enfant", src: "assets/deity-coffre-ouvert.jpg", alt: "Aglauros et Hersé ouvrent le coffre, Pandrosos découvre", wide: true },
+  ],
+  "hersé": [
+    { match: "céda à la curiosité et l'ouvrit", src: "assets/deity-coffre-ouvert.jpg", alt: "Aglauros et Hersé ouvrent le coffre, Pandrosos découvre", wide: true },
+    { match: "gardée par Aglauros", src: "assets/deity-aglauros-hermes.jpg", alt: "Aglauros bloque l'accès à Hermès" },
   ],
   "éris": [
     { match: "jeta parmi les déesses assemblées une pomme d'or", src: "assets/deity-eris-pomme.jpg", alt: "Éris jette la pomme d'or aux noces de Thétis" },
