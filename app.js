@@ -2009,6 +2009,7 @@ const DEITY_LORE = {
   "héphaïstos": [
     "Fils d'Héra, Héphaïstos naquit si chétif ou si laid, selon les versions, que sa mère le rejeta du haut de l'Olympe — une chute qui le laissa boiteux pour le restant de son existence.",
     "Devenu le forgeron des dieux malgré ce rejet initial, il créa les armes et merveilles les plus admirées de l'Olympe, du bouclier d'Achille aux flèches d'Éros, prouvant par son art ce que sa naissance semblait lui interdire.",
+    "Parmi ses créations les plus prisées, il façonna pour sa propre épouse Aphrodite (voir la fiche « Aphrodite ») une ceinture magique capable de rendre irrésistible quiconque la porte — un bijou si redouté qu'Héra elle-même (voir la fiche « Héra ») l'emprunta un jour en secret pour mieux détourner l'attention de Zeus, le temps que Poséidon vienne en aide aux Grecs sur le champ de bataille de Troie.",
     "Épris d'Athéna (voir la fiche « Athéna »), qui refusait pourtant tout mariage, il tenta un jour de s'unir à elle de force. Elle se déroba, et sa semence tomba sur la terre lorsqu'elle l'essuya avec un morceau de laine — de ce contact naquit Érichthonios, mi-enfant mi-serpent, que Gaïa, mère de toutes choses, remit alors à Athéna elle-même pour qu'elle l'élève. N'étant fils d'Athéna que par cette adoption, Érichthonios grandit sous sa seule protection avant de devenir, une fois adulte, l'un des premiers rois légendaires d'Athènes (voir la fiche « Érichthonios »).",
     "Homère le désigne souvent par l'épithète purement descriptive d'Amphigyeis, « boiteux des deux jambes » — un surnom qui rappelle son infirmité plutôt qu'un véritable titre de culte. Un lien plus incertain le rattache aux Cabires, ces divinités mineures d'un culte à mystères sur l'île de Lemnos et à Samothrace, parfois présentées comme ses propres fils — une parenté que les sources anciennes n'établissent jamais aussi clairement qu'on pourrait le croire.",
     "Dans le Tarot, Héphaïstos est le Roi de Bâtons, l'autorité qui se forge plutôt qu'elle ne se reçoit : rejeté par sa mère, repoussé par Athéna elle-même, il n'obtient jamais rien par simple droit de naissance — pas même une descendance, puisque Érichthonios naît de son désir déçu et grandit dans les mains d'une autre. Ce qu'il crée, en revanche, arme, palais ou enfant né malgré lui de la terre, reste par la force ce qu'il a lui-même façonné jusqu'au bout.",
@@ -3162,12 +3163,18 @@ const DEITY_PORTRAITS = {
   "iris": "assets/deity-iris.jpg",
   "léda": "assets/deity-leda.jpg",
   "io": "assets/deity-io.jpg",
+  "adonis": "assets/deity-adonis.jpg",
+  "sémélé": "assets/deity-semele.jpg",
+  // Orion : portrait de groupe (le géant fuyant, Artémis et Apollon, le scorpion et la
+  // constellation à venir), format large plutôt que le recadrage 4:5 habituel — voir
+  // DEITY_PORTRAIT_WIDE ci-dessous.
+  "orion": "assets/deity-orion-mort.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
 // afficher tels quels (.deity-portrait-wide, styles.css) plutôt que de forcer un recadrage
 // serré qui sacrifierait certaines des figures représentées sur les bords de l'image.
-const DEITY_PORTRAIT_WIDE = new Set(["muses", "pâris"]);
+const DEITY_PORTRAIT_WIDE = new Set(["muses", "pâris", "orion"]);
 
 // Portraits insérés à l'intérieur même du mythe, juste au-dessus du paragraphe qui mentionne la
 // figure représentée dessus — contrairement à DEITY_PORTRAITS ci-dessus, affiché une seule fois
@@ -3214,6 +3221,12 @@ const DEITY_INLINE_PORTRAITS = {
   ],
   "médée": [
     { match: "décocher une flèche d'or dans le cœur de Médée", src: "assets/deity-jason-medee.jpg", alt: "Jason et Médée, sous la flèche d'Éros" },
+  ],
+  "orion": [
+    { match: "l'emporta à Délos", src: "assets/deity-eos-orion.jpg", alt: "Éos et Orion" },
+  ],
+  "héphaïstos": [
+    { match: "un bijou si redouté qu'Héra elle-même", src: "assets/deity-hephaistos-ceinture.jpg", alt: "Héphaïstos forgeant la ceinture magique d'Aphrodite" },
   ],
   "éris": [
     { match: "jeta parmi les déesses assemblées une pomme d'or", src: "assets/deity-eris-pomme.jpg", alt: "Éris jette la pomme d'or aux noces de Thétis" },
