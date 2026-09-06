@@ -1773,7 +1773,7 @@ const DEITY_NOTES = {
   "cyllaros":"Centaure d'une grande beauté, tué aux côtés de son épouse Hylonome durant la Centauromachie.",
   "hylonome":"Centauresse éprise de Cyllaros, morte à ses côtés durant la Centauromachie.",
   "hyperboréens":"Peuple légendaire vivant au-delà du vent du Nord, dans un pays sans hiver cher à Apollon.",
-  "abaris":"Prêtre hyperboréen d'Apollon, capable de voyager à travers les airs sur une flèche d'or.",
+  "abaris":"Prêtre hyperboréen d'Apollon, capable de voyager à travers les airs sur une flèche d'or devenue, dit-on, celle du Sagittaire.",
   "hypsipyle":"Reine de Lemnos qui accueillit les Argonautes, eut des jumeaux avec Jason.",
   "œdipe":"Roi de Thèbes qui tua son père et épousa sa mère sans le savoir, accomplissant malgré lui une prophétie.",
   "jocaste":"Reine de Thèbes, mère et épouse d'Œdipe sans le savoir, elle se donna la mort en découvrant la vérité.",
@@ -2799,6 +2799,7 @@ const DEITY_LORE = {
     "Fils du dieu Pan et d'Euphémé, nourrice des Muses (voir la fiche « Pan »), Crotos grandit sur le mont Hélicon aux côtés des Muses elles-mêmes, qu'allaitait sa propre mère, partageant leur goût pour la musique et la poésie sans jamais en être un lui-même (voir la fiche « Muses »).",
     "Chasseur passionné vivant dans les montagnes parmi les satyres, il inventa, dit-on, l'art de l'applaudissement et des acclamations rythmées pour saluer les Muses après leurs concerts — un tel enthousiasme qu'elles obtinrent de Zeus qu'il soit changé en constellation en récompense.",
     "Il devint ainsi le Sagittaire, l'archer que l'on voit encore aujourd'hui dans le ciel nocturne, parfois figuré mi-homme mi-cheval en écho à sa vie sauvage parmi les bêtes des montagnes — sans qu'aucun lien antique ne le rattache pour autant au centaure Chiron (voir la fiche « Chiron »), malgré une ressemblance qui prête souvent à confusion.",
+    "Selon cette même tradition tardive, la flèche que porte encore l'archer serait celle-là même qu'Apollon offrit un jour au prêtre hyperboréen Abaris (voir la fiche « Abaris »), capable de voyager à travers les airs à son bord — remontée au ciel avec Crotos une fois le voyage d'Abaris achevé.",
   ],
   "deucalion": [
     "Fils du Titan Prométhée (voir la fiche « Prométhée »), Deucalion régnait sur Phthie lorsque Zeus, excédé par la cruauté et l'impiété grandissante des hommes, décida de noyer l'humanité entière sous un déluge universel.",
@@ -2975,6 +2976,7 @@ const DEITY_LORE = {
     "Prêtre et devin originaire du pays des Hyperboréens (voir la fiche « Hyperboréens »), consacré au culte d'Apollon (voir la fiche « Apollon »), Abaris reçut du dieu lui-même une flèche d'or sur laquelle il pouvait voyager à travers les airs, traversant fleuves, montagnes et mers sans jamais avoir besoin de nourriture ni de repos.",
     "Parcourant ainsi le monde grec, il prédisait les famines, apaisait les épidémies par des rites purificateurs et prophétisait sans jamais accepter la moindre offrande en retour — une intégrité qui frappa jusqu'à Pythagore, dit-on rencontré en personne lors de l'un de ses passages.",
     "Sa seule flèche reste l'attribut par lequel on le reconnaît dans l'art antique : un simple prêtre errant, mais si proche d'Apollon qu'il en partage presque le pouvoir de se déplacer à volonté, sans jamais quitter tout à fait sa condition mortelle.",
+    "Selon une tradition plus tardive, cette flèche d'or rejoignit elle aussi le ciel une fois le voyage d'Abaris achevé : elle serait devenue celle que tient encore aujourd'hui l'archer du Sagittaire, Crotos (voir la fiche « Crotos »), ultime hommage d'Apollon à la fidélité de son prêtre.",
   ],
   "hypsipyle": [
     "Reine de Lemnos, Hypsipyle épargna son propre père Thoas le jour où les femmes de l'île, délaissées par leurs maris partis chercher des captives thraces, massacrèrent tous les hommes de l'île en réponse — elle seule le cacha en secret plutôt que de se joindre au massacre.",
