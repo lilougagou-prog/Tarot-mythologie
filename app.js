@@ -915,7 +915,7 @@ const SYMBOL_LIBRARY = {
   "paon":{icon:"🦚",label:"Paon",category:"Mythologie",desc:"Attribut d'Héra : beauté, vigilance, souveraineté légitime.",links:["héra"],lore:[
     "Le paon est devenu l'un des animaux emblématiques d'Héra.",
     "Selon le récit le plus célèbre, Héra plaça les nombreux yeux d'Argos Panoptès, son fidèle gardien, sur la queue du paon après la mort de celui-ci. Les motifs en forme d'yeux devinrent ainsi le souvenir éternel d'Argos.",
-    "Argos Panoptès, « celui qui voit tout », devait son nom à son corps couvert de cent yeux, dont une partie restait toujours éveillée pendant que les autres dormaient. Héra l'avait chargé de surveiller Io, une jeune femme aimée de Zeus qu'elle avait changée en génisse par jalousie — c'est en la délivrant de cette garde, sur ordre de Zeus, qu'Hermès endormit puis tua Argos, avant qu'Héra ne recueille ses cent yeux sur la queue de son oiseau favori.",
+    "Argos Panoptès, « celui qui voit tout », devait son nom à son corps couvert de cent yeux, dont une partie restait toujours éveillée pendant que les autres dormaient. Héra l'avait chargé de surveiller Io (voir la fiche « Io »), une jeune femme aimée de Zeus qu'elle avait changée en génisse par jalousie — c'est en la délivrant de cette garde, sur ordre de Zeus, qu'Hermès endormit puis tua Argos, avant qu'Héra ne recueille ses cent yeux sur la queue de son oiseau favori.",
     "Le paon semble donc toujours regarder autour de lui. Son plumage magnifique rappelle également le rang d'Héra, reine des dieux, déesse du mariage et de la souveraineté.",
     "Le paon est devenu un symbole de beauté, de vigilance, de dignité, de souveraineté et de regard protecteur.",
     "Le paon est particulièrement associé à Héra.",
@@ -1752,6 +1752,7 @@ const DEITY_NOTES = {
   "amazones":"Peuple de femmes guerrières gouverné par des reines successives, sans hommes en son sein.",
   "néréides":"Cinquante nymphes marines filles de Nérée, dont Amphitrite et Thétis, souvent représentées avec une queue de poisson.",
   "harpyes":"Sœurs d'Iris, esprits ailés au visage de femme et au corps d'oiseau, semant la faim sur leur passage.",
+  "io":"Prêtresse d'Héra aimée de Zeus, changée en génisse et pourchassée par un taon jusqu'en Égypte.",
   "libye":"Princesse égyptienne, fille d'Épaphos, qui donna son nom au continent africain.",
   "égyptos":"Roi jumeau de Danaos, père de cinquante fils tous massacrés sauf un la nuit de leurs noces.",
   "danaos":"Roi jumeau d'Égyptos, père des cinquante Danaïdes, fondateur légendaire de la lignée royale d'Argos.",
@@ -1988,7 +1989,7 @@ const DEITY_LORE = {
   ],
   "éos": [
     "Déesse de l'aurore, Éos ouvre chaque matin les portes du ciel pour annoncer le passage du char d'Hélios, son frère — ses doigts de rose colorent le ciel juste avant le lever du jour (voir la fiche « Aurore »).",
-    "Éprise de plusieurs mortels, dont Tithonos, elle obtint pour lui l'immortalité mais oublia de demander aussi l'éternelle jeunesse : il vieillit sans jamais pouvoir mourir, jusqu'à se réduire, dit-on, à une simple voix.",
+    "Éprise de plusieurs mortels, dont Tithonos, elle obtint pour lui l'immortalité mais oublia de demander aussi l'éternelle jeunesse : il vieillit sans jamais pouvoir mourir, jusqu'à se réduire à une simple voix — changé, selon une tradition plus tardive, en cigale, dont le chant strident perpétue encore aujourd'hui cette plainte sans fin.",
     "Elle aima aussi le chasseur Orion, qu'elle emporta à Délos pour vivre à ses côtés, avant qu'il ne devienne le compagnon de chasse d'Artémis (voir la fiche « Orion »).",
     "Unie à Astréos, dieu des étoiles, elle mit aussi au monde les quatre vents, dont Borée, le vent du Nord (voir la fiche « Borée ») — une aurore qui n'ouvre pas seulement le ciel au soleil, mais engendre aussi les souffles qui le traversent.",
     "Dans le Tarot, Éos est le Valet de Bâtons, bâton déjà en main mais le mouvement pas encore commencé : chaque matin, elle ouvre les portes du ciel avant même que le char de son frère Hélios ne s'y engage, sans jamais le conduire elle-même. Cette énergie encore neuve, qui rend le passage possible sans en garantir l'issue, est exactement la sienne — une promesse plutôt qu'un accomplissement déjà prouvé.",
@@ -2869,8 +2870,14 @@ const DEITY_LORE = {
     "Les Argonautes de passage, exaspérés par ses tourments, chargèrent les fils ailés de Borée, Zétès et Calaïs (voir la fiche « Borée »), de les chasser. Sur le point de les tuer, les deux frères durent y renoncer sur l'ordre d'Iris elle-même, venue en personne épargner ses propres sœurs et leur faire promettre de ne plus jamais tourmenter Phinée.",
     "Leur nom reste depuis attaché à toute prise brutale et rapace — les « harpies » du langage courant leur doivent directement leur réputation.",
   ],
+  "io": [
+    "Prêtresse d'Héra à Argos, Io fut aimée de Zeus, qui la changea lui-même en génisse d'une blancheur éclatante pour dissimuler leur liaison à son épouse — ou, selon une autre version, ce fut Héra elle-même qui la surprit et la transforma. Peu dupe malgré tout, la déesse réclama l'animal en cadeau et le fit surveiller jour et nuit par le géant Argos Panoptès, « celui qui voit tout », dont les cent yeux ne se fermaient jamais tous à la fois.",
+    "Zeus envoya Hermès délivrer sa bien-aimée : déguisé en berger, le dieu endormit Argos au son de sa flûte avant de le tuer d'un coup de serpe. Héra, en deuil de son fidèle gardien, recueillit ses cent yeux pour en parer la queue de son oiseau favori, le paon (voir la fiche « Paon »).",
+    "Loin d'être libérée pour autant, Io fut alors pourchassée par un taon envoyé par Héra, dont la piqûre incessante la fit errer, toujours sous forme de génisse, à travers la Grèce et l'Asie tout entières — un détroit qu'elle traversa à la nage lui laissa le nom de Bosphore, « le passage de la vache », et la mer qu'elle longea plus au sud celui de mer Ionienne.",
+    "Ce n'est qu'en atteignant l'Égypte, épuisée, qu'elle retrouva enfin forme humaine et mit au monde Épaphos, né du seul toucher de la main de Zeus — un fils dont la descendance, par Libye (voir la fiche « Libye »), donnera naissance aux deux plus grandes lignées royales de la mythologie grecque, celle d'Argos et celle de Thèbes. Une tradition locale plus tardive lui donne aussi une fille, Kéroessa, dont le fils Byzas donnera plus tard son nom à Byzance (voir la fiche « Byzas »).",
+  ],
   "libye": [
-    "Fille d'Épaphos — le fils qu'Io, une jeune femme aimée de Zeus puis changée en génisse par la jalousie d'Héra, mit au monde après ses longues errances jusqu'en Égypte —, Libye donna son nom au continent tout entier qui porte encore le sien aujourd'hui.",
+    "Fille d'Épaphos — le fils qu'Io (voir la fiche « Io »), une jeune femme aimée de Zeus puis changée en génisse par la jalousie d'Héra, mit au monde après ses longues errances jusqu'en Égypte —, Libye donna son nom au continent tout entier qui porte encore le sien aujourd'hui.",
     "Unie au dieu-fleuve Nil, elle mit au monde des jumeaux, Bélos et Agénor : le premier régna sur l'Égypte et engendra à son tour Égyptos et Danaos (voir les fiches « Égyptos » et « Danaos »), tandis que le second partit fonder Tyr et Sidon, où naquirent plus tard Cadmos et Europe (voir les fiches « Cadmos » et « Europe »).",
     "Par cette double descendance, Libye se trouve à l'origine à la fois de la lignée royale d'Argos, promise aux Danaïdes et à Persée, et de celle de Thèbes, promise à Cadmos et à ses propres descendants — une même aïeule à l'origine de deux des plus grandes maisons de la mythologie grecque.",
   ],
@@ -2900,7 +2907,7 @@ const DEITY_LORE = {
     "De leur réconciliation naquit Abas, puis, quelques générations plus tard, Acrisios et Danaé (voir la fiche « Danaé »), dont le fils Persée (voir la fiche « Persée ») referme ainsi la boucle : le seul couple épargné parmi les Danaïdes se révèle, au bout du compte, l'ancêtre du plus grand tueur de monstres de la mythologie grecque.",
   ],
   "byzas": [
-    "Fils de Poséidon (voir la fiche « Poséidon ») et de la nymphe Kéroessa — elle-même fille d'Io et de Zeus, née près d'une corne d'or à l'embouchure d'une baie qui prit depuis le nom de Corne d'Or —, Byzas grandit sur les rives du Bosphore avant de consulter l'oracle du temple de Delphes (voir la fiche « Temple ») pour savoir où fonder sa propre cité.",
+    "Fils de Poséidon (voir la fiche « Poséidon ») et de la nymphe Kéroessa — elle-même fille d'Io (voir la fiche « Io ») et de Zeus, née près d'une corne d'or à l'embouchure d'une baie qui prit depuis le nom de Corne d'Or —, Byzas grandit sur les rives du Bosphore avant de consulter l'oracle du temple de Delphes (voir la fiche « Temple ») pour savoir où fonder sa propre cité.",
     "L'oracle lui ordonna de bâtir « en face du pays des aveugles » : arrivé sur la rive européenne du détroit, il comprit l'énigme en découvrant une colonie déjà installée sur la rive asiatique, à Chalcédoine — ses habitants avaient été « aveugles » de ne pas voir la supériorité évidente du site d'en face, mieux protégé et bien plus fertile.",
     "Il fonda là, au confluent de deux mers, la cité de Byzance, qui portera son nom durant des siècles avant de devenir, sous l'empereur Constantin, Constantinople, puis Istanbul — trois noms pour une seule ville, unique à cheval sur deux continents.",
   ],
@@ -3150,6 +3157,11 @@ const DEITY_PORTRAITS = {
   // (la scène où Éros la frappe de sa flèche), réutilisée ici comme portrait principal — il
   // n'en avait aucun jusqu'ici.
   "jason": "assets/deity-jason-medee.jpg",
+  "hélios": "assets/deity-helios.jpg",
+  "éos": "assets/deity-eos.jpg",
+  "iris": "assets/deity-iris.jpg",
+  "léda": "assets/deity-leda.jpg",
+  "io": "assets/deity-io.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
