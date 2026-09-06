@@ -1621,6 +1621,7 @@ const DEITY_NOTES = {
   "ulysse":"Héros rusé de l'Odyssée, inventeur du stratagème du cheval de Troie.",
   "pénélope":"Épouse fidèle d'Ulysse, qui tint vingt ans les prétendants à distance en défaisant chaque nuit le linceul qu'elle tissait le jour.",
   "télégonos":"Fils d'Ulysse et de Circé, qui tua son père sans le reconnaître avec une arme empoisonnée, accomplissant malgré lui une vieille prophétie.",
+  "télémaque":"Fils d'Ulysse et de Pénélope, parti en quête de nouvelles de son père avant de l'aider à châtier les prétendants à son retour.",
   "andromède":"Princesse enchaînée à un rocher en offrande à un monstre marin, sauvée par Persée.",
   "hécube":"Reine de Troie, épouse de Priam et mère d'un très grand nombre de leurs enfants, dont Hector et Pâris.",
   "priam":"Dernier roi de Troie, père d'Hector, Pâris et Cassandre, tué par Néoptolème à la chute de la ville.",
@@ -2138,7 +2139,7 @@ const DEITY_LORE = {
     "Dans le Tarot, Ulysse est la figure du 8 de Coupes, où un personnage s'éloigne de nuit, laissant des coupes soigneusement empilées derrière lui : après une année entière passée sur l'île de Circé (voir la fiche « Circé »), c'est bien lui qui choisit de reprendre la mer vers Ithaque, vers son épouse Pénélope (voir la fiche « Pénélope »), plutôt que de s'installer dans un confort déjà acquis.",
   ],
   "pénélope": [
-    "Fille du roi Icarios et cousine d'Hélène et de Clytemnestre (voir les fiches « Hélène » et « Clytemnestre »), Pénélope épousa Ulysse (voir la fiche « Ulysse »), roi d'Ithaque, peu avant que celui-ci ne parte combattre à Troie — laissant derrière lui une épouse enceinte de leur fils Télémaque et un royaume qu'elle dut gouverner seule pendant vingt années.",
+    "Fille du roi Icarios et cousine d'Hélène et de Clytemnestre (voir les fiches « Hélène » et « Clytemnestre »), Pénélope épousa Ulysse (voir la fiche « Ulysse »), roi d'Ithaque, peu avant que celui-ci ne parte combattre à Troie — laissant derrière lui une épouse enceinte de leur fils Télémaque (voir la fiche « Télémaque ») et un royaume qu'elle dut gouverner seule pendant vingt années.",
     "Durant l'absence prolongée de son mari, présumé mort par beaucoup, une foule de prétendants envahit le palais d'Ithaque pour la contraindre à un nouveau mariage. Pénélope les tint à distance par la ruse : elle promit de choisir un époux dès qu'elle aurait terminé de tisser le linceul funéraire de son beau-père Laërte, mais défaisait chaque nuit, en secret, l'ouvrage du jour — un stratagème qui dura trois ans, jusqu'à ce qu'une servante infidèle la trahisse.",
     "À son retour, Ulysse, déguisé en mendiant pour ne pas être reconnu, retrouva son palais livré aux prétendants ; Pénélope organisa alors l'épreuve de l'arc (voir la fiche « Arc ») — nul ne pouvant prétendre à sa main sans réussir à le bander et à tirer une flèche à travers douze anneaux alignés —, épreuve qu'aucun des prétendants ne put surmonter, et que le mendiant inconnu accomplit sans effort avant de révéler sa véritable identité et de massacrer les prétendants avec l'aide de son fils.",
     "Même alors, Pénélope hésita à reconnaître son époux après vingt ans d'absence, et le mit à l'épreuve : elle ordonna qu'on déplace leur lit nuptial, construit autour du tronc d'un olivier vivant et donc impossible à déplacer sans le briser — un secret que seuls eux deux connaissaient. La réaction indignée d'Ulysse, découvrant le piège, lui apporta la preuve qu'elle cherchait, et les deux époux furent enfin réunis.",
@@ -2146,8 +2147,14 @@ const DEITY_LORE = {
   "télégonos": [
     "Fils d'Ulysse et de la magicienne Circé (voir les fiches « Ulysse » et « Circé »), conçu durant l'année que son père passa sur l'île d'Aiaié avant de reprendre la mer vers Ithaque, Télégonos grandit seul auprès de sa mère, sans jamais connaître ce père reparti avant même sa naissance.",
     "Devenu adulte, il partit à sa recherche, armé d'une lance dont la pointe avait été trempée par Circé dans le venin d'une raie — un choix guidé par une prophétie voulant que la mort d'Ulysse vienne un jour de la mer. Une tempête le jeta sur une île qu'il ne reconnut pas pour Ithaque, et qu'il se mit à piller pour ravitailler son équipage.",
-    "Ulysse et son fils Télémaque accoururent défendre leurs terres contre cet inconnu ; dans l'affrontement qui suivit, Télégonos blessa mortellement son propre père sans le savoir, accomplissant malgré lui la vieille prophétie qui pesait sur Ulysse depuis son retour de Troie. Ce n'est qu'en découvrant l'identité du mourant qu'il comprit l'ampleur de son geste.",
+    "Ulysse et son fils Télémaque (voir la fiche « Télémaque ») accoururent défendre leurs terres contre cet inconnu ; dans l'affrontement qui suivit, Télégonos blessa mortellement son propre père sans le savoir, accomplissant malgré lui la vieille prophétie qui pesait sur Ulysse depuis son retour de Troie. Ce n'est qu'en découvrant l'identité du mourant qu'il comprit l'ampleur de son geste.",
     "Fou de chagrin, il ramena le corps d'Ulysse jusqu'à Aiaié, avec Pénélope (voir la fiche « Pénélope ») et Télémaque : Circé rendit alors les trois mortels immortels. Une tradition plus tardive, l'ancienne Télégonie, referme le cycle par un double mariage inattendu — Télégonos épousant Pénélope, veuve de son propre père, tandis que Télémaque épousait Circé elle-même.",
+  ],
+  "télémaque": [
+    "Fils unique d'Ulysse et de Pénélope (voir les fiches « Ulysse » et « Pénélope »), Télémaque n'était qu'un nourrisson quand son père partit combattre à Troie ; il grandit à Ithaque sans jamais l'avoir connu, entouré des prétendants qui, profitant de cette absence prolongée, envahissaient le palais et dilapidaient ses biens en attendant d'épouser sa mère.",
+    "Devenu jeune homme, encouragé par la déesse Athéna (voir la fiche « Athéna »), qui prit pour l'occasion les traits du vieux Mentor, il partit en quête de nouvelles de son père — un voyage qui le mena d'abord chez le sage Nestor à Pylos, puis à Sparte auprès de Ménélas et d'Hélène (voir les fiches « Ménélas » et « Hélène »), sans jamais obtenir de certitude sur le sort d'Ulysse.",
+    "À son retour à Ithaque, il retrouva son père rentré en secret, déguisé en mendiant pour échapper aux prétendants ; c'est à lui seul, avant tout autre, qu'Ulysse révéla sa véritable identité. Télémaque l'aida à préparer leur vengeance — retirant discrètement les armes de la grande salle pour désarmer les prétendants — puis combattit à ses côtés lors du massacre qui suivit l'épreuve de l'arc (voir la fiche « Arc »).",
+    "Une tradition plus tardive, l'ancienne Télégonie, prolonge son histoire au-delà de l'Odyssée : après la mort accidentelle d'Ulysse, tué par son demi-frère Télégonos (voir la fiche « Télégonos »), Télémaque épousa la magicienne Circé (voir la fiche « Circé »), mère de Télégonos, tandis que ce dernier épousait Pénélope, veuve de son propre père.",
   ],
   "andromède": [
     "Princesse éthiopienne, Andromède fut enchaînée à un rocher au bord de la mer en offrande expiatoire à un monstre marin, envoyé par Poséidon pour punir sa mère Cassiopée de s'être vantée d'une beauté supérieure à celle des Néréides (voir la fiche « Cassiopée »).",
@@ -3247,6 +3254,8 @@ const DEITY_PORTRAITS = {
   "pollux": "assets/deity-castor-pollux.jpg",
   "pénélope": "assets/deity-penelope.jpg",
   "télégonos": "assets/deity-telegonos.jpg",
+  "ulysse": "assets/deity-ulysse.jpg",
+  "télémaque": "assets/deity-telemaque.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
