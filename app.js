@@ -3203,7 +3203,7 @@ const DEITY_INLINE_PORTRAITS = {
     { match: "Daphné", src: "assets/deity-apollon-daphne.jpg", alt: "Apollon et Daphné" },
   ],
   "aphrodite": [
-    { match: "remporte le jugement de Pâris", src: "assets/deity-jugement-paris.jpg", alt: "Le jugement de Pâris" },
+    { match: "remporte le jugement de Pâris", src: "assets/deity-jugement-paris.jpg", alt: "Le jugement de Pâris", wide: true },
     { match: "dieu de la guerre", src: "assets/deity-ares-aphrodite.jpg", alt: "Arès et Aphrodite" },
     { match: "Diomède", src: "assets/deity-aphrodite-enee.jpg", alt: "Aphrodite qui sauve Énée" },
   ],
@@ -6116,7 +6116,8 @@ function showDeityDetail(id, backTo = cardDetailReturnTo){
       (isPremiumEnabled() || isFigureLoreFree(id))
         ? `<div class="section-title"><h3>Le mythe</h3></div>${lore.map(p=>{
             const inline = inlinePortraits.find(cfg => p.includes(cfg.match));
-            return `${inline ? `<img class="deity-portrait-inline" src="${inline.src}" alt="${escapeHTML(inline.alt)}" loading="lazy">` : ""}<p class="lore-text">${linkifyLore(p)}</p>`;
+            const inlineClass = inline?.wide ? "deity-portrait-inline deity-portrait-inline-wide" : "deity-portrait-inline";
+            return `${inline ? `<img class="${inlineClass}" src="${inline.src}" alt="${escapeHTML(inline.alt)}" loading="lazy">` : ""}<p class="lore-text">${linkifyLore(p)}</p>`;
           }).join("")}`
         : `<div class="section-title"><h3>Le mythe</h3></div>${premiumLockHTML("Le mythe complet de cette figure fait partie du contenu premium.")}`
     ) : ""}
