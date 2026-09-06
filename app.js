@@ -1589,6 +1589,7 @@ const DEITY_NOTES = {
   "athéna":"Déesse de la sagesse stratégique.",
   "aphrodite":"Déesse de l'amour et de la beauté.",
   "nérée":"Vieillard de la mer, dieu marin sage et bienveillant.",
+  "amphitrite":"Néréide devenue reine des mers, épouse de Poséidon, mère de Triton.",
   "bellérophon":"Héros dompteur de Pégase, vainqueur de la Chimère.",
 
   /* ----- Figures de cour supplémentaires ----- */
@@ -2047,6 +2048,12 @@ const DEITY_LORE = {
     "Pélée ne put l'épouser qu'en la maintenant de force à travers toutes ses métamorphoses, sur les conseils de Chiron (voir la fiche « Chiron ») — une lutte que Thétis finit par accepter sans jamais renoncer à sa propre nature changeante. Leurs noces, auxquelles Éris, déesse de la Discorde, ne fut pas conviée (voir la fiche « Éris »), déclenchèrent l'épisode de la pomme d'or qui mènera plus tard au jugement de Pâris (voir la fiche « Pâris »).",
     "De cette union naquit Achille (voir la fiche « Achille »), qu'elle tenta de rendre invulnérable en le plongeant dans le Styx, la rivière infernale (voir la fiche « Rivière »), puis de soustraire à son destin en le déguisant en jeune fille à la cour du roi Lycomède — une ruse qu'Ulysse finit par déjouer. Jusqu'au bout, Thétis lutta avec une ténacité sans faille contre une prophétie qu'elle savait pourtant ne jamais pouvoir empêcher.",
   ],
+  "amphitrite": [
+    "Fille de Nérée et de l'Océanide Doris (voir la fiche « Nérée »), Amphitrite était l'une des cinquante Néréides — mais c'est elle seule que Poséidon choisit pour épouse, reine à ses côtés de tout le royaume des mers.",
+    "Réticente à l'idée du mariage, elle s'enfuit se réfugier auprès du Titan Atlas plutôt que de céder à ses avances. Poséidon envoya plusieurs messagers à sa recherche, mais c'est un simple dauphin qui finit par la retrouver et la convainquit de revenir — en récompense, le dieu plaça l'animal parmi les étoiles, où brille encore aujourd'hui la constellation du Dauphin.",
+    "Devenue reine des mers, elle mit au monde Triton, messager marin mi-homme mi-poisson qui soufflait dans une conque pour apaiser ou déchaîner les flots sur l'ordre de son père, ainsi que Rhodé, nymphe qui donna plus tard son nom à l'île de Rhodes.",
+    "Une tradition plus rare, rapportée par Apollodore, lui attribue aussi la transformation de la nymphe Scylla en monstre, par jalousie envers Poséidon épris d'elle — une version bien moins suivie que celle, popularisée par Ovide, où c'est Circé qui s'en charge par dépit amoureux (voir la fiche « Circé »).",
+  ],
   "pythie": [
     "Prêtresse d'Apollon au temple de Delphes (voir la fiche « Temple »), la Pythie rendait ses oracles assise sur un trépied placé au-dessus d'une faille d'où s'échappaient, croyait-on, des vapeurs inspirant ses transes prophétiques.",
     "Ses réponses, données dans un état second, étaient réputées ambiguës autant qu'infaillibles — c'est elle qui annonça au roi Crésus que, s'il attaquait la Perse, il détruirait un grand empire, sans préciser lequel des deux ce serait.",
@@ -2087,7 +2094,7 @@ const DEITY_LORE = {
   "andromaque": [
     "Épouse d'Hector (voir la fiche « Hector »), le plus valeureux défenseur de Troie, Andromaque lui donna un fils, Astyanax, avant de lui faire les adieux les plus poignants de toute l'Iliade à la porte Scée de la ville (voir la fiche « Porte »), pressentant déjà qu'elle ne le reverrait pas vivant.",
     "À la chute de Troie, elle vit son fils précipité du haut des remparts par les Grecs, pour qu'aucun héritier d'Hector ne puisse jamais menacer leur victoire, puis fut elle-même emmenée captive par Néoptolème, le propre fils d'Achille, qui avait tué son mari (voir la fiche « Achille »).",
-    "Devenue malgré elle la compagne de Néoptolème (voir la fiche « Néoptolème »), elle lui donna un fils, Molossos, qui laissera son nom à toute une région d'Épire. Lorsque celui-ci choisit d'épouser Hermione, fille de Ménélas (voir la fiche « Ménélas »), il céda Andromaque à Hélénos, l'un des derniers fils survivants de Priam (voir la fiche « Priam ») — en récompense, dit-on, des prophéties que ce devin troyen avait livrées aux Grecs pour prendre Troie, et non par simple faveur envers elle.",
+    "Devenue malgré elle la compagne de Néoptolème (voir la fiche « Néoptolème »), elle lui donna un fils, Molossos, qui laissera son nom à toute une région d'Épire. Lorsque Néoptolème choisit d'épouser Hermione, fille de Ménélas (voir la fiche « Ménélas »), il céda Andromaque à Hélénos, l'un des derniers fils survivants de Priam (voir la fiche « Priam ») — en récompense, dit-on, des prophéties que ce devin troyen avait livrées aux Grecs pour prendre Troie.",
     "Elle n'oublia pourtant jamais Hector : avec Hélénos, elle recréa en terre d'exil une Troie miniature, un fleuve rebaptisé Xanthe, une porte Scée reconstruite à l'identique (voir la fiche « Porte ») — et, devenue reine d'un royaume qui n'était pourtant jamais tout à fait le sien, continua d'y porter le deuil de son premier mari devant un tombeau vide élevé en son honneur, une vie entièrement redéfinie par la guerre mais jamais réconciliée avec elle.",
   ],
   "pâris": [
@@ -2794,6 +2801,7 @@ const DEITY_PORTRAITS = {
   "phobos": "assets/deity-deimos-phobos.jpg",
   "médée": "assets/deity-medee.jpg",
   "circé": "assets/deity-circe.jpg",
+  "amphitrite": "assets/deity-amphitrite.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
@@ -2835,6 +2843,13 @@ const DEITY_INLINE_PORTRAITS = {
   ],
   "circé": [
     { match: "protégé par une plante magique", src: "assets/deity-circe-ulysse.jpg", alt: "Circé qui tente de transformer Ulysse" },
+    { match: "change aussi la nymphe Scylla", src: "assets/deity-circe-scylla.jpg", alt: "Circé change Scylla en monstre" },
+  ],
+  "thétis": [
+    { match: "Leurs noces", src: "assets/deity-thetis-noces.jpg", alt: "Les noces de Thétis et Pélée" },
+  ],
+  "éris": [
+    { match: "jeta parmi les déesses assemblées une pomme d'or", src: "assets/deity-eris-pomme.jpg", alt: "Éris jette la pomme d'or aux noces de Thétis" },
   ],
 };
 
