@@ -1620,6 +1620,7 @@ const DEITY_NOTES = {
   "charon":"Passeur des Enfers, il conduit les âmes à travers le Styx vers l'autre monde.",
   "ulysse":"Héros rusé de l'Odyssée, inventeur du stratagème du cheval de Troie.",
   "pénélope":"Épouse fidèle d'Ulysse, qui tint vingt ans les prétendants à distance en défaisant chaque nuit le linceul qu'elle tissait le jour.",
+  "télégonos":"Fils d'Ulysse et de Circé, qui tua son père sans le reconnaître avec une arme empoisonnée, accomplissant malgré lui une vieille prophétie.",
   "andromède":"Princesse enchaînée à un rocher en offrande à un monstre marin, sauvée par Persée.",
   "hécube":"Reine de Troie, épouse de Priam et mère d'un très grand nombre de leurs enfants, dont Hector et Pâris.",
   "priam":"Dernier roi de Troie, père d'Hector, Pâris et Cassandre, tué par Néoptolème à la chute de la ville.",
@@ -2103,7 +2104,7 @@ const DEITY_LORE = {
   "circé": [
     "Fille d'Hélios (voir la fiche « Hélios ») et magicienne experte en herbes et en breuvages, Circé vit sur une île isolée où elle transforme en animaux les voyageurs qui s'y aventurent sans méfiance — c'est ainsi qu'elle changea en pourceaux une partie de l'équipage d'Ulysse. Sa nièce Médée, fille de son frère Aiétès, hérita d'un don comparable pour la magie, mais tourné vers un tout autre destin (voir la fiche « Médée »).",
     "Des années plus tard, cette même nièce vint jusqu'à son île implorer d'être purifiée du sang de son propre frère, versé en fuyant la Colchide avec Jason (voir la fiche « Jason »). Circé accepta le rite — mais seulement par égard pour le lien de sang qui l'unissait à Médée, jamais pour Jason lui-même, resté pour elle un étranger qu'elle ne chercha jamais à connaître davantage.",
-    "Ulysse, protégé par une plante magique offerte par Hermès, résista à son sortilège et la contraignit à rendre à ses hommes leur forme humaine. Il resta ensuite une année entière sur son île, dont naquit un fils, Télégonos — qui, des années plus tard et sans le reconnaître, tuera son propre père, achevant malgré lui une prophétie qui pesait sur Ulysse depuis son retour à Ithaque. Certaines traditions plus tardives lui donnent aussi une fille de cette même union, Cassiphoné.",
+    "Ulysse, protégé par une plante magique offerte par Hermès, résista à son sortilège et la contraignit à rendre à ses hommes leur forme humaine. Il resta ensuite une année entière sur son île, dont naquit un fils, Télégonos (voir la fiche « Télégonos ») — qui, des années plus tard et sans le reconnaître, tuera son propre père, achevant malgré lui une prophétie qui pesait sur Ulysse depuis son retour à Ithaque. Certaines traditions plus tardives lui donnent aussi une fille de cette même union, Cassiphoné.",
     "Sa magie ne sert pas qu'à punir les intrus : par jalousie, elle change aussi la nymphe Scylla en monstre. Éprise du dieu marin Glaucos, lui-même épris de Scylla, Circé empoisonne la source où celle-ci se baigne — la nymphe en ressort affublée d'une ceinture de têtes de chiens hurlants, condamnée à hanter pour toujours un détroit périlleux de la mer, face au tourbillon de Charybde (voir la fiche « Mer »).",
     "Elle inflige un sort semblable à Picus (voir la fiche « Picus »), roi du Latium déjà marié à la nymphe Canens : le voyant refuser ses avances par fidélité, elle le change en pic — l'oiseau porte encore aujourd'hui son nom latin, picus. Deux amours contrariés, deux métamorphoses : la magie de Circé transforme aussi souvent qu'elle punit.",
     "Dans le Tarot, Circé est la figure du 7 de Coupes, où sept coupes flottent dans les nuages, chacune montrant une image différente — trésor, serpent, couronne : ces reflets multiples et trompeurs sont exactement ce que promettent ses breuvages, séduisants mais rarement ce qu'ils semblent être.",
@@ -2141,6 +2142,12 @@ const DEITY_LORE = {
     "Durant l'absence prolongée de son mari, présumé mort par beaucoup, une foule de prétendants envahit le palais d'Ithaque pour la contraindre à un nouveau mariage. Pénélope les tint à distance par la ruse : elle promit de choisir un époux dès qu'elle aurait terminé de tisser le linceul funéraire de son beau-père Laërte, mais défaisait chaque nuit, en secret, l'ouvrage du jour — un stratagème qui dura trois ans, jusqu'à ce qu'une servante infidèle la trahisse.",
     "À son retour, Ulysse, déguisé en mendiant pour ne pas être reconnu, retrouva son palais livré aux prétendants ; Pénélope organisa alors l'épreuve de l'arc (voir la fiche « Arc ») — nul ne pouvant prétendre à sa main sans réussir à le bander et à tirer une flèche à travers douze anneaux alignés —, épreuve qu'aucun des prétendants ne put surmonter, et que le mendiant inconnu accomplit sans effort avant de révéler sa véritable identité et de massacrer les prétendants avec l'aide de son fils.",
     "Même alors, Pénélope hésita à reconnaître son époux après vingt ans d'absence, et le mit à l'épreuve : elle ordonna qu'on déplace leur lit nuptial, construit autour du tronc d'un olivier vivant et donc impossible à déplacer sans le briser — un secret que seuls eux deux connaissaient. La réaction indignée d'Ulysse, découvrant le piège, lui apporta la preuve qu'elle cherchait, et les deux époux furent enfin réunis.",
+  ],
+  "télégonos": [
+    "Fils d'Ulysse et de la magicienne Circé (voir les fiches « Ulysse » et « Circé »), conçu durant l'année que son père passa sur l'île d'Aiaié avant de reprendre la mer vers Ithaque, Télégonos grandit seul auprès de sa mère, sans jamais connaître ce père reparti avant même sa naissance.",
+    "Devenu adulte, il partit à sa recherche, armé d'une lance dont la pointe avait été trempée par Circé dans le venin d'une raie — un choix guidé par une prophétie voulant que la mort d'Ulysse vienne un jour de la mer. Une tempête le jeta sur une île qu'il ne reconnut pas pour Ithaque, et qu'il se mit à piller pour ravitailler son équipage.",
+    "Ulysse et son fils Télémaque accoururent défendre leurs terres contre cet inconnu ; dans l'affrontement qui suivit, Télégonos blessa mortellement son propre père sans le savoir, accomplissant malgré lui la vieille prophétie qui pesait sur Ulysse depuis son retour de Troie. Ce n'est qu'en découvrant l'identité du mourant qu'il comprit l'ampleur de son geste.",
+    "Fou de chagrin, il ramena le corps d'Ulysse jusqu'à Aiaié, avec Pénélope (voir la fiche « Pénélope ») et Télémaque : Circé rendit alors les trois mortels immortels. Une tradition plus tardive, l'ancienne Télégonie, referme le cycle par un double mariage inattendu — Télégonos épousant Pénélope, veuve de son propre père, tandis que Télémaque épousait Circé elle-même.",
   ],
   "andromède": [
     "Princesse éthiopienne, Andromède fut enchaînée à un rocher au bord de la mer en offrande expiatoire à un monstre marin, envoyé par Poséidon pour punir sa mère Cassiopée de s'être vantée d'une beauté supérieure à celle des Néréides (voir la fiche « Cassiopée »).",
@@ -3239,6 +3246,7 @@ const DEITY_PORTRAITS = {
   "castor": "assets/deity-castor-pollux.jpg",
   "pollux": "assets/deity-castor-pollux.jpg",
   "pénélope": "assets/deity-penelope.jpg",
+  "télégonos": "assets/deity-telegonos.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
