@@ -1730,6 +1730,56 @@ const DEITY_NOTES = {
   "cécrops":"Premier roi d'Athènes, mi-homme mi-serpent, né de la terre elle-même, père d'Aglauros, Hersé et Pandrosos.",
   "aglauros":"Fille de Cécrops, mère d'Alcippé par Arès, changée en pierre par Hermès après avoir cédé à la jalousie envers sa sœur Hersé.",
   "pandrosos":"Fille de Cécrops, seule des trois sœurs à n'avoir jamais ouvert le coffre confié par Athéna.",
+  "électre":"Fille d'Agamemnon et de Clytemnestre, elle aida son frère Oreste à venger leur père en tuant leur mère.",
+  "chrysothémis":"Fille d'Agamemnon et de Clytemnestre, plus prudente que sa sœur Électre, elle refusa de se joindre à la vengeance contre leur mère.",
+  "arachné":"Tisserande lydienne devenue araignée pour avoir défié Athéna en tissage.",
+  "leucothoé":"Princesse aimée d'Hélios, enterrée vivante par son propre père et changée en arbuste à encens.",
+  "clytie":"Nymphe éprise d'Hélios, changée en fleur qui tourne son visage vers le soleil tout au long du jour.",
+  "danaé":"Princesse d'Argos, mère de Persée conçu par Zeus changé en pluie d'or.",
+  "adonis":"Jeune homme d'une beauté extraordinaire, aimé d'Aphrodite, tué par un sanglier à la chasse.",
+  "myrrha":"Princesse changée en arbre à myrrhe après une faute funeste envers son propre père, mère d'Adonis.",
+  "œagre":"Roi de Thrace, père d'Orphée selon la tradition la plus répandue.",
+  "crotos":"Fils de Pan et d'Euphémé, nourrice des Muses, inventeur de l'applaudissement, changé en constellation du Sagittaire.",
+  "deucalion":"Fils de Prométhée, seul survivant avec son épouse Pyrrha du déluge envoyé par Zeus.",
+  "pyrrha":"Fille d'Épiméthée et de Pandore, seule survivante avec son époux Deucalion du déluge envoyé par Zeus.",
+  "pléiades":"Sept nymphes filles d'Atlas, changées en étoiles pour échapper à Orion.",
+  "hyas":"Frère des Hyades, dont la mort à la chasse causa des larmes changées en étoiles.",
+  "grées":"Trois sœurs nées vieilles, ne partageant qu'un œil et une dent, contraintes de révéler à Persée le chemin vers leurs sœurs les Gorgones.",
+  "méduse":"La seule mortelle des trois Gorgones, changée en monstre par Athéna, décapitée par Persée.",
+  "gorgones":"Trois sœurs monstrueuses au regard pétrifiant, dont Méduse était la seule mortelle.",
+  "ganymède":"Prince troyen d'une beauté si parfaite que Zeus l'enleva pour en faire l'échanson des dieux.",
+  "myrina":"Reine guerrière des Amazones libyennes, conquérante avant de mourir au combat.",
+  "amazones":"Peuple de femmes guerrières gouverné par des reines successives, sans hommes en son sein.",
+  "néréides":"Cinquante nymphes marines filles de Nérée, dont Amphitrite et Thétis, souvent représentées avec une queue de poisson.",
+  "harpyes":"Sœurs d'Iris, esprits ailés au visage de femme et au corps d'oiseau, semant la faim sur leur passage.",
+  "libye":"Princesse égyptienne, fille d'Épaphos, qui donna son nom au continent africain.",
+  "égyptos":"Roi jumeau de Danaos, père de cinquante fils tous massacrés sauf un la nuit de leurs noces.",
+  "danaos":"Roi jumeau d'Égyptos, père des cinquante Danaïdes, fondateur légendaire de la lignée royale d'Argos.",
+  "danaïdes":"Les cinquante filles de Danaos, condamnées aux Enfers à remplir un tonneau percé pour avoir tué leurs époux.",
+  "hypermestre":"Seule des cinquante Danaïdes à épargner son époux Lyncée, par amour plutôt que par obéissance.",
+  "lyncée":"Seul époux des cinquante fils d'Égyptos épargné par sa femme Hypermestre, ancêtre de Persée.",
+  "byzas":"Fils de Poséidon, fondateur légendaire de Byzance.",
+  "phidaléia":"Figure féminine associée à une fondation antérieure sur le site de Byzance, peu documentée.",
+  "admète":"Roi de Phères que servit Apollon comme berger, époux d'Alceste.",
+  "alceste":"Fille de Pélias, elle accepta de mourir à la place de son époux Admète.",
+  "pélias":"Roi usurpateur d'Iolcos, oncle de Jason, tué par ses propres filles sur les conseils de Médée.",
+  "clito":"Mortelle aimée de Poséidon, mère d'Atlas et ancêtre légendaire des Atlantes.",
+  "sidé":"Première épouse d'Orion, tuée par Héra pour avoir rivalisé de beauté avec elle.",
+  "picus":"Roi légendaire du Latium, changé en pivert par Circé pour avoir refusé ses avances.",
+  "ixion":"Roi thessalien, père des Centaures, condamné à tourner pour l'éternité sur une roue enflammée.",
+  "pirithoos":"Roi des Lapithes, fils d'Ixion, dont les noces avec Hippodamie déclenchèrent la guerre contre les Centaures.",
+  "hippodamie":"Épouse de Pirithoos, dont l'enlèvement tenté par un Centaure ivre déclencha la Centauromachie.",
+  "calchas":"Devin grec de la guerre de Troie, qui exigea le sacrifice d'Iphigénie à Aulis.",
+  "cyllaros":"Centaure d'une grande beauté, tué aux côtés de son épouse Hylonome durant la Centauromachie.",
+  "hylonome":"Centauresse éprise de Cyllaros, morte à ses côtés durant la Centauromachie.",
+  "hyperboréens":"Peuple légendaire vivant au-delà du vent du Nord, dans un pays sans hiver cher à Apollon.",
+  "abaris":"Prêtre hyperboréen d'Apollon, capable de voyager à travers les airs sur une flèche d'or.",
+  "hypsipyle":"Reine de Lemnos qui accueillit les Argonautes, eut des jumeaux avec Jason.",
+  "œdipe":"Roi de Thèbes qui tua son père et épousa sa mère sans le savoir, accomplissant malgré lui une prophétie.",
+  "jocaste":"Reine de Thèbes, mère et épouse d'Œdipe sans le savoir, elle se donna la mort en découvrant la vérité.",
+  "antigone":"Fille d'Œdipe, condamnée à mort pour avoir enterré son frère envers et contre l'interdit royal.",
+  "halia":"Nymphe rhodienne aimée de Poséidon, punie par Aphrodite avant de devenir déesse marine locale.",
+  "menthé":"Naïade aimée d'Hadès, changée par une Perséphone jalouse en la plante odorante qui porte son nom.",
   "pyrame":"Jeune Babylonien épris de Thisbé malgré l'interdit de leurs familles, mort par erreur à ses côtés sous un mûrier.",
   "thisbé":"Jeune Babylonienne éprise de Pyrame, dont la fuite devant une lionne provoqua leur double mort tragique.",
   "muses":"Neuf déesses des arts et de la mémoire, filles de Zeus et de Mnémosyne, jamais représentées séparément.",
@@ -1761,7 +1811,7 @@ const DEITY_LORE = {
     "Dans le Tarot, Dionysos est le Mat, l'arcane sans numéro qui échappe à toute séquence : comme lui, il ne suit aucune route tracée, parcourant le monde en marge de l'ordre olympien, son thiase pour seul cortège. Sa légende porte une même leçon à double tranchant : la liberté totale libère ceux qui l'acceptent — l'épouse qu'il immortalisa sur l'île de Naxos, sa propre mère déifiée — et détruit ceux qui la refusent, comme Penthée déchiré pour avoir nié le dieu. Le Mat n'est ainsi jamais un aboutissement, seulement un risque assumé.",
   ],
   "hermès": [
-    "Né dans une grotte du mont Cyllène (voir la fiche « Grotte »), Hermès manifesta son astuce dès le jour de sa naissance : il déroba le troupeau de son frère Apollon, puis inventa la lyre à partir d'une carapace de tortue et la lui offrit en échange de son pardon (voir la fiche « Lyre »).",
+    "Fils de Zeus et de Maïa, l'aînée des Pléiades (voir la fiche « Pléiades »), Hermès naquit dans une grotte du mont Cyllène (voir la fiche « Grotte ») et manifesta son astuce dès le jour de sa naissance : il déroba le troupeau de son frère Apollon, puis inventa la lyre à partir d'une carapace de tortue et la lui offrit en échange de son pardon (voir la fiche « Lyre »).",
     "Messager officiel de Zeus et guide des âmes des morts vers l'autre monde, Hermès franchit sans entrave les frontières entre l'Olympe, la terre et les Enfers — un privilège qu'on lui prête souvent, à tort, comme exclusif : Iris relie elle aussi le ciel et la terre, et va jusqu'aux portes du Styx lorsqu'il faut y puiser l'eau du serment sacré (voir la fiche « Iris »), tandis qu'Hécate, de par sa nature triple, circule tout aussi librement entre les trois royaumes (voir la fiche « Hécate »). Ce qui distingue Hermès n'est donc pas l'exclusivité du passage, mais la diversité des rôles qu'il y joue : messager, psychopompe, patron des voyageurs, des marchands et des voleurs.",
     "Sa vie amoureuse est aussi mouvementée que ses voyages. D'Aphrodite (voir la fiche « Aphrodite »), il eut un fils à la double nature, Hermaphrodite, fusionné plus tard avec la nymphe Salmacis en un seul être aux deux sexes (voir la fiche « Hermaphrodite »). De la nymphe Dryope, il eut Pan (voir la fiche « Pan »), né avec des cornes et des sabots de bouc, que sa propre mère fuit à sa naissance. D'une troisième union, avec Chioné, naquit Autolycos, voleur si habile qu'il pouvait changer à volonté la forme et la couleur de tout ce qu'il dérobait — un don hérité directement de son père, et qui fera de lui, plus tard, le grand-père maternel d'Ulysse (voir la fiche « Ulysse »). Une quatrième liaison, avec Hersé, fille de Cécrops, l'entraîna un jour jusqu'au seuil de sa maison même, où sa sœur Aglauros tenta de lui barrer le passage (voir la fiche « Hersé »).",
     "On l'honorait aussi sous des noms plus spécifiques : Agoraios, sur l'agora même où se négociait tout commerce ; et surtout Kriophoros, « le Porteur de bélier », à Tanagra — une légende locale raconte qu'Hermès, pour écarter une épidémie de la ville, en fit le tour portant un bélier sur ses épaules ; en souvenir de ce geste, le plus bel éphèbe de la cité refaisait chaque année le même tour, un agneau sur le dos.",
@@ -1804,7 +1854,7 @@ const DEITY_LORE = {
     "Chef de chœur des Muses (voir la fiche « Muses »), qu'il conduit sous le nom d'Apollon Musagète, « guide des Muses », il partage avec elles le mont Parnasse et sa source Castalie, non loin de son propre sanctuaire de Delphes.",
     "Plusieurs surnoms rappellent ses différents visages : Pythien, en souvenir du serpent Python vaincu à Delphes ; Phoibos, « le Brillant », pour son éclat solaire ; et Loxias, « l'Ambigu », pour la nature volontairement obscure de ses oracles, qu'il fallait savoir interpréter plutôt que prendre au pied de la lettre. Un autre surnom, Lycien, reste débattu depuis l'Antiquité même : lié au loup, à la lumière ou à la région de Lycie, sans qu'aucune des trois explications ne l'emporte vraiment sur les autres.",
     "Il connut aussi un amour resté sans retour : ayant un jour raillé le petit arc d'Éros (voir la fiche « Éros »), jugé indigne d'un dieu de son rang, il s'attira la vengeance du dieu vexé — frappé à son tour d'une flèche d'or, il s'éprit aussitôt de la nymphe Daphné, elle-même atteinte d'une flèche de plomb qui la rendit incapable de l'aimer en retour. Il la poursuivit sans relâche jusqu'aux rives de son père, le dieu-fleuve Pénée, qui la changea en laurier pour la soustraire à ses avances — Apollon en fit dès lors son arbre sacré, et la couronne de laurier devint le symbole même de la victoire qu'il n'avait pas obtenue ce jour-là (voir la fiche « Laurier »).",
-    "Éprise de la princesse thessalienne Coronis (voir la fiche « Coronis »), il apprit d'un corbeau — blanc jusqu'alors — qu'elle lui préférait un mortel alors même qu'elle portait déjà son enfant : furieux, il la fit tuer par Artémis, mais arracha l'enfant du bûcher funéraire in extremis pour le confier à Chiron (voir la fiche « Chiron »). Cet enfant, Asclépios (voir la fiche « Asclépios »), devint un guérisseur si habile qu'il ressuscitait les morts, jusqu'à ce que Zeus, inquiet de le voir bouleverser l'ordre naturel, le foudroie. Fou de chagrin, Apollon se vengea sur les Cyclopes qui avaient forgé cette foudre — un crime qui lui valut d'être condamné à servir un an durant comme simple berger mortel auprès du roi Admète, corvée qu'il transforma en amitié si sincère qu'il obtint plus tard des Parques la grâce de prolonger sa vie. Quant au corbeau messager, resté blanc jusque-là, Apollon le noircit pour toujours en punition de sa nouvelle funeste.",
+    "Éprise de la princesse thessalienne Coronis (voir la fiche « Coronis »), il apprit d'un corbeau — blanc jusqu'alors — qu'elle lui préférait un mortel alors même qu'elle portait déjà son enfant : furieux, il la fit tuer par Artémis, mais arracha l'enfant du bûcher funéraire in extremis pour le confier à Chiron (voir la fiche « Chiron »). Cet enfant, Asclépios (voir la fiche « Asclépios »), devint un guérisseur si habile qu'il ressuscitait les morts, jusqu'à ce que Zeus, inquiet de le voir bouleverser l'ordre naturel, le foudroie. Fou de chagrin, Apollon se vengea sur les Cyclopes qui avaient forgé cette foudre — un crime qui lui valut d'être condamné à servir un an durant comme simple berger mortel auprès du roi Admète (voir la fiche « Admète »), corvée qu'il transforma en amitié si sincère qu'il obtint plus tard des Parques la grâce de prolonger sa vie. Quant au corbeau messager, resté blanc jusque-là, Apollon le noircit pour toujours en punition de sa nouvelle funeste.",
     "Il aima aussi le jeune prince spartiate Hyacinthe (voir la fiche « Hyacinthe »), avec qui il partageait le goût du disque — jusqu'à ce qu'un disque qu'il lança dévie de sa trajectoire, détourné par le vent jaloux Zéphyr (voir la fiche « Zéphyr »), et frappe mortellement le jeune homme en pleine tempe. Incapable de le sauver, Apollon changea son sang versé en une fleur nouvelle, la jacinthe, sur les pétales de laquelle on croyait pouvoir lire les lettres grecques de son deuil.",
     "Son dernier grand amour resta, lui, sans aucune réciprocité : à la princesse troyenne Cassandre (voir la fiche « Cassandre »), fille de Priam (voir la fiche « Priam »), il offrit le don de prophétie en échange de ses faveurs — mais elle refusa de tenir sa promesse une fois le don reçu. Ne pouvant le lui reprendre, Apollon la frappa d'une malédiction plus cruelle encore : ses prédictions, toujours exactes, ne seraient plus jamais crues par personne — pas même son avertissement, resté sans écho, contre le cheval de bois conçu par Ulysse (voir la fiche « Ulysse »), qui allait livrer Troie aux Grecs.",
     "Dans le Tarot, Apollon est le Chariot (VII), qui avance en maîtrisant deux forces attelées ensemble plutôt que par la seule force brute : chaque hiver, dit-on, il quitte Delphes sur un char tiré par des cygnes pour rejoindre le pays des Hyperboréens, aux confins nordiques du monde, avant de revenir au printemps reprendre son sanctuaire — un déplacement maîtrisé et cyclique, jamais une fuite. Sa victoire, comme celle de cette carte, ne tient jamais à un seul éclat : c'est la discipline répétée, oracle après oracle, saison après saison, qui finit par ressembler à une évidence.",
@@ -1830,6 +1880,7 @@ const DEITY_LORE = {
     "Fils de Zeus et d'une mortelle, Alcmène, l'enfant fut d'abord nommé Alcide, du nom de son grand-père Alcée. Il fut la cible de la jalousie d'Héra avant même sa naissance : elle chargea Ilithyie de retenir l'accouchement par magie, une ruse à peine déjouée (voir la fiche « Ilithyie »), puis, une fois l'enfant né, envoya deux serpents l'étrangler dans son sommeil — qu'il étrangla lui-même de ses propres mains encore enfant.",
     "Zeus, voulant offrir à son fils mortel une part d'immortalité, le fit un jour approcher du sein d'Héra endormie, espérant qu'il tète son lait divin sans qu'elle le sache. L'enfant tira si fort qu'elle se réveilla en sursaut et l'écarta d'un geste brusque : le lait jaillit à travers le ciel nocturne et y forma la traînée blanche que l'on nomme depuis la Voie lactée.",
     "Rendu fou par Héra à l'âge adulte, il tua sa propre famille dans un accès de délire. Pour s'en purifier, l'oracle de Delphes lui ordonna de se mettre au service du roi Eurysthée pendant douze ans et de prendre un nouveau nom, Héraclès — « la gloire d'Héra » — comme pour retourner contre elle-même la persécution qu'elle lui infligeait : chaque exploit accompli sous ce nom deviendrait, malgré elle, un hommage à la déesse.",
+    "Avant même de se mettre au service d'Eurysthée, il séjourna cinquante nuits chez le roi Thespios, désireux d'obtenir de nombreux descendants d'un héros d'une telle force : chacune de ses cinquante filles vint ainsi, une nuit après l'autre, partager la couche d'Héraclès, qui les crut toutes, dit-on, n'être qu'une seule et même femme. De cette hospitalité peu commune naquirent cinquante fils, les Thespiades, qui essaimèrent ensuite dans toute la Grèce et jusqu'en Sardaigne.",
     "Eurysthée lui imposa alors douze travaux jugés impossibles. Héraclès étouffa d'abord à mains nues le lion de Némée, dont la peau devint son armure, puis affronta l'hydre de Lerne, dont il fallait cautériser chaque cou pour empêcher deux têtes de repousser à la place d'une — son neveu Iolaos l'y aida, geste qui coûtera à ce travail d'être invalidé plus tard, faute d'avoir agi seul. Il captura ensuite vivante la biche de Cérynie, consacrée à Artémis, après une année entière de poursuite sans jamais la blesser, puis ramena vivant le sanglier d'Érymanthe en le forçant dans la neige profonde.",
     "Vinrent ensuite les écuries d'Augias, nettoyées en une seule journée en détournant le cours de deux fleuves — un travail lui aussi invalidé, cette fois pour avoir réclamé un salaire — puis les oiseaux du lac Stymphale, chassés à l'aide de castagnettes de bronze offertes par Athéna, le taureau de Crète maîtrisé à mains nues, et les juments de Diomède, dressées en leur faisant dévorer leur propre maître.",
     "Il obtint ensuite la ceinture d'Hippolyté, reine des Amazones (voir la fiche « Hippolyté »), d'abord prête à la lui offrir de bon cœur — jusqu'à ce qu'Héra, semant la discorde parmi les Amazones, ne transforme la rencontre en bataille. Il ramena seul le troupeau de Géryon depuis les confins du monde connu, cueillit les pommes d'or des Hespérides (voir la fiche « Hespérides ») en soulageant un temps Atlas de son fardeau céleste par la ruse — délivrant au passage Prométhée enchaîné, en abattant d'une flèche l'aigle qui lui dévorait le foie (voir la fiche « Prométhée ») —, et descendit enfin aux Enfers pour en ramener vivant, à mains nues, le chien Cerbère, avant de le rendre à Hadès.",
@@ -1847,7 +1898,7 @@ const DEITY_LORE = {
     "Fils de Cronos et de Rhéa, Hadès hérita du monde souterrain lors du partage du cosmos entre lui et ses frères Zeus et Poséidon — un lot que la tradition présente souvent comme le moins enviable, mais qu'il gouverne avec une rigueur incorruptible plutôt qu'avec cruauté.",
     "Sa part dans la victoire des Olympiens sur les Titans fut pourtant décisive : les Cyclopes, libérés du Tartare par Zeus en échange de leur aide, forgèrent à chacun des trois frères un présent capable de renverser le combat — la foudre pour Zeus, le trident pour Poséidon, et pour Hadès un casque qui rend invisible celui qui le porte. Coiffé de ce casque, il put s'approcher sans être vu pour dérober les armes des Titans ou frapper sans jamais être repéré — une contribution aussi discrète que déterminante.",
     "Il quitte rarement son royaume, à l'exception notable de l'enlèvement de Perséphone (voir la fiche « Perséphone »), dont il tombe amoureux et qu'il installe à ses côtés comme reine des Enfers.",
-    "Avant elle, ou selon d'autres versions alors même qu'il en était déjà l'époux, Hadès s'était épris de la naïade Menthé. Perséphone, découvrant cette liaison, la piétina de rage jusqu'à la changer en la plante odorante qui porte encore son nom — la menthe, dont le parfum ne se libère jamais aussi fort que lorsqu'on la foule aux pieds, comme un dernier écho de la colère qui l'a transformée.",
+    "Avant elle, ou selon d'autres versions alors même qu'il en était déjà l'époux, Hadès s'était épris de la naïade Menthé (voir la fiche « Menthé »), que Perséphone, découvrant cette liaison, changea de rage en la plante odorante qui porte encore son nom.",
     "Contrairement à une image tardive qui en fait un dieu maléfique, Hadès reste dans les mythes grecs un juge impartial, gardien d'un ordre auquel nul, pas même les dieux, ne peut se soustraire.",
     "Son nom le plus durable reste pourtant un autre : Plouton, « le Riche », euphémisme destiné à adoucir la crainte qu'inspirait son nom véritable, en insistant sur les richesses enfouies dans la terre plutôt que sur la mort elle-même — Euripide est le premier à l'employer comme un nom à part entière plutôt qu'un simple qualificatif. À Hermione, où l'on situait la fissure par laquelle Héraclès aurait ramené Cerbère à la surface (voir la fiche « Héraclès »), on l'honorait sous le nom de Klymenos, « le Renommé » ; Homère et les tragiques le disent aussi Polydegmon, « celui qui accueille tant de monde » — un titre qui ne laisse aucun doute sur l'unique destination que tous, tôt ou tard, finissent par emprunter.",
     "Dans le Tarot, Hadès est l'Arcane sans nom (XIII), celui qui fauche sans jamais détruire gratuitement : son casque d'invisibilité pendant la guerre des Titans, sa discrétion presque totale hors de son royaume, jusqu'à la façon dont il vit ses amours, tout chez lui agit en silence — une transformation qui opère sans jamais chercher à se faire remarquer.",
@@ -1863,6 +1914,7 @@ const DEITY_LORE = {
   "iris": [
     "Fille du Titan Thaumas et de l'Océanide Électre, Iris personnifie l'arc-en-ciel (voir la fiche « Arc-en-ciel »), pont visible entre le ciel et la terre qu'elle emprunte pour porter les messages des dieux aux mortels comme aux autres divinités.",
     "Contrairement à Hermès, dont les missions relèvent souvent de la ruse ou du commerce, Iris est associée à la fidélité du message transmis sans détour — une messagère de confiance, jamais rusée ni trompeuse. Son rôle ne s'arrête d'ailleurs pas au seul lien entre le ciel et la terre : lorsqu'un dieu doit prêter le serment le plus sacré qui soit, c'est elle qui va puiser, aux portes des Enfers, l'eau du Styx dans laquelle jurer un tel serment (voir la fiche « Hermès »).",
+    "Ses propres sœurs, les Harpyes (voir la fiche « Harpyes »), lui durent un jour la vie sauve : poursuivies par les fils ailés de Borée (voir la fiche « Borée »), Zétès et Calaïs, décidés à les tuer pour libérer le devin Phinée de leurs tourments, elles ne durent leur salut qu'à l'intervention personnelle d'Iris, venue en plein vol obtenir des deux frères la promesse de les épargner.",
     "Dans le Tarot, Iris est Tempérance (XIV), qui verse un liquide d'un vase à l'autre sans en perdre une goutte : l'arc-en-ciel qu'elle personnifie est justement ce pont visible entre deux mondes, le ciel et la terre, qu'aucun des deux ne suffit à combler seul. Messagère de confiance plutôt que rusée, elle va jusqu'aux portes du Styx puiser l'eau du serment le plus sacré — la preuve que l'équilibre le plus solide ne se trouve jamais dans un seul camp, mais dans le passage constant entre les deux.",
   ],
   "pan": [
@@ -2030,6 +2082,7 @@ const DEITY_LORE = {
   "charites": [
     "Trois déesses de la grâce et de la joie — le plus souvent nommées Aglaé (voir la fiche « Aglaé »), Euphrosyne et Thalia —, les Charites ne sont jamais représentées seules : elles dansent toujours ensemble, indissociables les unes des autres.",
     "Compagnes d'Aphrodite et des Muses, elles président à tout ce qui rend la vie belle sans nécessité — la beauté, la fête, la reconnaissance — plutôt qu'à ce qui est simplement utile. Les Heures (voir la fiche « Heures ») se joignent souvent à elles dans les cortèges divins, deux groupes de déesses toujours dansantes qu'on associe volontiers l'un à l'autre.",
+    "Leur habileté ne se limite pas à la danse : elles tissèrent de leurs propres mains la robe de noces d'Harmonie (voir la fiche « Harmonie »), le jour de son mariage avec Cadmos — un vêtement d'une beauté si rare qu'il resta, aux côtés du collier forgé par Héphaïstos pour la même occasion, l'un des présents les plus légendaires jamais offerts à une mortelle.",
   ],
   "narcisse": [
     "Jeune homme d'une beauté remarquable, Narcisse repoussait sans exception tous ceux qui l'aimaient, dont la nymphe Écho (voir la fiche « Écho »), inconsolable de son rejet.",
@@ -2041,9 +2094,10 @@ const DEITY_LORE = {
   ],
   "circé": [
     "Fille d'Hélios (voir la fiche « Hélios ») et magicienne experte en herbes et en breuvages, Circé vit sur une île isolée où elle transforme en animaux les voyageurs qui s'y aventurent sans méfiance — c'est ainsi qu'elle changea en pourceaux une partie de l'équipage d'Ulysse. Sa nièce Médée, fille de son frère Aiétès, hérita d'un don comparable pour la magie, mais tourné vers un tout autre destin (voir la fiche « Médée »).",
-    "Ulysse, protégé par une plante magique offerte par Hermès, résista à son sortilège et la contraignit à rendre à ses hommes leur forme humaine. Il resta ensuite une année entière sur son île, dont naquit un fils, Télégonos — qui, des années plus tard et sans le reconnaître, tuera son propre père, achevant malgré lui une prophétie qui pesait sur Ulysse depuis son retour à Ithaque.",
+    "Des années plus tard, cette même nièce vint jusqu'à son île implorer d'être purifiée du sang de son propre frère, versé en fuyant la Colchide avec Jason (voir la fiche « Jason »). Circé accepta le rite — mais seulement par égard pour le lien de sang qui l'unissait à Médée, jamais pour Jason lui-même, resté pour elle un étranger qu'elle ne chercha jamais à connaître davantage.",
+    "Ulysse, protégé par une plante magique offerte par Hermès, résista à son sortilège et la contraignit à rendre à ses hommes leur forme humaine. Il resta ensuite une année entière sur son île, dont naquit un fils, Télégonos — qui, des années plus tard et sans le reconnaître, tuera son propre père, achevant malgré lui une prophétie qui pesait sur Ulysse depuis son retour à Ithaque. Certaines traditions plus tardives lui donnent aussi une fille de cette même union, Cassiphoné.",
     "Sa magie ne sert pas qu'à punir les intrus : par jalousie, elle change aussi la nymphe Scylla en monstre. Éprise du dieu marin Glaucos, lui-même épris de Scylla, Circé empoisonne la source où celle-ci se baigne — la nymphe en ressort affublée d'une ceinture de têtes de chiens hurlants, condamnée à hanter pour toujours un détroit périlleux de la mer, face au tourbillon de Charybde (voir la fiche « Mer »).",
-    "Elle inflige un sort semblable à Picus, roi du Latium déjà marié à la nymphe Canens : le voyant refuser ses avances par fidélité, elle le change en pic — l'oiseau porte encore aujourd'hui son nom latin, picus. Deux amours contrariés, deux métamorphoses : la magie de Circé transforme aussi souvent qu'elle punit.",
+    "Elle inflige un sort semblable à Picus (voir la fiche « Picus »), roi du Latium déjà marié à la nymphe Canens : le voyant refuser ses avances par fidélité, elle le change en pic — l'oiseau porte encore aujourd'hui son nom latin, picus. Deux amours contrariés, deux métamorphoses : la magie de Circé transforme aussi souvent qu'elle punit.",
     "Dans le Tarot, Circé est la figure du 7 de Coupes, où sept coupes flottent dans les nuages, chacune montrant une image différente — trésor, serpent, couronne : ces reflets multiples et trompeurs sont exactement ce que promettent ses breuvages, séduisants mais rarement ce qu'ils semblent être.",
   ],
   "thétis": [
@@ -2335,7 +2389,7 @@ const DEITY_LORE = {
   ],
   "harmonie": [
     "Fille d'Arès (voir la fiche « Arès »), dieu de la guerre, et d'Aphrodite (voir la fiche « Aphrodite »), Harmonie naît de l'union la plus improbable qui soit — la guerre et l'amour — et en personnifie pourtant l'issue la plus apaisée : la concorde qui succède au conflit.",
-    "Son mariage avec Cadmos, fondateur de Thèbes (voir la fiche « Cadmos »), fut célébré en présence de tous les dieux de l'Olympe, venus lui offrir des présents — dont un collier forgé par Héphaïstos, d'une beauté si rare qu'il resta légendaire pour les générations suivantes.",
+    "Son mariage avec Cadmos, fondateur de Thèbes (voir la fiche « Cadmos »), fut célébré en présence de tous les dieux de l'Olympe, venus lui offrir des présents — dont un collier forgé par Héphaïstos et une robe de noces tissée par les Charites elles-mêmes (voir la fiche « Charites »), d'une beauté si rare qu'ils restèrent légendaires pour les générations suivantes.",
     "Devenue vieille aux côtés de Cadmos, elle fut changée avec lui en serpent et rejoignit les Champs Élysées — refusant, jusque dans la métamorphose, de se séparer de celui qu'elle avait épousé.",
     "Harmonie est particulièrement associée à Cadmos.",
     "Dans le Tarot, Harmonie est la figure du 2 de Coupes, où deux personnages échangent leurs coupes face à face, un caducée ailé suspendu entre eux (voir la fiche « Caducée ») — ses deux serpents entrelacés font écho, par un rapprochement plus tardif, à ce même couple changé en serpents à la fin de sa vie : cette carte célèbre l'union à parts égales, où chacun donne autant qu'il reçoit.",
@@ -2493,9 +2547,11 @@ const DEITY_LORE = {
     "Dans le Tarot, Hypnos est la figure du 4 de Coupes, où un dormeur assis sous un arbre reste indifférent aux coupes qui l'entourent, jusqu'à ce qu'une main lui tende depuis un nuage une quatrième offrande qu'il ne voit pas non plus : son sommeil n'est jamais malveillant, mais il peut, comme ici, faire manquer ce qui est pourtant offert.",
   ],
   "orphée": [
-    "Orphée fut le plus grand musicien jamais né, fils du roi thrace Œagre et de la Muse Calliope (voir la fiche « Calliope ») — certaines traditions le disent plutôt fils d'Apollon lui-même, qui lui offrit une lyre d'or et lui enseigna à en jouer (voir la fiche « Lyre »). Son chant, dit-on, charmait aussi bien les bêtes sauvages que les arbres et les rochers, qui se déplaçaient pour venir l'entendre.",
+    "Orphée fut le plus grand musicien jamais né, fils du roi thrace Œagre (voir la fiche « Œagre ») et de la Muse Calliope (voir la fiche « Calliope ») — certaines traditions le disent plutôt fils d'Apollon lui-même, qui lui offrit une lyre d'or et lui enseigna à en jouer (voir la fiche « Lyre »). Son chant, dit-on, charmait aussi bien les bêtes sauvages que les arbres et les rochers, qui se déplaçaient pour venir l'entendre.",
     "Le jour de son mariage avec la nymphe Eurydice — cérémonie que le dieu Hyménée lui-même présida, sa torche ne cessant de fumer sans jamais prendre flamme, mauvais présage resté sans réponse (voir la fiche « Hyménée ») —, celle-ci fut mordue par un serpent en fuyant un satyr et mourut sur le coup : la joie des noces basculant en un instant dans le deuil.",
     "Fou de chagrin, Orphée descendit aux Enfers avec sa seule lyre : son chant adoucit le cœur inflexible d'Hadès et de Perséphone (voir les fiches « Hadès » et « Perséphone »), qui consentirent à lui rendre Eurydice, à une condition — marcher devant elle sans se retourner avant d'avoir atteint la lumière du jour. Presque arrivé, incapable de résister au doute, il se retourna un instant trop tôt : elle disparut une seconde fois, cette fois pour toujours.",
+    "Retiré du monde après cette seconde perte, Orphée se détourna de tout nouvel amour et, selon certains récits, du culte de Dionysos lui-même, ne jurant plus que par Apollon et le soleil levant — un dédain que les Ménades thraces, fidèles bacchantes du dieu qu'il négligeait, ne lui pardonnèrent pas. Elles le mirent en pièces lors de l'une de leurs transes, dispersant ses membres que les Muses, ses tantes, recueillirent ensuite pour lui offrir une sépulture (voir la fiche « Muses »).",
+    "Sa tête, jetée dans le fleuve Hèbre, continua de chanter le nom d'Eurydice tout au long de sa dérive jusqu'à la mer, avant d'échouer sur l'île de Lesbos, où elle rendit, dit-on, des oracles pendant des siècles — la voix du plus grand musicien du monde restée vivante bien après la mort de son corps.",
     "Dans le Tarot, Orphée est la figure du 5 de Coupes, où une silhouette en deuil contemple trois coupes renversées sans voir les deux qui tiennent encore debout derrière elle : son regard, comme le sien vers Eurydice au sortir des Enfers, se fixe sur la perte au moment précis où il ne fallait plus se retourner.",
   ],
   "hyménée": [
@@ -2668,6 +2724,7 @@ const DEITY_LORE = {
     "Selon Hésiode, la source la plus ancienne à leur sujet, les Hespérides sont filles de la Nuit seule — « qui ne s'unit à personne » —, nées sans père comme plusieurs des figures les plus anciennes et les plus sombres de sa Théogonie. Une tradition plus tardive, aujourd'hui la plus répandue, en fait plutôt les filles du Titan Atlas (voir la fiche « Atlas ») : un lien qui doit sans doute davantage à la géographie qu'à un mythe précis, puisque leur jardin se situe justement aux confins occidentaux du monde, près des montagnes qui portent son nom.",
     "Aux côtés du dragon Ladon, né de Typhon et d'Échidna, elles gardent un pommier d'or planté au bout du monde connu — un cadeau de noces que Gaïa avait offert à Héra le jour de son mariage avec Zeus. Leur nombre même reste incertain selon les auteurs, tantôt trois, tantôt quatre, parfois sept, et leurs noms varient tout autant : Aiglé, Érythie et Hespéréthuse comptent parmi les plus souvent cités.",
     "C'est ce jardin qu'Héraclès dut atteindre pour son onzième travail (voir la fiche « Héraclès ») : plutôt que d'affronter lui-même le dragon, il chargea Atlas d'aller cueillir les pommes à sa place, le temps de porter le ciel sur ses propres épaules — un répit que le Titan tenta de prolonger indéfiniment, avant qu'Héraclès ne le pousse par ruse à reprendre son fardeau.",
+    "Une lecture évhémériste bien plus tardive, rapportée par l'historien grec Diodore de Sicile, rationalise entièrement ce mythe : les « pommes d'or », dit-il, désignaient en réalité des moutons — le mot grec mêlon signifiant à la fois « pomme » et « brebis » —, et le jardin merveilleux n'était autre qu'un domaine bien réel, appartenant à un roi libyen historique, que le onzième travail d'Héraclès se serait borné à visiter sans le moindre prodige. Une explication qui, en dépouillant le mythe de tout son merveilleux, n'a jamais réellement supplanté le récit qu'elle prétendait éclaircir.",
     "Réputées pour la douceur de leur chant, au point que certains poètes les surnomment les « chanteuses », les Hespérides restent des figures discrètes : aucun mythe ne leur attribue de destin propre en dehors de cette garde silencieuse, à l'écart de l'Olympe, aux confins d'un monde dont même les auteurs anciens ne savaient plus très bien situer le bord.",
   ],
   "cécrops": [
@@ -2690,6 +2747,265 @@ const DEITY_LORE = {
   "pandrosos": [
     "Fille du roi Cécrops d'Athènes (voir la fiche « Cécrops »), Pandrosos est celle des trois sœurs — avec Aglauros et Hersé (voir les fiches « Aglauros » et « Hersé ») — à qui Athéna confia le coffre contenant le jeune Érichthonios, en leur interdisant formellement de l'ouvrir (voir la fiche « Érichthonios »).",
     "Seule des trois à respecter cet interdit jusqu'au bout quand ses sœurs cédèrent à la curiosité, Pandrosos échappa à toute conséquence — un culte lui fut même rendu à Athènes, sur l'Acropole même, dans un sanctuaire attenant à celui d'Athéna, le Pandroséion, en récompense de cette fidélité restée sans faille.",
+  ],
+  "électre": [
+    "Fille d'Agamemnon et de Clytemnestre (voir les fiches « Agamemnon » et « Clytemnestre »), Électre vit son père assassiné à son retour de Troie et sauva de justesse son jeune frère Oreste (voir la fiche « Oreste »), qu'elle fit fuir avant que leur mère et son amant Égisthe (voir la fiche « Égisthe ») ne puissent s'en prendre à lui aussi.",
+    "Des années durant, elle survécut dans sa propre maison réduite au rang de servante, humiliée par Clytemnestre et Égisthe, sans jamais renoncer à l'espoir du retour de son frère pour venger leur père.",
+    "Lorsque Oreste revint enfin, déguisé pour ne pas être reconnu, c'est elle qui l'identifia la première et l'encouragea à accomplir la vengeance qu'elle n'avait jamais cessé d'attendre — un matricide qu'elle approuva sans réserve, contrairement à sa sœur Chrysothémis (voir la fiche « Chrysothémis »), bien plus prudente qu'elle.",
+    "Après le meurtre de leur mère, elle épousa Pylade, le fidèle compagnon qui avait accompagné Oreste dans toute son épreuve — une fin plus apaisée que celle qu'imagine un temps Euripide, qui la montre menacée de mort aux côtés de son frère avant qu'Apollon n'intervienne pour les sauver tous deux.",
+  ],
+  "chrysothémis": [
+    "Fille d'Agamemnon et de Clytemnestre (voir les fiches « Agamemnon » et « Clytemnestre »), Chrysothémis resta dans l'ombre de sa sœur Électre (voir la fiche « Électre »), dont l'existence entière se résume, chez Sophocle, à ce contraste entre les deux caractères.",
+    "Plus soumise que sa sœur, elle refusa de se joindre au projet de vengeance contre leur mère Clytemnestre et son amant Égisthe (voir la fiche « Égisthe »), jugeant la prudence préférable à un matricide qui lui semblait voué à l'échec — un choix qu'Électre lui reprocha amèrement comme une lâcheté.",
+    "Sophocle ne raconte jamais ce qu'il advint d'elle après le meurtre : contrairement à sa sœur, dont le destin se referme sur un mariage avec Pylade, Chrysothémis disparaît simplement du récit, aussi discrète dans sa sortie qu'elle l'aura été tout au long de la pièce.",
+  ],
+  "arachné": [
+    "Tisserande lydienne d'un talent extraordinaire, Arachné se vantait de surpasser Athéna elle-même dans l'art du tissage (voir la fiche « Athéna ») — une prétention que la déesse, déguisée en vieille femme, vint d'abord tenter de tempérer en vain.",
+    "Les deux rivales tissèrent alors chacune une tapisserie : Athéna y représenta les dieux de l'Olympe dans toute leur majesté, tandis qu'Arachné choisit d'y montrer leurs frasques amoureuses les moins glorieuses — Zeus changé en taureau, en cygne, en pluie d'or pour tromper ses conquêtes. Le travail d'Arachné, techniquement irréprochable, ne laissa à la déesse furieuse d'autre reproche à formuler que son sujet.",
+    "Athéna déchira la tapisserie et frappa Arachné, qui, de honte, tenta de se pendre. La déesse la sauva de la mort mais la changea en araignée, la condamnant, elle et sa descendance, à tisser sans fin — un châtiment qui perpétue malgré tout, à sa manière, le talent qu'elle refusait de renier.",
+  ],
+  "leucothoé": [
+    "Princesse d'Orient, fille du roi Orchamos, Leucothoé fut aimée d'Hélios (voir la fiche « Hélios »), qui prit l'apparence de sa propre mère pour s'introduire auprès d'elle avant de se révéler dans toute sa splendeur divine.",
+    "Clytie (voir la fiche « Clytie »), nymphe éprise du même dieu et jalouse d'avoir été délaissée pour sa rivale, révéla la liaison au père de Leucothoé. Furieux, Orchamos fit enterrer vivante sa propre fille, sans que le dieu, accouru trop tard, ne puisse la sauver.",
+    "Hélios changea le corps enseveli en un arbuste à encens, dont le parfum continue de s'élever de la terre — le seul hommage qu'il put encore rendre à son amante, une fois rendue à la terre qui l'avait recueillie.",
+  ],
+  "clytie": [
+    "Nymphe éprise d'Hélios (voir la fiche « Hélios »), Clytie fut un temps payée de retour, jusqu'à ce que le dieu lui préfère la princesse Leucothoé (voir la fiche « Leucothoé »).",
+    "Rongée de jalousie, elle révéla la liaison au père de sa rivale, provoquant sa mort — un geste qui ne lui rendit pourtant jamais l'amour d'Hélios, désormais détourné d'elle pour de bon.",
+    "Restée assise nue sur la terre nue neuf jours durant, sans boire ni manger, à suivre des yeux la course du dieu à travers le ciel, elle finit par s'enraciner sur place et se changer en une fleur qui tourne encore aujourd'hui son visage vers le soleil tout au long du jour.",
+  ],
+  "danaé": [
+    "Fille du roi Acrisios d'Argos, Danaé fut enfermée par son père dans une chambre de bronze après qu'un oracle lui eut prédit la mort de sa propre main par un futur petit-fils — une précaution que Zeus déjoua sans effort en s'unissant à elle sous la forme d'une pluie d'or.",
+    "De cette union naquit Persée (voir la fiche « Persée »). Acrisios, découvrant l'enfant, jeta mère et fils à la mer dans un coffre de bois, que les flots portèrent jusqu'à l'île de Sériphos, où un pêcheur nommé Dictys les recueillit et les éleva.",
+    "Le frère de Dictys, le roi Polydectès, épris de Danaé et désireux de se débarrasser de son fils devenu gênant, envoya Persée chercher la tête de la Gorgone Méduse (voir la fiche « Méduse ») — une mission pensée comme un aller sans retour. De retour victorieux, Persée pétrifia Polydectès et toute sa cour d'un dernier regard de la Gorgone, libérant enfin sa mère de cette emprise.",
+  ],
+  "adonis": [
+    "Né d'un arbre à myrrhe, fruit de la faute funeste de sa mère Myrrha envers son propre père (voir la fiche « Myrrha »), Adonis fut un enfant d'une beauté si extraordinaire qu'Aphrodite elle-même, blessée par une flèche d'Éros en le voyant, en tomba éperdument amoureuse (voir la fiche « Aphrodite »).",
+    "Confié en secret à Perséphone pour être élevé loin de tous (voir la fiche « Perséphone »), il grandit si beau que les deux déesses se le disputèrent, jusqu'à ce que Zeus tranche : Adonis partagerait son temps entre l'une et l'autre, choisissant de lui-même de passer le plus clair de ses jours auprès d'Aphrodite.",
+    "Passionné de chasse malgré les mises en garde d'Aphrodite, effrayée à l'idée de le perdre, il fut mortellement blessé par un sanglier — envoyé, selon certains récits, par la jalousie d'Arès ou d'Artémis. Accourue trop tard, Aphrodite se blessa elle-même à une épine en se précipitant vers lui ; là où leurs sangs mêlés touchèrent la terre, des anémones rouges jaillirent aussitôt.",
+    "Sa mort ne le sépare pas non plus tout à fait de Perséphone : les Enfers et l'Olympe se partagent depuis, dit-on, ce même jeune homme que se disputaient déjà deux déesses de son vivant — un cycle qui n'est pas sans rappeler celui de Perséphone elle-même, entre sa mère et son époux.",
+  ],
+  "myrrha": [
+    "Princesse de Chypre, fille du roi Cinyras, Myrrha fut frappée d'un désir incestueux irrépressible pour son propre père — punition, selon les versions, d'Aphrodite elle-même, offensée que la mère de Myrrha ait osé comparer la beauté de sa fille à la sienne.",
+    "Aidée par sa nourrice, elle s'unit à son père dans l'obscurité, sans qu'il reconnaisse sa propre fille, plusieurs nuits durant — jusqu'à ce que Cinyras, voulant enfin voir le visage de son amante, découvre la vérité et se lance à sa poursuite, une épée à la main.",
+    "Fuyant sa colère et celle des dieux, Myrrha erra des mois durant avant d'implorer, épuisée, d'être changée en une forme qui ne soit ni tout à fait vivante ni tout à fait morte. Les dieux l'exaucèrent en la changeant en arbre à myrrhe, dont l'écorce continue de pleurer la résine odorante qui porte son nom.",
+    "Dix mois plus tard, l'écorce de l'arbre se fendit et en sortit un enfant déjà formé, Adonis (voir la fiche « Adonis ») — né de la faute de sa mère, mais si beau qu'il devait bientôt faire tourner la tête d'une déesse à son tour.",
+  ],
+  "œagre": [
+    "Roi légendaire de Thrace, Œagre est présenté par la tradition la plus répandue comme le père d'Orphée (voir la fiche « Orphée »), né de son union avec la Muse Calliope (voir la fiche « Calliope ») — une paternité que d'autres récits attribuent plutôt à Apollon lui-même, jugeant plus digne d'un musicien aussi exceptionnel de descendre directement d'un dieu.",
+    "Simple mortel dans une lignée par ailleurs traversée de figures divines, Œagre reste une silhouette discrète de la mythologie thrace — moins un personnage aux exploits propres qu'un nom nécessaire pour ancrer la généalogie de son fils dans le monde des hommes autant que dans celui des dieux.",
+  ],
+  "crotos": [
+    "Fils du dieu Pan et d'Euphémé, nourrice des Muses (voir la fiche « Pan »), Crotos grandit sur le mont Hélicon aux côtés des Muses elles-mêmes, qu'allaitait sa propre mère, partageant leur goût pour la musique et la poésie sans jamais en être un lui-même (voir la fiche « Muses »).",
+    "Chasseur passionné vivant dans les montagnes parmi les satyres, il inventa, dit-on, l'art de l'applaudissement et des acclamations rythmées pour saluer les Muses après leurs concerts — un tel enthousiasme qu'elles obtinrent de Zeus qu'il soit changé en constellation en récompense.",
+    "Il devint ainsi le Sagittaire, l'archer que l'on voit encore aujourd'hui dans le ciel nocturne, parfois figuré mi-homme mi-cheval en écho à sa vie sauvage parmi les bêtes des montagnes — sans qu'aucun lien antique ne le rattache pour autant au centaure Chiron (voir la fiche « Chiron »), malgré une ressemblance qui prête souvent à confusion.",
+  ],
+  "deucalion": [
+    "Fils du Titan Prométhée (voir la fiche « Prométhée »), Deucalion régnait sur Phthie lorsque Zeus, excédé par la cruauté et l'impiété grandissante des hommes, décida de noyer l'humanité entière sous un déluge universel.",
+    "Prévenu par son père, Deucalion construisit un coffre de bois où il s'enferma avec son épouse Pyrrha (voir la fiche « Pyrrha »), fille d'Épiméthée et de Pandore — les deux seuls survivants d'une humanité tout entière engloutie neuf jours et neuf nuits durant.",
+    "Le coffre s'échoua enfin sur le mont Parnasse, où le couple, désireux de repeupler la terre, consulta l'oracle de Thémis (voir la fiche « Thémis »). Celui-ci leur ordonna de jeter derrière eux les os de leur mère : comprenant qu'il s'agissait des pierres de la Terre elle-même, ils obéirent, et des pierres jetées par Deucalion naquirent des hommes, tandis que celles jetées par Pyrrha donnèrent naissance à des femmes.",
+    "De cette seconde humanité naquit Hellen, dont le nom donna naissance au mot même de Hellènes — les Grecs se pensant depuis, par cette généalogie, tous descendants d'un couple ayant survécu à la destruction complète du monde.",
+  ],
+  "pyrrha": [
+    "Fille d'Épiméthée et de Pandore, la première femme façonnée par les dieux, Pyrrha épousa son cousin Deucalion (voir la fiche « Deucalion »), fils du Titan Prométhée (voir la fiche « Prométhée »).",
+    "Lorsque Zeus déchaîna un déluge universel pour engloutir une humanité devenue impie, le couple survécut seul, enfermé dans un coffre de bois construit sur les conseils de Prométhée, jusqu'à s'échouer sur le mont Parnasse.",
+    "Consultant l'oracle de Thémis (voir la fiche « Thémis ») pour savoir comment repeupler la terre, ils comprirent que « les os de leur mère » désignaient les pierres de la Terre elle-même : celles que jeta Pyrrha par-dessus son épaule devinrent des femmes, tandis que celles jetées par Deucalion donnèrent naissance à des hommes — une seconde humanité entièrement née de la pierre plutôt que de la chair.",
+  ],
+  "pléiades": [
+    "Sept nymphes filles du Titan Atlas (voir la fiche « Atlas ») et de l'Océanide Pléioné, les Pléiades — Maïa, Électre, Taygète, Alcyone, Céléno, Stérope et Mérope — furent poursuivies sans relâche par le chasseur Orion (voir la fiche « Orion »), épris de leur beauté à toutes.",
+    "Pour les soustraire à cette poursuite qui durait depuis des années, Zeus les changea d'abord en colombes, puis en étoiles, formant au ciel l'amas qui porte encore leur nom — Orion continue, dit-on, de les poursuivre nuit après nuit dans le ciel, sans jamais parvenir à les rattraper.",
+    "Une seule d'entre elles, Mérope, brille aujourd'hui plus faiblement que ses sœurs : honteuse d'avoir aimé un simple mortel, Sisyphe, quand toutes les autres s'étaient unies à des dieux, elle se voile le visage de chagrin depuis qu'elle a rejoint le ciel.",
+    "Maïa, l'aînée des sept, resta la plus célèbre : aimée de Zeus dans une grotte du mont Cyllène, elle devint la mère d'Hermès (voir la fiche « Hermès »).",
+  ],
+  "hyas": [
+    "Frère des Hyades — nymphes que la tradition la plus répandue dit filles d'Atlas (voir la fiche « Atlas ») et sœurs des Pléiades (voir la fiche « Pléiades ») —, Hyas fut un chasseur habile, tué en pleine chasse par un lion ou un sanglier selon les versions.",
+    "Ses sœurs, inconsolables, le pleurèrent sans fin jusqu'à en mourir elles-mêmes de chagrin — les dieux, touchés par une telle fidélité, les changèrent en étoiles, formant l'amas des Hyades, dont le lever, dans l'Antiquité, annonçait traditionnellement la saison des pluies.",
+    "Leur nom même, associé au mot grec désignant la pluie, hyein, a longtemps fait croire à un lien direct avec ce phénomène — une étymologie aujourd'hui contestée, certains la faisant plutôt dériver du mot pour « pourceau », hys, en référence à la forme du groupe d'étoiles.",
+  ],
+  "grées": [
+    "Trois sœurs nées vieilles dès leur naissance — Enyo, homonyme sans lien de parenté avec la déesse de la guerre du même nom (voir la fiche « Enyo »), Péphrédo et Dino —, les Grées, filles de Phorcys et de Céto, ne partagent à elles trois qu'un seul œil et une seule dent, qu'elles se passent tour à tour pour voir et mâcher.",
+    "Sœurs des trois Gorgones (voir la fiche « Gorgones »), dont Méduse (voir la fiche « Méduse »), elles seules connaissaient le chemin vers le repaire des Nymphes détentrices des armes nécessaires pour la vaincre. Persée (voir la fiche « Persée »), envoyé chercher la tête de la Gorgone, leur déroba cet œil unique au moment de l'échange et refusa de le leur rendre tant qu'elles ne lui auraient pas révélé ce qui lui fallait savoir pour tuer leur propre sœur.",
+    "Prises au piège de leur propre infirmité partagée, les Grées n'eurent d'autre choix que de céder — indiquant à Persée la route à suivre, malgré elles complices du sort funeste réservé à Méduse.",
+  ],
+  "méduse": [
+    "Seule mortelle des trois Gorgones (voir la fiche « Gorgones »), Méduse fut autrefois, dit-on, une jeune femme d'une beauté remarquable, réputée surtout pour sa chevelure — jusqu'à ce que Poséidon (voir la fiche « Poséidon ») s'unisse à elle de force dans le temple même d'Athéna.",
+    "Furieuse de voir son sanctuaire profané, Athéna (voir la fiche « Athéna ») punit non l'agresseur mais la victime : elle changea la chevelure de Méduse en un nid de serpents et son regard en une arme pétrifiante, condamnant quiconque la fixerait dans les yeux à se figer instantanément en pierre.",
+    "Persée (voir la fiche « Persée »), envoyé par le roi Polydectès chercher sa tête, ne put la vaincre qu'en évitant soigneusement son regard direct, guidé par le seul reflet de son bouclier poli offert par Athéna. Du sang jailli de sa blessure naquirent d'un coup Pégase et le géant Chrysaor, tous deux déjà conçus en elle par Poséidon avant sa mise à mort.",
+    "Sa tête, remise à Athéna qui la fixa pour toujours sur son égide, continua de pétrifier quiconque la regardait même après sa mort — un pouvoir qu'elle n'a jamais tout à fait perdu, malgré la fin qu'on lui connaît.",
+  ],
+  "gorgones": [
+    "Trois sœurs monstrueuses, filles de Phorcys et de Céto comme leurs propres sœurs les Grées (voir la fiche « Grées ») — Sthéno, Euryale et Méduse (voir la fiche « Méduse ») —, les Gorgones partagent un même pouvoir : quiconque croise leur regard se change instantanément en pierre.",
+    "Seule Méduse, parmi les trois, était mortelle — un détail qui scella son destin plus que celui de ses sœurs, puisque seule elle put être décapitée par Persée (voir la fiche « Persée »), tandis que Sthéno et Euryale, immortelles, se lancèrent en vain à sa poursuite pour venger leur cadette.",
+    "Leur visage — une bouche large aux crocs de sanglier, une langue tirée, une chevelure de serpents — devint dans l'art grec un motif protecteur à part entière, l'apotropaïon par excellence : sculpté sur les boucliers, les frontons de temples ou les mosaïques de seuil, il servait à détourner le mauvais œil plutôt qu'à effrayer sans raison.",
+  ],
+  "ganymède": [
+    "Prince troyen d'une beauté sans pareille parmi les mortels, Ganymède gardait les troupeaux de son père sur le mont Ida lorsque Zeus (voir la fiche « Zeus »), frappé par sa grâce, se changea en aigle — ou envoya son propre aigle, selon les versions — pour l'enlever et l'emporter jusqu'à l'Olympe.",
+    "Devenu immortel, il y remplaça Hébé (voir la fiche « Hébé ») comme échanson des dieux, chargé de verser le nectar lors de leurs banquets — un honneur si rare qu'aucun autre mortel ne l'obtint jamais de cette manière.",
+    "Pour consoler son père de cet enlèvement, Zeus lui offrit en dédommagement des chevaux divins d'une rapidité extraordinaire, capables de courir sur l'eau comme sur la terre ferme — un échange que la tradition grecque présente sans détour comme un juste prix, plutôt qu'une réparation suffisante pour un fils perdu.",
+    "Les Grecs placèrent plus tard Ganymède parmi les étoiles sous la forme du Verseau, versant l'eau céleste depuis son urne — une dernière image qui prolonge, dans le ciel, le geste même qu'il accomplissait déjà sur l'Olympe.",
+  ],
+  "myrina": [
+    "Reine légendaire des Amazones libyennes — un peuple guerrier distinct des Amazones du Pont-Euxin plus connues (voir la fiche « Amazones »), également gouvernées par des reines mais situées sur un tout autre rivage —, Myrina mena ses guerrières à la conquête de plusieurs peuples d'Afrique du Nord, selon le récit qu'en donne l'historien grec Diodore de Sicile.",
+    "Elle vainquit notamment les Gorgones, un peuple libyen guerrier dont le nom, selon Diodore lui-même, n'a rien à voir avec les Gorgones monstrueuses de la légende de Persée (voir la fiche « Gorgones ») — une simple homonymie que les auteurs anciens prenaient déjà soin de ne pas confondre.",
+    "Elle poursuivit ensuite sa conquête jusqu'en Égypte, puis en Syrie et en Asie Mineure, fondant sur son passage plusieurs cités qui portèrent longtemps son nom, avant de trouver la mort au combat contre une coalition de Thraces et de Scythes.",
+    "Son nom reste attaché, aux côtés d'Otrera, d'Hippolyté et d'Antiope (voir les fiches « Otrera », « Hippolyté » et « Antiope »), à la longue liste des reines qui firent des Amazones l'un des peuples les plus redoutés de la mythologie grecque.",
+  ],
+  "amazones": [
+    "Peuple légendaire de femmes guerrières, les Amazones ne tolèrent aucun homme en leur sein : selon la tradition la plus répandue, elles ne se rapprochent des hommes des peuples voisins qu'une fois par an, pour assurer leur descendance, et n'élèvent que leurs filles, renvoyant leurs fils à leurs pères ou les tuant selon les versions les plus sombres.",
+    "Leur société se transmet de reine en reine plutôt que de génération en génération dans une même famille : Otrera (voir la fiche « Otrera »), première d'entre elles et épouse mortelle d'Arès, fonda leur nation ; lui succédèrent, parmi d'autres, Hippolyté (voir la fiche « Hippolyté »), dont Héraclès obtint la ceinture, Antiope (voir la fiche « Antiope »), enlevée par Thésée, Penthésilée, tuée par Achille devant Troie, et Myrina (voir la fiche « Myrina »), conquérante jusqu'en Égypte selon Diodore de Sicile.",
+    "Leur nom même reste débattu depuis l'Antiquité : les Grecs le rattachaient à a-mazos, « sans sein », prétendant qu'elles se brûlaient ou s'ôtaient le sein droit pour mieux tirer à l'arc — une étymologie populaire qu'aucune représentation antique ne confirme jamais, puisque l'art grec les figure toujours avec leurs deux seins intacts.",
+    "Guerrières redoutées autant que fascinantes pour l'imaginaire grec, elles incarnent un monde inversé où ce sont les femmes qui commandent, chassent et combattent — un miroir renversé de l'ordre social grec, convoqué chaque fois qu'un héros devait prouver sa valeur face à un adversaire à sa mesure.",
+  ],
+  "néréides": [
+    "Cinquante nymphes marines, filles de Nérée et de l'Océanide Doris (voir la fiche « Nérée »), les Néréides personnifient la mer dans ce qu'elle a de plus bienveillant — contrairement aux monstres marins ou aux tempêtes que d'autres figures incarnent.",
+    "Deux d'entre elles connurent un destin bien au-delà des autres : Amphitrite (voir la fiche « Amphitrite »), devenue reine des mers en épousant Poséidon, et Thétis (voir la fiche « Thétis »), mère d'Achille, que Zeus et Poséidon eux-mêmes durent renoncer à épouser par crainte d'une prophétie.",
+    "On les représente traditionnellement au milieu des vagues, chevauchant des dauphins ou des hippocampes, leur corps de femme se prolongeant souvent, dans l'art le plus tardif, par une queue de poisson — une image que la tradition la plus ancienne ne leur réserve pourtant pas exclusivement, la représentation purement humaine restant tout aussi fréquente chez les Grecs archaïques et classiques.",
+  ],
+  "harpyes": [
+    "Sœurs d'Iris (voir la fiche « Iris »), filles comme elle du Titan Thaumas et de l'Océanide Électre, les Harpyes sont des esprits ailés au visage de femme et au corps d'oiseau de proie, réputées pour la puanteur et la voracité qu'elles laissent sur leur passage.",
+    "Envoyées par Zeus punir le devin Phinée, qui avait abusé de son don de prophétie, elles fondaient sur chacun de ses repas pour le dévorer ou le souiller avant qu'il ait pu y toucher, le condamnant à une faim perpétuelle malgré des tables sans cesse dressées.",
+    "Les Argonautes de passage, exaspérés par ses tourments, chargèrent les fils ailés de Borée, Zétès et Calaïs (voir la fiche « Borée »), de les chasser. Sur le point de les tuer, les deux frères durent y renoncer sur l'ordre d'Iris elle-même, venue en personne épargner ses propres sœurs et leur faire promettre de ne plus jamais tourmenter Phinée.",
+    "Leur nom reste depuis attaché à toute prise brutale et rapace — les « harpies » du langage courant leur doivent directement leur réputation.",
+  ],
+  "libye": [
+    "Fille d'Épaphos — le fils qu'Io, une jeune femme aimée de Zeus puis changée en génisse par la jalousie d'Héra, mit au monde après ses longues errances jusqu'en Égypte —, Libye donna son nom au continent tout entier qui porte encore le sien aujourd'hui.",
+    "Unie au dieu-fleuve Nil, elle mit au monde des jumeaux, Bélos et Agénor : le premier régna sur l'Égypte et engendra à son tour Égyptos et Danaos (voir les fiches « Égyptos » et « Danaos »), tandis que le second partit fonder Tyr et Sidon, où naquirent plus tard Cadmos et Europe (voir les fiches « Cadmos » et « Europe »).",
+    "Par cette double descendance, Libye se trouve à l'origine à la fois de la lignée royale d'Argos, promise aux Danaïdes et à Persée, et de celle de Thèbes, promise à Cadmos et à ses propres descendants — une même aïeule à l'origine de deux des plus grandes maisons de la mythologie grecque.",
+  ],
+  "égyptos": [
+    "Roi jumeau de Danaos (voir la fiche « Danaos »), petit-fils de Libye (voir la fiche « Libye ») par leur père Bélos, Égyptos régna sur l'Égypte et engendra cinquante fils, tandis que son frère n'eut que cinquante filles, les Danaïdes (voir la fiche « Danaïdes »).",
+    "Voulant réconcilier les deux branches rivales de la famille, il proposa à Danaos de marier ses cinquante fils à ses cinquante nièces — une offre que Danaos, averti par un oracle qu'un de ses futurs gendres le tuerait un jour, accepta en apparence tout en préparant en secret un tout autre sort à ses fils.",
+    "La nuit même des noces, quarante-neuf des cinquante fils d'Égyptos furent poignardés par leurs jeunes épouses sur l'ordre de leur père — seul Lyncée (voir la fiche « Lyncée »), épargné par sa femme Hypermestre (voir la fiche « Hypermestre »), survécut à ce massacre nuptial.",
+  ],
+  "danaos": [
+    "Roi jumeau d'Égyptos (voir la fiche « Égyptos »), Danaos régna sur la Libye avant de fuir vers Argos avec ses cinquante filles, les Danaïdes (voir la fiche « Danaïdes »), pour échapper au mariage forcé que leur imposaient leurs cinquante cousins.",
+    "Rattrapé malgré tout par les fils d'Égyptos, il feignit d'accepter les noces mais arma chacune de ses filles d'un poignard, leur ordonnant de tuer leur époux la nuit même des noces — un massacre que toutes accomplirent sauf une, Hypermestre (voir la fiche « Hypermestre »), amoureuse de son propre mari Lyncée (voir la fiche « Lyncée »).",
+    "Devenu roi d'Argos à la place du souverain local, Gélanor, qu'un jugement populaire lui préféra après qu'un loup eut attaqué un troupeau de bœufs sous les yeux de la cité — un présage que les Argiens interprétèrent comme annonçant la victoire de l'étranger sur l'autochtone —, Danaos fonda une dynastie qui allait, par Hypermestre et Lyncée, mener directement jusqu'à Persée (voir la fiche « Persée »).",
+  ],
+  "danaïdes": [
+    "Les cinquante filles de Danaos (voir la fiche « Danaos »), forcées d'épouser leurs cinquante cousins, les fils d'Égyptos (voir la fiche « Égyptos »), reçurent chacune de leur père un poignard et l'ordre de tuer leur époux la nuit même des noces — un massacre que quarante-neuf d'entre elles accomplirent sans faillir.",
+    "Seule Hypermestre (voir la fiche « Hypermestre ») épargna son mari Lyncée (voir la fiche « Lyncée »), par amour plutôt que par désobéissance calculée — un geste qui lui valut d'abord d'être jugée par son propre père, avant d'être acquittée et de fonder, avec lui, la lignée qui mènera jusqu'à Persée.",
+    "Aux Enfers, les quarante-neuf autres furent condamnées à remplir sans fin un tonneau percé de partout, puisant une eau qui s'échappe toujours avant d'atteindre le bord — un châtiment resté depuis l'image même de l'effort perpétuellement recommencé et jamais achevé, le « tonneau des Danaïdes ».",
+  ],
+  "hypermestre": [
+    "Seule des cinquante Danaïdes (voir la fiche « Danaïdes ») à épargner son époux la nuit de leurs noces, Hypermestre refusa d'obéir à l'ordre de son père Danaos (voir la fiche « Danaos ») par amour pour Lyncée (voir la fiche « Lyncée »), son propre cousin.",
+    "Elle l'aida même à s'enfuir avant que la fureur de leurs sœurs ne puisse le rattraper, au prix d'être elle-même jugée pour désobéissance devant un tribunal argien — un procès dont elle sortit acquittée, Aphrodite elle-même étant, selon la légende, intervenue en sa faveur.",
+    "De sa réconciliation avec Lyncée naquit une lignée royale qui traverse plusieurs générations avant d'aboutir, par Danaé, à la naissance de Persée (voir la fiche « Persée ») — la seule des cinquante sœurs dont la descendance survécut, précisément pour avoir refusé de tuer.",
+  ],
+  "lyncée": [
+    "Fils d'Égyptos (voir la fiche « Égyptos ») et l'un des cinquante prétendants mariés de force aux Danaïdes (voir la fiche « Danaïdes »), Lyncée fut le seul à échapper au massacre organisé par son beau-père Danaos (voir la fiche « Danaos ») la nuit de ses propres noces.",
+    "Son épouse Hypermestre (voir la fiche « Hypermestre »), amoureuse de lui plutôt que soumise à l'ordre paternel, le laissa fuir avant de l'aider à revenir plus tard reprendre le trône d'Argos, une fois Danaos disparu.",
+    "De leur réconciliation naquit Abas, puis, quelques générations plus tard, Acrisios et Danaé (voir la fiche « Danaé »), dont le fils Persée (voir la fiche « Persée ») referme ainsi la boucle : le seul couple épargné parmi les Danaïdes se révèle, au bout du compte, l'ancêtre du plus grand tueur de monstres de la mythologie grecque.",
+  ],
+  "byzas": [
+    "Fils de Poséidon (voir la fiche « Poséidon ») et de la nymphe Kéroessa — elle-même fille d'Io et de Zeus, née près d'une corne d'or à l'embouchure d'une baie qui prit depuis le nom de Corne d'Or —, Byzas grandit sur les rives du Bosphore avant de consulter l'oracle du temple de Delphes (voir la fiche « Temple ») pour savoir où fonder sa propre cité.",
+    "L'oracle lui ordonna de bâtir « en face du pays des aveugles » : arrivé sur la rive européenne du détroit, il comprit l'énigme en découvrant une colonie déjà installée sur la rive asiatique, à Chalcédoine — ses habitants avaient été « aveugles » de ne pas voir la supériorité évidente du site d'en face, mieux protégé et bien plus fertile.",
+    "Il fonda là, au confluent de deux mers, la cité de Byzance, qui portera son nom durant des siècles avant de devenir, sous l'empereur Constantin, Constantinople, puis Istanbul — trois noms pour une seule ville, unique à cheval sur deux continents.",
+  ],
+  "phidaléia": [
+    "Figure féminine associée par une tradition tardive et peu développée à une occupation antérieure du site où Byzas (voir la fiche « Byzas ») fondera plus tard Byzance — les sources byzantines qui la mentionnent restent rares et bien postérieures à l'époque classique.",
+    "Certains chroniqueurs byzantins la rattachent aux légendes plus anciennes qui font des Amazones (voir la fiche « Amazones ») les toutes premières occupantes de la région, avant l'arrivée des colons grecs venus de Mégare — une hypothèse parmi d'autres, à prendre avec la prudence qu'imposent des sources aussi tardives et lacunaires.",
+  ],
+  "admète": [
+    "Roi de Phères en Thessalie, Admète fut aimé d'Apollon (voir la fiche « Apollon »), condamné à le servir un an comme simple berger mortel en punition d'avoir tué les Cyclopes — une corvée que l'affection sincère du dieu transforma en année particulièrement heureuse pour ses troupeaux, toujours féconds tant qu'Apollon veillait sur eux.",
+    "En retour de cette amitié, Apollon obtint des Parques la faveur exceptionnelle de prolonger la vie d'Admète au-delà du jour fixé par le destin, à condition qu'un proche accepte de mourir à sa place le moment venu — une clause qu'aucun de ses vieux parents n'accepta, mais que sa propre épouse Alceste (voir la fiche « Alceste ») assuma sans hésiter.",
+    "Lorsque le jour funeste arriva, Héraclès (voir la fiche « Héraclès »), de passage chez lui et ignorant tout du deuil qui venait de le frapper, insista pour être reçu en hôte malgré tout — touché par cette hospitalité maintenue en plein malheur, il se rendit ensuite au tombeau d'Alceste, lutta corps à corps contre Thanatos (voir la fiche « Thanatos ») et la lui rendit vivante.",
+  ],
+  "alceste": [
+    "Fille du roi Pélias d'Iolcos (voir la fiche « Pélias »), Alceste épousa Admète (voir la fiche « Admète »), roi de Phères, après qu'il eut accompli l'épreuve exigée par son père — atteler à son char un lion et un sanglier ensemble —, un exploit qu'Admète ne réussit qu'avec l'aide discrète d'Apollon (voir la fiche « Apollon »), alors à son service.",
+    "Lorsque le moment fixé par le destin pour la mort d'Admète arriva, et qu'aucun de ses vieux parents n'accepta de mourir à sa place malgré la faveur obtenue par Apollon auprès des Parques, Alceste se proposa elle-même sans hésiter, par amour pour son époux.",
+    "Elle mourut donc à sa place — mais Héraclès (voir la fiche « Héraclès »), reçu en hôte chez Admète le jour même de ce deuil sans en connaître la cause, insista pour être traité normalement malgré tout ; découvrant ensuite la vérité, il se rendit au tombeau et lutta corps à corps contre Thanatos (voir la fiche « Thanatos ») pour la ramener vivante à son époux.",
+  ],
+  "pélias": [
+    "Roi usurpateur d'Iolcos, Pélias avait chassé du trône son propre demi-frère Éson, père de Jason (voir la fiche « Jason »), et gouvernait depuis en redoutant un oracle qui l'avertissait de se méfier d'un homme chaussé d'une seule sandale.",
+    "Lorsque Jason, adulte, se présenta devant lui ayant perdu une sandale en traversant un fleuve à gué, Pélias, feignant d'accepter de lui rendre son trône, lui imposa en échange une mission jugée impossible : ramener la Toison d'or de Colchide, aux confins du monde connu.",
+    "À son retour, découvrant que Pélias avait entre-temps fait périr son propre père, Jason laissa Médée (voir la fiche « Médée ») organiser seule la vengeance : elle persuada les propres filles de Pélias de le rajeunir en le découpant et en le faisant bouillir dans un chaudron magique, après une démonstration convaincante sur un vieux bélier changé en agneau — mais le sortilège, cette fois, ne joua jamais, et Pélias mourut de leurs mains sans jamais renaître.",
+  ],
+  "clito": [
+    "Selon le récit qu'en donne Platon dans le Timée et le Critias, Clito était une mortelle qui vivait seule avec ses parents sur une colline au centre d'une île, aux confins occidentaux du monde connu, lorsque Poséidon (voir la fiche « Poséidon ») en tomba amoureux.",
+    "Pour la protéger et s'unir à elle à l'abri des regards, le dieu entoura la colline d'anneaux concentriques de terre et d'eau, alternés comme des douves impossibles à franchir sans navire — le plan même de la cité qui allait devenir Atlantis.",
+    "De leur union naquirent cinq paires de jumeaux, dont l'aîné, Atlas — homonyme du Titan porteur du ciel, sans aucun lien de parenté avec lui (voir la fiche « Atlas ») —, reçut en partage l'île tout entière et donna son nom à l'Atlantique comme à son peuple, les Atlantes, dont Clito reste ainsi la lointaine aïeule.",
+  ],
+  "sidé": [
+    "Première épouse du chasseur géant Orion (voir la fiche « Orion »), Sidé osa se vanter d'une beauté supérieure à celle d'Héra elle-même — une prétention que la reine des dieux ne pouvait laisser passer.",
+    "Furieuse, Héra la précipita aux Enfers, où Sidé demeure depuis, bien avant qu'Orion ne connaisse ses amours plus célèbres avec Éos, puis son amitié avec Artémis.",
+    "Son nom, qui signifie « grenade » en grec, se retrouve aussi dans plusieurs cités d'Asie Mineure fondées sous ce même patronage — un nom resté attaché autant à un lieu qu'à cette première épouse effacée par l'histoire au profit des amours suivantes de son mari.",
+  ],
+  "picus": [
+    "Roi légendaire du Latium, petit-fils de Saturne selon la tradition romaine, Picus était réputé pour sa beauté et son don de prophétie, qu'il exerçait notamment par le chant des oiseaux et des pics en particulier, dont il tenait déjà l'affection avant même sa métamorphose.",
+    "Fidèlement marié à la nymphe Canens, il repoussa les avances de la magicienne Circé (voir la fiche « Circé »), rencontrée alors qu'il chassait en forêt — un refus qu'elle ne lui pardonna pas.",
+    "Furieuse, Circé le changea en pivert, l'oiseau qui porte encore aujourd'hui son nom latin, picus. Canens, inconsolable, le chercha six jours et six nuits durant à travers tout le Latium avant de se laisser mourir de chagrin sur les rives du Tibre, se dissolvant peu à peu en un simple murmure d'air.",
+  ],
+  "ixion": [
+    "Roi des Lapithes en Thessalie, Ixion assassina son propre beau-père pour échapper à une dette de mariage — le tout premier meurtre commis entre parents dans la mythologie grecque, si horrible qu'aucun mortel n'osa le purifier de sa faute.",
+    "Zeus, pris de pitié, l'accueillit malgré tout sur l'Olympe et le purifia lui-même — une clémence qu'Ixion paya d'ingratitude en tentant de séduire Héra en personne. Zeus, pour vérifier ses intentions, façonna une nuée à l'image de son épouse, Néphélé : trompé, Ixion s'unit à elle sans jamais s'apercevoir de la substitution.",
+    "De cette union naquirent les Centaures, mi-hommes mi-chevaux, dont Chiron (voir la fiche « Chiron ») reste la seule exception notable, né d'une tout autre union entre Cronos et Philyra. Pour cette double faute — l'ingratitude et l'outrage envers la reine des dieux —, Zeus condamna Ixion à tourner pour l'éternité, attaché à une roue enflammée, aux Enfers.",
+  ],
+  "pirithoos": [
+    "Roi des Lapithes en Thessalie, fils d'Ixion (voir la fiche « Ixion ») — ou de Zeus lui-même selon une tradition parallèle, désireuse d'effacer le père indigne —, Pirithoos avait d'abord voulu éprouver la réputation de Thésée (voir la fiche « Thésée ») en lui volant son bétail, avant qu'une admiration mutuelle ne transforme leur affrontement avorté en amitié indéfectible.",
+    "Pour ses propres noces avec Hippodamie (voir la fiche « Hippodamie »), il invita les Centaures, ses demi-frères par leur père commun — une réunion qui tourna au massacre lorsque l'un d'eux, ivre, tenta d'enlever la mariée elle-même, déclenchant la Centauromachie, bataille rangée entre Lapithes et Centaures.",
+    "Fidèle jusqu'au bout à son amitié avec Thésée, il l'accompagna dans une tentative insensée d'enlever Perséphone (voir la fiche « Perséphone ») en personne aux Enfers pour l'épouser — un affront qu'Hadès (voir la fiche « Hadès ») punit en les figeant tous deux sur un banc de pierre, incapables de se relever. Seul Thésée, délivré plus tard par Héraclès, put un jour se relever de ce siège ; Pirithoos, lui, y resta pour toujours.",
+  ],
+  "hippodamie": [
+    "Épouse de Pirithoos (voir la fiche « Pirithoos »), roi des Lapithes, Hippodamie vit ses propres noces basculer dans le sang lorsque les Centaures invités à la fête, ivres de vin, tentèrent de l'enlever elle-même ainsi que d'autres femmes présentes.",
+    "Le Centaure Eurytion, le plus insistant, la saisit par les cheveux devant tous les invités — un outrage qui déclencha sur-le-champ la Centauromachie, bataille rangée où Thésée (voir la fiche « Thésée »), présent en ami du marié, prêta main-forte aux Lapithes contre les Centaures en déroute.",
+    "Ce combat de noces resta l'un des sujets les plus représentés de l'art grec, sculpté notamment sur les métopes du Parthénon à Athènes — un affrontement entre l'ordre civilisé des hommes et la sauvagerie incontrôlée, que la fête elle-même avait pourtant réunis à la même table.",
+  ],
+  "cyllaros": [
+    "Centaure d'une beauté rare parmi les siens, au point qu'Ovide le dit presque digne d'un visage humain sans défaut, Cyllaros combattit aux côtés des autres Centaures lors de la Centauromachie qui éclata aux noces de Pirithoos et Hippodamie (voir les fiches « Pirithoos » et « Hippodamie »).",
+    "Il y trouva la mort, frappé d'un javelot resté fiché dans sa poitrine — une blessure qu'il ne sentit d'abord pas, tout entier tourné vers Hylonome (voir la fiche « Hylonome »), la centauresse qu'il aimait, occupée à panser une autre plaie plus légère avant de découvrir la mortelle.",
+    "Voyant son bien-aimé agoniser puis mourir dans ses bras, Hylonome se transperça elle-même du même fer pour ne jamais lui survivre — un couple de Centaures resté, chez Ovide, l'image même d'un amour aussi tendre que celui d'humains, au milieu d'un massacre.",
+  ],
+  "hylonome": [
+    "Centauresse aussi soignée de sa personne — peignant sa crinière, ornant son pelage de fleurs — qu'attentive à son seul amour, Hylonome n'aima jamais que Cyllaros (voir la fiche « Cyllaros »), le plus beau des Centaures, avec qui elle partageait tout, jusqu'à la même grotte pour demeure.",
+    "Lors de la Centauromachie déclenchée aux noces de Pirithoos et Hippodamie (voir les fiches « Pirithoos » et « Hippodamie »), elle combattit à ses côtés plutôt que de se tenir à l'écart, et le vit mortellement frappé d'un javelot en pleine bataille.",
+    "Plutôt que de lui survivre, elle retira l'arme encore fichée dans sa poitrine et s'en transperça à son tour, mourant serrée contre lui — un dernier geste qu'Ovide juge digne d'être raconté au milieu même du chaos d'une bataille, comme la preuve qu'un amour véritable peut survivre à tout sauf à la mort de l'autre.",
+  ],
+  "calchas": [
+    "Devin le plus réputé de l'armée grecque partie pour Troie, Calchas révéla très tôt son don en prédisant, dès le rassemblement de la flotte à Aulis, que le siège de Troie durerait exactement dix ans — un présage tiré du nombre de moineaux dévorés par un serpent devant un autel.",
+    "C'est encore lui qui, la flotte immobilisée par un vent contraire, révéla qu'Artémis exigeait le sacrifice d'Iphigénie (voir la fiche « Iphigénie ») pour l'apaiser — une annonce qui scella le destin de la fille d'Agamemnon (voir la fiche « Agamemnon ») et permit enfin le départ vers Troie.",
+    "Un oracle lui avait par ailleurs annoncé qu'il mourrait le jour où il rencontrerait un devin plus habile que lui. De retour de Troie, il affronta en un concours de divination le devin Mopsos, qui devina avec une précision plus exacte encore le nombre de figues d'un arbre et le nombre de porcelets portés par une truie pleine — Calchas, vaincu, mourut de honte sur-le-champ, la prophétie enfin accomplie.",
+  ],
+  "hyperboréens": [
+    "Peuple légendaire vivant, selon les Grecs, au-delà du souffle de Borée, le vent du Nord (voir la fiche « Borée ») — un pays sans hiver, sans maladie ni vieillesse, où l'on ne meurt, dit-on, que rassasié de vie, en se jetant de son plein gré dans la mer du haut d'une falaise.",
+    "Apollon (voir la fiche « Apollon ») leur voue une affection particulière : chaque hiver, il quitte son sanctuaire de Delphes pour aller passer plusieurs mois parmi eux, avant de revenir au printemps reprendre son oracle — un peuple si proche des dieux que Pindare le dit visité aussi bien par les Muses que par Persée lors de l'un de ses voyages.",
+    "Leur localisation exacte resta un mystère que les Grecs eux-mêmes ne cherchèrent jamais vraiment à résoudre, au-delà de l'idée d'un lieu au bout du monde connu, quelque part au nord des terres scythes — un pays moins géographique qu'idéal, la promesse d'une existence délivrée des maux ordinaires de la condition mortelle.",
+  ],
+  "abaris": [
+    "Prêtre et devin originaire du pays des Hyperboréens (voir la fiche « Hyperboréens »), consacré au culte d'Apollon (voir la fiche « Apollon »), Abaris reçut du dieu lui-même une flèche d'or sur laquelle il pouvait voyager à travers les airs, traversant fleuves, montagnes et mers sans jamais avoir besoin de nourriture ni de repos.",
+    "Parcourant ainsi le monde grec, il prédisait les famines, apaisait les épidémies par des rites purificateurs et prophétisait sans jamais accepter la moindre offrande en retour — une intégrité qui frappa jusqu'à Pythagore, dit-on rencontré en personne lors de l'un de ses passages.",
+    "Sa seule flèche reste l'attribut par lequel on le reconnaît dans l'art antique : un simple prêtre errant, mais si proche d'Apollon qu'il en partage presque le pouvoir de se déplacer à volonté, sans jamais quitter tout à fait sa condition mortelle.",
+  ],
+  "hypsipyle": [
+    "Reine de Lemnos, Hypsipyle épargna son propre père Thoas le jour où les femmes de l'île, délaissées par leurs maris partis chercher des captives thraces, massacrèrent tous les hommes de l'île en réponse — elle seule le cacha en secret plutôt que de se joindre au massacre.",
+    "C'est elle qui accueillit Jason et les Argonautes (voir la fiche « Jason ») lors de leur escale sur l'île, dépourvue d'hommes depuis ce massacre : les Lemniennes, désireuses de repeupler leur cité, retinrent les marins plus d'un an, et Hypsipyle eut de Jason des jumeaux avant son départ pour la Colchide.",
+    "Sa clémence envers son père finit par être découverte : chassée de Lemnos par les autres femmes, elle fut vendue comme esclave et devint nourrice du petit prince Opheltès à Némée. Une négligence d'un instant — le temps de guider des voyageurs, dont les futurs Sept contre Thèbes, jusqu'à une source — coûta la vie à l'enfant, mordu par un serpent ; en sa mémoire furent institués les Jeux Néméens, célébrés depuis tous les deux ans.",
+  ],
+  "œdipe": [
+    "Fils de Laïos, roi de Thèbes descendant de Cadmos (voir la fiche « Cadmos »), et de Jocaste (voir la fiche « Jocaste »), Œdipe fut exposé sur le mont Cithéron, les chevilles percées et liées, dès sa naissance : un oracle avait prédit qu'il tuerait son propre père.",
+    "Recueilli par des bergers puis élevé à la cour de Corinthe sans jamais connaître ses origines, il consulta à son tour l'oracle de Delphes une fois adulte, qui lui répéta la même prophétie — sans qu'il sache qu'il ne parlait déjà plus de ses parents adoptifs. Fuyant Corinthe pour l'éviter, il tua sans le savoir son père Laïos lors d'une rixe sur la route, au croisement de trois chemins.",
+    "Arrivé à Thèbes, il délivra la ville du Sphinx en résolvant seul son énigme — quel est l'être qui marche à quatre pattes le matin, deux à midi et trois le soir ? l'homme, à chaque âge de sa vie —, et reçut pour récompense la main de la reine veuve, Jocaste, sans savoir qu'il épousait sa propre mère.",
+    "La vérité éclata des années plus tard, lors d'une peste qui frappait Thèbes pour purifier la faute cachée : Jocaste se donna la mort en l'apprenant, et Œdipe, horrifié, se creva lui-même les yeux avant de partir en exil, accompagné de sa fille Antigone (voir la fiche « Antigone »).",
+  ],
+  "jocaste": [
+    "Reine de Thèbes, descendante de Cadmos (voir la fiche « Cadmos »), Jocaste épousa Laïos, qu'un oracle avertit qu'un fils né d'elle le tuerait un jour — un avertissement qui poussa le couple à faire exposer leur unique enfant dès sa naissance plutôt que de risquer cette prophétie.",
+    "Devenue veuve après la mort de Laïos, tué par un inconnu sur la route, elle épousa sans le savoir Œdipe (voir la fiche « Œdipe »), le vainqueur du Sphinx venu délivrer la ville — son propre fils, qu'elle croyait mort depuis longtemps.",
+    "Elle eut de lui quatre enfants, dont Antigone (voir la fiche « Antigone »), avant qu'une peste ne révèle enfin la vérité sur cette double faute involontaire. Incapable de survivre à cette découverte, Jocaste se pendit de ses propres mains, laissant Œdipe seul face à l'horreur de ce qu'il avait accompli sans le savoir.",
+  ],
+  "antigone": [
+    "Fille et demi-sœur d'Œdipe (voir la fiche « Œdipe »), née de son union involontaire avec sa propre mère Jocaste (voir la fiche « Jocaste »), Antigone accompagna son père en exil après qu'il se fut lui-même crevé les yeux, le guidant jusqu'à sa mort à Colone, près d'Athènes.",
+    "De retour à Thèbes, elle vit ses deux frères, Étéocle et Polynice, s'entretuer pour le trône dans la guerre des Sept contre Thèbes — Polynice, ayant attaqué sa propre cité à la tête d'une armée étrangère, se vit refuser toute sépulture par le nouveau roi Créon, sous peine de mort pour quiconque l'enterrerait.",
+    "Antigone brava l'interdit et accomplit seule les rites funéraires dus à son frère, choisissant la loi sacrée du sang plutôt que celle, plus récente, de la cité. Condamnée par Créon à être emmurée vivante malgré les liens qui l'unissaient à son propre fils Hémon, fiancé d'Antigone, elle se donna la mort avant que la sentence ne s'accomplisse — entraînant dans son sillage celles d'Hémon, puis de la propre épouse de Créon, désespérés l'un et l'autre.",
+  ],
+  "halia": [
+    "Nymphe native de Rhodes, Halia s'unit à Poséidon (voir la fiche « Poséidon ») et lui donna six fils ainsi qu'une fille, Rhodos, qui donna son nom à l'île.",
+    "Ses fils, devenus adultes, s'enorgueillirent au point d'empêcher Aphrodite (voir la fiche « Aphrodite ») elle-même d'aborder l'île lors de son propre passage — un outrage que la déesse ne pardonna jamais : elle les frappa de folie, et dans cet égarement ils violèrent leur propre mère avant de comprendre l'horreur de leur geste.",
+    "Poséidon, pour les punir à son tour, les enferma sous terre où ils devinrent des démons souterrains ; Halia, incapable de survivre à ce déshonneur, se jeta dans la mer — les Rhodiens continuèrent depuis de l'honorer comme une déesse marine locale, sous le nom de Leucothéa, à ne pas confondre avec l'autre Leucothéa, l'ancienne Ino, déesse marine d'origine tout à fait distincte.",
+  ],
+  "menthé": [
+    "Naïade des rives du Cocyte, aux Enfers, Menthé fut aimée d'Hadès (voir la fiche « Hadès ») avant même, selon certaines versions, qu'il n'ait épousé Perséphone (voir la fiche « Perséphone ») — ou, selon d'autres, alors qu'il l'était déjà.",
+    "Perséphone, découvrant cette liaison, ne s'en prit pas à son époux mais à la nymphe elle-même : de rage, elle la piétina jusqu'à la changer en la plante odorante qui porte encore son nom, la menthe.",
+    "Le parfum de la plante, dit-on, ne se libère jamais aussi fort que lorsqu'on la foule aux pieds — dernier écho, à chaque pas d'un promeneur, de la colère qui transforma Menthé pour toujours.",
   ],
   "pyrame": [
     "À Babylone, Pyrame et Thisbé (voir la fiche « Thisbé ») grandirent dans deux maisons voisines, séparées par un simple mur mitoyen — et s'éprirent l'un de l'autre malgré l'interdiction formelle de leurs deux familles, rivales sans que le mythe n'en précise jamais la raison.",
@@ -3969,11 +4285,11 @@ function verifySubscriptionStatus(){
 const FREE_MAJORS = new Set(["Le Mat", "I — Le Bateleur"]);
 const FREE_COURTS = new Set(["Roi de Bâtons", "Roi de Coupes", "Roi d'Épées", "Roi de Deniers"]);
 const FREE_SYMBOLS = new Set(["abeille", "aigle", "ailes", "air", "araignée"]); // 5 premiers par ordre alphabétique de la Bibliothèque symbolique
-// 4 premières par ordre alphabétique de Figures mythologiques — recalculé à l'ajout
-// d'Agamemnon (parmi les 20 fiches suggérées par l'audit généalogique), qui s'intercale
-// entre "actéon" et "aglaé" : "agon" sort donc du lot gratuit (déplacée en premium) au
-// profit d'"agamemnon".
-const FREE_FIGURES = new Set(["achille", "actéon", "agamemnon", "aglaé"]);
+// 4 premières par ordre alphabétique de Figures mythologiques — recalculé à l'ajout d'Abaris
+// et Admète (parmi les ~50 fiches de la grande vague de figures secondaires), qui s'intercalent
+// avant "achille" : "agamemnon" et "aglaé" sortent donc du lot gratuit (déplacées en premium)
+// au profit d'"abaris" et "admète".
+const FREE_FIGURES = new Set(["abaris", "achille", "actéon", "admète"]);
 const FREE_SPREAD_TYPES = new Set(["general"]);
 
 // L'éclairage mythologique d'une carte (majeur/figure de cour) est gratuit seulement pour
