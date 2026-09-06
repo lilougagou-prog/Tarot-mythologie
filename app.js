@@ -1781,6 +1781,8 @@ const DEITY_NOTES = {
   "jocaste":"Reine de Thèbes, mère et épouse d'Œdipe sans le savoir, elle se donna la mort en découvrant la vérité.",
   "antigone":"Fille d'Œdipe, condamnée à mort pour avoir enterré son frère envers et contre l'interdit royal.",
   "halia":"Nymphe rhodienne aimée de Poséidon, punie par Aphrodite avant de devenir déesse marine locale.",
+  "chryséis":"Fille du prêtre d'Apollon Chrysès, captive d'Agamemnon dont le retour forcé déclencha la colère du dieu contre les Grecs.",
+  "briséis":"Captive d'Achille disputée à Agamemnon, dont l'enlèvement déclencha la colère du héros au cœur de l'Iliade.",
   "menthé":"Naïade aimée d'Hadès, changée par une Perséphone jalouse en la plante odorante qui porte son nom.",
   "pyrame":"Jeune Babylonien épris de Thisbé malgré l'interdit de leurs familles, mort par erreur à ses côtés sous un mûrier.",
   "thisbé":"Jeune Babylonienne éprise de Pyrame, dont la fuite devant une lionne provoqua leur double mort tragique.",
@@ -2063,7 +2065,7 @@ const DEITY_LORE = {
   "achille": [
     "Fils de la Néréide Thétis et du roi mortel Pélée (voir la fiche « Thétis »), Achille fut plongé enfant dans le Styx, la rivière infernale (voir la fiche « Rivière »), par une mère qui espérait ainsi le rendre invulnérable — seul son talon, par lequel elle le tenait, échappa aux eaux, et devait bien plus tard causer sa perte.",
     "Confié au centaure Chiron (voir la fiche « Chiron ») sur le mont Pélion pour y apprendre la médecine, la musique et le maniement des armes, Achille grandit sous une prophétie sans appel : une vie longue mais sans gloire, ou une vie brève mais immortalisée par l'exploit. Pour tenter d'échapper à ce second destin, Thétis le déguisa en jeune fille à la cour du roi Lycomède, sur l'île de Skyros — où il devint pourtant l'amant de la princesse Déidamie, avec qui il eut un fils, Néoptolème, avant qu'Ulysse (voir la fiche « Ulysse ») ne le démasque en dissimulant une épée parmi des présents destinés aux jeunes filles du palais : seule la nouvelle venue s'en saisit aussitôt.",
-    "Une fois recruté pour la guerre de Troie, Achille y mena son propre peuple, les Myrmidons de Phthie — selon la légende, d'anciennes fourmis changées en hommes par Zeus pour repeupler l'île d'Égine, au service de son grand-père Éaque. Le plus fameux conflit de l'Iliade éclate pourtant loin du champ de bataille : contraint de rendre sa propre captive pour apaiser la colère d'Apollon, Agamemnon (voir la fiche « Agamemnon ») s'empare en représailles de Briséis, la captive d'Achille — une humiliation qui le pousse à se retirer des combats et laisse les Grecs perdre du terrain.",
+    "Une fois recruté pour la guerre de Troie, Achille y mena son propre peuple, les Myrmidons de Phthie — selon la légende, d'anciennes fourmis changées en hommes par Zeus pour repeupler l'île d'Égine, au service de son grand-père Éaque. Le plus fameux conflit de l'Iliade éclate pourtant loin du champ de bataille : contraint de rendre sa propre captive Chryséis (voir la fiche « Chryséis ») pour apaiser la colère d'Apollon, Agamemnon (voir la fiche « Agamemnon ») s'empare en représailles de Briséis (voir la fiche « Briséis »), la captive d'Achille — une humiliation qui le pousse à se retirer des combats et laisse les Grecs perdre du terrain.",
     "Seule la mort de Patrocle, son compagnon le plus cher, tombé sous les coups d'Hector alors qu'il portait les propres armes d'Achille pour rallier les Grecs en déroute, le fait reprendre les armes. Fou de chagrin, Achille tue Hector en duel sous les murs de Troie puis traîne son corps derrière son char plusieurs jours durant, jusqu'à ce que le vieux roi Priam vienne en personne, de nuit et sans escorte, franchir la porte Scée (voir la fiche « Porte ») pour le supplier de lui rendre la dépouille de son fils.",
     "Peu après, une reine des Amazones venue prêter main-forte à Troie, Penthésilée (voir la fiche « Penthésilée »), l'affronte à son tour : Achille la tue en duel et, dit-on, pleure en découvrant la beauté de celle qu'il vient d'abattre — seule Amazone reconnue par les textes anciens comme véritable fille d'Arès (voir la fiche « Arès »).",
     "Invincible en apparence, Achille tombe pourtant devant cette même porte Scée, tué d'une flèche que Pâris (voir la fiche « Pâris ») décoche mais qu'Apollon guide lui-même jusqu'à son unique point faible, le talon. Son fils Néoptolème (voir la fiche « Néoptolème »), resté caché sur Skyros pendant toute la guerre, est appelé à Troie après cette mort — un oracle affirme que la ville ne peut tomber sans lui —, où il se révèle aussi impitoyable que farouche, jusqu'à tuer le vieux Priam (voir la fiche « Priam ») au pied même d'un autel lors de la prise de la ville.",
@@ -2235,7 +2237,7 @@ const DEITY_LORE = {
   "agamemnon": [
     "Fils d'Atrée, roi de Mycènes, Agamemnon hérita avec son frère Ménélas (voir la fiche « Ménélas ») d'une lignée déjà lourde d'un crime ancien — son propre père avait un jour servi aux dieux la chair des fils de son frère Thyeste, en pleine querelle pour le trône. Il épousa Clytemnestre (voir la fiche « Clytemnestre »), fille du roi Tyndare, tandis que Ménélas épousait sa sœur Hélène (voir la fiche « Hélène ») — deux mariages qui allaient bientôt lier leur maison au sort de Troie tout entière.",
     "Désigné chef de la coalition grecque après l'enlèvement d'Hélène par Pâris (voir la fiche « Pâris »), il vit sa flotte immobilisée à Aulis par un vent contraire, punition d'Artémis qu'il avait offensée : seul le sacrifice de sa propre fille Iphigénie (voir la fiche « Iphigénie ») pouvait, selon le devin Calchas, apaiser la déesse — un geste qu'il accepta, sans savoir qu'Artémis substituerait au dernier instant une biche sur l'autel.",
-    "Devant Troie, sa querelle avec Achille (voir la fiche « Achille ») faillit coûter la guerre aux Grecs : contraint de rendre sa propre captive pour calmer la colère d'Apollon, il s'empara par dépit de Briséis, celle d'Achille, qui se retira aussitôt du combat et laissa les Troyens reprendre l'avantage.",
+    "Devant Troie, sa querelle avec Achille (voir la fiche « Achille ») faillit coûter la guerre aux Grecs : contraint de rendre sa propre captive Chryséis (voir la fiche « Chryséis ») pour calmer la colère d'Apollon, il s'empara par dépit de Briséis (voir la fiche « Briséis »), celle d'Achille, qui se retira aussitôt du combat et laissa les Troyens reprendre l'avantage.",
     "À la chute de la ville, il reçut pour part de butin la prophétesse Cassandre (voir la fiche « Cassandre »), fille de Priam (voir la fiche « Priam ») — sans jamais croire ses avertissements sur le sort funeste qui les attendait tous deux à leur retour.",
     "De retour à Mycènes après dix années d'absence, il fut accueilli en apparence en héros par Clytemnestre, restée fidèle en rien : elle le piégea dans un filet au sortir du bain et le tua avec la complicité de son amant Égisthe (voir la fiche « Égisthe ») — un meurtre que leur fils Oreste (voir la fiche « Oreste ») vengerait des années plus tard en les tuant tous les deux à son tour.",
   ],
@@ -3020,6 +3022,18 @@ const DEITY_LORE = {
     "Ses fils, devenus adultes, s'enorgueillirent au point d'empêcher Aphrodite (voir la fiche « Aphrodite ») elle-même d'aborder l'île lors de son propre passage — un outrage que la déesse ne pardonna jamais : elle les frappa de folie, et dans cet égarement ils violèrent leur propre mère avant de comprendre l'horreur de leur geste.",
     "Poséidon, pour les punir à son tour, les enferma sous terre où ils devinrent des démons souterrains ; Halia, incapable de survivre à ce déshonneur, se jeta dans la mer — les Rhodiens continuèrent depuis de l'honorer comme une déesse marine locale, sous le nom de Leucothéa, à ne pas confondre avec l'autre Leucothéa, l'ancienne Ino, déesse marine d'origine tout à fait distincte.",
   ],
+  "chryséis": [
+    "Fille de Chrysès, prêtre d'Apollon à Chrysa (voir la fiche « Apollon »), Chryséis fut capturée lors d'un raid mené par Achille (voir la fiche « Achille ») sur une cité voisine de Troie, puis offerte en butin de guerre à Agamemnon (voir la fiche « Agamemnon »), qui la retint malgré les supplications et les riches présents de son propre père venu la racheter.",
+    "Outragé par ce refus, Chrysès implora Apollon de punir les Grecs — le dieu répondit en abattant sur leur camp une peste dévastatrice, ses flèches invisibles frappant hommes et bêtes neuf jours durant, jusqu'à ce que le devin Calchas (voir la fiche « Calchas ») en révèle la cause devant l'armée assemblée.",
+    "Contraint de rendre Chryséis à son père pour apaiser le dieu, Agamemnon se dédommagea en s'emparant de Briséis (voir la fiche « Briséis »), la captive d'Achille — un geste qui déclencha la colère du héros et, avec elle, l'intrigue tout entière de l'Iliade.",
+    "Une tradition plus tardive, reprise notamment dans l'art contemporain sans fondement homérique direct, présente les deux jeunes femmes comme cousines — unies, par-delà cette parenté supposée, par le même sort de captives arrachées à leur foyer en une seule et même guerre.",
+  ],
+  "briséis": [
+    "Captive d'Achille (voir la fiche « Achille ») depuis qu'il eut mis à sac sa cité natale de Lyrnessos et tué son époux ainsi que ses frères, Briséis vivait néanmoins auprès de lui dans une relation que l'Iliade décrit comme sincèrement affectueuse plutôt que forcée.",
+    "Contraint de rendre Chryséis (voir la fiche « Chryséis ») à son père pour apaiser la colère d'Apollon, Agamemnon (voir la fiche « Agamemnon ») s'empara d'elle en dédommagement — une humiliation publique qui poussa Achille à se retirer des combats, laissant les Grecs perdre du terrain sans lui.",
+    "Rendue à Achille une fois leur querelle apaisée, elle pleura sur le corps de Patrocle, mort au combat, louant la douceur qu'Achille avait toujours eue envers elle malgré les circonstances de leur rencontre — l'un des rares moments de l'Iliade où une captive de guerre reçoit une voix et un chagrin qui lui soient propres.",
+    "Cette même tradition moderne qui unit Briséis et Chryséis (voir la fiche « Chryséis ») par les liens du sang les montre aussi proches par le cœur, consolées l'une par l'autre dans le camp achéen malgré la rivalité de leurs maîtres respectifs.",
+  ],
   "menthé": [
     "Naïade des rives du Cocyte, aux Enfers, Menthé fut aimée d'Hadès (voir la fiche « Hadès ») avant même, selon certaines versions, qu'il n'ait épousé Perséphone (voir la fiche « Perséphone ») — ou, selon d'autres, alors qu'il l'était déjà.",
     "Perséphone, découvrant cette liaison, ne s'en prit pas à son époux mais à la nymphe elle-même : de rage, elle la piétina jusqu'à la changer en la plante odorante qui porte encore son nom, la menthe.",
@@ -3197,6 +3211,9 @@ const DEITY_PORTRAITS = {
   // Penthésilée contre Achille : deux personnages en pleine bataille, format large plutôt que
   // le recadrage 4:5 habituel, voir DEITY_PORTRAIT_WIDE.
   "penthésilée": "assets/deity-penthesilee-achille.jpg",
+  "chryséis": "assets/deity-chryseis.jpg",
+  "briséis": "assets/deity-briseis.jpg",
+  "alcippé": "assets/deity-alcippe.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
@@ -3282,6 +3299,12 @@ const DEITY_INLINE_PORTRAITS = {
   ],
   "éris": [
     { match: "jeta parmi les déesses assemblées une pomme d'or", src: "assets/deity-eris-pomme.jpg", alt: "Éris jette la pomme d'or aux noces de Thétis" },
+  ],
+  "chryséis": [
+    { match: "présente les deux jeunes femmes comme cousines", src: "assets/deity-chryseis-briseis.jpg", alt: "Chryséis et sa cousine Briséis", wide: true },
+  ],
+  "briséis": [
+    { match: "consolées l'une par l'autre dans le camp achéen", src: "assets/deity-chryseis-briseis.jpg", alt: "Chryséis et sa cousine Briséis", wide: true },
   ],
 };
 
