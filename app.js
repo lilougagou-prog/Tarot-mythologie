@@ -3218,6 +3218,8 @@ const DEITY_PORTRAITS = {
   "priam": "assets/deity-priam.jpg",
   "andromaque": "assets/deity-andromaque.jpg",
   "hector": "assets/deity-hector.jpg",
+  "hélène": "assets/deity-helene.jpg",
+  "clytemnestre": "assets/deity-clytemnestre.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
