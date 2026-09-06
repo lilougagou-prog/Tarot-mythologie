@@ -1781,6 +1781,7 @@ const DEITY_NOTES = {
   "jocaste":"Reine de Thèbes, mère et épouse d'Œdipe sans le savoir, elle se donna la mort en découvrant la vérité.",
   "antigone":"Fille d'Œdipe, condamnée à mort pour avoir enterré son frère envers et contre l'interdit royal.",
   "halia":"Nymphe rhodienne aimée de Poséidon, punie par Aphrodite avant de devenir déesse marine locale.",
+  "hermione":"Fille de Ménélas et d'Hélène, disputée entre Oreste et Néoptolème, qu'elle finit par épouser après sa mort.",
   "chryséis":"Fille du prêtre d'Apollon Chrysès, captive d'Agamemnon dont le retour forcé déclencha la colère du dieu contre les Grecs.",
   "briséis":"Captive d'Achille disputée à Agamemnon, dont l'enlèvement déclencha la colère du héros au cœur de l'Iliade.",
   "menthé":"Naïade aimée d'Hadès, changée par une Perséphone jalouse en la plante odorante qui porte son nom.",
@@ -2157,7 +2158,7 @@ const DEITY_LORE = {
   "andromaque": [
     "Épouse d'Hector (voir la fiche « Hector »), le plus valeureux défenseur de Troie, Andromaque lui donna un fils, Astyanax, avant de lui faire les adieux les plus poignants de toute l'Iliade à la porte Scée de la ville (voir la fiche « Porte »), pressentant déjà qu'elle ne le reverrait pas vivant.",
     "À la chute de Troie, elle vit son fils précipité du haut des remparts par les Grecs, pour qu'aucun héritier d'Hector ne puisse jamais menacer leur victoire, puis fut elle-même emmenée captive par Néoptolème, le propre fils d'Achille, qui avait tué son mari (voir la fiche « Achille »).",
-    "Devenue malgré elle la compagne de Néoptolème (voir la fiche « Néoptolème »), elle lui donna un fils, Molossos, qui laissera son nom à toute une région d'Épire. Lorsque Néoptolème choisit d'épouser Hermione, fille de Ménélas (voir la fiche « Ménélas »), il céda Andromaque à Hélénos, l'un des derniers fils survivants de Priam (voir la fiche « Priam ») — en récompense, dit-on, des prophéties que ce devin troyen avait livrées aux Grecs pour prendre Troie.",
+    "Devenue malgré elle la compagne de Néoptolème (voir la fiche « Néoptolème »), elle lui donna un fils, Molossos, qui laissera son nom à toute une région d'Épire. Lorsque Néoptolème choisit d'épouser Hermione (voir la fiche « Hermione »), fille de Ménélas (voir la fiche « Ménélas »), il céda Andromaque à Hélénos, l'un des derniers fils survivants de Priam (voir la fiche « Priam ») — en récompense, dit-on, des prophéties que ce devin troyen avait livrées aux Grecs pour prendre Troie.",
     "Elle n'oublia pourtant jamais Hector : avec Hélénos, elle recréa en terre d'exil une Troie miniature, un fleuve rebaptisé Xanthe, une porte Scée reconstruite à l'identique (voir la fiche « Porte ») — et, devenue reine d'un royaume qui n'était pourtant jamais tout à fait le sien, continua d'y porter le deuil de son premier mari devant un tombeau vide élevé en son honneur, une vie entièrement redéfinie par la guerre mais jamais réconciliée avec elle.",
   ],
   "pâris": [
@@ -2246,7 +2247,7 @@ const DEITY_LORE = {
     "Devenu adulte, un oracle d'Apollon lui ordonna de venger son père en tuant les meurtriers, quels qu'ils fussent — il exécuta Égisthe puis, sans plus d'hésitation, sa propre mère Clytemnestre, un matricide que même l'ordre du dieu ne suffit pas à effacer.",
     "Les Érinyes (voir la fiche « Érinyes »), déesses vengeresses du sang versé entre proches, le poursuivirent alors sans relâche jusqu'à la folie ; un oracle l'envoya en Tauride récupérer la statue sacrée d'Artémis, où il retrouva par le plus grand des hasards sa sœur Iphigénie (voir la fiche « Iphigénie »), qu'il croyait morte depuis Aulis, et s'enfuit avec elle et la statue.",
     "Ramené à Athènes, il fut enfin jugé sur la colline de l'Aréopage — le même tribunal qui avait autrefois acquitté Arès (voir la fiche « Arès ») — devant un jury humain plutôt que face à la seule vengeance sans fin des Érinyes : les voix se partagèrent à égalité, et c'est Athéna elle-même, en ajoutant la sienne, qui fit pencher la balance vers l'acquittement.",
-    "Libéré de sa malédiction, il obtint enfin la main d'Hermione, fille de Ménélas et d'Hélène (voir les fiches « Ménélas » et « Hélène »), déjà promise ailleurs — un rival de taille se dressait sur son chemin : Néoptolème (voir la fiche « Néoptolème »), qui la revendiquait aussi, et que les traditions font mourir de la main d'Oreste ou de celle des prêtres de Delphes, selon les versions, avant que ce dernier mariage ne puisse enfin avoir lieu.",
+    "Libéré de sa malédiction, il obtint enfin la main d'Hermione (voir la fiche « Hermione »), fille de Ménélas et d'Hélène (voir les fiches « Ménélas » et « Hélène »), déjà promise ailleurs — un rival de taille se dressait sur son chemin : Néoptolème (voir la fiche « Néoptolème »), qui la revendiquait aussi, et que les traditions font mourir de la main d'Oreste ou de celle des prêtres de Delphes, selon les versions, avant que ce dernier mariage ne puisse enfin avoir lieu.",
   ],
   "asclépios": [
     "Fils d'Apollon et de la princesse thessalienne Coronis (voir les fiches « Apollon » et « Coronis »), Asclépios fut arraché du bûcher funéraire de sa mère par son propre père et confié au centaure Chiron (voir la fiche « Chiron »), qui lui enseigna l'art de la médecine dès l'enfance.",
@@ -2258,7 +2259,7 @@ const DEITY_LORE = {
     "Fils d'Achille et de la princesse Déidamie, conçu alors que son père se cachait déguisé à la cour de Skyros pour échapper à la guerre de Troie (voir la fiche « Achille »), Néoptolème grandit loin du conflit jusqu'à la mort de son père, tué par une flèche de Pâris guidée par Apollon.",
     "Un oracle affirma alors que Troie ne pourrait tomber sans lui : Ulysse (voir la fiche « Ulysse ») vint le chercher sur son île et lui remit les armes mêmes de son père, forgées par Héphaïstos.",
     "À la chute de la ville, il se montra aussi impitoyable que farouche : il tua le vieux roi Priam (voir la fiche « Priam ») au pied même de l'autel de Zeus où celui-ci s'était réfugié, sacrifia Polyxène (voir la fiche « Polyxène ») sur le tombeau de son propre père pour apaiser son ombre, et prit pour captive Andromaque (voir la fiche « Andromaque »), veuve d'Hector, dont il eut un fils, Molossos, avant de la céder plus tard à Hélénos, l'un des propres frères d'Hector, en récompense des prophéties que ce dernier avait livrées aux Grecs pour prendre Troie.",
-    "De retour en Grèce, il épousa Hermione, fille de Ménélas et d'Hélène (voir les fiches « Ménélas » et « Hélène »), déjà promise à Oreste (voir la fiche « Oreste ») — une rivalité qui lui coûta la vie à Delphes, tué selon les versions par Oreste lui-même ou par les prêtres du sanctuaire d'Apollon, lors d'une querelle sur les honneurs qui lui étaient dus.",
+    "De retour en Grèce, il épousa Hermione (voir la fiche « Hermione »), fille de Ménélas et d'Hélène (voir les fiches « Ménélas » et « Hélène »), déjà promise à Oreste (voir la fiche « Oreste ») — une rivalité qui lui coûta la vie à Delphes, tué selon les versions par Oreste lui-même ou par les prêtres du sanctuaire d'Apollon, lors d'une querelle sur les honneurs qui lui étaient dus.",
   ],
   "cassandre": [
     "Fille de Priam et d'Hécube (voir les fiches « Priam » et « Hécube »), Cassandre reçut d'Apollon le don de prophétie en échange de ses faveurs — une promesse qu'elle rompit une fois le don obtenu, et que le dieu, ne pouvant le lui reprendre, punit d'une malédiction plus cruelle encore : ses prédictions, toujours exactes, ne seraient plus jamais crues par personne (voir la fiche « Apollon »).",
@@ -3022,6 +3023,12 @@ const DEITY_LORE = {
     "Ses fils, devenus adultes, s'enorgueillirent au point d'empêcher Aphrodite (voir la fiche « Aphrodite ») elle-même d'aborder l'île lors de son propre passage — un outrage que la déesse ne pardonna jamais : elle les frappa de folie, et dans cet égarement ils violèrent leur propre mère avant de comprendre l'horreur de leur geste.",
     "Poséidon, pour les punir à son tour, les enferma sous terre où ils devinrent des démons souterrains ; Halia, incapable de survivre à ce déshonneur, se jeta dans la mer — les Rhodiens continuèrent depuis de l'honorer comme une déesse marine locale, sous le nom de Leucothéa, à ne pas confondre avec l'autre Leucothéa, l'ancienne Ino, déesse marine d'origine tout à fait distincte.",
   ],
+  "hermione": [
+    "Fille unique de Ménélas et d'Hélène (voir les fiches « Ménélas » et « Hélène »), Hermione grandit à Sparte durant les dix années où sa mère, enlevée ou consentante selon les versions, se trouvait à Troie aux côtés de Pâris (voir la fiche « Pâris »).",
+    "Promise dès l'enfance à son cousin Oreste (voir la fiche « Oreste »), elle fut néanmoins donnée par son père à Néoptolème (voir la fiche « Néoptolème »), fils d'Achille, en récompense de sa bravoure devant Troie — un mariage arrangé sans elle, qui la rendit malheureuse aux côtés d'un époux déjà lié à sa captive Andromaque (voir la fiche « Andromaque »).",
+    "Jalouse et sans enfant, elle accusa Andromaque de sorcellerie et tenta de la faire tuer avec son fils Molossos, avant qu'Oreste, venu la retrouver, ne fasse assassiner Néoptolème à Delphes lors d'une querelle sur les honneurs dus au sanctuaire d'Apollon.",
+    "Libre enfin de son rival, elle épousa Oreste, comme le voulait la promesse de leur enfance — un dénouement que la tragédie grecque, chez Euripide notamment, transforme en un rare mariage heureux au milieu d'une lignée par ailleurs vouée aux malédictions.",
+  ],
   "chryséis": [
     "Fille de Chrysès, prêtre d'Apollon à Chrysa (voir la fiche « Apollon »), Chryséis fut capturée lors d'un raid mené par Achille (voir la fiche « Achille ») sur une cité voisine de Troie, puis offerte en butin de guerre à Agamemnon (voir la fiche « Agamemnon »), qui la retint malgré les supplications et les riches présents de son propre père venu la racheter.",
     "Outragé par ce refus, Chrysès implora Apollon de punir les Grecs — le dieu répondit en abattant sur leur camp une peste dévastatrice, ses flèches invisibles frappant hommes et bêtes neuf jours durant, jusqu'à ce que le devin Calchas (voir la fiche « Calchas ») en révèle la cause devant l'armée assemblée.",
@@ -3220,6 +3227,8 @@ const DEITY_PORTRAITS = {
   "hector": "assets/deity-hector.jpg",
   "hélène": "assets/deity-helene.jpg",
   "clytemnestre": "assets/deity-clytemnestre.jpg",
+  "iphigénie": "assets/deity-iphigenie.jpg",
+  "hermione": "assets/deity-hermione.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
