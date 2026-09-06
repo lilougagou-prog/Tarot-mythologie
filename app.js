@@ -1781,7 +1781,7 @@ const DEITY_NOTES = {
   "jocaste":"Reine de Thèbes, mère et épouse d'Œdipe sans le savoir, elle se donna la mort en découvrant la vérité.",
   "antigone":"Fille d'Œdipe, condamnée à mort pour avoir enterré son frère envers et contre l'interdit royal.",
   "halia":"Nymphe rhodienne aimée de Poséidon, punie par Aphrodite avant de devenir déesse marine locale.",
-  "hermione":"Fille de Ménélas et d'Hélène, disputée entre Oreste et Néoptolème, qu'elle finit par épouser après sa mort.",
+  "hermione":"Fille de Ménélas et d'Hélène, disputée entre Oreste et Néoptolème ; à la mort de ce dernier, elle épouse finalement Oreste.",
   "chryséis":"Fille du prêtre d'Apollon Chrysès, captive d'Agamemnon dont le retour forcé déclencha la colère du dieu contre les Grecs.",
   "briséis":"Captive d'Achille disputée à Agamemnon, dont l'enlèvement déclencha la colère du héros au cœur de l'Iliade.",
   "menthé":"Naïade aimée d'Hadès, changée par une Perséphone jalouse en la plante odorante qui porte son nom.",
