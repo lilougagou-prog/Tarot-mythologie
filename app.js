@@ -3175,6 +3175,10 @@ const DEITY_PORTRAITS = {
   // qui suivent celui d'Alceste.
   "admète": "assets/deity-admete-char.jpg",
   "alceste": "assets/deity-alceste-admete-noces.jpg",
+  // Hersé : scène de groupe (elle-même, ses deux sœurs, et Hermès) — format large plutôt que
+  // le recadrage 4:5 habituel, voir DEITY_PORTRAIT_WIDE, pour ne perdre aucune des quatre
+  // figures sur les bords.
+  "hersé": "assets/deity-herse-panathenees.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
@@ -3186,7 +3190,7 @@ const DEITY_PORTRAITS = {
 // étaient donc restées, par oubli, recadrées en 4:5 comme un portrait individuel — coupant les
 // deux figures latérales de chaque triade. Ajoutées ici au même titre que les Muses, Pâris et
 // Orion.
-const DEITY_PORTRAIT_WIDE = new Set(["muses", "pâris", "orion", "heures", "parques"]);
+const DEITY_PORTRAIT_WIDE = new Set(["muses", "pâris", "orion", "heures", "parques", "hersé"]);
 
 // Portraits insérés à l'intérieur même du mythe, juste au-dessus du paragraphe qui mentionne la
 // figure représentée dessus — contrairement à DEITY_PORTRAITS ci-dessus, affiché une seule fois
