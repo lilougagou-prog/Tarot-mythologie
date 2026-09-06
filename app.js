@@ -2176,12 +2176,12 @@ const DEITY_LORE = {
   "castor": [
     "Fils mortel du roi Tyndare et de Léda (voir la fiche « Léda »), Castor forme avec son frère Pollux (voir la fiche « Pollux »), lui engendré par Zeus la même nuit sous la forme d'un cygne, les jumeaux Dioscures — l'un mortel, l'autre immortel, unis toute leur vie par un attachement que rien ne parvint à rompre.",
     "Dompteur de chevaux réputé, il participa avec son frère à l'expédition des Argonautes menée par Jason (voir la fiche « Jason ») et à la chasse du sanglier de Calydon, avant qu'un différend avec leurs cousins Idas et Lyncée, pour le partage d'un butin de bétail, ne tourne à l'affrontement mortel : Castor y trouva la mort, tué par Idas.",
-    "Fou de douleur, Pollux refusa l'immortalité qui l'aurait séparé pour toujours de son frère et supplia Zeus de partager son propre sort avec lui — depuis, les deux frères se relaient un jour sur deux entre l'Olympe et le séjour des morts, jamais séparés plus de vingt-quatre heures. Marins et voyageurs leur rendaient un culte particulier, les tenant pour responsables du feu follet qui apparaît parfois au sommet des mâts par gros temps, signe de leur protection.",
+    "Fou de douleur, Pollux refusa l'immortalité qui l'aurait séparé pour toujours de son frère et supplia Zeus de partager son propre sort avec lui : Zeus accorda que les deux frères ne soient plus jamais séparés, mais au prix d'une vie à cheval entre deux mondes — une journée ensemble parmi les vivants sur l'Olympe, la suivante ensemble parmi les morts aux Enfers, et ainsi de suite, sans fin. Marins et voyageurs leur rendaient un culte particulier, les tenant pour responsables du feu follet qui apparaît parfois au sommet des mâts par gros temps, signe de leur protection.",
   ],
   "pollux": [
     "Fils de Zeus et de Léda (voir la fiche « Léda »), conçu la même nuit où son frère Castor (voir la fiche « Castor ») fut engendré par le roi Tyndare, Pollux forme avec lui les jumeaux Dioscures — inséparables depuis l'enfance, malgré la différence de nature qui les séparait déjà, l'un mortel, l'autre non.",
     "Pugiliste redouté, il combattit aux côtés de son frère lors de l'expédition des Argonautes menée par Jason (voir la fiche « Jason »), où il triompha en un combat de boxe du roi Amycos. Un différend avec leurs cousins Idas et Lyncée pour un partage de butin tourna à l'affrontement : Castor y fut tué, laissant Pollux seul survivant d'un lien qu'il refusait d'accepter rompu.",
-    "Plutôt que de vivre éternellement séparé de son frère, il supplia Zeus de lui laisser partager son immortalité avec lui — depuis, les deux frères alternent chaque jour entre l'Olympe et le séjour des morts, jamais l'un sans l'autre bien longtemps. Élevés parmi les étoiles sous la forme de la constellation des Gémeaux (voir la fiche « Étoile »), ils restent depuis l'image même de la fraternité plus forte que la mort.",
+    "Plutôt que de vivre éternellement séparé de son frère, il supplia Zeus de lui laisser partager son immortalité avec lui : Zeus leur accorda de ne plus jamais se quitter, mais au prix d'une existence partagée entre deux mondes — un jour ensemble parmi les vivants sur l'Olympe, le jour suivant ensemble parmi les morts aux Enfers, en alternance perpétuelle. Élevés parmi les étoiles sous la forme de la constellation des Gémeaux (voir la fiche « Étoile »), ils restent depuis l'image même de la fraternité plus forte que la mort.",
   ],
   "léda": [
     "Reine de Sparte, épouse du roi Tyndare, Léda fut séduite par Zeus qui prit la forme d'un cygne pour s'unir à elle — la même nuit, dit-on, où elle s'unissait aussi à son propre époux, mêlant ainsi en une seule nuit une descendance mortelle et une descendance divine.",
@@ -3229,6 +3229,8 @@ const DEITY_PORTRAITS = {
   "clytemnestre": "assets/deity-clytemnestre.jpg",
   "iphigénie": "assets/deity-iphigenie.jpg",
   "hermione": "assets/deity-hermione.jpg",
+  "castor": "assets/deity-castor-pollux.jpg",
+  "pollux": "assets/deity-castor-pollux.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
@@ -3240,7 +3242,7 @@ const DEITY_PORTRAITS = {
 // étaient donc restées, par oubli, recadrées en 4:5 comme un portrait individuel — coupant les
 // deux figures latérales de chaque triade. Ajoutées ici au même titre que les Muses, Pâris et
 // Orion.
-const DEITY_PORTRAIT_WIDE = new Set(["muses", "pâris", "orion", "heures", "parques", "hersé", "amazones", "penthésilée"]);
+const DEITY_PORTRAIT_WIDE = new Set(["muses", "pâris", "orion", "heures", "parques", "hersé", "amazones", "penthésilée", "castor", "pollux"]);
 
 // Portraits insérés à l'intérieur même du mythe, juste au-dessus du paragraphe qui mentionne la
 // figure représentée dessus — contrairement à DEITY_PORTRAITS ci-dessus, affiché une seule fois
