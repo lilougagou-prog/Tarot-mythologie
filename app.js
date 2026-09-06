@@ -3180,7 +3180,13 @@ const DEITY_PORTRAITS = {
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
 // afficher tels quels (.deity-portrait-wide, styles.css) plutôt que de forcer un recadrage
 // serré qui sacrifierait certaines des figures représentées sur les bords de l'image.
-const DEITY_PORTRAIT_WIDE = new Set(["muses", "pâris", "orion"]);
+// Retour direct d'utilisatrice : "le portrait des Parques est coupé, on ne voit pas bien
+// celles qui sont sur les côtés" — Les Heures et les Parques (700×560, deux scènes de groupe à
+// trois déesses côte à côte) avaient été ajoutées avant l'introduction de ce mécanisme et
+// étaient donc restées, par oubli, recadrées en 4:5 comme un portrait individuel — coupant les
+// deux figures latérales de chaque triade. Ajoutées ici au même titre que les Muses, Pâris et
+// Orion.
+const DEITY_PORTRAIT_WIDE = new Set(["muses", "pâris", "orion", "heures", "parques"]);
 
 // Portraits insérés à l'intérieur même du mythe, juste au-dessus du paragraphe qui mentionne la
 // figure représentée dessus — contrairement à DEITY_PORTRAITS ci-dessus, affiché une seule fois
