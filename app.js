@@ -3214,6 +3214,10 @@ const DEITY_PORTRAITS = {
   "chryséis": "assets/deity-chryseis.jpg",
   "briséis": "assets/deity-briseis.jpg",
   "alcippé": "assets/deity-alcippe.jpg",
+  "hécube": "assets/deity-hecube.jpg",
+  "priam": "assets/deity-priam.jpg",
+  "andromaque": "assets/deity-andromaque.jpg",
+  "hector": "assets/deity-hector.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
