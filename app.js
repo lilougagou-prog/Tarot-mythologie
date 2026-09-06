@@ -3181,6 +3181,9 @@ const DEITY_PORTRAITS = {
   "hersé": "assets/deity-herse-panathenees.jpg",
   "pandrosos": "assets/deity-pandrosos.jpg",
   "aglauros": "assets/deity-aglauros.jpg",
+  "hippolyté": "assets/deity-hippolyte-amazone.jpg",
+  "myrina": "assets/deity-myrina.jpg",
+  "otrera": "assets/deity-otrera.jpg",
 };
 
 // Portraits de groupe fournis dans un format large plutôt que le format 4:5 habituel — les
