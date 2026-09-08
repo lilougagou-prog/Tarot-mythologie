@@ -3226,16 +3226,19 @@ async function accountRequest(path, { method = "GET", body, auth = false } = {})
   return json;
 }
 
+// Les 6 actions du compte vivent toutes derrière /api/account?action=... (un seul fichier
+// serverless, voir api/account.js — regroupées pour rester sous la limite de 12 fonctions du
+// plan Hobby Vercel), jamais un chemin dédié par action.
 async function createAccount(email, password){
-  const { token } = await accountRequest("/api/auth-signup", { method:"POST", body:{ email, password } });
+  const { token } = await accountRequest("/api/account?action=signup", { method:"POST", body:{ email, password } });
   setAuthSession(token, email.trim().toLowerCase());
 }
 async function loginAccount(email, password){
-  const { token } = await accountRequest("/api/auth-login", { method:"POST", body:{ email, password } });
+  const { token } = await accountRequest("/api/account?action=login", { method:"POST", body:{ email, password } });
   setAuthSession(token, email.trim().toLowerCase());
 }
 async function logoutAccount(){
-  try{ await accountRequest("/api/auth-logout", { method:"POST", auth:true }); }
+  try{ await accountRequest("/api/account?action=logout", { method:"POST", auth:true }); }
   catch{ /* le jeton local est de toute façon retiré juste après — tant pis si le serveur ne
             l'a pas reçu, il finira par expirer de lui-même (voir SESSION_TTL_DAYS). */ }
   clearAuthSession();
@@ -3245,7 +3248,7 @@ async function logoutAccount(){
 // restoreLocalStorageData()). C'est un geste délibéré ("cet appareil fait foi"), jamais
 // automatique.
 async function pushBackupToCloud(){
-  const { updatedAt } = await accountRequest("/api/sync-data", { method:"POST", auth:true, body:{ data: collectAllLocalStorageData() } });
+  const { updatedAt } = await accountRequest("/api/account?action=sync-data", { method:"POST", auth:true, body:{ data: collectAllLocalStorageData() } });
   return updatedAt;
 }
 // Récupère la dernière sauvegarde du compte et l'applique ICI (avec confirmation, voir
@@ -3253,17 +3256,17 @@ async function pushBackupToCloud(){
 // sur cet appareil"). Renvoie false sans rien faire si le compte n'a encore aucune sauvegarde
 // enregistrée (ex. tout juste créé).
 async function pullBackupFromCloud(){
-  const { data } = await accountRequest("/api/sync-data", { method:"GET", auth:true });
+  const { data } = await accountRequest("/api/account?action=sync-data", { method:"GET", auth:true });
   if(!data){ alert("Ce compte n'a encore aucune sauvegarde enregistrée."); return false; }
   return restoreLocalStorageData(data);
 }
 // Suppression définitive du compte (droit à l'effacement RGPD) : identifiants, sessions et
-// sauvegarde cloud disparaissent côté serveur (voir api/auth-delete-account.js) — n'efface
-// jamais les données restées en localStorage sur cet appareil, qui suivent leur propre logique
-// (désinstallation de l'app / effacement des données du site, voir la politique de
+// sauvegarde cloud disparaissent côté serveur (voir api/account.js, action delete-account) —
+// n'efface jamais les données restées en localStorage sur cet appareil, qui suivent leur propre
+// logique (désinstallation de l'app / effacement des données du site, voir la politique de
 // confidentialité).
 async function deleteAccount(){
-  await accountRequest("/api/auth-delete-account", { method:"POST", auth:true });
+  await accountRequest("/api/account?action=delete-account", { method:"POST", auth:true });
   clearAuthSession();
 }
 
@@ -3605,7 +3608,7 @@ function setPremiumEnabled(on){ localStorage.setItem("delphesPremium", on ? "1" 
    l'app (aucun compte, tout en localStorage) : à la place d'une source de vérité "à nous",
    Stripe LUI-MÊME sert de source de vérité. Le navigateur garde juste l'identifiant de
    l'abonnement Stripe créé (delphesSubscription, localStorage) et le fait revalider par
-   Stripe directement (`/api/subscription-status`) au plus une fois par jour — jamais de
+   Stripe directement (`/api/stripe-status?type=subscription`) au plus une fois par jour — jamais de
    webhook à sécuriser, jamais de base à maintenir. Contrepartie assumée : un abonnement
    annulé côté Stripe reste actif localement jusqu'à la prochaine revérification (max 24h),
    et n'importe qui pourrait en théorie fabriquer un delphesSubscription bidon dans son
@@ -3614,9 +3617,8 @@ function setPremiumEnabled(on){ localStorage.setItem("delphesPremium", on ? "1" 
    l'app grandit au-delà d'une phase de test avec des personnes connues.
 
    À CONFIGURER SUR VERCEL avant d'espérer un test, même en laissant PAYMENT_ENABLED à
-   false pour l'instant (les 3 endpoints /api/create-checkout-session, /api/checkout-
-   session-status et /api/subscription-status répondent sinon une erreur 500 propre,
-   jamais un plantage) :
+   false pour l'instant (/api/create-checkout-session et /api/stripe-status répondent
+   sinon une erreur 500 propre, jamais un plantage) :
    - STRIPE_SECRET_KEY : clé secrète Stripe (commence par sk_test_... en mode test,
      sk_live_... en production) — Tableau de bord Stripe → Développeurs → Clés API.
    - STRIPE_PRICE_ID : l'id du Price Stripe (commence par price_...) pour l'abonnement à
@@ -3665,7 +3667,7 @@ async function checkPendingCheckoutReturn(){
   history.replaceState(null, "", window.location.pathname);
   if(checkout !== "success" || !sessionId) return;
   try{
-    const r = await fetch(`/api/checkout-session-status?session_id=${encodeURIComponent(sessionId)}`, {
+    const r = await fetch(`/api/stripe-status?type=checkout&session_id=${encodeURIComponent(sessionId)}`, {
       headers: { "X-App-Access-Code": getAccessCode() },
     });
     const data = await r.json();
@@ -3686,7 +3688,7 @@ function verifySubscriptionStatus(){
   if(sub.checkedAt && Date.now() - sub.checkedAt < oneDayMs) return;
   if(subscriptionCheckInFlight) return;
   subscriptionCheckInFlight = true;
-  fetch(`/api/subscription-status?subscription_id=${encodeURIComponent(sub.subscriptionId)}`, {
+  fetch(`/api/stripe-status?type=subscription&subscription_id=${encodeURIComponent(sub.subscriptionId)}`, {
     headers: { "X-App-Access-Code": getAccessCode() },
   })
     .then(r=>r.json())
