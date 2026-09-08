@@ -3041,6 +3041,57 @@ function getProfile(){
 }
 function saveProfileData(data){ localStorage.setItem("delphesProfile", JSON.stringify(data)); }
 
+// ===================== Sauvegarde / restauration manuelle =====================
+// Tant qu'aucun compte cloud n'existe (voir « Pistes de suite possibles »), tout — profil
+// astral, journal, rêves, proches, série de jours, progression — reste en localStorage, donc
+// strictement local à cet appareil et à ce navigateur. Une réinstallation de la PWA (ou un
+// nettoyage des données du site par l'OS) peut tout effacer sans recours : retour direct
+// d'utilisatrice après une perte de progression en réinstallant l'app pour récupérer un nouveau
+// logo. Exporte/restaure la TOTALITÉ du localStorage de l'app (pas une liste de clés choisies à
+// la main, qui se périmerait à chaque nouvelle donnée ajoutée) dans un fichier JSON unique, à
+// garder soi-même (mail, cloud personnel…) — voir l'écran Profil/Astro.
+function exportBackupData(){
+  const data = {};
+  for(let i=0; i<localStorage.length; i++){
+    const key = localStorage.key(i);
+    data[key] = localStorage.getItem(key);
+  }
+  const payload = { app:"Tarot de Delphes", version:1, exportedAt:new Date().toISOString(), data };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type:"application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `tarot-de-delphes-sauvegarde-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+// Remplace intégralement le localStorage actuel par le contenu du fichier (plutôt qu'une fusion
+// clé par clé, plus simple à garantir correcte et conforme à ce qu'on attend d'une restauration
+// de sauvegarde) — après confirmation explicite, puisque c'est irréversible pour les données de
+// l'appareil actuel si elles n'ont pas elles-mêmes été sauvegardées avant.
+function importBackupData(file){
+  const reader = new FileReader();
+  reader.onload = () => {
+    let payload;
+    try{ payload = JSON.parse(reader.result); }
+    catch{ alert("Ce fichier n'est pas une sauvegarde valide (JSON illisible)."); return; }
+    if(!payload || typeof payload.data !== "object" || !payload.data){
+      alert("Ce fichier n'est pas une sauvegarde valide.");
+      return;
+    }
+    const count = Object.keys(payload.data).length;
+    if(!confirm(`Restaurer cette sauvegarde (${count} élément${count>1?"s":""}) ? Toutes les données actuellement enregistrées sur cet appareil seront remplacées.`)) return;
+    localStorage.clear();
+    for(const [key, value] of Object.entries(payload.data)) localStorage.setItem(key, value);
+    alert("Sauvegarde restaurée. L'app va se recharger.");
+    location.reload();
+  };
+  reader.onerror = () => alert("Impossible de lire ce fichier.");
+  reader.readAsText(file);
+}
+
 /* ===================== PROGRESSION PERSONNELLE (Apprendre) ===================== */
 // Suivi de ce qui a réellement été consulté en détail — pas seulement tiré — dans trois
 // catégories : cartes, figures mythologiques, symboles (nombres inclus). Chaque id n'est
@@ -5304,6 +5355,12 @@ function profil(){
     ${saved && saved.astral ? `<div class="tile" data-screen-go="mythologie"><strong>🃏 Mythologie personnelle</strong><span>Ta divinité tutélaire et les arcanes majeurs que ton thème réveille.</span></div>` : ""}
   </div>
   <button class="secondary" data-profil-edit="1" style="display:block;margin:22px auto 0">${saved ? "Modifier mes informations" : "Renseigner mes informations"}</button>
+  <div style="margin-top:28px;text-align:center">
+    <p class="note">Tout reste uniquement sur cet appareil — une réinstallation de l'app peut tout effacer. Exporte une sauvegarde de temps en temps, à garder de ton côté (mail, cloud personnel…) ; tu pourras la restaurer sur ce même appareil ou un autre.</p>
+    <button class="secondary" data-backup-export="1" style="margin:10px 6px 0">Exporter mes données</button>
+    <button class="secondary" data-backup-import="1" style="margin:10px 6px 0">Restaurer une sauvegarde</button>
+    <input type="file" id="backupFileInput" accept="application/json" style="display:none">
+  </div>
   <p class="note" style="text-align:center;margin-top:16px"><a href="politique-confidentialite.html" target="_blank" rel="noopener">Politique de confidentialité</a></p>`;
 }
 
@@ -6949,6 +7006,17 @@ function bind(){
   // niveau (voir data-go/data-route ci-dessus) plutôt que dans les bindings spécifiques à un
   // écran "detail" — profil() n'en est pas un.
   document.querySelectorAll("[data-profil-edit]").forEach(el=>el.onclick=()=>showProfilEditForm());
+  // Sauvegarde/restauration manuelle (voir exportBackupData()/importBackupData()) : le bouton
+  // "Restaurer" déclenche le vrai input file caché, invisible tant qu'aucun fichier n'est
+  // choisi — un <input type="file"> reste le seul moyen d'ouvrir le sélecteur natif.
+  document.querySelectorAll("[data-backup-export]").forEach(el=>el.onclick=()=>exportBackupData());
+  document.querySelectorAll("[data-backup-import]").forEach(el=>el.onclick=()=>document.getElementById("backupFileInput").click());
+  const backupInput = document.getElementById("backupFileInput");
+  if(backupInput) backupInput.onchange = (e)=>{
+    const file = e.target.files[0];
+    if(file) importBackupData(file);
+    e.target.value = ""; // permet de resélectionner le même fichier une seconde fois si besoin
+  };
   document.querySelectorAll("[data-reves-go]").forEach(el=>{
     el.onclick = ()=>{
       const key = el.dataset.revesGo;
