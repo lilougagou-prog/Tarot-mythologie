@@ -92,6 +92,7 @@ main{max-width:900px;margin:auto;padding:22px 18px}
 .hero-emblem-cluster .hero-emblem{margin-bottom:0}
 .hero-emblem-cluster .hero-emblem.mini{font-size:15px;opacity:.8}
 .hero p{max-width:560px;margin:10px auto 0;line-height:1.7;opacity:.78;font-size:16px}
+.hero small{display:block;margin-top:8px;font-size:14px;opacity:.7}
 @keyframes emblem-breathe{
   0%,100%{transform:scale(1);text-shadow:0 0 0 rgba(219,185,111,0)}
   50%{transform:scale(1.15);text-shadow:0 0 14px rgba(219,185,111,.65)}
@@ -258,7 +259,12 @@ main{max-width:900px;margin:auto;padding:22px 18px}
 .lore-text{font-size:16px}
 .symbol-list{display:grid;gap:10px;margin-top:10px}
 .symbol{padding:14px 16px;border-left:3px solid var(--gold);background:rgba(255,255,255,.5);border-radius:0 12px 12px 0}
-.symbol b{font-family:"Cinzel",serif;font-size:15px;letter-spacing:.01em}
+.symbol b{font-family:"Cinzel",serif;font-size:16px;letter-spacing:.01em}
+/* Le <small> qu'on y met (ex. la note de la divinité tutélaire, écran Mythologie personnelle)
+   hérite sinon du rétrécissement par défaut du navigateur (~80%) sans jamais avoir été stylé
+   explicitement — bien plus petit que le reste du texte de lecture de l'app. Retour direct
+   d'utilisatrice : "certains textes sont trop petits (divinité tutélaire par exemple)". */
+.symbol small{font-size:15px;opacity:.7;line-height:1.5;display:inline-block;margin-top:4px}
 
 .draw-zone{text-align:center;padding:20px 0}
 .draw-zone.compact{padding:8px 0 0}
@@ -272,13 +278,19 @@ textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;paddin
 .secondary:disabled{opacity:.3;cursor:not-allowed}
 .ghost{border:0;background:none;color:var(--deep);opacity:.55;padding:12px 14px;cursor:pointer;font-size:13px;text-decoration:underline;display:block;margin:0 auto;transition:transform .12s ease}
 .ghost:active{transform:scale(.96)}
+/* Onglets Se connecter/Créer un compte (écran Compte) : même gabarit que .secondary, juste
+   distingués par leur état actif plutôt qu'une nouvelle classe de bouton. */
+.account-tab.active{background:var(--gold);border-color:var(--gold);color:#fff}
 
 /* ===== Précédent/Suivant sur la fiche d'une carte (onglet Apprendre) : voir showDetail()
    dans app.js — n'apparaît que quand la fiche a été ouverte depuis une grille ordonnée
    (tous les Majeurs, ou les cartes d'une même enseigne). ===== */
 .detail-card-nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px}
 .detail-card-nav button{flex:1}
-.note{font-size:13px;opacity:.65;line-height:1.6}
+/* Retour direct d'utilisatrice : "certains textes sont trop petits (divinité tutélaire par
+   exemple)" — .note sert de légende/texte secondaire dans une soixantaine d'endroits de l'app
+   (13px sur un corps de texte à 17px était nettement en dessous du confort de lecture). */
+.note{font-size:15px;opacity:.7;line-height:1.6}
 /* Ligne du calendrier attique (accueil) : couleur plus prononcée que .note pour ne pas
    se fondre dans le reste du texte muet du hero. */
 .attic-line{font-size:13px;line-height:1.6;color:var(--terracotta);opacity:.95;font-weight:600}

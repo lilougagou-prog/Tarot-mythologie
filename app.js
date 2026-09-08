@@ -3050,13 +3050,19 @@ function saveProfileData(data){ localStorage.setItem("delphesProfile", JSON.stri
 // logo. Exporte/restaure la TOTALITÉ du localStorage de l'app (pas une liste de clés choisies à
 // la main, qui se périmerait à chaque nouvelle donnée ajoutée) dans un fichier JSON unique, à
 // garder soi-même (mail, cloud personnel…) — voir l'écran Profil/Astro.
-function exportBackupData(){
+// Factorisé : sert aussi bien à l'export fichier (exportBackupData()) qu'à l'envoi vers le
+// compte cloud (pushBackupToCloud() plus bas) — les deux posent exactement la même donnée,
+// seule la destination change.
+function collectAllLocalStorageData(){
   const data = {};
   for(let i=0; i<localStorage.length; i++){
     const key = localStorage.key(i);
     data[key] = localStorage.getItem(key);
   }
-  const payload = { app:"Tarot de Delphes", version:1, exportedAt:new Date().toISOString(), data };
+  return data;
+}
+function exportBackupData(){
+  const payload = { app:"Tarot de Delphes", version:1, exportedAt:new Date().toISOString(), data: collectAllLocalStorageData() };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type:"application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -3067,10 +3073,21 @@ function exportBackupData(){
   a.remove();
   URL.revokeObjectURL(url);
 }
-// Remplace intégralement le localStorage actuel par le contenu du fichier (plutôt qu'une fusion
-// clé par clé, plus simple à garantir correcte et conforme à ce qu'on attend d'une restauration
-// de sauvegarde) — après confirmation explicite, puisque c'est irréversible pour les données de
-// l'appareil actuel si elles n'ont pas elles-mêmes été sauvegardées avant.
+// Remplace intégralement le localStorage actuel par `data` (plutôt qu'une fusion clé par clé,
+// plus simple à garantir correcte et conforme à ce qu'on attend d'une restauration de
+// sauvegarde) — après confirmation explicite (le nombre d'éléments concernés), puisque c'est
+// irréversible pour les données de l'appareil actuel si elles n'ont pas elles-mêmes été
+// sauvegardées avant. Factorisé : sert à la fois à importBackupData() (fichier local) et à
+// pullBackupFromCloud() plus bas (compte cloud) — même geste, seule la source change.
+function restoreLocalStorageData(data){
+  const count = Object.keys(data).length;
+  if(!confirm(`Restaurer cette sauvegarde (${count} élément${count>1?"s":""}) ? Toutes les données actuellement enregistrées sur cet appareil seront remplacées.`)) return false;
+  localStorage.clear();
+  for(const [key, value] of Object.entries(data)) localStorage.setItem(key, value);
+  alert("Sauvegarde restaurée. L'app va se recharger.");
+  location.reload();
+  return true;
+}
 function importBackupData(file){
   const reader = new FileReader();
   reader.onload = () => {
@@ -3081,15 +3098,82 @@ function importBackupData(file){
       alert("Ce fichier n'est pas une sauvegarde valide.");
       return;
     }
-    const count = Object.keys(payload.data).length;
-    if(!confirm(`Restaurer cette sauvegarde (${count} élément${count>1?"s":""}) ? Toutes les données actuellement enregistrées sur cet appareil seront remplacées.`)) return;
-    localStorage.clear();
-    for(const [key, value] of Object.entries(payload.data)) localStorage.setItem(key, value);
-    alert("Sauvegarde restaurée. L'app va se recharger.");
-    location.reload();
+    restoreLocalStorageData(payload.data);
   };
   reader.onerror = () => alert("Impossible de lire ce fichier.");
   reader.readAsText(file);
+}
+
+// ===================== Compte (bêta) : fait suivre la sauvegarde d'un appareil à l'autre =====
+// Un compte email + mot de passe très simple (voir api/auth-*.js), dont le SEUL rôle est de
+// poser la même sauvegarde que collectAllLocalStorageData()/restoreLocalStorageData()
+// ci-dessus quelque part hors de cet appareil (api/sync-data.js) — jamais un nouveau type de
+// donnée, jamais un système social. Encore un filet manuel (on choisit soi-même quand envoyer
+// et quand récupérer), pas une synchronisation automatique en continu — voir le README pour
+// pourquoi et pour la suite possible.
+function getAuthToken(){ return localStorage.getItem("delphesAuthToken"); }
+function getAuthEmail(){ return localStorage.getItem("delphesAuthEmail"); }
+function isLoggedIn(){ return !!getAuthToken(); }
+function setAuthSession(token, email){
+  localStorage.setItem("delphesAuthToken", token);
+  localStorage.setItem("delphesAuthEmail", email);
+}
+function clearAuthSession(){
+  localStorage.removeItem("delphesAuthToken");
+  localStorage.removeItem("delphesAuthEmail");
+}
+
+async function accountRequest(path, { method = "GET", body, auth = false } = {}){
+  const headers = { "X-App-Access-Code": getAccessCode() };
+  if(body) headers["Content-Type"] = "application/json";
+  if(auth) headers["Authorization"] = `Bearer ${getAuthToken()}`;
+  const r = await fetch(path, { method, headers, body: body ? JSON.stringify(body) : undefined });
+  let json;
+  try{ json = await r.json(); }
+  catch{ json = {}; }
+  if(!r.ok) throw new Error(json.error || "Une erreur est survenue.");
+  return json;
+}
+
+async function createAccount(email, password){
+  const { token } = await accountRequest("/api/auth-signup", { method:"POST", body:{ email, password } });
+  setAuthSession(token, email.trim().toLowerCase());
+}
+async function loginAccount(email, password){
+  const { token } = await accountRequest("/api/auth-login", { method:"POST", body:{ email, password } });
+  setAuthSession(token, email.trim().toLowerCase());
+}
+async function logoutAccount(){
+  try{ await accountRequest("/api/auth-logout", { method:"POST", auth:true }); }
+  catch{ /* le jeton local est de toute façon retiré juste après — tant pis si le serveur ne
+            l'a pas reçu, il finira par expirer de lui-même (voir SESSION_TTL_DAYS). */ }
+  clearAuthSession();
+}
+// Envoie la totalité des données de cet appareil vers le compte — remplace intégralement ce qui
+// était éventuellement déjà enregistré côté cloud (pas de fusion, même principe que
+// restoreLocalStorageData()). C'est un geste délibéré ("cet appareil fait foi"), jamais
+// automatique.
+async function pushBackupToCloud(){
+  const { updatedAt } = await accountRequest("/api/sync-data", { method:"POST", auth:true, body:{ data: collectAllLocalStorageData() } });
+  return updatedAt;
+}
+// Récupère la dernière sauvegarde du compte et l'applique ICI (avec confirmation, voir
+// restoreLocalStorageData()) — geste tout aussi délibéré dans l'autre sens ("le cloud fait foi
+// sur cet appareil"). Renvoie false sans rien faire si le compte n'a encore aucune sauvegarde
+// enregistrée (ex. tout juste créé).
+async function pullBackupFromCloud(){
+  const { data } = await accountRequest("/api/sync-data", { method:"GET", auth:true });
+  if(!data){ alert("Ce compte n'a encore aucune sauvegarde enregistrée."); return false; }
+  return restoreLocalStorageData(data);
+}
+// Suppression définitive du compte (droit à l'effacement RGPD) : identifiants, sessions et
+// sauvegarde cloud disparaissent côté serveur (voir api/auth-delete-account.js) — n'efface
+// jamais les données restées en localStorage sur cet appareil, qui suivent leur propre logique
+// (désinstallation de l'app / effacement des données du site, voir la politique de
+// confidentialité).
+async function deleteAccount(){
+  await accountRequest("/api/auth-delete-account", { method:"POST", auth:true });
+  clearAuthSession();
 }
 
 /* ===================== PROGRESSION PERSONNELLE (Apprendre) ===================== */
@@ -5353,6 +5437,7 @@ function profil(){
     <div class="tile" data-screen-go="astral"><strong>☉ Profil astral</strong><span>Ton thème natal complet, calculé à partir de ta date, heure et lieu de naissance.</span></div>
     <div class="tile" data-screen-go="relations"><strong>🤝 Mes proches</strong><span>Compare ton thème à celui d'un partenaire, d'un enfant, d'un parent…</span></div>
     ${saved && saved.astral ? `<div class="tile" data-screen-go="mythologie"><strong>🃏 Mythologie personnelle</strong><span>Ta divinité tutélaire et les arcanes majeurs que ton thème réveille.</span></div>` : ""}
+    <div class="tile" data-screen-go="compte"><strong>☁️ Compte${isLoggedIn() ? "" : " (bêta)"}</strong><span>${isLoggedIn() ? `Connecté·e — ${escapeHTML(getAuthEmail())}` : "Fais suivre ta sauvegarde d'un appareil à l'autre."}</span></div>
   </div>
   <button class="secondary" data-profil-edit="1" style="display:block;margin:22px auto 0">${saved ? "Modifier mes informations" : "Renseigner mes informations"}</button>
   <div style="margin-top:28px;text-align:center">
@@ -5499,6 +5584,144 @@ function showPersonalMythology(){
   cardDetailReturnTo = showPersonalMythology;
   bindCards();
   bindChips(); // rend cliquable la divinité tutélaire (data-deity)
+}
+
+/* ===================== COMPTE (bêta) : sauvegarde cloud, voir plus haut ===================== */
+function showAccount(){
+  preDetailScroll = window.scrollY;
+  document.getElementById("screen").innerHTML = `<div class="detail">${renderAccount()}
+    <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
+  </div>`;
+  triggerScreenAnim("detail");
+  window.scrollTo(0,0);
+  document.getElementById("detailBack").onclick = ()=>{
+    const scrollTarget = preDetailScroll;
+    render();
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
+  };
+  cardDetailReturnTo = showAccount;
+  bindAccountScreen();
+}
+
+function renderAccount(){
+  if(isLoggedIn()){
+    return `<div class="section-title"><h3>Compte</h3></div>
+    <p class="note">Connecté·e en tant que <b>${escapeHTML(getAuthEmail())}</b>.</p>
+    <p class="note">Ce compte ne sert qu'à faire suivre ta sauvegarde d'un appareil à l'autre — un geste que tu déclenches toi-même, jamais automatique. « Envoyer » remplace la sauvegarde du compte par celle de cet appareil ; « Récupérer » fait l'inverse.</p>
+    <p class="note" id="accountError" style="display:none;color:var(--terracotta)"></p>
+    <p class="note" id="accountStatus" style="display:none"></p>
+    <button class="primary" id="accountPush" style="display:block;width:fit-content;margin:14px auto 0">Envoyer cet appareil vers le compte</button>
+    <button class="secondary" id="accountPull" style="display:block;width:fit-content;margin:12px auto 0">Récupérer la sauvegarde du compte</button>
+    <button class="ghost" id="accountLogout">Se déconnecter</button>
+    <button class="ghost" id="accountDelete" style="color:var(--terracotta)">Supprimer définitivement mon compte</button>`;
+  }
+  return `<div class="section-title"><h3>Compte (bêta)</h3></div>
+  <p class="note">Crée un compte (e-mail + mot de passe) pour que ta sauvegarde — profil, journal, rêves, proches, progression — te suive d'un appareil à l'autre, plutôt que de rester coincée sur celui-ci. Aucune vérification par e-mail pour l'instant : garde ton mot de passe quelque part, il n'y a pas encore de récupération automatique en cas d'oubli.</p>
+  <div class="tiles" style="display:flex;gap:10px;justify-content:center;margin-top:14px">
+    <button class="secondary account-tab active" id="accountTabLogin" data-account-tab="login">Se connecter</button>
+    <button class="secondary account-tab" id="accountTabSignup" data-account-tab="signup">Créer un compte</button>
+  </div>
+  <div id="accountFormLogin">
+    <div class="draw-notes" style="margin-top:16px">
+      <p class="suit-h4" style="margin:0 0 6px">E-mail</p>
+      <input id="accountLoginEmail" type="email" placeholder="toi@exemple.com" autocomplete="email">
+    </div>
+    <div class="draw-notes">
+      <p class="suit-h4" style="margin:0 0 6px">Mot de passe</p>
+      <input id="accountLoginPassword" type="password" placeholder="Ton mot de passe" autocomplete="current-password">
+    </div>
+    <button class="primary" id="accountLoginSubmit" style="display:block;margin:14px auto 0">Se connecter</button>
+  </div>
+  <div id="accountFormSignup" style="display:none">
+    <div class="draw-notes" style="margin-top:16px">
+      <p class="suit-h4" style="margin:0 0 6px">E-mail</p>
+      <input id="accountSignupEmail" type="email" placeholder="toi@exemple.com" autocomplete="email">
+    </div>
+    <div class="draw-notes">
+      <p class="suit-h4" style="margin:0 0 6px">Mot de passe</p>
+      <input id="accountSignupPassword" type="password" placeholder="Au moins 8 caractères" autocomplete="new-password">
+    </div>
+    <button class="primary" id="accountSignupSubmit" style="display:block;margin:14px auto 0">Créer mon compte</button>
+  </div>
+  <p class="note" id="accountError" style="display:none;color:var(--terracotta);margin-top:14px"></p>
+  <div id="accountFormLoading" style="display:none"></div>`;
+}
+
+function bindAccountScreen(){
+  if(isLoggedIn()){
+    const errorEl = document.getElementById("accountError");
+    const statusEl = document.getElementById("accountStatus");
+    const showError = (msg) => { errorEl.textContent = msg; errorEl.style.display = "block"; statusEl.style.display = "none"; };
+    const showStatus = (msg) => { statusEl.textContent = msg; statusEl.style.display = "block"; errorEl.style.display = "none"; };
+    document.getElementById("accountPush").onclick = async () => {
+      if(!confirm("Remplacer la sauvegarde du compte par celle de cet appareil ?")) return;
+      try{ await pushBackupToCloud(); showStatus("Envoyé — la sauvegarde du compte reflète maintenant cet appareil."); }
+      catch(err){ showError(err.message); }
+    };
+    document.getElementById("accountPull").onclick = async () => {
+      try{ await pullBackupFromCloud(); } // recharge la page en cas de succès — rien à afficher après
+      catch(err){ showError(err.message); }
+    };
+    document.getElementById("accountLogout").onclick = async () => {
+      await logoutAccount();
+      render();
+    };
+    document.getElementById("accountDelete").onclick = async () => {
+      if(!confirm("Supprimer définitivement ce compte et la sauvegarde qu'il contient ? Cette action est irréversible. (Les données déjà sur cet appareil, elles, ne sont pas touchées.)")) return;
+      try{ await deleteAccount(); render(); }
+      catch(err){ showError(err.message); }
+    };
+    return;
+  }
+
+  document.querySelectorAll("[data-account-tab]").forEach(el=>{
+    el.onclick = () => {
+      const tab = el.dataset.accountTab;
+      document.querySelectorAll("[data-account-tab]").forEach(t=>t.classList.toggle("active", t===el));
+      document.getElementById("accountFormLogin").style.display = tab==="login" ? "block" : "none";
+      document.getElementById("accountFormSignup").style.display = tab==="signup" ? "block" : "none";
+      document.getElementById("accountError").style.display = "none";
+    };
+  });
+
+  const errorEl = document.getElementById("accountError");
+  const loadingEl = document.getElementById("accountFormLoading");
+  const showError = (msg) => { errorEl.textContent = msg; errorEl.style.display = "block"; };
+
+  document.getElementById("accountLoginSubmit").onclick = async () => {
+    const email = document.getElementById("accountLoginEmail").value;
+    const password = document.getElementById("accountLoginPassword").value;
+    errorEl.style.display = "none";
+    loadingEl.style.display = "block";
+    try{
+      await loginAccount(email, password);
+      render();
+    } catch(err){
+      showError(err.message);
+    } finally {
+      loadingEl.style.display = "none";
+    }
+  };
+
+  document.getElementById("accountSignupSubmit").onclick = async () => {
+    const email = document.getElementById("accountSignupEmail").value;
+    const password = document.getElementById("accountSignupPassword").value;
+    errorEl.style.display = "none";
+    loadingEl.style.display = "block";
+    try{
+      await createAccount(email, password);
+      // Un compte tout juste créé n'a encore aucune sauvegarde côté cloud — proposer tout de
+      // suite d'y poser celle de cet appareil plutôt que de laisser cette étape implicite.
+      if(confirm("Compte créé. Envoyer la sauvegarde de cet appareil vers ce nouveau compte maintenant ?")){
+        try{ await pushBackupToCloud(); } catch{ /* l'écran Compte, affiché juste après, permet de réessayer */ }
+      }
+      render();
+    } catch(err){
+      showError(err.message);
+    } finally {
+      loadingEl.style.display = "none";
+    }
+  };
 }
 
 /* ===================== ONGLET RÊVES (onirocritique grecque, IA) ===================== */
@@ -6998,6 +7221,7 @@ function bind(){
       else if(key==="stats") showStats();
       else if(key==="relations") showRelations();
       else if(key==="mythologie") showPersonalMythology();
+      else if(key==="compte") showAccount();
     };
   });
   // Retour direct d'utilisatrice : « Modifier mes informations » vivait uniquement au fond

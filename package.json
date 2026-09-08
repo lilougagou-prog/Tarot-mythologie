@@ -6,6 +6,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.117.1",
+    "@neondatabase/serverless": "^0.10.4",
     "astronomy-engine": "^2.1.19",
     "luxon": "^3.7.2",
     "stripe": "^22.6.1"
