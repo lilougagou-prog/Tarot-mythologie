@@ -1542,6 +1542,97 @@ const SYMBOL_LIBRARY = {
   ]},
 };
 
+// Illustrations dédiées des symboles (mêmes fichiers que l'app sœur Panthéon,
+// assets/symbol-*.webp — voir showSymbolDetail()), en tête de fiche à la place de
+// l'emoji quand une illustration existe pour ce symbole.
+const SYMBOL_ILLUSTRATIONS = {
+  "abeille": "assets/symbol-abeille.webp",
+  "aigle": "assets/symbol-aigle.webp",
+  "ailes": "assets/symbol-ailes.webp",
+  "air": "assets/symbol-air.webp",
+  "araignée": "assets/symbol-araignee.webp",
+  "arc": "assets/symbol-arc.webp",
+  "arc-en-ciel": "assets/symbol-arc-en-ciel.webp",
+  "aurore": "assets/symbol-aurore.webp",
+  "balance": "assets/symbol-balance.webp",
+  "blé": "assets/symbol-ble.webp",
+  "bélier": "assets/symbol-belier.webp",
+  "caducée": "assets/symbol-caduceus.webp",
+  "cerf": "assets/symbol-cerf.webp",
+  "char": "assets/symbol-char.webp",
+  "char solaire": "assets/symbol-char-solaire.webp",
+  "chaîne": "assets/symbol-chaine.webp",
+  "chemin": "assets/symbol-chemin.webp",
+  "cheval": "assets/symbol-cheval.webp",
+  "chien": "assets/symbol-chien.webp",
+  "chouette": "assets/symbol-chouette.webp",
+  "chèvre": "assets/symbol-chevre.webp",
+  "chêne": "assets/symbol-chene.webp",
+  "clé": "assets/symbol-cle.webp",
+  "colombe": "assets/symbol-colombe.webp",
+  "corbeau": "assets/symbol-corbeau.webp",
+  "corne d'abondance": "assets/symbol-corne-abondance.webp",
+  "couronne": "assets/symbol-couronne.webp",
+  "crabe": "assets/symbol-crabe.webp",
+  "crocus": "assets/symbol-crocus.webp",
+  "cygne": "assets/symbol-cygne.webp",
+  "cyprès": "assets/symbol-cypres.webp",
+  "dauphin": "assets/symbol-dauphin.webp",
+  "eau": "assets/symbol-eau.webp",
+  "feu": "assets/symbol-feu.webp",
+  "figue": "assets/symbol-figue.webp",
+  "flèche": "assets/symbol-fleche.webp",
+  "flûte": "assets/symbol-flute.webp",
+  "forêt": "assets/symbol-foret.webp",
+  "foudre": "assets/symbol-foudre.webp",
+  "graine": "assets/symbol-graine.webp",
+  "grenade": "assets/symbol-grenade.webp",
+  "grotte": "assets/symbol-grotte.webp",
+  "labyrinthe": "assets/symbol-labyrinthe.webp",
+  "lanterne": "assets/symbol-lanterne.webp",
+  "laurier": "assets/symbol-laurier.webp",
+  "lierre": "assets/symbol-lierre.webp",
+  "lion": "assets/symbol-lion.webp",
+  "lotus": "assets/symbol-lotus.webp",
+  "lune": "assets/symbol-lune.webp",
+  "lyre": "assets/symbol-lyre.webp",
+  "mer": "assets/map-icon-detroit.webp",
+  "miroir": "assets/symbol-miroir.webp",
+  "monde souterrain": "assets/map-icon-souterrain.webp",
+  "montagne": "assets/map-icon-montagne.webp",
+  "myrte": "assets/symbol-myrte.webp",
+  "noix": "assets/symbol-noix.webp",
+  "olive": "assets/symbol-olive.webp",
+  "olivier": "assets/symbol-olivier.webp",
+  "paon": "assets/symbol-paon.webp",
+  "papillon": "assets/symbol-papillon.webp",
+  "pavot": "assets/symbol-pavot.webp",
+  "poisson": "assets/symbol-poisson.webp",
+  "pomme": "assets/symbol-pomme.webp",
+  "pont": "assets/symbol-pont.webp",
+  "porte": "assets/symbol-porte.webp",
+  "pégase": "assets/symbol-pegase.webp",
+  "raisin": "assets/symbol-raisin.webp",
+  "rivière": "assets/symbol-riviere.webp",
+  "rose": "assets/symbol-rose.webp",
+  "roue": "assets/symbol-roue.webp",
+  "sceptre": "assets/symbol-sceptre.webp",
+  "scorpion": "assets/symbol-scorpion.webp",
+  "serpent": "assets/symbol-serpent.webp",
+  "soleil": "assets/symbol-soleil.webp",
+  "taureau": "assets/symbol-taureau.webp",
+  "temple": "assets/symbol-temple.webp",
+  "terre": "assets/symbol-terre.webp",
+  "torche": "assets/symbol-torche.webp",
+  "torches": "assets/symbol-torches.webp",
+  "trident": "assets/symbol-trident.webp",
+  "vigne": "assets/symbol-vigne.webp",
+  "voile": "assets/symbol-voile.webp",
+  "éclair": "assets/symbol-eclair.webp",
+  "éclipse": "assets/symbol-eclipse.webp",
+  "étoiles": "assets/symbol-etoile.webp",
+};
+
 // Alias : formes alternatives pointant vers la même fiche
 const SYMBOL_ALIASES = {
   "deux vases":"eau","vases":"eau","panthère":"vigne","sac de voyage":"chemin","table":"caducée",
@@ -5306,7 +5397,9 @@ function showSymbolDetail(id, backTo = cardDetailReturnTo){
   const linkedDeities = s.links.filter(l => DEITY_NOTES[l]);
   document.getElementById("screen").innerHTML = `<div class="detail">
     ${wasNew ? discoveryFX() : ""}
-    <div class="symbol-hero">${s.icon}</div>
+    ${SYMBOL_ILLUSTRATIONS[id]
+      ? `<img class="symbol-illustration-big" src="${escapeHTML(SYMBOL_ILLUSTRATIONS[id])}" alt="${escapeHTML(s.label)}" loading="lazy">`
+      : `<div class="symbol-hero">${s.icon}</div>`}
     <h2>${escapeHTML(s.label)}</h2>
     <p class="symbol-cat-big">${escapeHTML(s.category)}</p>
     <p>${escapeHTML(s.desc)}</p>

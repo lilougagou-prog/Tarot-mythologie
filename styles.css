@@ -393,6 +393,12 @@ textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;paddin
 .clickable-symbol{cursor:pointer;display:inline-block;border-bottom:1px dashed var(--gold);transition:opacity .12s ease}
 .clickable-symbol:hover{opacity:.7}
 .symbol-hero{font-size:56px;text-align:center;margin-bottom:6px}
+
+/* Illustration dédiée d'un symbole (SYMBOL_ILLUSTRATIONS, mêmes fichiers que l'app sœur
+   Panthéon), en tête de fiche à la place de .symbol-hero quand elle existe pour ce symbole :
+   contain plutôt que cover pour ne jamais rogner le sujet, pas de cadre puisque le fond de la
+   page fait déjà office d'arrière-plan. */
+.symbol-illustration-big{display:block;max-width:220px;max-height:220px;width:100%;object-fit:contain;margin:0 auto 8px;filter:drop-shadow(0 6px 10px var(--shadow))}
 .symbol-cat-big{text-align:center;font-family:"Cinzel",serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.6;margin-top:-8px}
 
 .empty{padding:35px 5px;text-align:center;opacity:.65}
