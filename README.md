@@ -667,11 +667,15 @@ Testé par deux scripts dédiés (non commités, comme le reste des vérificatio
 
 **Action requise avant que ça fonctionne en production** : relier une base de données Postgres au projet Vercel (Storage → Create Database → Neon, ou coller l'URL d'une base Neon existante dans la variable d'environnement `DATABASE_URL` — voir `.env.example`) puis redéployer. Sans cette variable, les endpoints répondent explicitement "Le compte n'est pas encore configuré côté serveur" plutôt que de planter en silence.
 
-## Menu Compte (icône 👤 de la barre du haut)
+## Menu Compte (bouton rond en haut à droite)
 
 Retour direct d'utilisatrice : *"je veux qu'un petit bouton profil apparaisse en haut à droite (à la place du bouton retour à l'accueil actuel) qui regroupe Compte et Nous contacter, pour que « Profil astral » reste purement le profil astral et la divinité tutélaire, sans élément technique."*
 
-L'ancien `#homeBtn` (⌂, en haut à droite de la barre du haut sur chaque écran) est retiré — il faisait doublon avec l'onglet **⌂ Accueil**, déjà présent en permanence dans le menu du bas quel que soit l'écran affiché, y compris les fiches "detail" (carte, figure, symbole…). À sa place : un bouton **👤** (`#accountMenuBtn`), qui ouvre un petit menu à deux tuiles — `showAccountMenu()`/`renderAccountMenu()` dans `app.js` :
+L'ancien `#homeBtn` (⌂, en haut à droite de la barre du haut sur chaque écran) est retiré — il faisait doublon avec l'onglet **⌂ Accueil**, déjà présent en permanence dans le menu du bas quel que soit l'écran affiché, y compris les fiches "detail" (carte, figure, symbole…). À sa place : un bouton rond (`#accountMenuBtn`, classe `.icon-btn`), qui ouvre un petit menu à deux tuiles — `showAccountMenu()`/`renderAccountMenu()` dans `app.js`.
+
+Le bouton est une icône SVG en traits fins (silhouette de profil), pas un emoji — même traitement que le bouton profil de l'app sœur Panthéon (`.profile-fab`), adapté à la palette terracotta/crème de Delphes au lieu du marbre/bronze de Panthéon. Retour d'utilisatrice après un premier essai avec l'emoji 👤 : *"ce truc bleu n'est pas dans le thème de l'appli"* — le rendu de cet emoji varie selon les appareils (parfois teinté de bleu, hors de notre contrôle), ce qui jurait avec la palette de l'appli. Un SVG en `currentColor` garde toujours la bonne teinte, sur tous les appareils, comme le reste des icônes de l'appli.
+
+Le menu ouvert par ce bouton propose :
 - **☁️ Compte** — mène à l'écran Compte déjà existant (voir plus haut).
 - **✉️ Nous contacter** — mène à l'écran Nous contacter (voir la section dédiée plus bas, ajoutée dans la foulée par le même chantier côté app sœur Panthéon).
 
