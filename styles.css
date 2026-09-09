@@ -281,6 +281,9 @@ textarea,input{width:100%;border:1px solid var(--line);border-radius:14px;paddin
 /* Onglets Se connecter/Créer un compte (écran Compte) : même gabarit que .secondary, juste
    distingués par leur état actif plutôt qu'une nouvelle classe de bouton. */
 .account-tab.active{background:var(--gold);border-color:var(--gold);color:#fff}
+/* Sélecteur Question/Bug/Autre (écran Nous contacter) : même principe que .account-tab
+   ci-dessus, juste sous un nom propre à cet écran. */
+.contact-type.active{background:var(--gold);border-color:var(--gold);color:#fff}
 
 /* ===== Précédent/Suivant sur la fiche d'une carte (onglet Apprendre) : voir showDetail()
    dans app.js — n'apparaît que quand la fiche a été ouverte depuis une grille ordonnée
