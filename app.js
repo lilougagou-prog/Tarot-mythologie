@@ -3753,6 +3753,12 @@ const BRACELET_ENABLED = false;
 const BRACELET_SHOP_BASE_URL = "https://boutique.tarot-de-delphes.fr/bracelet"; // TODO: remplacer par l'URL réelle une fois la boutique créée
 const BRACELET_PREMIUM_DISCOUNT_CODE = "DELPHES-PREMIUM"; // TODO: remplacer par le vrai code de réduction de la boutique
 
+// Adresse utilisée par la tuile « Nous contacter » du menu Compte (voir renderAccountMenu()) —
+// la même que celle encore en placeholder dans politique-confidentialite.html ("[adresse e-mail
+// de contact à préciser]") : les deux doivent être mises à jour ensemble le jour où une vraie
+// adresse existe.
+const CONTACT_EMAIL = "contact@a-completer.exemple"; // TODO: remplacer par la vraie adresse de contact
+
 // "XI — La Force" -> "la-force" ; "Le Mat" (le seul arcane sans numéro) -> "le-mat". Un id
 // court et lisible par carte, stable (dérivé du nom, jamais recalculé aléatoirement) pour
 // que la boutique puisse reconnaître chaque arcane sans dépendre du texte affiché en entier.
@@ -5532,7 +5538,6 @@ function profil(){
     <div class="tile" data-screen-go="astral"><strong>☉ Profil astral</strong><span>Ton thème natal complet, calculé à partir de ta date, heure et lieu de naissance.</span></div>
     <div class="tile" data-screen-go="relations"><strong>🤝 Mes proches</strong><span>Compare ton thème à celui d'un partenaire, d'un enfant, d'un parent…</span></div>
     ${saved && saved.astral ? `<div class="tile" data-screen-go="mythologie"><strong>🃏 Mythologie personnelle</strong><span>Ta divinité tutélaire et les arcanes majeurs que ton thème réveille.</span></div>` : ""}
-    <div class="tile" data-screen-go="compte"><strong>☁️ Compte${isLoggedIn() ? "" : " (bêta)"}</strong><span>${isLoggedIn() ? `Connecté·e — ${escapeHTML(getAuthEmail())}` : "Fais suivre ta sauvegarde d'un appareil à l'autre."}</span></div>
   </div>
   <button class="secondary" data-profil-edit="1" style="display:block;margin:22px auto 0">${saved ? "Modifier mes informations" : "Renseigner mes informations"}</button>
   <div style="margin-top:28px;text-align:center">
@@ -5679,6 +5684,37 @@ function showPersonalMythology(){
   cardDetailReturnTo = showPersonalMythology;
   bindCards();
   bindChips(); // rend cliquable la divinité tutélaire (data-deity)
+}
+
+/* ===================== MENU COMPTE (icône 👤 de la barre du haut) ===================== */
+// Retour direct d'utilisatrice : "je veux qu'un petit bouton profil apparaisse en haut à
+// droite (à la place du bouton retour à l'accueil actuel) qui regroupe Compte et Nous
+// contacter, pour que « Profil astral » reste purement le profil astral et la divinité
+// tutélaire, sans élément technique." — remplace l'ancien #homeBtn (⌂, redondant avec l'onglet
+// Accueil déjà présent en permanence dans le menu du bas) par ce menu, accessible depuis
+// n'importe quel écran de l'app plutôt que noyé dans l'onglet Astro.
+function showAccountMenu(){
+  preDetailScroll = window.scrollY;
+  document.getElementById("screen").innerHTML = `<div class="detail">${renderAccountMenu()}
+    <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
+  </div>`;
+  triggerScreenAnim("detail");
+  window.scrollTo(0,0);
+  document.getElementById("detailBack").onclick = ()=>{
+    const scrollTarget = preDetailScroll;
+    render();
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
+  };
+  cardDetailReturnTo = showAccountMenu;
+  document.getElementById("accountMenuCompteTile").onclick = ()=> showAccount();
+}
+
+function renderAccountMenu(){
+  return `<div class="section-title centered"><h3>Compte</h3></div>
+  <div class="grid" style="margin-top:10px">
+    <div class="tile" id="accountMenuCompteTile"><strong>☁️ Compte${isLoggedIn() ? "" : " (bêta)"}</strong><span>${isLoggedIn() ? `Connecté·e — ${escapeHTML(getAuthEmail())}` : "Crée un compte pour faire suivre ta sauvegarde d'un appareil à l'autre."}</span></div>
+    <a class="tile" href="mailto:${escapeHTML(CONTACT_EMAIL)}" style="display:block;color:inherit;text-decoration:none"><strong>✉️ Nous contacter</strong><span>Une question, un souci, une idée ? Écris-nous.</span></a>
+  </div>`;
 }
 
 /* ===================== COMPTE (bêta) : sauvegarde cloud, voir plus haut ===================== */
@@ -7343,7 +7379,7 @@ function bind(){
       else if(key==="journal") showDreamJournal();
     };
   });
-  document.getElementById("homeBtn").onclick=()=>setRoute("home");
+  document.getElementById("accountMenuBtn").onclick=()=>showAccountMenu();
   document.getElementById("soundBtn").onclick=()=>AmbientAudio.toggleMute();
   AmbientAudio.syncButton();
 

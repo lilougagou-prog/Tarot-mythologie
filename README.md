@@ -667,6 +667,20 @@ Testé par deux scripts dédiés (non commités, comme le reste des vérificatio
 
 **Action requise avant que ça fonctionne en production** : relier une base de données Postgres au projet Vercel (Storage → Create Database → Neon, ou coller l'URL d'une base Neon existante dans la variable d'environnement `DATABASE_URL` — voir `.env.example`) puis redéployer. Sans cette variable, les endpoints répondent explicitement "Le compte n'est pas encore configuré côté serveur" plutôt que de planter en silence.
 
+## Menu Compte (icône 👤 de la barre du haut)
+
+Retour direct d'utilisatrice : *"je veux qu'un petit bouton profil apparaisse en haut à droite (à la place du bouton retour à l'accueil actuel) qui regroupe Compte et Nous contacter, pour que « Profil astral » reste purement le profil astral et la divinité tutélaire, sans élément technique."*
+
+L'ancien `#homeBtn` (⌂, en haut à droite de la barre du haut sur chaque écran) est retiré — il faisait doublon avec l'onglet **⌂ Accueil**, déjà présent en permanence dans le menu du bas quel que soit l'écran affiché, y compris les fiches "detail" (carte, figure, symbole…). À sa place : un bouton **👤** (`#accountMenuBtn`), qui ouvre un petit menu à deux tuiles — `showAccountMenu()`/`renderAccountMenu()` dans `app.js` :
+- **☁️ Compte** — mène à l'écran Compte déjà existant (voir plus haut).
+- **✉️ Nous contacter** — lien `mailto:` direct vers `CONTACT_EMAIL` (constante en tête d'`app.js`, même principe que `BRACELET_SHOP_BASE_URL` : un `TODO` en attendant la vraie adresse — actuellement un placeholder, **à remplacer avant toute publication**, en même temps que le placeholder identique resté dans `politique-confidentialite.html`).
+
+La tuile « ☁️ Compte » a corrélativement disparu de l'onglet Profil/Astro (`profil()`) : cet onglet ne propose plus que **Profil astral**, **Mes proches** et, une fois un thème enregistré, **Mythologie personnelle** — plus aucun élément "technique" (compte, sauvegarde cloud) n'y figure, conformément à la demande. Le reste de cet onglet (bouton "Modifier mes informations", export/import de sauvegarde manuelle, lien vers la politique de confidentialité) n'a pas été touché — seule la tuile Compte a été déplacée.
+
+Accessible depuis n'importe quel écran de l'app (barre du haut persistante), pas seulement depuis l'onglet Astro — cohérent avec l'usage d'un bouton de compte dans la plupart des apps.
+
+Testé par un script dédié (non commité) : disparition de l'ancien `#homeBtn` (HTML et JS), présence du nouveau `#accountMenuBtn`, absence de la tuile Compte dans `profil()`, rendu du menu avec ses deux tuiles, câblage correct de la tuile Compte vers l'écran Compte existant. `service-worker.js` : `delphes-v187` → `delphes-v188`.
+
 ## Limite de 12 fonctions (plan Hobby Vercel)
 
 Le premier déploiement de ce chantier a échoué : *"No more than 12 Serverless Functions can be added to a Deployment on the Hobby plan."* Chaque fichier top-level dans `api/` (hors `api/_lib/`, exclu du routage par son préfixe `_`) compte comme une fonction serverless séparée — les 6 nouveaux endpoints du compte avaient fait passer le total de 12 à 18, au-delà de la limite du plan gratuit Vercel.
