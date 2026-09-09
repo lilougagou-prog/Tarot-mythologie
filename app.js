@@ -3753,12 +3753,6 @@ const BRACELET_ENABLED = false;
 const BRACELET_SHOP_BASE_URL = "https://boutique.tarot-de-delphes.fr/bracelet"; // TODO: remplacer par l'URL réelle une fois la boutique créée
 const BRACELET_PREMIUM_DISCOUNT_CODE = "DELPHES-PREMIUM"; // TODO: remplacer par le vrai code de réduction de la boutique
 
-// Adresse utilisée par la tuile « Nous contacter » du menu Compte (voir renderAccountMenu()) —
-// la même que celle encore en placeholder dans politique-confidentialite.html ("[adresse e-mail
-// de contact à préciser]") : les deux doivent être mises à jour ensemble le jour où une vraie
-// adresse existe.
-const CONTACT_EMAIL = "contact@a-completer.exemple"; // TODO: remplacer par la vraie adresse de contact
-
 // "XI — La Force" -> "la-force" ; "Le Mat" (le seul arcane sans numéro) -> "le-mat". Un id
 // court et lisible par carte, stable (dérivé du nom, jamais recalculé aléatoirement) pour
 // que la boutique puisse reconnaître chaque arcane sans dépendre du texte affiché en entier.
@@ -5707,13 +5701,14 @@ function showAccountMenu(){
   };
   cardDetailReturnTo = showAccountMenu;
   document.getElementById("accountMenuCompteTile").onclick = ()=> showAccount();
+  document.getElementById("accountMenuContactTile").onclick = ()=> showContact();
 }
 
 function renderAccountMenu(){
   return `<div class="section-title centered"><h3>Compte</h3></div>
   <div class="grid" style="margin-top:10px">
     <div class="tile" id="accountMenuCompteTile"><strong>☁️ Compte${isLoggedIn() ? "" : " (bêta)"}</strong><span>${isLoggedIn() ? `Connecté·e — ${escapeHTML(getAuthEmail())}` : "Crée un compte pour faire suivre ta sauvegarde d'un appareil à l'autre."}</span></div>
-    <a class="tile" href="mailto:${escapeHTML(CONTACT_EMAIL)}" style="display:block;color:inherit;text-decoration:none"><strong>✉️ Nous contacter</strong><span>Une question, un souci, une idée ? Écris-nous.</span></a>
+    <div class="tile" id="accountMenuContactTile"><strong>✉️ Nous contacter</strong><span>Une question, un bug à signaler, une idée ?</span></div>
   </div>`;
 }
 
@@ -5851,6 +5846,100 @@ function bindAccountScreen(){
       showError(err.message);
     } finally {
       loadingEl.style.display = "none";
+    }
+  };
+}
+
+/* ===================== NOUS CONTACTER ===================== */
+// Retour direct d'utilisatrice : une question, un bug à signaler, une idée — même formulaire
+// que dans l'app sœur Panthéon, mais les messages des deux apps tombent dans la MÊME table
+// (voir api/_lib/contact-db.js, CONTACT_DATABASE_URL) : une seule boîte de réception à
+// surveiller, distinguée par app plutôt que deux pages séparées.
+async function sendContactMessage({ type, message, email }){
+  return accountRequest("/api/account?action=contact", { method:"POST", body:{ type, message, email } });
+}
+
+let contactState = { type:"question", draftMessage:"", draftEmail:"" };
+
+function showContact(){
+  preDetailScroll = window.scrollY;
+  contactState = { type:"question", draftMessage:"", draftEmail: isLoggedIn() ? getAuthEmail() : "" };
+  document.getElementById("screen").innerHTML = `<div class="detail">${renderContact()}
+    <button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>
+  </div>`;
+  triggerScreenAnim("detail");
+  window.scrollTo(0,0);
+  document.getElementById("detailBack").onclick = ()=>{
+    const scrollTarget = preDetailScroll;
+    render();
+    requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
+  };
+  cardDetailReturnTo = showContact;
+  bindContactScreen();
+}
+
+function renderContact(){
+  const s = contactState;
+  return `<div class="section-title"><h3>Nous contacter</h3></div>
+  <p class="note">On lit tout, on répond du mieux qu'on peut.</p>
+  <p class="suit-h4" style="margin:18px 0 8px">Type de demande</p>
+  <div class="tiles" style="display:flex;gap:10px;justify-content:center">
+    <button class="secondary contact-type${s.type==="question"?" active":""}" data-contact-type="question">Question</button>
+    <button class="secondary contact-type${s.type==="bug"?" active":""}" data-contact-type="bug">Bug</button>
+    <button class="secondary contact-type${s.type==="autre"?" active":""}" data-contact-type="autre">Autre</button>
+  </div>
+  <div class="draw-notes" style="margin-top:16px">
+    <p class="suit-h4" style="margin:0 0 6px">Votre message</p>
+    <textarea id="contactMessage" rows="5" placeholder="Décrivez votre question ou le problème rencontré…">${escapeHTML(s.draftMessage || "")}</textarea>
+  </div>
+  <div class="draw-notes">
+    <p class="suit-h4" style="margin:0 0 6px">Email de réponse</p>
+    <input id="contactEmail" type="email" placeholder="toi@exemple.com" value="${escapeHTML(s.draftEmail || "")}">
+  </div>
+  <p class="note" id="contactError" style="display:none;color:var(--terracotta)"></p>
+  <button class="primary" id="contactSubmit" style="display:block;margin:14px auto 0">Envoyer</button>`;
+}
+
+function renderContactSent(email){
+  return `<div class="section-title centered"><h3>Message envoyé</h3></div>
+  <p class="note" style="text-align:center">Merci ! On vous répond dès que possible${email ? ` à <b>${escapeHTML(email)}</b>` : ""}.</p>`;
+}
+
+function bindContactScreen(){
+  const typeButtons = document.querySelectorAll("[data-contact-type]");
+  typeButtons.forEach(btn=>{
+    btn.onclick = ()=>{
+      typeButtons.forEach(b=>b.classList.toggle("active", b===btn));
+      contactState.type = btn.dataset.contactType;
+    };
+  });
+
+  const errorEl = document.getElementById("contactError");
+  const submitBtn = document.getElementById("contactSubmit");
+  const showError = (msg) => { errorEl.textContent = msg; errorEl.style.display = "block"; };
+
+  submitBtn.onclick = async () => {
+    const message = document.getElementById("contactMessage").value.trim();
+    const email = document.getElementById("contactEmail").value.trim();
+    contactState.draftMessage = message;
+    contactState.draftEmail = email;
+    errorEl.style.display = "none";
+    if(!message){ showError("Écris un message avant d'envoyer."); return; }
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Envoi…";
+    try{
+      await sendContactMessage({ type: contactState.type, message, email: email || null });
+      document.querySelector("#screen .detail").innerHTML = renderContactSent(email) +
+        `<button class="secondary" id="detailBack" style="margin-top:20px">← Retour</button>`;
+      document.getElementById("detailBack").onclick = ()=>{
+        const scrollTarget = preDetailScroll;
+        render();
+        requestAnimationFrame(()=>window.scrollTo(0,scrollTarget));
+      };
+    } catch(err){
+      showError(err.message);
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Envoyer";
     }
   };
 }
@@ -7353,6 +7442,7 @@ function bind(){
       else if(key==="relations") showRelations();
       else if(key==="mythologie") showPersonalMythology();
       else if(key==="compte") showAccount();
+      else if(key==="contact") showContact();
     };
   });
   // Retour direct d'utilisatrice : « Modifier mes informations » vivait uniquement au fond

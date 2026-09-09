@@ -16,16 +16,23 @@
 // GET  /api/account?action=sync-data       (Authorization: Bearer <token>) -> { data, updatedAt }
 // POST /api/account?action=sync-data       { data } + Authorization -> { ok: true, updatedAt }
 // GET  /api/account?action=cleanup         (Authorization: Bearer CRON_SECRET, Vercel Cron) -> { ok: true, ... }
+// POST /api/account?action=contact         { type, message, email? } -> { ok: true }
 //
 // Voir README « Compte (bêta) — sauvegarde cloud » pour la logique détaillée de chaque action ;
-// ce fichier ne fait qu'assembler ce qui vivait avant dans 6 fichiers séparés.
+// ce fichier ne fait qu'assembler ce qui vivait avant dans 6 fichiers séparés (et désormais
+// "contact", ajouté ici pour la même raison plutôt que dans un 13e fichier api/contact.js —
+// voir _lib/contact-db.js pour ce qui distingue cette action des cinq premières : une connexion
+// Postgres différente, CONTACT_DATABASE_URL, vers la base de l'app sœur Panthéon).
 const { sql, ensureSchema } = require("./_lib/db");
 const { hashPassword, verifyPassword, isPasswordValid } = require("./_lib/password");
 const { createSession, verifySessionFromRequest, deleteSession } = require("./_lib/session");
 const { checkRateLimit, clientIp } = require("./_lib/rate-limit");
+const { ensureContactSchema, insertContactMessage } = require("./_lib/contact-db");
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_SYNC_PAYLOAD_BYTES = 5 * 1024 * 1024; // 5 Mo — très généreux pour du texte de localStorage
+const CONTACT_TYPES = new Set(["question", "bug", "autre"]);
+const MAX_CONTACT_MESSAGE_LENGTH = 4000;
 
 function checkAccessCode(req, res){
   const requiredCode = process.env.APP_ACCESS_CODE;
@@ -210,6 +217,43 @@ async function actionCleanup(req, res){
   }
 }
 
+// Formulaire "Nous contacter" (voir renderContact()/showContact() dans app.js) — stockage
+// simple, jamais d'envoi d'email automatique : les messages atterrissent dans la même table que
+// ceux de Panthéon (voir _lib/contact-db.js) et se consultent depuis une seule page, côté
+// Panthéon (admin-messages.html), plutôt que d'avoir une boîte de réception par app.
+async function actionContact(req, res){
+  if(req.method !== "POST"){ res.status(405).json({ error: "Méthode non autorisée." }); return; }
+  if(!checkAccessCode(req, res)) return;
+
+  const { allowed } = await checkRateLimit(`contact:${clientIp(req)}`, 5).catch(() => ({ allowed: true }));
+  if(!allowed){ res.status(429).json({ error: "Trop de messages envoyés, réessaie dans quelques minutes." }); return; }
+
+  const body = req.body || {};
+  const type = body.type;
+  if(!CONTACT_TYPES.has(type)){ res.status(400).json({ error: "Requête invalide : type attendu (question, bug ou autre)." }); return; }
+
+  const message = typeof body.message === "string" ? body.message.trim() : "";
+  if(!message){ res.status(400).json({ error: "Le message est vide." }); return; }
+  if(message.length > MAX_CONTACT_MESSAGE_LENGTH){ res.status(400).json({ error: "Message trop long." }); return; }
+
+  let email = null;
+  if(body.email != null){
+    if(typeof body.email !== "string" || !EMAIL_RE.test(body.email.trim())){ res.status(400).json({ error: "Adresse email invalide." }); return; }
+    email = body.email.trim();
+  }
+
+  if(!process.env.CONTACT_DATABASE_URL){ res.status(500).json({ error: "Le formulaire de contact n'est pas encore configuré côté serveur." }); return; }
+
+  try{
+    await ensureContactSchema();
+    await insertContactMessage({ type, message, email });
+    res.status(200).json({ ok: true });
+  } catch(err){
+    console.error("Erreur /api/account?action=contact:", err);
+    res.status(500).json({ error: "Envoi impossible pour le moment, réessaie plus tard." });
+  }
+}
+
 const ACTIONS = {
   signup: actionSignup,
   login: actionLogin,
@@ -217,6 +261,7 @@ const ACTIONS = {
   "delete-account": actionDeleteAccount,
   "sync-data": actionSyncData,
   cleanup: actionCleanup,
+  contact: actionContact,
 };
 
 module.exports = async function handler(req, res){
