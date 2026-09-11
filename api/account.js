@@ -17,6 +17,7 @@
 // POST /api/account?action=sync-data       { data } + Authorization -> { ok: true, updatedAt }
 // GET  /api/account?action=cleanup         (Authorization: Bearer CRON_SECRET, Vercel Cron) -> { ok: true, ... }
 // POST /api/account?action=contact         { type, message, email? } -> { ok: true }
+// GET  /api/account?action=ai-usage        (Authorization: Bearer ADMIN_SECRET) -> { total, byKind, last30Days }
 //
 // Voir README « Compte (bêta) — sauvegarde cloud » pour la logique détaillée de chaque action ;
 // ce fichier ne fait qu'assembler ce qui vivait avant dans 6 fichiers séparés (et désormais
@@ -28,6 +29,7 @@ const { hashPassword, verifyPassword, isPasswordValid } = require("./_lib/passwo
 const { createSession, verifySessionFromRequest, deleteSession } = require("./_lib/session");
 const { checkRateLimit, clientIp } = require("./_lib/rate-limit");
 const { ensureContactSchema, insertContactMessage } = require("./_lib/contact-db");
+const { getAiUsageStats } = require("./_lib/ai-usage");
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_SYNC_PAYLOAD_BYTES = 5 * 1024 * 1024; // 5 Mo — très généreux pour du texte de localStorage
@@ -254,6 +256,29 @@ async function actionContact(req, res){
   }
 }
 
+// Compteur d'appels IA (voir _lib/ai-usage.js et admin-ai-usage.html) — retour direct
+// d'utilisatrice : "je veux pouvoir savoir combien d'appels IA ont été faits". Protégé par
+// ADMIN_SECRET (variable d'environnement séparée d'APP_ACCESS_CODE, qui lui protège l'usage
+// de l'appli — ici c'est une page réservée à la personne qui gère l'appli, pas aux
+// utilisatrices) : sans ADMIN_SECRET défini côté serveur, l'action refuse tout accès plutôt
+// que de laisser les statistiques ouvertes par défaut.
+async function actionAiUsage(req, res){
+  if(req.method !== "GET"){ res.status(405).json({ error: "Méthode non autorisée." }); return; }
+  const requiredSecret = process.env.ADMIN_SECRET;
+  if(!requiredSecret){ res.status(500).json({ error: "Compteur non configuré côté serveur (ADMIN_SECRET manquant)." }); return; }
+  const auth = req.headers["authorization"];
+  if(auth !== `Bearer ${requiredSecret}`){ res.status(401).json({ error: "Non autorisé." }); return; }
+  if(!requireDatabase(req, res)) return;
+
+  try{
+    const stats = await getAiUsageStats();
+    res.status(200).json(stats);
+  } catch(err){
+    console.error("Erreur /api/account?action=ai-usage:", err);
+    res.status(500).json({ error: "Impossible de récupérer les statistiques pour le moment." });
+  }
+}
+
 const ACTIONS = {
   signup: actionSignup,
   login: actionLogin,
@@ -262,6 +287,7 @@ const ACTIONS = {
   "sync-data": actionSyncData,
   cleanup: actionCleanup,
   contact: actionContact,
+  "ai-usage": actionAiUsage,
 };
 
 module.exports = async function handler(req, res){

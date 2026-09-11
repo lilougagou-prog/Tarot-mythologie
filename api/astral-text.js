@@ -52,6 +52,7 @@
 // APP_ACCESS_CODE est définie côté serveur, l'en-tête X-App-Access-Code est requis.
 
 const Anthropic = require("@anthropic-ai/sdk");
+const { logAiCall } = require("./_lib/ai-usage");
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -256,6 +257,7 @@ Réponds UNIQUEMENT avec un objet JSON valide, sans texte autour, sans balises m
         majorLinksText: cleanMajorLinksText.length ? cleanMajorLinksText : null,
       },
     });
+    await logAiCall("astral-text");
   } catch (err) {
     console.error("Erreur /api/astral-text:", err);
     res.status(502).json({ error: "Impossible de générer les textes astraux." });

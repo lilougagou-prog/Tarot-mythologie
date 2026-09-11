@@ -42,6 +42,7 @@
 // APP_ACCESS_CODE dans les réglages Vercel — aucun changement de code requis.
 
 const Anthropic = require("@anthropic-ai/sdk");
+const { logAiCall } = require("./_lib/ai-usage");
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -238,6 +239,7 @@ Réponds UNIQUEMENT avec un objet JSON valide, sans texte autour, sans balises m
     }
 
     res.status(200).json(parsed);
+    await logAiCall("reading");
   } catch (err) {
     console.error("Erreur /api/reading:", err);
     res.status(502).json({ error: "Impossible de générer la lecture IA." });
