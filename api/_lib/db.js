@@ -51,6 +51,16 @@ async function ensureSchema(){
       bucket_key TEXT NOT NULL,
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     )`;
+    // Compteur d'appels IA (lecture, portrait, thème astral en texte...) — voir
+    // _lib/ai-usage.js. Une ligne par jour ET par type d'appel (pas une ligne par appel) :
+    // le total de la table ne grossit jamais avec le nombre d'appels, seulement avec le
+    // nombre de jours écoulés — quelques milliers de lignes même après des années d'usage.
+    await s`CREATE TABLE IF NOT EXISTS ai_usage_daily (
+      day DATE NOT NULL,
+      kind TEXT NOT NULL,
+      count INTEGER NOT NULL DEFAULT 0,
+      PRIMARY KEY (day, kind)
+    )`;
     await s`CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id)`;
     await s`CREATE INDEX IF NOT EXISTS idx_rate_limits_bucket_time ON rate_limits(bucket_key, created_at)`;
   })();

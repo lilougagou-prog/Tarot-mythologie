@@ -667,11 +667,15 @@ Testé par deux scripts dédiés (non commités, comme le reste des vérificatio
 
 **Action requise avant que ça fonctionne en production** : relier une base de données Postgres au projet Vercel (Storage → Create Database → Neon, ou coller l'URL d'une base Neon existante dans la variable d'environnement `DATABASE_URL` — voir `.env.example`) puis redéployer. Sans cette variable, les endpoints répondent explicitement "Le compte n'est pas encore configuré côté serveur" plutôt que de planter en silence.
 
-## Menu Compte (icône 👤 de la barre du haut)
+## Menu Compte (bouton rond en haut à droite)
 
 Retour direct d'utilisatrice : *"je veux qu'un petit bouton profil apparaisse en haut à droite (à la place du bouton retour à l'accueil actuel) qui regroupe Compte et Nous contacter, pour que « Profil astral » reste purement le profil astral et la divinité tutélaire, sans élément technique."*
 
-L'ancien `#homeBtn` (⌂, en haut à droite de la barre du haut sur chaque écran) est retiré — il faisait doublon avec l'onglet **⌂ Accueil**, déjà présent en permanence dans le menu du bas quel que soit l'écran affiché, y compris les fiches "detail" (carte, figure, symbole…). À sa place : un bouton **👤** (`#accountMenuBtn`), qui ouvre un petit menu à deux tuiles — `showAccountMenu()`/`renderAccountMenu()` dans `app.js` :
+L'ancien `#homeBtn` (⌂, en haut à droite de la barre du haut sur chaque écran) est retiré — il faisait doublon avec l'onglet **⌂ Accueil**, déjà présent en permanence dans le menu du bas quel que soit l'écran affiché, y compris les fiches "detail" (carte, figure, symbole…). À sa place : un bouton rond (`#accountMenuBtn`, classe `.icon-btn`), qui ouvre un petit menu à deux tuiles — `showAccountMenu()`/`renderAccountMenu()` dans `app.js`.
+
+Le bouton est une icône SVG en traits fins (silhouette de profil), pas un emoji — même traitement que le bouton profil de l'app sœur Panthéon (`.profile-fab`), adapté à la palette terracotta/crème de Delphes au lieu du marbre/bronze de Panthéon. Retour d'utilisatrice après un premier essai avec l'emoji 👤 : *"ce truc bleu n'est pas dans le thème de l'appli"* — le rendu de cet emoji varie selon les appareils (parfois teinté de bleu, hors de notre contrôle), ce qui jurait avec la palette de l'appli. Un SVG en `currentColor` garde toujours la bonne teinte, sur tous les appareils, comme le reste des icônes de l'appli.
+
+Le menu ouvert par ce bouton propose :
 - **☁️ Compte** — mène à l'écran Compte déjà existant (voir plus haut).
 - **✉️ Nous contacter** — mène à l'écran Nous contacter (voir la section dédiée plus bas, ajoutée dans la foulée par le même chantier côté app sœur Panthéon).
 
@@ -714,6 +718,16 @@ Retour direct d'utilisatrice, demandé juste après le même chantier côté Pan
 **Limite de 12 fonctions (voir section dédiée ci-dessus) oblige** : pas de nouveau fichier `api/contact.js` (aurait fait passer le total à 13 et cassé le déploiement), mais une 7ᵉ action dans `api/account.js` existant — `POST /api/account?action=contact { type, message, email? } -> { ok: true }`, même limitation de débit (`_lib/rate-limit.js`, 5/minute par IP) et même code d'accès (`X-App-Access-Code`, via le `accountRequest()` déjà utilisé par les 6 autres actions) que le reste de ce fichier. `_lib/contact-db.js`, nouveau, isole cette connexion Postgres séparée du reste de `_lib/db.js` (qui, lui, ne connaît que `DATABASE_URL`).
 
 Testé : `node --check` sur les fichiers modifiés, script Playwright dédié (non commité) sur le scénario complet — formulaire dans le style de l'app, sélection de type, message envoyé (backend simulé localement), état « Envoi… », écran de confirmation, retour sur le bon onglet.
+
+## Statistiques d'appels IA (`admin-ai-usage.html`)
+
+Retour direct d'utilisatrice : *"je veux pouvoir savoir combien d'appels IA ont été faits"* — chaque appel IA (lecture de tarot, portrait, thème astral en texte, interprétation de rêve, rétrospective, rituel du jour, texte de comparaison — 7 types au total) est facturé par Anthropic ; ce compteur permet de suivre l'usage sans avoir à ouvrir la console Anthropic. **Ne compte pas** `api/astral.js` (thème astral) ni `api/transits.js` (positions du jour) : ce sont de purs calculs astronomiques, sans appel IA, donc sans coût.
+
+- `_lib/ai-usage.js` — `logAiCall(kind)` enregistre chaque appel IA réussi dans la table `ai_usage_daily(day, kind, count)` : **une ligne par jour et par type**, jamais une ligne par appel (compteur incrémenté sur la même ligne), pour que la table reste minuscule même après des années d'usage. Aucune donnée personnelle stockée — ni qui a appelé, ni le contenu. Volontairement tolérant aux pannes : une erreur d'écriture est journalisée côté serveur mais ne fait jamais échouer la lecture/le portrait/etc. déjà généré(e).
+- `POST /api/account?action=ai-usage` (nouvelle 8ᵉ action, même raison qu'au-dessus : la limite de 12 fonctions interdit un nouveau fichier `api/ai-usage.js`) — renvoie `{ total, byKind: [{kind, label, total}], last30Days: [{day, kind, label, count}] }`. Protégé par une variable d'environnement dédiée, **`ADMIN_SECRET`** (voir `.env.example`) — volontairement séparée d'`APP_ACCESS_CODE`, qui protège l'usage de l'appli par les utilisatrices, alors qu'ici c'est une page réservée à la personne qui gère l'appli. Tant qu'`ADMIN_SECRET` n'est pas définie côté serveur, l'action refuse tout accès plutôt que d'être ouverte par défaut.
+- `admin-ai-usage.html`, nouvelle page statique (même identité visuelle terracotta/or/crème que le reste de l'app, autonome comme `politique-confidentialite.html`) : demande le code d'accès (jamais enregistré, à ressaisir à chaque visite), puis affiche le total, la répartition par type (barres) et le détail des 30 derniers jours. Accessible à `/admin-ai-usage.html` une fois déployée — pas de lien depuis l'app elle-même (page réservée, pas un écran pour les utilisatrices).
+
+Testé : `node --check` sur les fichiers modifiés, script Node dédié (non commité) qui simule un enregistrement et une lecture des statistiques.
 
 ## Pistes de suite possibles (non bloquantes)
 - ~~Ajouter les illustrations des cartes mineures restantes~~ — fait : les 78 cartes du jeu (22 arcanes majeurs + 56 mineures, Épées/Bâtons/Coupes/Deniers) sont désormais toutes illustrées (même gabarit, 500×750px, JPEG qualité ~88-90), Deniers ayant terminé son rattrapage en 3 lots successifs fournis par l'utilisatrice. La double lecture Marseille + mythologie (`CARD_LORE`) couvrait déjà les 78 cartes ; illustration et texte se rejoignent donc désormais complètement.

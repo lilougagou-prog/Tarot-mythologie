@@ -16,6 +16,7 @@
 // APP_ACCESS_CODE est définie côté serveur, l'en-tête X-App-Access-Code est requis.
 
 const Anthropic = require("@anthropic-ai/sdk");
+const { logAiCall } = require("./_lib/ai-usage");
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -107,6 +108,7 @@ Réponds UNIQUEMENT avec un objet JSON valide, sans texte autour, sans balises m
     }
 
     res.status(200).json({ retrospective: parsed.retrospective.trim() });
+    await logAiCall("retrospective");
   } catch (err) {
     console.error("Erreur /api/retrospective:", err);
     res.status(502).json({ error: "Impossible de générer la rétrospective." });
