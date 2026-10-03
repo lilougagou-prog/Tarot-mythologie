@@ -164,392 +164,392 @@ function decanCardFor(sign, degreeInSign){
 // Fiches enrichies : lecture Tarot de Marseille + éclairage mythologique — pour la carte du jour et le détail des arcanes.
 const CARD_LORE = {
 "Le Mat": {
-  marseille:"Dans la tradition du Tarot de Marseille, le Mat est le seul arcane sans numéro fixe. Il erre hors de la séquence, en innocent ou en fou selon le regard qu'on porte sur lui, symbole de la liberté totale et du risque qu'elle comporte quand plus aucun repère ne guide le pas.",
+  cles:{amour:"Une rencontre imprévue ou une relation qui demande à rester légère, sans promesse figée.",travail:"Un départ, une reconversion, un projet lancé sans filet.",conseil:"Fais confiance à l'élan, mais garde un minimum de prudence pour ne pas tout risquer d'un coup."},
   myth:"Dionysos incarne cette même sortie du cadre. Dieu du vin et de l'extase sacrée, il voyage affranchi des conventions sociales, une panthère à ses côtés. Sa légende enseigne qu'une liberté sans mesure peut aussi bien libérer que faire perdre pied.",
   lecture:"Dans un tirage, le Mat invite à partir sans trop calculer, à faire confiance à l'élan plutôt qu'au plan. Il peut aussi signaler une insouciance qui frôle l'imprudence, selon ce que les cartes voisines racontent."
 },
 "I — Le Bateleur": {
-  marseille:"Sur la table du Bateleur reposent les quatre objets des enseignes à venir : bâton, coupe, épée, denier. Tout est en germe, rien n'est encore joué. C'est l'arcane du potentiel et de l'habileté à mettre une idée en mouvement.",
+  cles:{amour:"Le début d'une séduction, une habileté à se montrer sous son meilleur jour.",travail:"Toutes les ressources sont déjà là : c'est le moment de se lancer.",conseil:"Ne reste pas spectateur : mets tes talents en mouvement maintenant."},
   myth:"Hermès, messager rusé et maître du commerce comme du langage, passe sans effort entre le monde des dieux, celui des hommes et celui des morts. Le Bateleur ne crée rien de nouveau : il révèle ce qui est déjà possible et sait le mettre en scène.",
   lecture:"Dans un tirage, le Bateleur annonce qu'on a déjà tout ce qu'il faut sous la main pour commencer. Il invite à oser le premier geste plutôt qu'à attendre des conditions parfaites qui ne viendront pas."
 },
 "II — La Papesse": {
-  marseille:"Assise entre deux colonnes, un livre fermé sur les genoux, la Papesse garde un savoir qui ne se dévoile pas de force. Intuition et retenue valent ici mieux qu'une connaissance exhibée.",
+  cles:{amour:"Une attirance encore secrète, un sentiment qu'on préfère observer avant de le dévoiler.",travail:"Une information ou une intuition à ne pas négliger, même si elle reste discrète.",conseil:"Prends le temps d'écouter avant de parler ou d'agir."},
   myth:"Métis, titanide de la ruse et de la sagesse pratique, fut avalée par Zeus qui redoutait sa descendance. Son intelligence continua pourtant d'agir depuis l'intérieur même du dieu : un savoir caché n'est pas un savoir inactif.",
   lecture:"Dans un tirage, la Papesse conseille d'écouter ce qu'on sait déjà intérieurement avant de chercher une réponse à l'extérieur. Elle invite aussi à la discrétion : tout ne mérite pas d'être dit tout de suite."
 },
 "III — L'Impératrice": {
-  marseille:"L'Impératrice tient sceptre et écu. Sa posture dit la souveraineté, la fécondité, le pouvoir de faire grandir ce qui a été semé avec autorité.",
+  cles:{amour:"Une relation qui s'épanouit, un désir d'enfant ou de construire quelque chose de durable.",travail:"Un projet qui porte ses fruits, une créativité à exploiter pleinement.",conseil:"Autorise-toi à occuper ta place sans t'excuser de réussir."},
   myth:"Héra, reine des dieux et protectrice du mariage, incarne une souveraineté légitime, non conquise par la force mais pleinement assumée, avec ses exigences comme ses privilèges.",
   lecture:"Dans un tirage, l'Impératrice signale une période fertile, propice à faire grandir un projet, une relation ou soi-même. Elle peut aussi rappeler qu'on a le droit de prendre sa place pleinement."
 },
 "IV — L'Empereur": {
-  marseille:"De profil, jambes croisées, l'Empereur pose une structure stable. Autorité et ordre établi caractérisent cet arcane, un pouvoir qui ne se remet pas en question à chaque instant.",
+  cles:{amour:"Besoin de stabilité et de clarté dans la relation, ou un partenaire à l'autorité marquée.",travail:"Une position de responsabilité à assumer, des règles à poser clairement.",conseil:"Structure la situation plutôt que de la laisser à l'improvisation."},
   myth:"Zeus, roi des dieux et maître de la foudre, garantit l'ordre cosmique après avoir renversé les Titans. Son autorité n'a rien d'arbitraire : elle tient le monde debout.",
   lecture:"Dans un tirage, l'Empereur invite à poser un cadre clair, à trancher plutôt qu'à tergiverser. Il peut aussi pointer une figure d'autorité, réelle ou à devenir, dans la situation posée."
 },
 "V — Le Pape": {
-  marseille:"Le Pape bénit deux disciples agenouillés devant lui. Transmission et enseignement traversent cet arcane, un passage initiatique d'un savoir qui va d'un être à un autre.",
+  cles:{amour:"Un conseil reçu d'un proche ou une relation fondée sur des valeurs partagées.",travail:"Une formation, un mentor, une tradition professionnelle à respecter.",conseil:"Cherche l'avis de quelqu'un de plus expérimenté avant de trancher seul."},
   myth:"Chiron, centaure sage et blessé d'une plaie qui ne guérira jamais, fut le précepteur d'Achille, de Jason et de bien d'autres héros. Sa légende dit que transmettre ne demande pas d'être soi-même intact.",
   lecture:"Dans un tirage, le Pape peut désigner un conseil à recevoir ou à donner, un mentor, une tradition à honorer. Il invite à apprendre d'une expérience plutôt qu'à réinventer seul ce qui existe déjà."
 },
 "VI — L'Amoureux": {
-  marseille:"Un homme hésite entre deux figures féminines tandis qu'un archer vise depuis le ciel. C'est l'arcane du choix et du désir, qui échappe en partie à la raison.",
+  cles:{amour:"Un choix amoureux décisif, ou une attirance forte difficile à raisonner.",travail:"Une décision entre deux voies qui reflètent vraiment ce qu'on veut.",conseil:"Écoute ce que tu désires vraiment, pas seulement ce qui semble raisonnable."},
   myth:"Éros, dieu du désir irrésistible, décoche ses flèches sans toujours consulter la volonté de ceux qu'il touche. L'attraction précède souvent la décision consciente.",
   lecture:"Dans un tirage, l'Amoureux pointe un choix affectif ou une attirance forte, parfois un dilemme entre deux options qui comptent vraiment. Il invite à regarder ce que le cœur veut, pas seulement ce qui semble raisonnable."
 },
 "VII — Le Chariot": {
-  marseille:"Le conducteur du Chariot avance en maîtrisant deux forces opposées attelées ensemble. Sa victoire vient de la maîtrise, jamais de la force brute.",
+  cles:{amour:"Une relation qui avance avec détermination, malgré des différences à concilier.",travail:"Une victoire qui arrive après un effort soutenu et bien dirigé.",conseil:"Garde le cap, sans forcer brutalement ni te laisser distraire."},
   myth:"Apollon, dieu de la lumière et de la mesure, quitte chaque hiver Delphes sur un char tiré par des cygnes pour rejoindre le pays des Hyperboréens, puis revient au printemps. Sa victoire n'est jamais un coup d'éclat isolé : c'est une discipline répétée.",
   lecture:"Dans un tirage, le Chariot annonce une avancée déterminée, souvent après avoir réussi à concilier deux forces ou deux parties de soi qui tiraient en sens contraire. Il demande de garder le cap."
 },
 "VIII — La Justice": {
-  marseille:"Balance dans une main, épée dans l'autre, la Justice pèse avant de trancher. C'est l'arcane de la décision fondée sur un examen exact, jamais sur l'humeur du moment.",
+  cles:{amour:"Un besoin de vérité et d'équité dans le couple, parfois une rupture à régulariser.",travail:"Une décision, un contrat ou une procédure légale qui se clarifie.",conseil:"Pèse objectivement avant de décider, sans te laisser guider par l'émotion seule."},
   myth:"Thémis, titanide de la loi divine, portait déjà la balance avant même l'avènement des dieux de l'Olympe. La justice y est un ordre premier du monde, antérieur à toute autorité particulière.",
   lecture:"Dans un tirage, la Justice appelle à regarder une situation avec lucidité avant de décider, sans se laisser guider par l'émotion seule. Elle peut aussi annoncer une décision officielle ou un rééquilibrage mérité."
 },
 "IX — L'Hermite": {
-  marseille:"Seul, une lanterne à la main, l'Hermite avance à son propre rythme. Patience et retrait volontaire définissent cette quête qui ne se précipite pas.",
+  cles:{amour:"Un besoin de solitude avant de s'engager, ou une pause nécessaire dans la relation.",travail:"Une réflexion en profondeur avant la prochaine étape, loin de l'agitation.",conseil:"Accorde-toi ce temps de retrait, même s'il va à contre-courant du rythme ambiant."},
   myth:"Déméter, déesse des moissons, erre sur la terre à la recherche de sa fille Perséphone disparue, refusant toute récolte tant qu'elle ne l'a pas retrouvée. Sa patience obstinée façonne littéralement les saisons.",
   lecture:"Dans un tirage, l'Hermite conseille de prendre du recul, de chercher une réponse en soi plutôt que dans l'agitation extérieure. Il peut signaler un besoin légitime de solitude avant d'y voir plus clair."
 },
 "X — La Roue de Fortune": {
-  marseille:"La Roue tourne, portant certains vers le haut et d'autres vers le bas, sans considération pour le mérite. Cycles, hasard et retournements de situation s'y lisent.",
+  cles:{amour:"Un tournant inattendu, positif ou non, dans la relation.",travail:"Un changement de situation qui échappe en partie à ton contrôle.",conseil:"Accepte le mouvement plutôt que de t'accrocher à ce qui change de toute façon."},
   myth:"Tyché, déesse de la fortune, distribue chance et malchance sans logique apparente. Sa roue rappelle qu'aucune position, haute ou basse, n'est jamais définitivement acquise.",
   lecture:"Dans un tirage, la Roue annonce un changement de situation qui échappe en partie au contrôle. Elle invite à accepter le mouvement plutôt qu'à s'accrocher à un état qui, de toute façon, ne durera pas."
 },
 "XI — La Force": {
-  marseille:"Une femme ouvre sans effort apparent la gueule d'un lion. La vraie force de cet arcane n'est pas musculaire : elle est intérieure et maîtrisée.",
+  cles:{amour:"Une patience et une douceur qui apaisent une tension dans la relation.",travail:"Une difficulté à surmonter par la persévérance plutôt que par la confrontation.",conseil:"Choisis la maîtrise tranquille plutôt que le rapport de force."},
   myth:"Héraclès dompte le lion de Némée à mains nues, sans arme, dans le premier de ses douze travaux. La légende retient moins la violence du combat que la maîtrise qui en résulte.",
   lecture:"Dans un tirage, la Force demande du courage tranquille plutôt qu'un rapport de force. Elle invite à apprivoiser une émotion ou une difficulté avec douceur plutôt qu'à la combattre de front."
 },
 "XII — Le Pendu": {
-  marseille:"Suspendu la tête en bas, le Pendu semble immobilisé. Cette position ouvre pourtant un autre regard sur ce qui l'entoure : un sacrifice volontaire, pas un simple malheur.",
+  cles:{amour:"Une relation en pause, ou un sacrifice consenti pour l'autre.",travail:"Un projet en attente, qui gagne à être vu sous un autre angle.",conseil:"Lâche le contrôle un temps : forcer maintenant ne ferait qu'épuiser."},
   myth:"Prométhée, enchaîné à un rocher pour avoir donné le feu aux hommes, accepte une punition éternelle par choix assumé. Son sacrifice change durablement la perspective de toute l'humanité.",
   lecture:"Dans un tirage, le Pendu invite à lâcher le contrôle un temps, à accepter une pause ou un renoncement qui, vu autrement, ouvre une perspective neuve. Rien ne sert de forcer une situation qui demande à mûrir."
 },
 "XIII — L'Arcane sans nom": {
-  marseille:"Sans titre inscrit, cette carte fauche des formes déjà mortes, d'où repoussent de nouvelles pousses. Une fin nécessaire s'y joue, jamais une destruction gratuite.",
+  cles:{amour:"La fin d'une relation ou d'une période, qui libère une place pour autre chose.",travail:"Un projet ou un poste qui touche à sa fin, pour laisser place au suivant.",conseil:"Laisse partir ce qui ne peut plus durer plutôt que de le prolonger artificiellement."},
   myth:"Hadès, dieu du monde souterrain, ne règne pas par cruauté : il gère le passage obligé de toute chose vers une autre forme d'existence. Ce qu'il retient n'est jamais perdu, seulement transformé ailleurs.",
   lecture:"Dans un tirage, cet arcane annonce une fin qui libère de la place pour autre chose, même si elle est difficile à traverser sur le moment. Il invite à laisser partir ce qui ne peut plus durer."
 },
 "XIV — Tempérance": {
-  marseille:"Un ange verse un liquide d'un vase à l'autre sans en perdre une goutte. Équilibre et dosage s'y jouent, une circulation entre deux états qui doivent apprendre à se répondre.",
+  cles:{amour:"Un équilibre à trouver entre deux besoins ou deux personnalités différentes.",travail:"Un ajustement progressif plutôt qu'un changement brutal de méthode.",conseil:"Dose, mélange, patiente : la solution est dans le juste milieu, pas dans l'extrême."},
   myth:"Iris, messagère arc-en-ciel entre l'Olympe et la Terre, incarne littéralement ce passage fluide entre deux mondes. Ni l'un ni l'autre seul ne suffit : l'équilibre se trouve dans le mouvement entre les deux.",
   lecture:"Dans un tirage, Tempérance conseille de doser plutôt que de choisir radicalement, de chercher un juste milieu entre deux pôles. Elle annonce souvent une période d'ajustement patient plutôt qu'un basculement brutal."
 },
 "XV — Le Diable": {
-  marseille:"Deux figures enchaînées se tiennent devant le Diable, mais leurs chaînes sont lâches. L'attachement de cet arcane est souvent plus consenti qu'il n'y paraît au premier regard.",
+  cles:{amour:"Une dépendance affective ou une attirance difficile à raisonner.",travail:"Une situation professionnelle qui enferme plus qu'elle ne nourrit.",conseil:"Reconnais ce qui t'attache avant de pouvoir vraiment t'en détacher."},
   myth:"Pan, dieu à moitié bouc, incarne l'instinct animal non policé par la raison. Il n'est ni bon ni mauvais en soi : il rappelle simplement ce qui, en chacun, échappe au contrôle rationnel et mérite d'être reconnu plutôt que nié.",
   lecture:"Dans un tirage, le Diable pointe une dépendance, une habitude ou un attachement dont on pourrait se détacher si on le décidait vraiment. Il demande d'abord d'admettre qu'on tient les chaînes autant qu'on les subit."
 },
 "XVI — La Maison-Dieu": {
-  marseille:"La foudre frappe une tour et en fait tomber les occupants. Cet arcane montre l'effondrement brutal d'une structure qui semblait pourtant solide.",
+  cles:{amour:"Une rupture soudaine, difficile mais qui met fin à une situation intenable.",travail:"Un changement brutal (licenciement, échec, imprévu) qui rebat les cartes.",conseil:"Laisse l'ancienne structure s'effondrer : elle dégage la place pour reconstruire."},
   myth:"Poséidon, dieu des séismes autant que de la mer, peut faire s'écrouler en un instant ce que les hommes ont mis des années à bâtir. Sa colère est rapide, mais elle libère aussi le terrain pour reconstruire autrement.",
   lecture:"Dans un tirage, la Maison-Dieu annonce une rupture soudaine, parfois salutaire malgré sa brutalité. Elle invite à voir ce qui s'effondre comme un espace qui se libère plutôt que comme une catastrophe pure."
 },
 "XVII — L'Étoile": {
-  marseille:"Une femme verse de l'eau sous un ciel étoilé. L'espoir y revient après l'épreuve, par une orientation silencieuse plutôt qu'une certitude bruyante.",
+  cles:{amour:"Un espoir retrouvé après une période difficile, une confiance qui revient.",travail:"Une inspiration ou une opportunité qui se dessine doucement.",conseil:"Fais confiance à une intuition discrète plutôt qu'à une certitude extérieure."},
   myth:"Hécate, déesse des carrefours, porte la torche qui guide dans l'obscurité sans jamais imposer le chemin à suivre. Elle éclaire ; elle ne décide pas à la place de celui qui marche.",
   lecture:"Dans un tirage, l'Étoile annonce un répit après une période difficile, une confiance qui revient doucement. Elle invite à se fier à une intuition discrète plutôt qu'à chercher une garantie extérieure."
 },
 "XVIII — La Lune": {
-  marseille:"Deux tours encadrent un chemin sous une lune qui déforme les distances. Incertitude et inconscient dominent : ce qui n'est pas encore tout à fait clair.",
+  cles:{amour:"Une zone d'ombre ou un non-dit à éclaircir dans la relation.",travail:"Une situation encore floue, où l'intuition en sait plus que les faits pour l'instant.",conseil:"Avance prudemment sans exiger de tout comprendre tout de suite."},
   myth:"Séléné, déesse de la lune, éclaire la nuit d'une lumière changeante qui révèle et trompe à la fois. Cet arcane invite à avancer malgré le flou plutôt qu'à attendre une clarté totale avant de bouger.",
   lecture:"Dans un tirage, la Lune signale une zone encore trouble, où l'intuition en sait sans doute plus que la raison pour l'instant. Elle conseille d'avancer prudemment, sans exiger de tout comprendre d'avance."
 },
 "XIX — Le Soleil": {
-  marseille:"Deux enfants jouent sous un soleil éclatant. La clarté y est retrouvée, la joie simple, une vérité qui n'a plus besoin de se cacher.",
+  cles:{amour:"Une relation épanouie, une joie simple et sincère.",travail:"Une réussite visible, une situation qui s'éclaircit enfin.",conseil:"Profite pleinement de ce moment favorable, sans t'en méfier."},
   myth:"Hélios, dieu solaire, voit tout depuis son char qui traverse le ciel chaque jour. Rien ne peut rester longtemps dissimulé sous une lumière aussi directe.",
   lecture:"Dans un tirage, le Soleil est l'une des cartes les plus favorables : succès visible, joie sincère, situation qui s'éclaircit enfin. Il invite à profiter pleinement de ce moment plutôt qu'à s'en méfier."
 },
 "XX — Le Jugement": {
-  marseille:"Un ange sonne de la trompette et des figures se relèvent de leur tombeau. Un bilan s'impose ici, un appel qui ne peut être ignoré, une remise à sa juste place.",
+  cles:{amour:"Un bilan à faire sur la relation, une vérité à ne plus repousser.",travail:"Une décision ou un appel professionnel qui ne peut plus attendre.",conseil:"Réponds honnêtement à ce qui t'appelle, même si ça remet des choses en question."},
   myth:"Minos, juge des morts aux Enfers, pèse les actes de chacun sans complaisance ni cruauté gratuite. Le jugement, chez lui, n'est pas une punition : c'est une clarification attendue depuis longtemps.",
   lecture:"Dans un tirage, le Jugement invite à faire le point honnêtement sur une situation, à répondre enfin à un appel qu'on repoussait. Il annonce souvent une décision qui remet les choses à leur juste place."
 },
 "XXI — Le Monde": {
-  marseille:"Une figure danse au centre d'une couronne végétale, entourée des quatre créatures. Accomplissement et totalité s'y lisent, la boucle enfin bouclée.",
+  cles:{amour:"Un accomplissement relationnel, une relation qui a trouvé son équilibre.",travail:"Un cycle professionnel achevé avec succès.",conseil:"Savoure cet aboutissement avant de penser au prochain départ."},
   myth:"Gaïa, déesse primordiale de la Terre et mère de toutes choses, est l'aboutissement qui contient et intègre tout ce qui a précédé plutôt que de l'exclure. Le Monde n'efface rien du chemin parcouru, il le rassemble.",
   lecture:"Dans un tirage, le Monde marque un aboutissement réel, la fin satisfaisante d'un cycle entier. Il invite à savourer ce qui est accompli avant d'envisager, plus tard, un nouveau départ."
 },
 "Valet de Bâtons": {
-  marseille:"Le Valet de Bâtons se tient prêt, bâton en main, avant même que le mouvement ne commence. C'est l'élan qui s'annonce, encore neuf, pas encore éprouvé par l'action.",
+  cles:{amour:"Un enthousiasme naissant, une déclaration encore maladroite mais sincère.",travail:"Une idée neuve à tester, même sans expérience préalable.",conseil:"Lance-toi sans attendre d'être totalement prêt."},
   myth:"Éos, déesse de l'aurore aux doigts de rose, ouvre chaque jour les portes du ciel pour que le soleil s'y engage. Elle ne conduit pas le char elle-même : elle rend simplement le passage possible.",
   lecture:"Dans un tirage, ce Valet annonce une idée neuve ou un enthousiasme qui demande à s'exprimer. Il invite à se lancer, même sans toute l'expérience nécessaire."
 },
 "Cavalier de Bâtons": {
-  marseille:"Le Cavalier de Bâtons galope, bâton levé, sans se retourner. Action rapide et engagement total caractérisent cette énergie qui préfère avancer que réfléchir davantage.",
+  cles:{amour:"Une approche directe et fougueuse, parfois trop rapide pour l'autre.",travail:"Une action décidée, menée tambour battant.",conseil:"Garde un œil sur les obstacles que l'élan te fait oublier."},
   myth:"Niké, déesse ailée de la victoire, se tient aux côtés des vainqueurs sans jamais combattre elle-même. Elle est le mouvement qui précède et accompagne le triomphe.",
   lecture:"Dans un tirage, ce Cavalier annonce une action rapide, parfois un peu précipitée. Il conseille de foncer tout en gardant un œil sur les obstacles qu'on pourrait ne pas voir venir."
 },
 "Reine de Bâtons": {
-  marseille:"La Reine de Bâtons tient son bâton fermement, assise mais jamais passive. Confiance stable et feu intérieur n'ont plus besoin de se démontrer chez elle.",
+  cles:{amour:"Une assurance naturelle qui attire, sans avoir besoin de se forcer.",travail:"Un leadership chaleureux, porté par une confiance stable.",conseil:"Agis depuis cette stabilité plutôt que depuis le doute."},
   myth:"Hestia, déesse du foyer, refusa les prétendants de l'Olympe pour garder la flamme sacrée toujours allumée au centre de chaque maison. Sa présence discrète mais irremplaçable est la vraie force de cette Reine.",
   lecture:"Dans un tirage, cette Reine évoque une assurance tranquille, un feu intérieur sur lequel on peut compter. Elle invite à agir depuis cette stabilité plutôt que depuis le doute."
 },
 "Roi de Bâtons": {
-  marseille:"Le Roi de Bâtons dirige avec l'autorité de celui qui a lui-même façonné son pouvoir. Maîtrise acquise par le travail, création menée jusqu'au bout.",
+  cles:{amour:"Un partenaire sûr de lui, bâtisseur, qui mène la relation avec assurance.",travail:"Une autorité gagnée par l'expérience, pas reçue en héritage.",conseil:"Dirige avec la même exigence envers toi-même qu'envers les autres."},
   myth:"Héphaïstos, dieu forgeron rejeté pour sa claudication, se rendit indispensable par son génie créateur : armes des dieux, palais, automates. Sa légende rappelle que l'autorité la plus solide se forge patiemment de ses mains.",
   lecture:"Dans un tirage, ce Roi désigne un leadership gagné par l'expérience et le travail, pas reçu en héritage. Il invite à diriger un projet avec la même exigence envers soi qu'envers les autres."
 },
 "Valet de Coupes": {
-  marseille:"Le Valet de Coupes contemple sa coupe avec étonnement. Sensibilité qui s'éveille, premier émoi, désir encore trop neuf pour se nommer clairement.",
+  cles:{amour:"Un sentiment naissant, encore fragile et un peu naïf.",travail:"Une idée créative qui demande encore à mûrir.",conseil:"Accueille cette émotion sans vouloir tout de suite l'expliquer."},
   myth:"Himéros, dieu ailé compagnon d'Éros, incarne le désir soudain, celui qui saisit avant toute réflexion. Ce Valet ressent avant de comprendre.",
   lecture:"Dans un tirage, ce Valet annonce un sentiment naissant, souvent agréable mais encore fragile. Il conseille d'accueillir cette émotion sans chercher tout de suite à l'expliquer."
 },
 "Cavalier de Coupes": {
-  marseille:"Le Cavalier de Coupes avance lentement, coupe tendue devant lui. Offre sincère et quête menée par le cœur caractérisent ce mouvement, plus que toute stratégie.",
+  cles:{amour:"Une proposition romantique sincère, portée par le cœur plus que par la raison.",travail:"Une offre qui séduit mais mérite d'être évaluée calmement.",conseil:"Engage-toi pour de bon, pas seulement pour l'instant présent."},
   myth:"Énée, fils d'Aphrodite, quitta Troie en flammes en portant son père sur son dos, fidèle à ce qu'il aimait jusque dans la ruine. Ce Cavalier porte la même loyauté tranquille.",
   lecture:"Dans un tirage, ce Cavalier évoque une proposition romantique ou une invitation sincère. Il invite à s'engager pour de bon plutôt que pour un instant."
 },
 "Reine de Coupes": {
-  marseille:"La Reine de Coupes regarde sa coupe fermée, comme un secret qu'elle seule connaît. Intuition affective et réceptivité n'ont pas besoin de se justifier chez elle.",
+  cles:{amour:"Une grande empathie, une capacité à ressentir ce que l'autre vit vraiment.",travail:"Une intuition fiable, précieuse dans une équipe ou une négociation.",conseil:"Fais confiance à ton ressenti, souvent plus juste qu'il n'y paraît."},
   myth:"Aphrodite, née de l'écume marine, incarne un amour qui échappe à toute logique et pourtant gouverne les dieux comme les hommes. Cette Reine ressent avec cette même acuité : rien ne lui échappe de ce qui touche au cœur.",
   lecture:"Dans un tirage, cette Reine conseille d'écouter son intuition affective, souvent plus fiable qu'on ne le croit. Elle peut aussi désigner une personne d'une grande empathie dans l'entourage."
 },
 "Roi de Coupes": {
-  marseille:"Le Roi de Coupes reste stable sur une mer agitée, coupe en main. Maîtrise émotionnelle et sagesse acquise à force d'avoir traversé bien des marées.",
+  cles:{amour:"Une maîtrise émotionnelle qui apaise les tensions du couple.",travail:"Un calme qui permet de conseiller sans se laisser déborder.",conseil:"Reste posé, même quand la situation s'agite autour de toi."},
   myth:"Nérée, vieillard bienveillant de la mer et père des cinquante Néréides, connaît toutes les vérités mais ne les impose jamais. Il les révèle à qui sait le retenir.",
   lecture:"Dans un tirage, ce Roi invite à garder son calme émotionnel même quand la situation est agitée. Il peut désigner quelqu'un de posé, capable de conseiller sans se laisser déborder."
 },
 "Valet d'Épées": {
-  marseille:"Le Valet d'Épées observe, épée prête, l'esprit en alerte. Curiosité vive et idées qui filent plus vite qu'elles ne se posent.",
+  cles:{amour:"Une curiosité pour l'autre, parfois plus mentale que sentimentale.",travail:"Une information nouvelle à vérifier avant d'agir.",conseil:"Ne tranche pas trop vite : l'esprit va parfois plus vite que les faits."},
   myth:"Zéphyr, le plus doux des vents, peut aussi bien caresser les fleurs que déraciner un arbre selon son humeur. Ce Valet a cette même vivacité changeante, un esprit brillant encore à apprivoiser.",
   lecture:"Dans un tirage, ce Valet annonce une information nouvelle ou une curiosité à satisfaire. Il conseille de vérifier avant de trancher, car l'esprit va parfois plus vite que les faits."
 },
 "Cavalier d'Épées": {
-  marseille:"Le Cavalier d'Épées charge sans ralentir, épée haute. Action décidée, parfois précipitée, qui préfère l'affrontement direct à l'attente.",
+  cles:{amour:"Une confrontation directe, nécessaire pour clarifier la relation.",travail:"Une décision rapide, prise sans trop hésiter.",conseil:"Vérifie que tu ne vises pas trop haut, trop loin, par pur élan."},
   myth:"Bellérophon, monté sur Pégase, terrassa la Chimère avec autant de courage que d'impétuosité, avant qu'un excès d'ambition ne précipite sa chute. Ce Cavalier porte la même bravoure fougueuse.",
   lecture:"Dans un tirage, ce Cavalier annonce une confrontation directe ou une décision prise vite. Il invite à vérifier qu'on ne vise pas trop haut, trop loin, par pur élan."
 },
 "Reine d'Épées": {
-  marseille:"La Reine d'Épées tient son épée droite, le regard clair. Discernement, indépendance d'esprit, décision prise sans se laisser attendrir inutilement.",
+  cles:{amour:"Une franchise qui peut déstabiliser mais qui assainit la relation.",travail:"Un jugement clair, détaché des sentiments du moment.",conseil:"Dis la vérité, même si elle n'est pas facile à entendre."},
   myth:"Athéna, née tout armée de la tête de Zeus, conseille les héros sans jamais se laisser guider par la seule émotion. Sa chouette voit dans l'obscurité ce que d'autres manquent.",
   lecture:"Dans un tirage, cette Reine conseille un jugement clair, détaché des sentiments du moment. Elle peut désigner une personne lucide, parfois perçue comme sévère parce qu'elle refuse de mentir."
 },
 "Roi d'Épées": {
-  marseille:"Le Roi d'Épées gouverne depuis son trône, épée verticale. Autorité intellectuelle et décisions mesurées contrôlent des forces qui pourraient autrement tout emporter.",
+  cles:{amour:"Un besoin de parler cœur ouvert, mais avec la tête d'abord.",travail:"Une autorité juridique, administrative ou intellectuelle à respecter.",conseil:"Décide avec la tête plutôt qu'avec les émotions du moment."},
   myth:"Éole, gardien des vents, les enferme dans une outre pour n'en libérer que ce qui est nécessaire. Un pouvoir sur des forces invisibles mais redoutables.",
   lecture:"Dans un tirage, ce Roi invite à décider avec la tête plutôt qu'avec les sentiments. Il peut désigner une autorité (juridique, administrative, intellectuelle) à respecter ou à solliciter."
 },
 "Valet de Deniers": {
-  marseille:"Le Valet de Deniers observe une pièce avec attention, comme une graine qu'on examine avant de la semer. Projet naissant, application studieuse, patience du débutant.",
+  cles:{amour:"Une relation qui démarre doucement, sans précipitation.",travail:"Un projet concret qui commence, une formation ou une première offre.",conseil:"Sois patient avec des débuts modestes : ils mènent quelque part."},
   myth:"Chloris, déesse des fleurs, transforme d'un souffle chaque endroit qu'elle traverse en jardin. Ce Valet porte cette même promesse silencieuse : rien n'est encore visible, mais tout est déjà en germination.",
   lecture:"Dans un tirage, ce Valet annonce un projet concret qui démarre, une formation ou une première offre d'emploi. Il conseille la patience plutôt que l'impatience devant des débuts modestes."
 },
 "Cavalier de Deniers": {
-  marseille:"Le Cavalier de Deniers avance sans se presser, dans un champ plutôt que sur un chemin de bataille. Travail méthodique, constance préférée à la précipitation.",
+  cles:{amour:"Une relation stable, construite pas à pas plutôt que dans l'urgence.",travail:"Un travail de fond, méthodique, qui finira par payer.",conseil:"Avance sans chercher de raccourci."},
   myth:"Triptolème reçut de Déméter un char ailé et des grains de blé pour enseigner l'agriculture au monde entier, patiemment, terre après terre. Ce Cavalier porte cette même vocation.",
   lecture:"Dans un tirage, ce Cavalier invite à avancer pas à pas vers un objectif concret, sans chercher de raccourci. Il peut signaler une période studieuse ou un travail de fond qui finira par payer."
 },
 "Reine de Deniers": {
-  marseille:"La Reine de Deniers tient son denier avec douceur, entourée d'abondance discrète. Fertilité et capacité à faire grandir ce qui lui est confié, générosité concrète.",
+  cles:{amour:"Une tendresse concrète, exprimée par des gestes plutôt que des mots.",travail:"Un sens pratique qui fait grandir ce qui est confié.",conseil:"Prends soin de ce qui t'est confié, en acceptant aussi de te reposer."},
   myth:"Perséphone traverse chaque année le monde souterrain puis en revient, faisant fleurir la terre à son retour. Cette Reine incarne cette même alternance féconde.",
   lecture:"Dans un tirage, cette Reine évoque un soin concret apporté à soi-même, à ses proches ou à ses finances. Elle rappelle que la croissance a besoin de ses périodes de repli pour mieux repartir."
 },
 "Roi de Deniers": {
-  marseille:"Le Roi de Deniers siège entouré de richesse tangible. Réussite matérielle installée, sens pratique, autorité fondée sur des résultats concrets et durables.",
+  cles:{amour:"Un partenaire stable, qui offre une vraie sécurité matérielle.",travail:"Une réussite bien installée, fondée sur des résultats concrets.",conseil:"Mets cette abondance au service de quelque chose, plutôt que de l'accumuler seul."},
   myth:"Ploutos, dieu de la richesse, fut rendu aveugle par Zeus afin qu'il distribue l'abondance sans favoritisme, à qui la mérite comme à qui ne la mérite pas. Ce Roi gère ce qu'il possède avec ce même sérieux.",
   lecture:"Dans un tirage, ce Roi annonce une stabilité matérielle solide ou une réussite bien établie. Il invite à mettre cette abondance au service de quelque chose, plutôt qu'à simplement l'accumuler."
 },
 "As de Bâtons": {
-  marseille:"L'As de Bâtons est une main qui surgit des nuages, tenant un bâton en bourgeon. Énergie brute encore intacte, désir d'agir qui ne demande qu'à s'exprimer.",
+  cles:{amour:"Un désir neuf, une attirance pleine d'énergie à peine née.",travail:"Un nouveau projet à saisir rapidement.",conseil:"L'énergie est là : il ne reste qu'à lui donner une direction."},
   myth:"Hormos personnifie l'élan qui précède toute action, avant même qu'un but précis ne soit choisi. Il était honoré à Athènes aux côtés de la Pitié, comme s'il fallait tempérer une force aussi brute (voir la fiche « Hormos »). Cet As est ce don initial, à apprivoiser plutôt qu'à redouter.",
   lecture:"Dans un tirage, cet As annonce un nouveau projet, une impulsion forte à saisir rapidement. L'énergie est là, reste à lui donner une direction."
 },
 "2 de Bâtons": {
-  marseille:"Un personnage tient le globe d'une main et un bâton de l'autre, regardant au loin depuis ses remparts. Premier choix de direction, projet qui hésite encore entre deux voies.",
+  cles:{amour:"Une relation à un carrefour, un choix de direction à faire ensemble.",travail:"Une décision d'expansion, un déménagement ou un nouveau projet à l'étude.",conseil:"Planifie avant de te lancer, en connaissance de cause."},
   myth:"Artémis, encore enfant, choisit elle-même son domaine et son mode de vie plutôt que d'attendre qu'on les lui impose : l'arc, les montagnes sauvages, l'indépendance (voir la fiche « Artémis »). Cette carte pose la même question : quelle direction donner à une énergie qui ne demande qu'à partir ?",
   lecture:"Dans un tirage, cette carte invite à planifier avant de se lancer, à choisir sa direction en connaissance de cause. Elle peut aussi signaler une décision d'expansion, un déménagement ou un nouveau projet à l'étude."
 },
 "3 de Bâtons": {
-  marseille:"Trois bâtons plantés en terre, un personnage regarde des navires s'éloigner vers l'horizon. Entreprise lancée, expansion, résultats encore à venir mais déjà en mouvement.",
+  cles:{amour:"Une relation qui prend de l'ampleur, avec des projets à plus long terme.",travail:"Une initiative bien lancée qui commence à porter ses fruits.",conseil:"Regarde vers les prochaines étapes plutôt que de te retourner."},
   myth:"Arès, une fois la guerre déclarée, ne la négocie plus : l'élan brut qu'il personnifie n'attend que l'issue qu'il a lui-même déjà mise en mouvement (voir la fiche « Arès »). Cette carte est cette même attente active, tournée vers ce qui vient.",
   lecture:"Dans un tirage, cette carte confirme qu'une initiative est bien lancée et commence à porter ses fruits. Elle invite à regarder plus loin, vers les prochaines étapes, plutôt qu'à se retourner."
 },
 "4 de Bâtons": {
-  marseille:"Quatre bâtons soutiennent une guirlande de fleurs, deux figures célèbrent devant. Stabilité heureuse, fondations posées, moment de répit mérité après l'effort.",
+  cles:{amour:"Une étape heureuse du couple : emménagement, fiançailles, célébration.",travail:"Une réussite qui mérite d'être fêtée avant de continuer.",conseil:"Profite de ce répit mérité avant la suite."},
   myth:"Thalia, l'une des trois Charites, personnifie la fête et l'abondance, qui n'ont besoin de rien justifier d'autre qu'elles-mêmes (voir la fiche « Thalia »). Cette carte célèbre ce même palier stable, un seuil franchi qu'il ne reste qu'à savourer.",
   lecture:"Dans un tirage, cette carte annonce une célébration, un mariage, ou simplement un moment heureux bien mérité. Elle invite à profiter de ce répit avant la suite."
 },
 "5 de Bâtons": {
-  marseille:"Cinq personnages croisent leurs bâtons dans un désordre apparent. Rivalité et tension d'énergies qui s'opposent, sans qu'aucune ne prenne clairement le dessus.",
+  cles:{amour:"Des tensions ou des désaccords, sans gravité s'ils restent loyaux.",travail:"Une compétition ou une rivalité professionnelle à gérer avec calme.",conseil:"Défends ta position sans en faire une guerre."},
   myth:"Zelos personnifie cette ardeur rivale, frère de la Victoire elle-même mais jamais son garant (voir la fiche « Zelos »). Cette carte invite à voir le conflit comme un frottement nécessaire, pas une catastrophe.",
   lecture:"Dans un tirage, cette carte signale une compétition ou un désaccord sans enjeu dramatique, plutôt sain s'il reste loyal. Elle invite à défendre sa position sans en faire une guerre."
 },
 "6 de Bâtons": {
-  marseille:"Un cavalier couronné de laurier avance entouré de bâtons, acclamé par d'autres. Victoire reconnue publiquement, effort enfin récompensé et validé par les autres.",
+  cles:{amour:"Une relation reconnue et assumée aux yeux des autres.",travail:"Un succès visible, une reconnaissance publique méritée.",conseil:"Accepte les compliments plutôt que de les minimiser."},
   myth:"Bia, la Force qui exécute sans jamais discuter, siège depuis la victoire sur les Titans à la place d'honneur que sa loyauté lui a valu (voir la fiche « Bia »). Cette carte est cette même reconnaissance méritée, célébrée devant témoins.",
   lecture:"Dans un tirage, cette carte annonce une réussite visible, une reconnaissance publique de ses efforts. Elle invite à accepter les compliments plutôt qu'à les minimiser."
 },
 "7 de Bâtons": {
-  marseille:"Un personnage en position haute défend sa place avec un bâton contre six autres levés vers lui. Résistance et position à défendre, courage face à une pression multiple.",
+  cles:{amour:"Une relation à défendre face à des pressions extérieures.",travail:"Une position ou des acquis à défendre face à la concurrence.",conseil:"Tiens bon, même sans certitude totale sur l'issue."},
   myth:"Agon, personnification de la compétition codifiée et honoré à Olympie aux côtés des concours sportifs, est précisément ce terrain qu'il faut sans cesse redéfendre face à qui veut le prendre (voir la fiche « Agon »). Cette carte est cette même ténacité : tenir bon, même sans certitude de l'issue.",
   lecture:"Dans un tirage, cette carte invite à défendre une position ou des acquis face à une pression extérieure. Elle encourage à tenir bon même si la légitimité du combat n'est pas garantie d'avance."
 },
 "8 de Bâtons": {
-  marseille:"Huit bâtons filent dans les airs, en plein vol, vers un but encore invisible. Accélération soudaine, événements qui se précipitent après une période d'attente.",
+  cles:{amour:"Une relation qui s'accélère soudainement, des nouvelles rapides.",travail:"Des événements qui se précipitent après une période d'attente.",conseil:"Suis le rythme plutôt que de chercher à le freiner."},
   myth:"Borée, dieu du vent du Nord et le plus violent des quatre Anémoi, souffle avec une force capable de fracasser une flotte entière (voir la fiche « Borée »). Cette carte est ce même mouvement rapide, presque impossible à ralentir une fois lancé.",
   lecture:"Dans un tirage, cette carte annonce une accélération soudaine des événements, souvent une bonne nouvelle qui arrive vite. Elle invite à suivre le rythme plutôt qu'à chercher à le freiner."
 },
 "9 de Bâtons": {
-  marseille:"Un personnage blessé mais debout tient son dernier bâton, huit autres dressés derrière lui en rempart. Résilience et vigilance maintenue malgré la fatigue accumulée.",
+  cles:{amour:"Une relation fatiguée mais qui tient encore, presque au bout de l'épreuve.",travail:"Une résistance qui touche à sa fin, l'objectif est tout proche.",conseil:"Tiens encore un peu : le but n'est plus très loin."},
   myth:"Alké personnifie la vaillance martiale, cette fermeté qui tient la ligne dans l'épreuve sans jamais chercher l'éclat (voir la fiche « Alké »). Cette carte est cette endurance presque épuisée qui refuse encore de céder.",
   lecture:"Dans un tirage, cette carte salue une résistance qui a tenu malgré la fatigue. Elle invite à tenir encore un peu, l'objectif étant déjà très proche."
 },
 "10 de Bâtons": {
-  marseille:"Un personnage courbé porte dix bâtons vers une maison au loin. Charge lourde, responsabilités accumulées, but presque atteint mais au prix d'un fardeau conséquent.",
+  cles:{amour:"Un partenaire surchargé de responsabilités, qui a besoin de souffler.",travail:"Une surcharge de tâches portées seul, qui pourraient se partager.",conseil:"Demande-toi ce que tu peux enfin déposer."},
   myth:"Kratos, personnification de la Puissance souveraine, exécute les ordres de Zeus jusqu'au bout, quel que soit le poids de la tâche (voir la fiche « Kratos »). Cette carte questionne cette même charge : est-elle encore nécessaire à porter seul jusqu'au bout ?",
   lecture:"Dans un tirage, cette carte signale une surcharge de responsabilités, portées seul alors qu'elles pourraient se partager. Elle invite à se demander ce qu'on peut enfin déposer."
 },
 "As de Coupes": {
-  marseille:"Une main sort des nuages, offrant une coupe débordante d'où jaillissent cinq jets d'eau. Émotion neuve et généreuse, cœur ouvert avant toute retenue.",
+  cles:{amour:"Un amour naissant, un cœur qui s'ouvre sans retenue.",travail:"Un renouveau créatif ou une collaboration qui démarre avec enthousiasme.",conseil:"Accueille ce sentiment sans chercher à le retenir ou à le contrôler."},
   myth:"Philotès, personnification de l'affection et du désir partagé, incarne cet élan qui donne sans calcul ni condition (voir la fiche « Philotès »). Cet As est ce même premier don, avant même de savoir ce qu'il en coûtera.",
   lecture:"Dans un tirage, cet As annonce un amour naissant ou un renouveau émotionnel profond. Il invite à accueillir ce sentiment sans chercher à le retenir ou à le contrôler."
 },
 "2 de Coupes": {
-  marseille:"Deux figures échangent leurs coupes face à face, un caducée ailé entre elles. Union, réciprocité, lien affectif qui se noue à parts égales.",
+  cles:{amour:"Une relation qui se noue ou se consolide à parts égales.",travail:"Une association ou un partenariat professionnel équilibré.",conseil:"Veille à ce que chacun donne autant qu'il reçoit."},
   myth:"Harmonie et Cadmos, fondateur de Thèbes, furent unis lors de noces où tous les dieux de l'Olympe vinrent en personne (voir la fiche « Harmonie »). Cette carte célèbre cet échange équilibré, où chacun donne autant qu'il reçoit.",
   lecture:"Dans un tirage, cette carte annonce une relation qui se noue ou se consolide dans l'équilibre. Elle peut aussi marquer la naissance d'une véritable amitié ou association."
 },
 "3 de Coupes": {
-  marseille:"Trois figures lèvent leur coupe ensemble, en cercle, entourées de fruits. Joie partagée, célébration collective, abondance émotionnelle vécue à plusieurs.",
+  cles:{amour:"Une joie à célébrer avec ses proches, pas seulement en couple.",travail:"Une réussite collective, une équipe qui fonctionne bien ensemble.",conseil:"Ne garde pas une bonne nouvelle pour toi seul."},
   myth:"Euphrosyne, l'une des trois Charites, personnifie la joie qui ne se vit jamais seule (voir la fiche « Euphrosyne »). Cette carte est cette même allégresse qui a besoin d'être vécue à plusieurs pour prendre tout son sens.",
   lecture:"Dans un tirage, cette carte invite à célébrer avec ses proches, à ne pas garder une bonne nouvelle pour soi. Elle peut annoncer des retrouvailles ou une fête à venir."
 },
 "4 de Coupes": {
-  marseille:"Un personnage assis sous un arbre regarde trois coupes sans réaction, une quatrième lui est tendue depuis un nuage. Lassitude, indifférence face à une opportunité pourtant offerte.",
+  cles:{amour:"Une lassitude dans la relation, une opportunité qu'on ne voit plus.",travail:"Une offre intéressante accueillie avec indifférence par fatigue.",conseil:"Relève la tête avant de refuser ce qui est offert."},
   myth:"Hypnos, dieu du Sommeil, veille sur ce même assoupissement où plus rien, pas même une offrande tendue, ne parvient à percer (voir la fiche « Hypnos »). Cette carte avertit du même risque : trop enfermé dans son propre repos, on peut laisser passer ce qui mériterait un regard.",
   lecture:"Dans un tirage, cette carte signale une lassitude ou une opportunité qu'on ne voit plus tant on est tourné vers l'intérieur. Elle invite à relever la tête avant de refuser ce qui est offert."
 },
 "5 de Coupes": {
-  marseille:"Un personnage en deuil contemple trois coupes renversées, sans voir les deux qui restent debout derrière lui. Regret, attention entièrement fixée sur la perte plutôt que sur ce qui subsiste.",
+  cles:{amour:"Une déception amoureuse, un chagrin encore présent.",travail:"Un échec ou une perte qui occupe toute l'attention.",conseil:"Regarde aussi ce qui tient encore debout, une fois le chagrin traversé."},
   myth:"Orphée, en se retournant vers Eurydice un instant trop tôt au sortir des Enfers, la perdit une seconde fois, cette fois pour toujours (voir la fiche « Orphée »). Cette carte rappelle cette même leçon : le chagrin est légitime, mais il ne doit pas aveugler sur ce qui reste encore possible.",
   lecture:"Dans un tirage, cette carte accompagne un deuil ou une déception réelle. Elle invite doucement à regarder aussi ce qui tient encore debout, une fois le chagrin traversé."
 },
 "6 de Coupes": {
-  marseille:"Deux enfants échangent des coupes fleuries dans un jardin paisible. Nostalgie douce, souvenir d'enfance, tendresse simple retrouvée sans calcul.",
+  cles:{amour:"Un souvenir du passé qui refait surface, une tendresse nostalgique.",travail:"Une collaboration avec une personne connue de longue date.",conseil:"Renoue avec une tendresse simple, sans arrière-pensée."},
   myth:"Ariane offrit à Thésée son fil sans rien exiger en retour, sinon la confiance qu'il revienne (voir la fiche « Ariane »). Cette carte est ce même geste : une tendresse donnée sans calcul, avec la simplicité d'un souvenir d'enfance.",
   lecture:"Dans un tirage, cette carte évoque le passé, un souvenir heureux ou une personne qui réapparaît. Elle invite à renouer avec une tendresse simple, sans arrière-pensée."
 },
 "7 de Coupes": {
-  marseille:"Sept coupes flottent dans les nuages, chacune contenant une image différente : trésor, serpent, couronne. Choix multiples, illusions à démêler avant de décider vraiment.",
+  cles:{amour:"Plusieurs attirances ou options, pas toutes aussi sincères qu'elles en ont l'air.",travail:"Des choix multiples, certains plus illusoires que prometteurs.",conseil:"Trie avant de t'engager, plutôt que de rêver sur tout à la fois."},
   myth:"Circé offrait à ses visiteurs des breuvages aux apparences trompeuses, séduisants mais rarement ce qu'ils semblaient être (voir la fiche « Circé »). Cette carte invite à la même vigilance : toutes les promesses ne se valent pas, il faut regarder au-delà du reflet.",
   lecture:"Dans un tirage, cette carte met en garde contre des choix trop nombreux ou des promesses trop belles pour être vraies. Elle invite à trier avant de s'engager, plutôt qu'à rêver sur tout à la fois."
 },
 "8 de Coupes": {
-  marseille:"Un personnage s'éloigne de nuit, laissant huit coupes soigneusement empilées derrière lui. Départ volontaire, quête de sens qui prime sur ce qui a déjà été construit.",
+  cles:{amour:"Un départ volontaire d'une relation qui ne satisfait plus.",travail:"Une démission ou un renoncement à quelque chose de confortable mais vide de sens.",conseil:"Suis ce besoin de sens plutôt que de rester par habitude."},
   myth:"Ulysse, après une année entière passée sur l'île de Circé, choisit de reprendre la mer vers Ithaque plutôt que de s'installer dans un confort déjà acquis (voir les fiches « Ulysse » et « Circé »). Cette carte est ce même choix de partir vers autre chose, même en laissant de l'acquis derrière soi.",
   lecture:"Dans un tirage, cette carte annonce un départ volontaire, un renoncement à quelque chose de confortable mais qui ne satisfait plus. Elle invite à suivre ce besoin de sens plutôt qu'à rester par habitude."
 },
 "9 de Coupes": {
-  marseille:"Un personnage satisfait est assis, bras croisés, devant neuf coupes alignées en arc. Contentement, désirs comblés, bien-être qui n'a plus besoin de rien démontrer.",
+  cles:{amour:"Un contentement sincère, un souhait affectif exaucé.",travail:"Une satisfaction méritée, un objectif atteint.",conseil:"Savoure ce contentement sans culpabilité."},
   myth:"Hébé versait aux dieux de l'Olympe le nectar et l'ambroisie, la boisson même de l'immortalité (voir la fiche « Hébé »). Cette carte est ce même sentiment d'accomplissement, tranquille et suffisant, qui n'attend plus rien d'ailleurs.",
   lecture:"Dans un tirage, cette carte annonce une satisfaction réelle, un souhait exaucé. Elle invite à savourer ce contentement sans culpabilité."
 },
 "10 de Coupes": {
-  marseille:"Une famille réunie lève les bras vers un arc-en-ciel de dix coupes au-dessus d'elle. Bonheur familial accompli, harmonie durable, joie qui se transmet au-delà de soi.",
+  cles:{amour:"Un bonheur familial ou relationnel durable.",travail:"Un équilibre entre vie professionnelle et vie personnelle enfin atteint.",conseil:"Apprécie cette harmonie plutôt que d'en douter."},
   myth:"Hyménée, dieu du mariage qu'on invoquait à voix haute à chaque noce pour qu'elle ne tourne jamais au malheur, préside à cette même joie qui se transmet des mariés jusqu'aux enfants qui dansent déjà sous le même arc (voir la fiche « Hyménée »). Cette carte est ce bonheur qui rayonne et se partage, plutôt que de rester enfermé.",
   lecture:"Dans un tirage, cette carte annonce un bonheur familial ou relationnel durable, l'une des cartes les plus heureuses du jeu. Elle invite à apprécier cette harmonie plutôt qu'à en douter."
 },
 "As de Épées": {
-  marseille:"Une main tient une épée droite couronnée de laurier et de palme. Idée claire, vérité qui perce, décision prise avec une netteté qui ne laisse pas de place au doute.",
+  cles:{amour:"Une vérité qui éclate enfin dans la relation, une clarté bienvenue.",travail:"Une idée claire, une décision prise avec netteté.",conseil:"Tranche avec cette lucidité plutôt que de continuer à tourner autour."},
   myth:"Aletheia, personnification de la Vérité, ne connaît pas de demi-mesure : son nom même signifie « ce qui échappe à l'oubli » (voir la fiche « Aletheia »). Cet As porte cette même force tranchante, une pensée juste mais qui exige d'être entendue telle quelle.",
   lecture:"Dans un tirage, cet As annonce une clarté mentale soudaine, une vérité qui éclate enfin. Il invite à trancher avec cette lucidité plutôt qu'à continuer de tourner autour."
 },
 "2 de Épées": {
-  marseille:"Une figure aux yeux bandés tient deux épées croisées sur sa poitrine, dos à la mer. Indécision assumée, équilibre précaire entre deux choix qu'on refuse encore de trancher.",
+  cles:{amour:"Un refus de choisir entre deux options affectives, par peur des deux.",travail:"Une décision bloquée, laissée en suspens trop longtemps.",conseil:"Retire le bandeau plutôt que d'attendre que quelqu'un d'autre décide."},
   myth:"Ananké, déesse primordiale de la Nécessité, enlace le temps lui-même depuis l'origine du monde, et même les dieux s'inclinent devant ses décrets (voir la fiche « Ananké »). Cette carte est ce moment suspendu où l'on refuse encore de choisir, avant que la nécessité ne tranche à sa place.",
   lecture:"Dans un tirage, cette carte signale un refus de choisir, souvent parce que les deux options font peur à parts égales. Elle invite à retirer le bandeau plutôt qu'à attendre que quelqu'un d'autre décide."
 },
 "3 de Épées": {
-  marseille:"Trois épées transpercent un cœur rouge sous un ciel d'orage. Douleur nette, vérité blessante mais nécessaire, rupture qui ne peut plus être évitée.",
+  cles:{amour:"Une rupture ou une peine de cœur franche.",travail:"Une nouvelle difficile à encaisser mais nécessaire.",conseil:"Laisse la douleur passer plutôt que de la refouler."},
   myth:"Éris, déesse de la Discorde, jeta parmi les invités des noces de Thétis une pomme d'or portant trois mots, « à la plus belle », un geste minuscule qui déclencha la guerre de Troie (voir la fiche « Éris »). Cette carte est cette même blessure précise, une vérité jetée sans retour possible, qu'il faut traverser plutôt que nier.",
   lecture:"Dans un tirage, cette carte annonce une peine de cœur ou une rupture franche. Elle conseille de laisser la douleur passer plutôt que de la refouler, car elle s'apaise plus vite qu'on ne le craint."
 },
 "4 de Épées": {
-  marseille:"Une figure allongée repose sur un tombeau, trois épées suspendues au mur et une sous elle. Retrait nécessaire, repos de l'esprit après une période de tension.",
+  cles:{amour:"Un besoin de repos dans la relation, une pause plutôt qu'une rupture.",travail:"Une récupération nécessaire avant de reprendre l'activité.",conseil:"Arrête-toi : forcer maintenant ne ferait qu'épuiser davantage."},
   myth:"Lethée, fleuve de l'Oubli, offre aux âmes épuisées le repos d'oublier un temps ce qui les a usées (voir la fiche « Lethée »). Cette carte invite à cette même pause volontaire : l'esprit a parfois besoin de silence pour se réparer.",
   lecture:"Dans un tirage, cette carte conseille de s'arrêter, de récupérer avant de reprendre le combat. Forcer maintenant ne ferait qu'épuiser davantage."
 },
 "5 de Épées": {
-  marseille:"Un personnage ramasse trois épées avec un sourire ambigu tandis que deux figures s'éloignent, tête baissée. Victoire à coût élevé, conflit gagné mais qui laisse un goût amer.",
+  cles:{amour:"Une dispute gagnée mais qui laisse un goût amer.",travail:"Un conflit remporté au prix d'une relation professionnelle abîmée.",conseil:"Demande-toi si ce conflit valait vraiment la peine."},
   myth:"Némésis, déesse de la rétribution, rétablit toujours l'équilibre lorsque l'orgueil dépasse sa juste mesure (voir la fiche « Némésis »). Cette carte questionne le prix réel de certaines victoires, celles qui isolent plus qu'elles ne rassemblent.",
   lecture:"Dans un tirage, cette carte met en garde contre une victoire à la Pyrrhus, gagnée au prix d'une relation abîmée. Elle invite à se demander si ce conflit valait vraiment la peine."
 },
 "6 de Épées": {
-  marseille:"Un passeur conduit une barque chargée d'épées vers une rive plus calme, deux silhouettes assises à l'arrière. Transition, éloignement volontaire d'une zone de trouble vers plus de sérénité.",
+  cles:{amour:"Un apaisement progressif après une période difficile du couple.",travail:"Une transition vers une situation plus calme.",conseil:"Éloigne-toi du trouble plutôt que de continuer à t'y débattre."},
   myth:"Palioxis, personnification du reflux d'une armée en déroute dans le cortège d'Arès, n'incarne jamais la défaite elle-même mais le moment où continuer le combat cesserait d'avoir un sens (voir la fiche « Palioxis »). Cette carte est ce même mouvement, quitter une eau agitée pour une autre plus tranquille.",
   lecture:"Dans un tirage, cette carte annonce un apaisement progressif après une période difficile. Elle invite à s'éloigner du trouble plutôt qu'à continuer de s'y débattre."
 },
 "7 de Épées": {
-  marseille:"Un personnage s'éloigne d'un camp en emportant cinq épées et en laissant deux derrière lui, avec un air furtif. Stratégie, action menée en partie seule, discrétion parfois nécessaire.",
+  cles:{amour:"Un non-dit ou une cachotterie dans la relation.",travail:"Une entorse aux règles pour arriver à ses fins.",conseil:"Vérifie que tu ne contournes pas quelqu'un ou quelque chose d'important."},
   myth:"Apaté, personnification de la Tromperie, sait exactement jusqu'où une ruse peut aller sans jamais tout à fait devenir un mensonge déclaré (voir la fiche « Apaté »). Cette carte est cette même intelligence tactique, efficace mais qui flirte parfois avec la limite de l'honnêteté.",
   lecture:"Dans un tirage, cette carte invite à vérifier qu'on ne contourne pas une règle ou une personne pour arriver à ses fins. Elle peut aussi signaler qu'on nous cache quelque chose."
 },
 "8 de Épées": {
-  marseille:"Une figure entravée et les yeux bandés se tient debout, entourée de huit épées plantées en cercle. Sentiment d'enfermement, obstacles qui semblent infranchissables, mais le chemin entre les épées reste ouvert.",
+  cles:{amour:"Un sentiment d'être piégé dans la relation, souvent plus mental que réel.",travail:"Un blocage qui vient surtout de la peur, pas de la situation elle-même.",conseil:"Cherche la sortie plutôt que de te croire condamné à rester."},
   myth:"Phobos, personnification de la Peur, était brandi sur les boucliers pour faire vaciller des rangs entiers avant même le premier coup porté (voir la fiche « Phobos »). Cette carte rappelle que l'entrave est souvent plus mentale que réellement définitive.",
   lecture:"Dans un tirage, cette carte signale un blocage qui vient surtout de la peur, plus que de la situation réelle. Elle invite à chercher la sortie plutôt qu'à se croire condamné à rester."
 },
 "9 de Épées": {
-  marseille:"Un personnage se réveille en sursaut, le visage dans les mains, neuf épées suspendues au-dessus de lui. Angoisse nocturne, pensées ressassées qui empêchent le repos.",
+  cles:{amour:"Une angoisse nocturne liée à la relation, des pensées qui tournent en boucle.",travail:"Un stress qui empêche de dormir, plus lourd la nuit que le jour.",conseil:"Parles-en à quelqu'un plutôt que de ressasser seul."},
   myth:"Morphée, dieu des songes, sait façonner dans le rêve des visions si parfaites qu'elles se confondent avec la réalité, y compris celles qu'on ne voudrait jamais voir (voir la fiche « Morphée »). Cette carte est cette même nuit agitée, mais le jour dissipe souvent ce que la nuit avait grossi.",
   lecture:"Dans un tirage, cette carte évoque une anxiété qui tourne en boucle, souvent plus grande la nuit que le jour. Elle invite à en parler à quelqu'un plutôt qu'à ressasser seul."
 },
 "10 de Épées": {
-  marseille:"Un personnage gît au sol, transpercé de dix épées, sous un ciel qui commence pourtant à s'éclaircir à l'horizon. Fin brutale d'un cycle, mais aussi le signe qu'il ne peut plus rien empirer après cela.",
+  cles:{amour:"Une rupture définitive, douloureuse mais qui touche le fond.",travail:"Un échec complet, qui ne peut plus empirer après cela.",conseil:"À partir de ce point bas, il ne reste qu'à remonter."},
   myth:"Thanatos, personnification de la mort paisible, n'est jamais cruel, seulement inévitable, quoi qu'on tente pour l'enchaîner (voir la fiche « Thanatos »). Cette carte est ce point le plus bas d'où, justement, il ne reste qu'à se relever.",
   lecture:"Dans un tirage, cette carte marque un point bas touché, une fin définitive. Elle rassure autant qu'elle alarme : à partir de là, il ne reste qu'à remonter."
 },
 "As de Deniers": {
-  marseille:"Une main tient un unique denier doré au-dessus d'un jardin fleuri. Opportunité concrète, début tangible, promesse de croissance matérielle bien enracinée.",
+  cles:{amour:"Une relation qui démarre sur des bases concrètes et solides.",travail:"Une opportunité tangible : emploi, revenu, projet qui démarre.",conseil:"Saisis cette opportunité et prends-en soin dès le départ."},
   myth:"Rhéa, mère des premiers Olympiens, protégea seule la promesse d'un avenir divin en cachant l'enfant Zeus dans une grotte plutôt que de le voir englouti (voir la fiche « Rhéa »). Cet As est cette même promesse tangible, encore fragile, qu'il faut savoir mettre à l'abri le temps qu'elle grandisse.",
   lecture:"Dans un tirage, cet As annonce une opportunité concrète : un emploi, un revenu, un projet solide qui démarre. Il invite à la saisir et à en prendre soin dès le départ."
 },
 "2 de Deniers": {
-  marseille:"Un personnage jongle avec deux deniers reliés par un ruban en forme d'infini, un navire tanguant en arrière-plan. Adaptation, équilibre à maintenir entre plusieurs priorités concrètes.",
+  cles:{amour:"Un équilibre à trouver entre la relation et d'autres priorités de vie.",travail:"Plusieurs engagements à jongler sans se laisser déborder.",conseil:"Reste flexible sans perdre l'équilibre."},
   myth:"Kairos, l'instant opportun, ne se saisit qu'en plein mouvement, jamais après coup (voir la fiche « Kairos »). Cette carte demande cette même vigilance : jongler sans perdre l'équilibre, au bon moment plutôt qu'à n'importe lequel.",
   lecture:"Dans un tirage, cette carte signale un jonglage entre plusieurs engagements, financiers ou organisationnels. Elle invite à rester flexible sans se laisser déborder."
 },
 "3 de Deniers": {
-  marseille:"Un artisan sculpte une pierre dans une abbaye, deux figures consultent ses plans à ses côtés. Travail collectif, compétence reconnue, projet qui prend forme grâce à la collaboration.",
+  cles:{amour:"Une relation qui se construit à plusieurs, avec le soutien de l'entourage.",travail:"Un travail d'équipe reconnu, une compétence valorisée.",conseil:"Accepte l'aide ou l'avis d'autrui plutôt que de vouloir tout porter seul."},
   myth:"Dédale, architecte du Labyrinthe crétois, ne construisit jamais une œuvre aussi retorse tout seul (voir la fiche « Dédale »). Cette carte célèbre ce même travail à plusieurs mains, plus solide que tout effort isolé.",
   lecture:"Dans un tirage, cette carte valorise le travail d'équipe et la reconnaissance d'un savoir-faire. Elle invite à accepter l'aide ou l'avis d'autrui plutôt qu'à vouloir tout porter seul."
 },
 "4 de Deniers": {
-  marseille:"Un personnage serre fermement un denier contre sa poitrine, deux sous ses pieds, un sur sa tête. Contrôle, besoin de sécurité qui peut virer à la rigidité si l'on s'y accroche trop fort.",
+  cles:{amour:"Une peur de perdre l'autre qui mène à trop contrôler la relation.",travail:"Une prudence financière excessive, par peur de manquer.",conseil:"Desserre un peu l'emprise : tout retenir ne protège pas vraiment."},
   myth:"Ctésios, aspect domestique de Zeus gardien des réserves du foyer, veille sur ce qu'on amasse plutôt que sur ce qu'on dépense (voir la fiche « Ctésios »). Cette carte questionne ce qu'on retient peut-être trop fort pour rien.",
   lecture:"Dans un tirage, cette carte pointe un excès de prudence financière ou matérielle, une peur de manquer qui ferme plus qu'elle ne protège. Elle invite à desserrer un peu l'emprise."
 },
 "5 de Deniers": {
-  marseille:"Deux personnages démunis passent devant un vitrail éclairé sans y entrer, dans le froid. Période difficile, sentiment d'exclusion, alors qu'un refuge est pourtant tout proche.",
+  cles:{amour:"Un sentiment d'exclusion ou de manque dans la relation.",travail:"Une période de difficulté matérielle ou d'isolement professionnel.",conseil:"Demande de l'aide plutôt que de rester dehors par fierté."},
   myth:"Penia, la Pauvreté elle-même, mendiait autrefois à la porte d'un festin où l'abondance coulait à flots sans qu'elle y ait sa place (voir la fiche « Penia »). Cette carte rappelle que même dans l'épreuve, un secours reste parfois à portée, si l'on accepte de le voir.",
   lecture:"Dans un tirage, cette carte évoque une période de manque ou d'isolement matériel. Elle invite à demander de l'aide plutôt qu'à rester dehors par fierté."
 },
 "6 de Deniers": {
-  marseille:"Un marchand pèse et distribue des pièces à deux mendiants agenouillés. Générosité, échange, redistribution équilibrée entre celui qui a et celui qui a besoin.",
+  cles:{amour:"Un équilibre dans ce que chacun donne et reçoit dans le couple.",travail:"Une aide reçue ou donnée, un soutien mérité.",conseil:"Sois généreux sans excès, dans un sens comme dans l'autre."},
   myth:"Éléos, personnification de la Pitié, avait à Athènes un autel unique consacré à la seule compassion, refuge de tous les suppliants (voir la fiche « Éléos »). Cette carte est ce même geste de partage, juste et mesuré.",
   lecture:"Dans un tirage, cette carte annonce un échange équilibré : une aide reçue ou donnée, un prêt, un soutien mérité. Elle invite à la générosité mesurée plutôt qu'à l'excès dans un sens ou dans l'autre."
 },
 "7 de Deniers": {
-  marseille:"Un cultivateur s'appuie sur sa houe, contemplant sept deniers accrochés à un buisson. Évaluation, pause dans l'effort pour juger si la récolte à venir vaut la peine investie.",
+  cles:{amour:"Une pause pour évaluer si la relation mérite qu'on continue d'y investir.",travail:"Un investissement en cours, dont les résultats demandent encore du temps.",conseil:"Patiente : certains résultats ne sont pas encore mûrs."},
   myth:"Aristée, formé par les Nymphes à l'art de l'élevage et de la culture, dut apprendre la patience avant de voir ses efforts porter leurs fruits (voir la fiche « Aristée »). Cette carte est ce temps d'observation patiente, avant de savoir si l'effort portera ses fruits.",
   lecture:"Dans un tirage, cette carte invite à faire une pause et à évaluer un investissement en cours, sans précipiter la récolte. Elle rappelle que certains résultats demandent simplement plus de temps."
 },
 "8 de Deniers": {
-  marseille:"Un artisan burine ses deniers un à un, appliqué, dans un atelier ordonné. Travail méthodique, perfectionnement d'un savoir-faire par la répétition patiente.",
+  cles:{amour:"Une relation qui se construit par des petites attentions répétées.",travail:"Un apprentissage patient, une compétence qui se perfectionne par la pratique.",conseil:"Continue de pratiquer plutôt que de chercher un raccourci."},
   myth:"Techné, personnification du savoir-faire artisanal, ne s'acquiert que par la répétition d'un même geste, jusqu'à ce que la main le connaisse mieux que l'esprit (voir la fiche « Techné »). Cette carte est cette même maîtrise qui ne s'acquiert que par la pratique répétée.",
   lecture:"Dans un tirage, cette carte valorise l'apprentissage patient et le perfectionnement d'une compétence. Elle encourage à continuer de pratiquer plutôt qu'à chercher un raccourci."
 },
 "9 de Deniers": {
-  marseille:"Une figure élégante se tient seule dans un jardin abondant, un faucon sur le poing. Indépendance, aisance acquise par soi-même, plaisir tranquille d'une réussite qui n'a plus rien à prouver.",
+  cles:{amour:"Une indépendance assumée, un bien-être qui ne dépend pas de l'autre.",travail:"Une réussite personnelle, acquise par soi-même.",conseil:"Profite seul, sans culpabilité, de ce que tu as bâti."},
   myth:"Aglaé, la plus jeune des trois Charites, personnifie l'éclat qui couronne un accomplissement déjà réussi (voir la fiche « Aglaé »). Cette carte est cette même autonomie sereine, faite d'un travail déjà accompli.",
   lecture:"Dans un tirage, cette carte annonce une réussite personnelle et une indépendance bien méritées. Elle invite à profiter seul, sans culpabilité, de ce qu'on a bâti."
 },
 "10 de Deniers": {
-  marseille:"Une famille sur trois générations se tient réunie dans une cour prospère, entourée de dix deniers. Héritage, réussite durable qui dépasse la seule réussite individuelle pour se transmettre.",
+  cles:{amour:"Une relation stable, pensée sur le long terme, parfois familiale.",travail:"Une sécurité professionnelle durable qui dépasse l'individu.",conseil:"Pense à long terme, au-delà de toi seul."},
   myth:"Euthénie personnifie la Prospérité et l'Abondance durable, celle qui s'accumule patiemment plutôt que d'arriver d'un seul coup (voir la fiche « Euthénie »). Cette carte est cet aboutissement qui se transmet, plutôt que de s'arrêter à soi.",
   lecture:"Dans un tirage, cette carte annonce une réussite durable qui dépasse l'individu : un héritage, une stabilité familiale, une sécurité construite pour durer. Elle invite à penser à long terme, au-delà de soi."
 },
@@ -7375,9 +7375,15 @@ function showDetail(c, backTo = cardDetailReturnTo, list){
       <div class="section-title"><h3>Dans un tirage</h3></div>
       <p class="lore-text">${escapeHTML(lore.lecture)}</p>
     ` : ""}
+    ${lore && lore.cles ? `
+      <div class="section-title"><h3>Clés d'interprétation</h3></div>
+      <div class="symbol-list">
+        <div class="symbol"><b>En amour</b><br>${escapeHTML(lore.cles.amour)}</div>
+        <div class="symbol"><b>Au travail</b><br>${escapeHTML(lore.cles.travail)}</div>
+        <div class="symbol"><b>Conseil</b><br>${escapeHTML(lore.cles.conseil)}</div>
+      </div>
+    ` : ""}
     ${lore ? `
-      <div class="section-title"><h3>Lecture traditionnelle</h3></div>
-      <p class="lore-text">${escapeHTML(lore.marseille)}</p>
       ${(isPremiumEnabled() || isCardMythFree(c)) ? `
         <div class="section-title"><h3>Éclairage mythologique — ${escapeHTML(deityLabel)}</h3></div>
         <p class="lore-text">${linkifyLore(lore.myth)}</p>
