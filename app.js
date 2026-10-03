@@ -10,7 +10,7 @@ const MAJORS = [
 ["VI — L'Amoureux","Éros","🏹","Choix · désir · attraction","major","arc · flèche · deux chemins · coupe · ailes · papillon · laurier"],
 ["VII — Le Chariot","Apollon","☀","Victoire · maîtrise · mouvement","major","cygnes · laurier · lyre · chevaux · montagne · temple · arc · balance · flûte · serpent · dauphin · corbeau · cerf · flèche · couronne · cyprès"],
 ["VIII — La Justice","Thémis","⚖","Équilibre · vérité · décision","major","balance · épée · couronne · colonnes"],
-["IX — L'Hermite","Déméter","🌾","Quête · solitude · patience","major","épis · lanterne · chemin · blé · torches · grenade · terre · pavot"],
+["IX — L'Ermite","Déméter","🌾","Quête · solitude · patience","major","épis · lanterne · chemin · blé · torches · grenade · terre · pavot"],
 ["X — La Roue de Fortune","Tyché","☸","Cycles · destin · changement","major","roue · corne d'abondance · chute · sommet"],
 ["XI — La Force","Héraclès","🦁","Maîtrise · courage · puissance intérieure","major","lion · peau de lion · massue · mains nues · chemin · forêt · coupe · chaîne · flèche · chien · taureau · terre · pomme"],
 ["XII — Le Pendu","Prométhée","🔥","Sacrifice · suspension · autre regard","major","chaînes · feu · rocher · suspension · aigle · torche"],
@@ -36,7 +36,7 @@ const ZODIAC_MAJOR_LINKS = {
   "Gémeaux":"VI — L'Amoureux",
   "Cancer":"VII — Le Chariot",
   "Lion":"XI — La Force",
-  "Vierge":"IX — L'Hermite",
+  "Vierge":"IX — L'Ermite",
   "Balance":"VIII — La Justice",
   "Scorpion":"XIII — L'Arcane sans nom",
   "Sagittaire":"XIV — Tempérance",
@@ -75,7 +75,7 @@ const ZODIAC_MAJOR_MYTH = {
     myth: "Le lion lui-même vient du premier des douze travaux d'Héraclès : terrasser à mains nues, sans arme, le lion de Némée à la peau impénétrable — la maîtrise d'une force brute par la seule volonté.",
   },
   "Vierge": {
-    astro: "Vierge, signe de terre mutable gouverné par Mercure, incarne le tri patient et minutieux, l'attention aux détails qui font mûrir les choses — la tradition en fait le signe de L'Hermite.",
+    astro: "Vierge, signe de terre mutable gouverné par Mercure, incarne le tri patient et minutieux, l'attention aux détails qui font mûrir les choses — la tradition en fait le signe de L'Ermite.",
     myth: "Déméter, déesse des moissons, s'est retirée du monde, errant seule et endeuillée à la recherche de sa fille Perséphone enlevée par Hadès, privant la terre de récoltes tant que sa quête solitaire ne trouvait pas d'issue.",
   },
   "Balance": {
@@ -208,10 +208,10 @@ const CARD_LORE = {
   myth:"Thémis, titanide de la loi divine, portait déjà la balance avant même l'avènement des dieux de l'Olympe. La justice y est un ordre premier du monde, antérieur à toute autorité particulière.",
   lecture:"Dans un tirage, la Justice appelle à regarder une situation avec lucidité avant de décider, sans se laisser guider par l'émotion seule. Elle peut aussi annoncer une décision officielle ou un rééquilibrage mérité."
 },
-"IX — L'Hermite": {
+"IX — L'Ermite": {
   cles:{amour:"Un besoin de solitude avant de s'engager, ou une pause nécessaire dans la relation. Ce retrait n'est pas un rejet de l'autre, mais un temps pour se retrouver soi-même d'abord.",travail:"Une réflexion en profondeur avant la prochaine étape, loin de l'agitation. Certaines décisions professionnelles gagnent à mûrir loin du bruit et des avis extérieurs.",conseil:"Accorde-toi ce temps de retrait, même s'il va à contre-courant du rythme ambiant. La patience construit ici quelque chose que la précipitation aurait gâché."},
   myth:"Déméter, déesse des moissons, erre sur la terre à la recherche de sa fille Perséphone disparue, refusant toute récolte tant qu'elle ne l'a pas retrouvée. Sa patience obstinée façonne littéralement les saisons.",
-  lecture:"Dans un tirage, l'Hermite conseille de prendre du recul, de chercher une réponse en soi plutôt que dans l'agitation extérieure. Il peut signaler un besoin légitime de solitude avant d'y voir plus clair."
+  lecture:"Dans un tirage, l'Ermite conseille de prendre du recul, de chercher une réponse en soi plutôt que dans l'agitation extérieure. Il peut signaler un besoin légitime de solitude avant d'y voir plus clair."
 },
 "X — La Roue de Fortune": {
   cles:{amour:"Un tournant inattendu, positif ou non, dans la relation. Quelque chose bouge sans que tu l'aies vraiment provoqué, et il va falloir s'adapter au nouveau contexte.",travail:"Un changement de situation qui échappe en partie à ton contrôle. Une opportunité ou un revers arrive de façon presque imprévisible, bousculant ce qui semblait stable.",conseil:"Accepte le mouvement plutôt que de t'accrocher à ce qui change de toute façon. Résister au changement coûte souvent plus cher que de s'y adapter."},
@@ -569,7 +569,7 @@ Object.assign(CARD_IMAGES, {
   "VI — L'Amoureux": "assets/card-6-amoureux.jpg",
   "VII — Le Chariot": "assets/card-7-chariot.jpg",
   "VIII — La Justice": "assets/card-8-justice.jpg",
-  "IX — L'Hermite": "assets/card-9-hermite.jpg",
+  "IX — L'Ermite": "assets/card-9-hermite.jpg",
   "X — La Roue de Fortune": "assets/card-10-rouedefortune.jpg",
   "XI — La Force": "assets/card-11-force.jpg",
   "XII — Le Pendu": "assets/card-12-pendu.jpg",
@@ -1887,7 +1887,7 @@ const DEITY_LORE = {
     "Déesse des moissons, Déméter enseigna aux hommes l'art de l'agriculture — un don qu'elle retira au monde entier de rage et de chagrin lorsque sa fille Perséphone fut enlevée par Hadès (voir la fiche « Hadès »).",
     "La terre entière resta stérile jusqu'à ce que Zeus négocie un compromis : Perséphone passerait une partie de l'année aux Enfers et l'autre auprès de sa mère — un partage qui, depuis, rythme les saisons, l'hiver au deuil de Déméter et le printemps à ses retrouvailles.",
     "À Athènes et dans une grande partie de la Grèce, on la fêtait sous le nom de Thesmophoros, « celle qui apporte les lois », lors des Thesmophories réservées aux femmes mariées ; son titre le plus solennel restait Éleusinia, en l'honneur d'Éleusis et des Mystères qui portent son nom. Un mythe arcadien plus sombre, propre à la ville de Thelpusa, raconte comment Poséidon la poursuivit alors qu'elle errait à la recherche de sa fille disparue : changée en jument pour lui échapper, elle ne put empêcher le dieu de prendre lui-même la forme d'un étalon pour s'unir à elle malgré tout — de cette union naquirent le cheval Arion et une fille que la tradition plus tardive a fini par identifier à Perséphone elle-même (voir la fiche « Perséphone »), bien que son nom véritable, sur ce seul lieu, ne se révélât qu'aux initiés. L'épisode valut par ailleurs à Déméter, sur ce seul lieu, les surnoms d'Erinys, « la Furieuse », et de Lousia, « la Baigneuse », pour le bain purificateur qu'elle prit ensuite dans le fleuve Ladon.",
-    "Dans le Tarot, Déméter est l'Hermite (IX), lanterne à la main, avançant à son propre rythme sans se presser : la même patience obstinée qu'elle mit à parcourir la terre entière à la recherche de Perséphone, refusant toute récolte tant qu'elle ne l'aurait pas retrouvée. Sa légende rappelle que certaines attentes ne se contentent pas de traverser le temps — elles le façonnent directement, puisque ce deuil suspendu est devenu, depuis, l'hiver lui-même.",
+    "Dans le Tarot, Déméter est l'Ermite (IX), lanterne à la main, avançant à son propre rythme sans se presser : la même patience obstinée qu'elle mit à parcourir la terre entière à la recherche de Perséphone, refusant toute récolte tant qu'elle ne l'aurait pas retrouvée. Sa légende rappelle que certaines attentes ne se contentent pas de traverser le temps — elles le façonnent directement, puisque ce deuil suspendu est devenu, depuis, l'hiver lui-même.",
   ],
   "tyché": [
     "Déesse de la fortune et du hasard, Tyché échappe à toute généalogie fixe selon les auteurs — tantôt fille de Zeus, tantôt de l'Océan — comme si le hasard lui-même refusait de se laisser enfermer dans une origine unique.",
