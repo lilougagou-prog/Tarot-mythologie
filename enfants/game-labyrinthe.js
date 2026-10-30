@@ -3,9 +3,9 @@
 // ============================================================================
 
 const MAZE_LEVELS = [
-  { key: "facile", label: "Facile", size: 7, branchBias: 0.85 },
-  { key: "moyen", label: "Moyen", size: 9, branchBias: 0.55 },
-  { key: "difficile", label: "Difficile", size: 11, branchBias: 0.2 },
+  { key: "facile", label: "Facile", size: 7, branchBias: 0.85, fogRadius: null },
+  { key: "moyen", label: "Moyen", size: 9, branchBias: 0.5, fogRadius: 2 },
+  { key: "difficile", label: "Difficile", size: 13, branchBias: 0.15, fogRadius: 1 },
 ];
 
 // petits objets purement décoratifs semés sur le chemin (aucun effet de jeu)
@@ -80,6 +80,7 @@ function maze_generate(cols, rows, branchBias = 1) {
 function renderLabyrintheGame(container) {
   let level = MAZE_LEVELS[0];
   let cells, cols, rows, cellPx, playerC, playerR, goalGod, won;
+  let fogEls, revealed;
 
   const wrap = document.createElement("section");
   wrap.className = "maze-screen";
@@ -171,6 +172,34 @@ function renderLabyrintheGame(container) {
         gridEl.appendChild(deco);
       });
 
+    // Brouillard de guerre (moyen/difficile) : tant qu'une case n'a pas été
+    // approchée, elle reste masquée par une tuile « inconnue » — impossible
+    // de résoudre le labyrinthe des yeux depuis le départ, il faut vraiment
+    // s'y déplacer. Une fois découverte, une case le reste (jamais
+    // re-masquée), pour ne pas perdre ce qu'on a déjà vu.
+    revealed = new Set();
+    fogEls = null;
+    if (level.fogRadius != null) {
+      fogEls = [];
+      for (let r = 0; r < rows; r++) {
+        const row = [];
+        for (let c = 0; c < cols; c++) {
+          const fog = document.createElement("div");
+          fog.className = "maze-fog";
+          fog.style.left = c * cellPx + "px";
+          fog.style.top = r * cellPx + "px";
+          fog.style.width = cellPx + "px";
+          fog.style.height = cellPx + "px";
+          fog.style.fontSize = cellPx * 0.5 + "px";
+          gridEl.appendChild(fog);
+          row.push(fog);
+        }
+        fogEls.push(row);
+      }
+      revealAround(playerR, playerC);
+      updateFog();
+    }
+
     let player = gridEl.querySelector(".maze-player");
     if (!player) {
       player = document.createElement("div");
@@ -179,6 +208,26 @@ function renderLabyrintheGame(container) {
     }
     gridEl.appendChild(player);
     positionPlayer(player);
+  }
+
+  function revealAround(r, c) {
+    const rad = level.fogRadius;
+    for (let dr = -rad; dr <= rad; dr++) {
+      for (let dc = -rad; dc <= rad; dc++) {
+        const nr = r + dr;
+        const nc = c + dc;
+        if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) revealed.add(nr * cols + nc);
+      }
+    }
+  }
+
+  function updateFog() {
+    if (!fogEls) return;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        fogEls[r][c].classList.toggle("revealed", revealed.has(r * cols + c));
+      }
+    }
   }
 
   function positionPlayer(player) {
@@ -199,6 +248,10 @@ function renderLabyrintheGame(container) {
     playerR += dr;
     const player = gridEl.querySelector(".maze-player");
     positionPlayer(player);
+    if (fogEls) {
+      revealAround(playerR, playerC);
+      updateFog();
+    }
     if (playerC === cols - 1 && playerR === rows - 1) {
       won = true;
       incGameCount("labyrinthe", [goalGod.id]);
