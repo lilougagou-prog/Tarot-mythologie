@@ -3,9 +3,9 @@
 // ============================================================================
 
 const MAZE_LEVELS = [
-  { key: "facile", label: "Facile", size: 7 },
-  { key: "moyen", label: "Moyen", size: 9 },
-  { key: "difficile", label: "Difficile", size: 11 },
+  { key: "facile", label: "Facile", size: 7, branchBias: 0.85 },
+  { key: "moyen", label: "Moyen", size: 9, branchBias: 0.55 },
+  { key: "difficile", label: "Difficile", size: 11, branchBias: 0.2 },
 ];
 
 // petits objets purement décoratifs semés sur le chemin (aucun effet de jeu)
@@ -30,7 +30,15 @@ const MINOTAUR_SVG = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/s
   <path d="M41 77 Q50 83 59 77" stroke="#5c3a1e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
 </svg>`;
 
-function maze_generate(cols, rows) {
+function maze_generate(cols, rows, branchBias = 1) {
+  // "Growing tree" : généralise le creusement récursif (recursive backtracker).
+  // À chaque étape, on part soit de la cellule la PLUS RÉCENTE de la liste
+  // active (comme une pile → long couloir sinueux, quasiment un chemin
+  // unique avec très peu d'embranchements), soit d'une cellule AU HASARD
+  // dans la liste active (façon algorithme de Prim → labyrinthe "buissonnant"
+  // avec beaucoup de courtes impasses). branchBias est la probabilité de
+  // choisir la plus récente à chaque étape : 1 = couloir unique classique
+  // (facile à suivre), proche de 0 = labyrinthe plein d'impasses (difficile).
   const cells = [];
   for (let r = 0; r < rows; r++) {
     const row = [];
@@ -43,10 +51,11 @@ function maze_generate(cols, rows) {
     { dc: 0, dr: 1, self: "S", opp: "N" },
     { dc: -1, dr: 0, self: "W", opp: "E" },
   ];
-  const stack = [{ c: 0, r: 0 }];
+  const active = [{ c: 0, r: 0 }];
   cells[0][0].visited = true;
-  while (stack.length) {
-    const cur = stack[stack.length - 1];
+  while (active.length) {
+    const idx = Math.random() < branchBias ? active.length - 1 : Math.floor(Math.random() * active.length);
+    const cur = active[idx];
     const options = [];
     dirs.forEach((d) => {
       const nc = cur.c + d.dc;
@@ -56,14 +65,14 @@ function maze_generate(cols, rows) {
       }
     });
     if (options.length === 0) {
-      stack.pop();
+      active.splice(idx, 1);
       continue;
     }
     const pick = options[Math.floor(Math.random() * options.length)];
     cells[cur.r][cur.c][pick.d.self] = false;
     cells[pick.nr][pick.nc][pick.d.opp] = false;
     cells[pick.nr][pick.nc].visited = true;
-    stack.push({ c: pick.nc, r: pick.nr });
+    active.push({ c: pick.nc, r: pick.nr });
   }
   return cells;
 }
@@ -112,7 +121,7 @@ function renderLabyrintheGame(container) {
     won = false;
     cols = level.size;
     rows = level.size;
-    cells = maze_generate(cols, rows);
+    cells = maze_generate(cols, rows, level.branchBias);
     playerC = 0;
     playerR = 0;
     goalGod = randomGods(1)[0];
