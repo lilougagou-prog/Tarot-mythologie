@@ -3,9 +3,9 @@
 // ============================================================================
 
 const MAZE_LEVELS = [
-  { key: "facile", label: "Facile", size: 7 },
-  { key: "moyen", label: "Moyen", size: 9 },
-  { key: "difficile", label: "Difficile", size: 11 },
+  { key: "facile", label: "Facile", size: 7, branchBias: 0.85, fogRadius: null },
+  { key: "moyen", label: "Moyen", size: 9, branchBias: 0.5, fogRadius: 2 },
+  { key: "difficile", label: "Difficile", size: 13, branchBias: 0.15, fogRadius: 1 },
 ];
 
 // petits objets purement décoratifs semés sur le chemin (aucun effet de jeu)
@@ -30,7 +30,15 @@ const MINOTAUR_SVG = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/s
   <path d="M41 77 Q50 83 59 77" stroke="#5c3a1e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
 </svg>`;
 
-function maze_generate(cols, rows) {
+function maze_generate(cols, rows, branchBias = 1) {
+  // "Growing tree" : généralise le creusement récursif (recursive backtracker).
+  // À chaque étape, on part soit de la cellule la PLUS RÉCENTE de la liste
+  // active (comme une pile → long couloir sinueux, quasiment un chemin
+  // unique avec très peu d'embranchements), soit d'une cellule AU HASARD
+  // dans la liste active (façon algorithme de Prim → labyrinthe "buissonnant"
+  // avec beaucoup de courtes impasses). branchBias est la probabilité de
+  // choisir la plus récente à chaque étape : 1 = couloir unique classique
+  // (facile à suivre), proche de 0 = labyrinthe plein d'impasses (difficile).
   const cells = [];
   for (let r = 0; r < rows; r++) {
     const row = [];
@@ -43,10 +51,11 @@ function maze_generate(cols, rows) {
     { dc: 0, dr: 1, self: "S", opp: "N" },
     { dc: -1, dr: 0, self: "W", opp: "E" },
   ];
-  const stack = [{ c: 0, r: 0 }];
+  const active = [{ c: 0, r: 0 }];
   cells[0][0].visited = true;
-  while (stack.length) {
-    const cur = stack[stack.length - 1];
+  while (active.length) {
+    const idx = Math.random() < branchBias ? active.length - 1 : Math.floor(Math.random() * active.length);
+    const cur = active[idx];
     const options = [];
     dirs.forEach((d) => {
       const nc = cur.c + d.dc;
@@ -56,14 +65,14 @@ function maze_generate(cols, rows) {
       }
     });
     if (options.length === 0) {
-      stack.pop();
+      active.splice(idx, 1);
       continue;
     }
     const pick = options[Math.floor(Math.random() * options.length)];
     cells[cur.r][cur.c][pick.d.self] = false;
     cells[pick.nr][pick.nc][pick.d.opp] = false;
     cells[pick.nr][pick.nc].visited = true;
-    stack.push({ c: pick.nc, r: pick.nr });
+    active.push({ c: pick.nc, r: pick.nr });
   }
   return cells;
 }
@@ -71,6 +80,7 @@ function maze_generate(cols, rows) {
 function renderLabyrintheGame(container) {
   let level = MAZE_LEVELS[0];
   let cells, cols, rows, cellPx, playerC, playerR, goalGod, won;
+  let fogEls, revealed;
 
   const wrap = document.createElement("section");
   wrap.className = "maze-screen";
@@ -112,7 +122,7 @@ function renderLabyrintheGame(container) {
     won = false;
     cols = level.size;
     rows = level.size;
-    cells = maze_generate(cols, rows);
+    cells = maze_generate(cols, rows, level.branchBias);
     playerC = 0;
     playerR = 0;
     goalGod = randomGods(1)[0];
@@ -162,6 +172,34 @@ function renderLabyrintheGame(container) {
         gridEl.appendChild(deco);
       });
 
+    // Brouillard de guerre (moyen/difficile) : tant qu'une case n'a pas été
+    // approchée, elle reste masquée par une tuile « inconnue » — impossible
+    // de résoudre le labyrinthe des yeux depuis le départ, il faut vraiment
+    // s'y déplacer. Une fois découverte, une case le reste (jamais
+    // re-masquée), pour ne pas perdre ce qu'on a déjà vu.
+    revealed = new Set();
+    fogEls = null;
+    if (level.fogRadius != null) {
+      fogEls = [];
+      for (let r = 0; r < rows; r++) {
+        const row = [];
+        for (let c = 0; c < cols; c++) {
+          const fog = document.createElement("div");
+          fog.className = "maze-fog";
+          fog.style.left = c * cellPx + "px";
+          fog.style.top = r * cellPx + "px";
+          fog.style.width = cellPx + "px";
+          fog.style.height = cellPx + "px";
+          fog.style.fontSize = cellPx * 0.5 + "px";
+          gridEl.appendChild(fog);
+          row.push(fog);
+        }
+        fogEls.push(row);
+      }
+      revealAround(playerR, playerC);
+      updateFog();
+    }
+
     let player = gridEl.querySelector(".maze-player");
     if (!player) {
       player = document.createElement("div");
@@ -170,6 +208,26 @@ function renderLabyrintheGame(container) {
     }
     gridEl.appendChild(player);
     positionPlayer(player);
+  }
+
+  function revealAround(r, c) {
+    const rad = level.fogRadius;
+    for (let dr = -rad; dr <= rad; dr++) {
+      for (let dc = -rad; dc <= rad; dc++) {
+        const nr = r + dr;
+        const nc = c + dc;
+        if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) revealed.add(nr * cols + nc);
+      }
+    }
+  }
+
+  function updateFog() {
+    if (!fogEls) return;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        fogEls[r][c].classList.toggle("revealed", revealed.has(r * cols + c));
+      }
+    }
   }
 
   function positionPlayer(player) {
@@ -190,6 +248,10 @@ function renderLabyrintheGame(container) {
     playerR += dr;
     const player = gridEl.querySelector(".maze-player");
     positionPlayer(player);
+    if (fogEls) {
+      revealAround(playerR, playerC);
+      updateFog();
+    }
     if (playerC === cols - 1 && playerR === rows - 1) {
       won = true;
       incGameCount("labyrinthe", [goalGod.id]);
