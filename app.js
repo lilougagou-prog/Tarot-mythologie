@@ -284,7 +284,7 @@ const CARD_LORE = {
   lecture:"Dans un tirage, ce Cavalier annonce une action rapide, parfois un peu précipitée. Il conseille de foncer tout en gardant un œil sur les obstacles qu'on pourrait ne pas voir venir."
 },
 "Reine de Bâtons": {
-  cles:{amour:"Une assurance naturelle qui attire, sans avoir besoin de se forcer. Cette confiance tranquille rassure l'autre plus qu'elle n'intimide.",travail:"Un leadership chaleureux, porté par une confiance stable. Les autres suivent naturellement une autorité qui ne doute pas d'elle-même.",conseil:"Agis depuis cette stabilité plutôt que depuis le doute. Ta confiance est un repère pour les autres, pas seulement pour toi."},
+  cles:{amour:"Une chaleur qui rassure sans jamais s'imposer, comme un feu qu'on sait toujours trouver allumé en rentrant. Ce que tu offres à l'autre est une présence stable, pas une passion qui s'embrase et s'éteint.",travail:"Une autorité qui n'a besoin de l'approbation de personne pour tenir. Les autres suivent, non pas parce que tu l'exiges, mais parce que ta stabilité ne vacille jamais.",conseil:"Agis depuis cette stabilité plutôt que depuis le doute. Ta confiance est un repère pour les autres, pas seulement pour toi."},
   myth:"Hestia, déesse du foyer, refusa les prétendants de l'Olympe pour garder la flamme sacrée toujours allumée au centre de chaque maison. Sa présence discrète mais irremplaçable est la vraie force de cette Reine.",
   lecture:"Dans un tirage, cette Reine évoque une assurance tranquille, un feu intérieur sur lequel on peut compter. Elle invite à agir depuis cette stabilité plutôt que depuis le doute."
 },
@@ -329,7 +329,7 @@ const CARD_LORE = {
   lecture:"Dans un tirage, cette Reine conseille un jugement clair, détaché des sentiments du moment. Elle peut désigner une personne lucide, parfois perçue comme sévère parce qu'elle refuse de mentir."
 },
 "Roi d'Épées": {
-  cles:{amour:"Un besoin de parler cœur ouvert, mais avec la tête d'abord. La raison aide ici à poser une relation sur des bases solides plutôt que confuses.",travail:"Une autorité juridique, administrative ou intellectuelle à respecter. C'est le moment de s'appuyer sur des règles claires plutôt que sur l'improvisation.",conseil:"Décide avec la tête plutôt qu'avec les émotions du moment. Une décision réfléchie tient mieux qu'une réaction à chaud."},
+  cles:{amour:"Une capacité à retenir ce qui pourrait blesser, pour ne lâcher que ce qui aide vraiment la relation. Tout ressenti n'a pas besoin d'être dit sur le moment, surtout à chaud.",travail:"Une autorité juridique, administrative ou intellectuelle à respecter. C'est le moment de s'appuyer sur des règles claires plutôt que sur l'improvisation.",conseil:"Décide avec la tête plutôt qu'avec les émotions du moment. Une décision réfléchie tient mieux qu'une réaction à chaud."},
   myth:"Éole, gardien des vents, les enferme dans une outre pour n'en libérer que ce qui est nécessaire. Un pouvoir sur des forces invisibles mais redoutables.",
   lecture:"Dans un tirage, ce Roi invite à décider avec la tête plutôt qu'avec les sentiments. Il peut désigner une autorité (juridique, administrative, intellectuelle) à respecter ou à solliciter."
 },
@@ -409,7 +409,7 @@ const CARD_LORE = {
   lecture:"Dans un tirage, cet As annonce un amour naissant ou un renouveau émotionnel profond. Il invite à accueillir ce sentiment sans chercher à le retenir ou à le contrôler."
 },
 "2 de Coupes": {
-  cles:{amour:"Une relation qui se noue ou se consolide à parts égales. L'échange est équilibré, chacun apporte autant qu'il reçoit.",travail:"Une association ou un partenariat professionnel équilibré. La collaboration fonctionne parce qu'elle repose sur une vraie réciprocité.",conseil:"Veille à ce que chacun donne autant qu'il reçoit. Un déséquilibre, même discret, finit toujours par se faire sentir."},
+  cles:{amour:"Une vraie rencontre, où l'autre te voit tel que tu es et réciproquement. Ce lien se noue parce que vous vous reconnaissez l'un dans l'autre, pas seulement parce que les comptes sont bons.",travail:"Une association qui fonctionne parce que vous vous complétez plutôt que parce que vous êtes pareils. Chacun apporte ce que l'autre n'a pas, et c'est précisément ça qui marche.",conseil:"Veille à ce que chacun donne autant qu'il reçoit. Un déséquilibre, même discret, finit toujours par se faire sentir."},
   myth:"Harmonie et Cadmos, fondateur de Thèbes, furent unis lors de noces où tous les dieux de l'Olympe vinrent en personne (voir la fiche « Harmonie »). Cette carte célèbre cet échange équilibré, où chacun donne autant qu'il reçoit.",
   lecture:"Dans un tirage, cette carte annonce une relation qui se noue ou se consolide dans l'équilibre. Elle peut aussi marquer la naissance d'une véritable amitié ou association."
 },
@@ -509,7 +509,7 @@ const CARD_LORE = {
   lecture:"Dans un tirage, cet As annonce une opportunité concrète : un emploi, un revenu, un projet solide qui démarre. Il invite à la saisir et à en prendre soin dès le départ."
 },
 "2 de Deniers": {
-  cles:{amour:"Un équilibre à trouver entre la relation et d'autres priorités de vie. Jongler entre plusieurs engagements n'est pas un problème en soi, tant que l'équilibre tient.",travail:"Plusieurs engagements à jongler sans se laisser déborder. La charge est réelle, mais gérable si elle est bien organisée.",conseil:"Reste flexible sans perdre l'équilibre. S'adapter ne veut pas dire tout accepter sans limite."},
+  cles:{amour:"Une place à faire pour l'autre au milieu d'un emploi du temps déjà plein. Ce n'est pas une question de temps disponible, mais de priorité qu'on choisit de lui donner.",travail:"Plusieurs engagements à jongler sans se laisser déborder. La charge est réelle, mais gérable si elle est bien organisée.",conseil:"Décide ce qui compte vraiment plutôt que d'essayer de tout faire à parts égales. Vouloir tout jongler sans rien lâcher finit par fatiguer plus que bien faire moins de choses."},
   myth:"Kairos, l'instant opportun, ne se saisit qu'en plein mouvement, jamais après coup (voir la fiche « Kairos »). Cette carte demande cette même vigilance : jongler sans perdre l'équilibre, au bon moment plutôt qu'à n'importe lequel.",
   lecture:"Dans un tirage, cette carte signale un jonglage entre plusieurs engagements, financiers ou organisationnels. Elle invite à rester flexible sans se laisser déborder."
 },
@@ -549,7 +549,7 @@ const CARD_LORE = {
   lecture:"Dans un tirage, cette carte annonce une réussite personnelle et une indépendance bien méritées. Elle invite à profiter seul, sans culpabilité, de ce qu'on a bâti."
 },
 "10 de Deniers": {
-  cles:{amour:"Une relation stable, pensée sur le long terme, parfois familiale. Ce qui se construit là dépasse le couple seul pour toucher à l'héritage, au sens large.",travail:"Une sécurité professionnelle durable qui dépasse l'individu. Ce que tu bâtis aujourd'hui profite à plus que toi seul, dans la durée.",conseil:"Pense à long terme, au-delà de toi seul. Ce qui se transmet compte plus que ce qui se garde."},
+  cles:{amour:"Une stabilité familiale qui se construit sur plusieurs générations, pas seulement pour vous deux. Ce que vous bâtissez aujourd'hui, d'autres en hériteront après vous.",travail:"Une sécurité professionnelle si bien ancrée qu'elle tiendra même après ton départ. Ce que tu mets en place aujourd'hui continue de porter ses fruits sans toi.",conseil:"Pense à ce que tu transmets, pas seulement à ce que tu gardes. Ce qui se partage dure souvent plus longtemps que ce qu'on retient jalousement pour soi."},
   myth:"Euthénie personnifie la Prospérité et l'Abondance durable, celle qui s'accumule patiemment plutôt que d'arriver d'un seul coup (voir la fiche « Euthénie »). Cette carte est cet aboutissement qui se transmet, plutôt que de s'arrêter à soi.",
   lecture:"Dans un tirage, cette carte annonce une réussite durable qui dépasse l'individu : un héritage, une stabilité familiale, une sécurité construite pour durer. Elle invite à penser à long terme, au-delà de soi."
 },
